@@ -1,8 +1,9 @@
 <?php
 /*
-20211225 rogercgui include input type number
-20240327 fho4abcd Update some translations
-20240412 fho4abcd Comment/translations
+2021-12-25 rogercgui include input type number
+2024-03-27 fho4abcd Update some translations
+2024-04-12 fho4abcd Comment/translations
+2026-04-19 rogercgui Add support for TAB field type in the FDT and data entry editor
 */
 	$rows_title=array();
 	$rows_title[0]=$msgstr["fdtrow"];
@@ -36,6 +37,7 @@
 	$field_type["M"]=$msgstr["ft_m"];		//Fixed Field
 	$field_type["M5"]=$msgstr["ft_m5"];		//Date(MARC 005)
 	$field_type["LDR"]=$msgstr["ft_ldr"];	//MARC-Leader
+	$field_type["TAB"] = $msgstr["ft_tab"];	//TAB
 	$field_type["T"]=$msgstr["ft_t"];		//Group
 	$field_type["L"]=$msgstr["ft_l"];		//Line
 	$field_type["H"]=$msgstr["ft_h"];		//Heading
