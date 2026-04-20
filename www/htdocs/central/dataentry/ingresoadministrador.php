@@ -39,7 +39,7 @@ if (isset($arrHttp["wks_a"])){
 	echo "&nbsp; &nbsp; ".$msgstr["fmt"].": ".$arrHttp['wks'];
     }
 }
-echo "&nbsp; <a class='bt bt-gray' href=JavaScript:OpenAll()>".$msgstr["expand_colapse"]."</a>";
+echo "&nbsp; <a class='bt bt-gray' id='expand_colapse_btn' href=JavaScript:OpenAll()>".$msgstr["expand_colapse"]."</a>";
 // Se construye el Indice de acceso a la hoja de entrada
 $ixIndice="S";
 if ($ixIndice=="S"){
