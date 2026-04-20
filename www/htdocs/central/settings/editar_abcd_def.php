@@ -636,6 +636,7 @@ $databases_codes = databases();
 				"GENERAL" => array("it" => "title", "Label" => $msgstr["set_database"]),
 				"UNICODE" => array("it" => "radio", "Options" => "1;0", "Label" => $msgstr['set_yes'] . ";" . $msgstr['set_no'], "Tip" => $msgstr["set_TIP_UNICODE"]),
 				"CISIS_VERSION" => array("it" => "radio", "Options" => $cisis_versions_allowed, "Label" => $cisis_versions_allowed, "Tip" => $msgstr["set_TIP_CISIS_VERSION"]),
+				"SUBFIELDS_INLINE" => array("it" => "radio", "Options" => "Y;N", "Label" => "Yes;No", "Tip" => $msgstr["set_TIP_SUBFIELDS_INLINE"]),
 				"ROOT" => array("it" => "text", "size" => "50", "placeholder" => $db_path, "Tip" => $msgstr["set_TIP_ROOT"] . $arrHttp["base"] . "/root/"),
 				"COLLECTION" => array("it" => "text", "size" => "50", "placeholder" => "", "Tip" => $msgstr["set_TIP_COLLECTION"] . $arrHttp["base"] . "/collection/"),
 				"SORTLENGTH" => array("it" => "text", "size" => "3", "placeholder" => "", "Tip" => $msgstr["set_TIP_SORTLENGTH"]),
