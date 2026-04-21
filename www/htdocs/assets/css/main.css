@@ -3407,3 +3407,42 @@ div.ABCD_menu:hover {
         grid-area: input;
     }
 }
+
+
+/* ==========================================================================
+   USABILITY FIX: MINIMUM WIDTH FOR FIELDS (FDT)
+   ========================================================================== */
+/* Prevents table fields and subfields from becoming illegible or squashed 
+   when configured with a small number of columns in the FDT (e.g. cols = 5 or 10) */
+
+.table-fdt input[type="text"],
+.table-fdt input[type="number"],
+.table-fdt input[type="password"],
+.table-fdt select {
+    min-width: 40px !important;
+}
+
+.table-fdt textarea {
+    min-width: 40px !important;
+}
+
+/* ==========================================================================
+   MODERN LOADING SCREEN (FONT AWESOME)
+   ========================================================================== */
+#preloader, #loading {
+    position: fixed !important;
+    inset: 0 !important;
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    z-index: 999999 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#preloader i, #loading-image {
+    font-size: 50px !important;
+    color: #0056b3 !important;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+}
