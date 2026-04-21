@@ -161,7 +161,17 @@ if (in_array($current_script, $allowed_scripts) && $config_show_lang == "Y") {
 	</div>
 	<div class="spacer">&#160;</div>
 
+	<script>
+		document.getElementById('preloader').style.display = 'none';
+	</script>
+
+
 </footer>
+
+</body>
+
+</html>
+
 <?php
 
 if ((!isset($def["CHECK_VERSION"])) || ($def["CHECK_VERSION"] != "N")) {
@@ -196,7 +206,3 @@ if ((!isset($def["CHECK_VERSION"])) || ($def["CHECK_VERSION"] != "N")) {
 	</script>
 
 <?php } ?>
-
-</body>
-
-</html>

@@ -842,6 +842,5 @@ include("../common/header.php");
 			echo "FDT='N'";
 		?>
 
-		document.getElementById('preloader').style.display = 'none';
 	</script>
 	<?php include("../common/footer.php"); ?>
