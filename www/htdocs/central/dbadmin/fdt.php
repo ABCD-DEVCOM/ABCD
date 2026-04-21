@@ -64,8 +64,9 @@ include("../common/header.php");
 	<script src="../dataentry/js/dhtml_grid/dhtmlX.js"></script>
 	<script src="../dataentry/js/lr_trim.js"></script>
 	<?php include("fdt_inc_script.php") ?>
-	<img src="../dataentry/img/preloader.gif" alt="Loading..." id="preloader"
-		style="position:absolute;top:30%;left:45%;border:2px solid;" />
+
+	<?php include("../common/inc_wait.php") ?>
+
 	<script>
 		function EditRow(Fila, id) {
 			Fila = mygrid.getRowIndex(mygrid.getSelectedId())
@@ -127,7 +128,7 @@ include("../common/header.php");
 
 			// 2. Set the window header by inheriting the styles
 			msgwin.document.writeln("<!DOCTYPE html><html><head><title>Relatório de Validação</title>")
-			msgwin.document.writeln(headCSS) 
+			msgwin.document.writeln(headCSS)
 			msgwin.document.writeln("<style>")
 			msgwin.document.writeln("  body { font-size: 10pt; padding: 25px; background-color: #f4f6f9; }")
 			msgwin.document.writeln("  td { font-family: arial; font-size: 9pt; padding: 6px; }")
