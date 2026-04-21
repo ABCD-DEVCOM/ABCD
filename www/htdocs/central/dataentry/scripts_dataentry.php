@@ -634,256 +634,133 @@ function CancelarActualizacion(){
 	tagOrg = ""
 	subcOrg = ""
 
-	function Organizar(tag, subC) {
-		tagOrg = tag
-		subcOrg = subC
-		document.getElementById('loading').style.display = 'block';
-		tableID = "id_" + tag
-		var table = document.getElementById(tableID);
-		var rowCount = table.rows.length;
-		var valores = new Array()
-		for (irow = 0; irow < rowCount - 2; irow++) {
-			valores[irow] = ""
-			if (subC.length > 0) {
-				for (i = 0; i < subC.length; i++) {
-					sc = "_" + subC.substr(i, 1)
-					newName = "tag" + tag + "_" + irow + sc
-					Ctrl = eval("document.forma1." + newName)
-					switch (Ctrl.type) {
-						case "text":
-							valores[irow] += Ctrl.value + '|$|'
-							break;
-						case "textarea":
-							valores[irow] += Ctrl.value + '|$|'
-							break;
-						case "checkbox":
-							valores[irow] += Ctrl.checked + '|$|';
-							break;
-						case "select-one":
-							valores[irow] += Ctrl.selectedIndex + '|$|'
-							break;
-						case "radio":
-							valores[irow] += Ctrl.checked + '|$|'
-							break;
-					}
-				}
-			}
-			var Sel = document.getElementById("reorg");
-			var newOpt = Sel.appendChild(document.createElement('option'));
-			x = valores[irow].split('|$|')
-			optText = ""
-			ixvLength = x.length
-			for (iv = 0; iv < ixvLength; iv++) {
-				if (Trim(x[iv]) != "") {
-					optText += "^" + subC.substr(iv, 1) + x[iv]
-				}
-			}
-			newOpt.text = optText
-			newOpt.value = valores[irow];
-		}
-	}
-
-	function OrganizarSalir(accion) {
-		var Sel = document.getElementById("reorg");
-		switch (accion) {
-			case "cancelar":
-				Sel.options.length = 0
-				document.getElementById('loading').style.display = 'none';
-				break
-			case "aceptar":
-				tag = tagOrg
-				subC = subcOrg
-				rowCount = Sel.length
-				for (irow = 0; irow < rowCount; irow++) {
-					valor = Sel.options[irow].value
-					vv = valor.split('|$|')
-					for (i = 0; i < subC.length; i++) {
-						sc = "_" + subC.substr(i, 1)
-						Name = "tag" + tag + "_" + irow + sc
-						Ctrl = eval("document.forma1." + Name)
-						switch (Ctrl.type) {
-							case "text":
-								Ctrl.value = vv[i]
-								break;
-							case "textarea":
-								Ctrl.value = vv[i]
-								break;
-							case "checkbox":
-								Ctrl.checked = vv[i];
-								break;
-							case "select-one":
-								Ctrl.selectedIndex = vv[i]
-								break;
-							case "radio":
-								Ctrl.checked = vv[i]
-								break;
-						}
-					}
-				}
-				Sel.options.length = 0
-				document.getElementById('loading').style.display = 'none';
-				break
-		}
-	}
-
 	function RowClean(linea, subC) {
-		t = linea.split("_");
-		tag = t[0]
-		row = t[1];
-		if (subC.length > 0) {
-			for (i = 0; i < subC.length; i++) {
-				sc = ""
-				if (subC != "")
-					sc = "_" + subC.substr(i, 1)
-				newName = "tag" + tag + "_" + row + sc
-				Ctrl = eval("document.forma1." + newName)
-				switch (Ctrl.type) {
-					case "text":
-						Ctrl.value = ""
-						break;
-					case "textarea":
-						Ctrl.value = ""
-						mlt = tag + "_0" + sc
-						text_counter = eval("document.forma1.rem" + tag + "_" + nfilas + sc)
-						if (text_counter) {
-							text_counter.value = max_l[mlt]
-						}
-						break;
-					case "checkbox":
-						Ctrl.checked = false;
-						break;
-					case "select-one":
-						Ctrl.selectedIndex = 0;
-						break;
-					case "radio":
-						Ctrl.checked = false;
-						break;
+		var t = linea.split("_");
+		var tag = t[0];
+		var row = t[1];
+
+		// Encontra a primeira caixa de texto desta linha para servir de âncora
+		var firstInputName = "tag" + tag + "_" + row;
+		if (subC && subC.length > 0) {
+			firstInputName += "_" + subC.substr(0, 1);
+		}
+
+		var inputs = document.getElementsByName(firstInputName);
+		var input = inputs.length > 0 ? inputs[0] : document.getElementById(firstInputName);
+
+		if (input) {
+			var tr = input.closest('tr');
+			if (tr) {
+				var tbody = tr.closest('tbody');
+				// Se a tabela tiver mais que uma linha, apagamos a linha!
+				if (tbody.getElementsByTagName('tr').length > 1) {
+					tr.parentNode.removeChild(tr);
+				} else {
+					// Se for a última linha, apenas a esvaziamos
+					var allInputs = tr.querySelectorAll('input[type="text"], input[type="hidden"], input[type="number"], textarea');
+					for (var f = 0; f < allInputs.length; f++) {
+						allInputs[f].value = '';
+					}
+					var selects = tr.querySelectorAll('select');
+					for (var s = 0; s < selects.length; s++) {
+						selects[s].selectedIndex = 0;
+					}
+					var checks = tr.querySelectorAll('input[type="checkbox"], input[type="radio"]');
+					for (var c = 0; c < checks.length; c++) {
+						checks[c].checked = false;
+					}
 				}
 			}
 		}
-
 	}
 
 	function addRow(tableID, subC, accion, valdef) {
-		vd = valdef.split("$$$")
-		va_def = new Array()
-		for (xvd in vd) {
-			ll0 = vd[xvd]
+		var vd = valdef.split("$$$");
+		var va_def = new Array();
+		for (var xvd in vd) {
+			var ll0 = vd[xvd];
 			if (Trim(ll0) != "") {
-				vd1 = ll0.split("|")
-				va_def[vd1[0]] = vd1[1]
+				var vd1 = ll0.split("|");
+				va_def[vd1[0]] = vd1[1];
 			}
-
 		}
-		tag = tableID
-		tableID = "id_" + tag
-		var table = document.getElementById(tableID);
 
-		var rowCount = table.rows.length;
-		var row = table.insertRow(rowCount);
-		if (subC == "") {
-			initRow = 0
-			nfilas = rowCount
-		} else {
-			initRow = 2
-			nfilas = rowCount - 2
-		}
-		var colCount = table.rows[initRow].cells.length;
-		for (var i = 0; i < colCount; i++) {
-			var newcell = row.insertCell(i);
-			newcell.vAlign = 'top';
-			newcell.setAttribute("bgColor", "#FFFFFF");
-			newcell.innerHTML = table.rows[initRow].cells[i].innerHTML;
-			sc = ""
-			if (subC != "")
-				sc = "_" + subC.substr(i, 1)
-			oldName = tag + "_0" + sc
-			newName = tag + "_" + nfilas + sc
-			celda = newcell.innerHTML
-			while (celda.indexOf(oldName) != -1) {
-				celda = celda.replace(oldName, newName)
+		var tag = tableID;
+		var table = document.getElementById("id_" + tag);
+		var tbody = table.getElementsByTagName('tbody')[0];
+		if (!tbody) tbody = table;
+
+		var rows = tbody.getElementsByTagName('tr');
+		var lastRow = rows[rows.length - 1];
+
+		// Descobre o índice da última linha dinamicamente
+		var lastIndex = -1;
+		var inputs = lastRow.querySelectorAll('input, select, textarea');
+		for (var k = 0; k < inputs.length; k++) {
+			var name = inputs[k].name;
+			if (name && name.indexOf('tag' + tag + '_') !== -1) {
+				var parts = name.split('_');
+				lastIndex = parseInt(parts[1]);
+				break;
 			}
-			if (celda.indexOf("Javascript:DateToIso(") != -1) {
-				celda = celda.replace("_0_", "_" + nfilas + "_")
-			}
-
-			newcell.innerHTML = celda
 		}
-		if (subC.length > 0) {
-			for (i = 0; i < subC.length; i++) {
-				sc = ""
-				if (subC != "")
-					sc = "_" + subC.substr(i, 1)
-				lsc = subC.substr(i, 1)
-				newName = "tag" + tag + "_" + nfilas + sc
-				Ctrl = eval("document.forma1." + newName)
-				if (accion == "add") {
-					switch (Ctrl.type) {
-						case "text":
-							if (lsc in va_def)
-								Ctrl.value = va_def[lsc]
-							else
-								Ctrl.value = ""
-							break;
-						case "textarea":
-							if (lsc in va_def)
-								Ctrl.value = va_def[lsc]
-							else
-								Ctrl.value = ""
-							mlt = tag + "_0" + sc
-							text_counter = eval("document.forma1.rem" + tag + "_" + nfilas + sc)
-							if (text_counter) {
-								text_counter.value = max_l[mlt]
+		if (lastIndex === -1) lastIndex = rows.length - 1;
+		var nextIndex = lastIndex + 1;
+
+		// Clona a linha inteira
+		var newRow = lastRow.cloneNode(true);
+		newRow.style.background = (nextIndex % 2 == 0) ? '#ffffff' : '#f9f9f9'; // Zebra striping
+
+		// Atualiza os Nomes e IDs na nova linha
+		var newInputs = newRow.querySelectorAll('input, select, textarea');
+		for (var i = 0; i < newInputs.length; i++) {
+			var el = newInputs[i];
+			var oldName = el.name;
+			if (oldName) el.name = oldName.replace(tag + "_" + lastIndex, tag + "_" + nextIndex);
+			var oldId = el.id;
+			if (oldId) el.id = oldId.replace(tag + "_" + lastIndex, tag + "_" + nextIndex);
+
+			var onkeyup = el.getAttribute('onkeyup');
+			if (onkeyup) el.setAttribute('onkeyup', onkeyup.replace(tag + "_" + lastIndex, tag + "_" + nextIndex));
+
+			var onkeydown = el.getAttribute('onkeydown');
+			if (onkeydown) el.setAttribute('onkeydown', onkeydown.replace(tag + "_" + lastIndex, tag + "_" + nextIndex));
+
+			// Se a ação for "add", esvazia os valores que foram clonados
+			if (accion == "add") {
+				if (el.tagName === 'INPUT' && (el.type === 'text' || el.type === 'hidden' || el.type === 'number')) {
+					var isMatched = false;
+					if (subC && subC.length > 0) {
+						for (var s = 0; s < subC.length; s++) {
+							var lsc = subC.substr(s, 1);
+							if (el.name && el.name.indexOf("_" + lsc) !== -1) {
+								el.value = (va_def[lsc] !== undefined) ? va_def[lsc] : "";
+								isMatched = true;
+								break;
 							}
-							break;
-						case "checkbox":
-							Ctrl.checked = false;
-							break;
-						case "select-one":
-							Ctrl.selectedIndex = 0;
-							break;
-						case "radio":
-							Ctrl.checked = false;
-							break;
-
+						}
 					}
-				} else {
-					prev_val = nfilas - 1
-					oldName = "tag" + tag + "_" + prev_val + sc
-					Ctrl_new = eval("document.forma1." + newName)
-					Ctrl_old = eval("document.forma1." + oldName)
-					switch (Ctrl.type) {
-						case "text":
-							Ctrl_new.value = Ctrl_old.value
-							break;
-						case "textarea":
-							Ctrl_new.value = Ctrl_old.value
-							//mlt=tag+"_0"+sc
-							//text_counter=eval("document.forma1.rem"+tag+"_"+nfilas+sc)
-							//if (text_counter){
-							//   text_counter.value=max_l[mlt]
-							//}
-							break;
-						case "checkbox":
-							Ctrl_new.checked = Ctrl_old.checked;
-							break;
-						case "select-one":
-							Ctrl_new.selectedIndex = Ctrl_old.selectedIndex;
-							break;
-						case "radio":
-							Ctrl_new.checked = Ctrl_old.checked;
-							break;
-					}
-
-
+					if (!isMatched) el.value = "";
+				} else if (el.tagName === 'TEXTAREA') {
+					el.value = "";
+				} else if (el.tagName === 'SELECT') {
+					el.selectedIndex = 0;
+				} else if (el.tagName === 'INPUT' && (el.type === 'checkbox' || el.type === 'radio')) {
+					el.checked = false;
 				}
 			}
-		} else {
-			newName = "tag" + tag + "_" + nfilas
-			Ctrl = eval("document.forma1." + newName)
-			Ctrl.value = ""
 		}
 
+		// Atualiza o botão da lixeira na nova linha para apontar para o novo índice
+		var links = newRow.querySelectorAll('a');
+		for (var i = 0; i < links.length; i++) {
+			var href = links[i].getAttribute('href');
+			if (href && href.indexOf('RowClean') !== -1) {
+				links[i].setAttribute('href', href.replace(tag + "_" + lastIndex, tag + "_" + nextIndex));
+			}
+		}
+
+		tbody.appendChild(newRow);
 	}
 
 	function deleteRow(tableID) {
