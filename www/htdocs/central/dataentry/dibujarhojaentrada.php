@@ -625,7 +625,7 @@ function PrepararFormato()
 											}
 										}
 										//calendar attaches to existing form element
-	?>
+?>
 										<input tabindex="0" type="text" name="tag<?php echo $tag; ?>"
 											id="tag<?php echo $tag; ?>_c"
 											value="<?php echo $campo ?>"
@@ -865,10 +865,10 @@ function PrepararFormato()
 
 	require_once("../dataentry/javascript_validation.php");
 }
-// --- INÍCIO DA LÓGICA DE ABAS DINÂMICAS (VERSÃO FINAL CLEAN) ---
+
 ?>
 <style>
-	/* Barra de Navegação Estilo Koha */
+	/* Navigation bar */
 	.abcd-tabs-nav {
 		display: flex;
 		flex-wrap: wrap;
@@ -904,29 +904,28 @@ function PrepararFormato()
 		border-bottom: 1px solid #fff;
 	}
 
-	/* --- LIMPEZA DE ELEMENTOS LEGACY EM MODO ABAS --- */
-
-	/* 1. Esconde o botão "+" (Campos) da coluna de ações */
-	.has-tabs .table-fdt-two a[href^="javascript:Campos"],
-	#expand_colapse_btn {
+	/* ---  CLEARING LEGACY ELEMENTS IN TAB MODE --- */
+	/* 1. Hide the '+' button (Fields) in the Actions column */
+	<?php if (ConfigHelper::isInlineSubfieldsEnabled()): ?>.has-tabs .table-fdt-two a[href^="javascript:Campos"] {
 		display: none !important;
 	}
 
-	/* 2. Esconde o link "Cerrar" e o texto em negrito do acordeão original */
+	<?php endif; ?>
+	/* 2. Hide the "Cerrar" link and the bold text of the original accordion */
 	.has-tabs a[href^="javascript:switchMenu"]:not(.header-fdt),
-	.has-tabs a[href^="javascript:switchMenu"] b,
+
 	.has-tabs a[href^="javascript:switchMenu"] i {
 		display: none !important;
 	}
 
-	/* 3. Neutraliza o cabeçalho H (torna-o um título H6 simples) */
+	/* 3. Removes the H header (converts it to a simple H6 heading) */
 	.has-tabs .header-fdt {
 		pointer-events: none !important;
 		background: transparent !important;
 		color: #333 !important;
 		border: none !important;
 		border-bottom: 2px solid #eee !important;
-		margin: 30px 0 15px 0 !important;
+		margin: 30px 0 15px 8px !important;
 		padding: 0 0 8px 0 !important;
 		font-size: 14px !important;
 		font-weight: bold !important;
@@ -935,7 +934,7 @@ function PrepararFormato()
 		letter-spacing: 0.5px;
 	}
 
-	/* Força a exibição de todas as secções dentro da aba */
+	/* Forces the display of all sections within the tab */
 	.has-tabs .abcd-tab-pane .group-fields {
 		display: block !important;
 		border: none !important;

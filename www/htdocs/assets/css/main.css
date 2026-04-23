@@ -1883,7 +1883,7 @@ td {
 .table-fdt tbody tr td {
     border-bottom: 1px solid var(--abcd-light);
     vertical-align: middle;
-    padding: 0.3rem;
+    padding: 0 0.3rem;
 }
 
 .table-fdt>tbody>tr>td>input[type=text],
@@ -1943,13 +1943,11 @@ td.no-wrap {
 
 .table-fdt-three {
     /* NAME OF FIELD */
-    width: 300px;
-    /* Largura fixa um pouco maior para acomodar textos longos */
+    width: 250px;
     vertical-align: top;
     text-align: right;
     padding-right: 15px;
     padding-top: 8px;
-    /* Alinha visualmente com o input */
     font-weight: 500;
     color: var(--abcd-gray-700);
     line-height: 1.5;
@@ -2821,7 +2819,7 @@ div[id^="myvar_"] {
 .table-fdt input[type="text"],
 .table-fdt textarea,
 .table-fdt select {
-    border: 1px solid #d1d5db;
+    /* border: 1px solid #d1d5db; */
     border-radius: 4px;
     font-family: inherit;
     box-sizing: border-box;
