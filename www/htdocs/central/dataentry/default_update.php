@@ -82,9 +82,12 @@ foreach ($arrHttp as $var => $value) {
    	}
 
 }
-foreach ($valortag as $tag=>$value){	if (strlen($tag)==1) $tag="000".$tag;
+foreach ($valortag as $tag=>$value){
+	if (strlen($tag)==1) $tag="000".$tag;
 	if (strlen($tag)==2) $tag="00".$tag;
-	if (strlen($tag)==3) $tag="0".$tag;	$ValorCapturado.=$tag.$value."$$$";}
+	if (strlen($tag)==3) $tag="0".$tag;
+	$ValorCapturado.=$tag.$value."$$$";
+}
 if (isset($arrHttp["check_select"])){
     	$dummy=array();
     	$dummy=explode("\n",$arrHttp["check_select"]);
@@ -99,7 +102,7 @@ if (isset($arrHttp["check_select"])){
 					if (strlen($key)==1) $key="000".$key;
 					if (strlen($key)==2) $key="00".$key;
 					if (strlen($key)==3) $key="0".$key;
-					$parte2=stripslashes($parte2);
+				//	$parte2=stripslashes($parte2);
 				//	$parte2=str_replace("'","&acute;",$parte2);
 					unset($p2);
 					$p2=explode("_",$parte2);
