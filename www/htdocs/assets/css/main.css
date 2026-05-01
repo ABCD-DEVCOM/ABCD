@@ -574,7 +574,71 @@ table.alert:before {
     text-align: center;
 }
 
-/* Tooltip */
+/* ==========================================================================
+   TOOLTIP DO HELP.TAB 
+   ========================================================================== */
+a.tooltip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: help;
+    text-decoration: none;
+    color: var(--abcd-blue);
+    padding: 4px;
+    margin-right: 4px;
+}
+
+/* Hide the message and get the floating balloon ready */
+a.tooltip span {
+    visibility: hidden;
+    width: 280px;
+    /* A comfortable width for reading */
+    background-color: #ffffff;
+    color: #333333;
+    text-align: left;
+    border-radius: 6px;
+    padding: 10px 12px;
+    position: absolute;
+    z-index: 999999;
+    bottom: 130%;
+    left: -10px;
+    /* Align to the right to avoid horizontal scrolling*/
+    border: 1px solid #b9d8d9;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.4;
+    white-space: normal;
+}
+
+/* The little arrow on the balloon (CSS Triangle) */
+a.tooltip span::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    /* It's at the bottom of the balloon */
+    right: 10px;
+    /* Point to the icon */
+    margin-left: -6px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: #b9d8d9 transparent transparent transparent;
+}
+
+/* Show the tooltip when you hover over it */
+a.tooltip:hover span {
+    visibility: visible;
+    opacity: 1;
+}
+
+a.tooltip:hover i {
+    color: var(--abcd-orange);
+    /* Visual feedback on the icon */
+}
+
 div.tooltip-data {
     margin: 16px 0;
     padding: 4px 0;
@@ -2014,7 +2078,7 @@ textarea+.btn-limpar-abcd {
 /* Ensures that no field is wide enough to break the row of buttons */
 .table-fdt-four input[type="text"],
 .table-fdt-four textarea {
-    max-width: calc(100% - 150px) !important;
+    max-width: calc(100% - 80px) !important;
 }
 
 /* ==========================================================================
