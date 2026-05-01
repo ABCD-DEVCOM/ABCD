@@ -140,7 +140,6 @@ class GroupRenderer {
         
         echo "<div style='font-weight:bold; font-size:14px; color:#0056b3; margin-bottom:10px; border-bottom:1px solid #e0e0e0; padding-bottom:5px;'>";
         echo self::sanitize($titulo);
-        echo "<span style='font-size:11px; color:#888; font-weight:normal; margin-left:10px;'>(Modo Inline)</span>";
         echo "</div>";
         
         $campo_valor = isset($valortag[$tag]) ? $valortag[$tag] : "";

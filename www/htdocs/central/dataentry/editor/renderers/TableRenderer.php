@@ -39,7 +39,6 @@ class TableRenderer
 
         echo "<div style='font-weight:bold; font-size:14px; color:#0056b3; margin-bottom:10px; border-bottom:1px solid #e0e0e0; padding-bottom:5px;'>";
         echo htmlspecialchars($t[2] ?? '', ENT_QUOTES, 'UTF-8');
-        echo "<span style='font-size:11px; color:#888; font-weight:normal; margin-left:10px;'>(Modo Tabela)</span>";
         echo "</div>";
 
         echo "<div class='abcd-table-container' style='border: 1px solid #c0c0c0; border-left: 4px solid #17a2b8; background-color: #fafcfc; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 10px; overflow-x: auto;'>";
