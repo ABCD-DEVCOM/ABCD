@@ -156,27 +156,30 @@ function PrepararFormato()
 		$tipo_e = "";
 		$entryType = "";
 
-		// --- INÍCIO DA INTERCETAÇÃO DA ABA (TAB) ---
+		// --- START OF ABA INTERCEPTION (TAB) ---
 		if ($t[0] == "TAB") {
 			if (!isset($tabopen)) $tabopen = false;
 
-			// Se houver uma aba anterior aberta, temos que fechá-la
 			if ($tabopen) {
 				if ($wrapperopen) {
-					echo "</div></div>\n"; // Fecha o cabeçalho (H) que ficou aberto
+					echo "</div></div>\n"; // Close the header (H) that was left open
 					$wrapperopen = false;
 				}
-				echo "</div>\n"; // Fecha a div da aba (abcd-tab-pane)
+				echo "</div>\n"; // Close the tab pane (abcd-tab-pane)
 			}
 
 			$titulo_aba = trim($t[2]);
-			// Abre a nova aba invisível
-			echo "<div class='abcd-tab-pane' data-tab-title='" . htmlspecialchars($titulo_aba, ENT_QUOTES) . "' style='display:none;'>\n";
+
+			// Agnostic encoding replacement (Replaces the problematic `htmlspecialchars`)
+			$safe_titulo = str_replace(array("'", '"', '<', '>'), array('&#39;', '&quot;', '&lt;', '&gt;'), $titulo_aba);
+
+			// Opens a new invisible tab (it will be displayed by JavaScript when the tab is clicked)
+			echo "<div class='abcd-tab-pane' data-tab-title='" . $safe_titulo . "' style='display:none;'>\n";
 			$tabopen = true;
 
-			continue; // Pula para a próxima linha da FDT (não desenha a tabela do campo)
+			continue; // Skip to the next row in the FDT (do not draw the field table)
 		}
-		// --- FIM DA INTERCETAÇÃO ---
+		// --- END OF ABA INTERCEPTION (TAB) ---
 
 		if (!$ver or $ver and isset($valortag[$t[1]]) or ($t[0] == "H" or $t[0] == "L")) {
 			if (($t[0] == "H" or $t[0] == "L" or $ivars == 0)) {

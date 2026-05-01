@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Name: TabRenderer.php
  * Author: Roger C. Guilherme
@@ -7,7 +8,6 @@
  * Description: Renderer for tab fields in the ABCD data entry editor.
  * This class generates the HTML for rendering a tab container based on the field configuration and options provided. It manages the opening and closing of divs and table rows to ensure proper structure for the tabbed interface.
  */
-
 
 class TabRenderer
 {
@@ -26,10 +26,14 @@ class TabRenderer
 
         $ixant++;
 
+        // Encoding-agnostic replacement:
+        // Prevents the htmlspecialchars error that returns an empty string in ISO-8859-1 encodings
+        $safe_titulo = str_replace(array("'", '"', '<', '>'), array('&#39;', '&quot;', '&lt;', '&gt;'), $titulo);
+
         // We create a row that will span all columns
         // The "abcd-tab-pane" class will be used by JavaScript to identify the tabs
         echo "<tr class='abcd-tab-row'><td colspan='4' class='abcd-tab-container-cell' style='padding:0;'>\n";
-        echo "<div class='abcd-tab-pane' data-tab-title='" . htmlspecialchars($titulo, ENT_QUOTES) . "' style='display:none;'>\n";
+        echo "<div class='abcd-tab-pane' data-tab-title='" . $safe_titulo . "' style='display:none;'>\n";
         echo "<div id='wrapper_$ixant' class='group-fields' style='display:block; border:none;'>\n";
 
         $wrapperopen = true;
