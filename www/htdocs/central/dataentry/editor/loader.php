@@ -21,5 +21,6 @@ require_once __DIR__ . '/renderers/SelectRenderer.php';
 require_once __DIR__ . '/renderers/TextRenderer.php';
 require_once __DIR__ . '/renderers/RepeatableRenderer.php';
 require_once __DIR__ . '/renderers/TableRenderer.php';
+require_once __DIR__ . '/renderers/UploadRenderer.php';
 require_once __DIR__ . '/renderers/GroupRenderer.php';
 require_once __DIR__ . '/renderers/TabRenderer.php';

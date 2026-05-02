@@ -331,12 +331,19 @@ function Redraw(xsalida,newSc,add_name){
 		switch (sc[7]){
 			case "U":
 				//case Upload
-				msgupload="Subir"
-				msgseleccionar="Seleccionar"
-				NombreCampo="t"+C_Sc+"_"+M;
-				html+="<input type=text class=SubC  size="+xsize+" name="+NombreCampo+" id=t"+C_Sc+"_"+M+" value='"+valor+"' >"
-				html+=" <a class=\"bt-fdt\" href=javascript:EnviarArchivo('"+NombreCampo+"','"+sc[7]+"')><i class=\"fas fa-upload\"  alt=\""+msgupload+"\" title=\""+msgupload+"\" align=top></i></a>\n"
-				html+=" <a class=\"bt-fdt\" href='javascript:msgwin=window.open(\"dirs_explorer.php?Opcion=seleccionar&tag="+NombreCampo+"&base="+base+"\",\"Explore\",\"width=300,height=500,left=500,scrollbars,resizable,toolbar=yes\");msgwin.focus()'><i class=\"far fa-folder-open\" alt=\""+msgseleccionar+"\" title=\"".msgseleccionar+"\" align=top></i></a>&nbsp;"
+				msgupload = "Subir";
+				msgseleccionar = "Seleccionar";
+				NombreCampo = "t" + C_Sc + "_" + M;
+
+				html += "<div style='display:flex; align-items:flex-start; gap:8px; width:100%;'>";
+				html += "<input type=text class=SubC size=" + xsize + " name=" + NombreCampo + " id=t" + C_Sc + "_" + M + " value='" + valor + "' style='flex-grow:1; margin:0;' >";
+
+				html += "<div style='display:flex; flex-direction:column; gap:4px;'>";
+				html += " <a class=\"bt-fdt\" style='margin:0;' href=\"javascript:EnviarArchivo('" + NombreCampo + "','" + sc[7] + "')\"><i class=\"fas fa-upload\" title=\"" + msgupload + "\"></i></a>";
+
+				// Usamos a função SelectArchivo que você já corrigiu no scripts_dataentry, em vez do window.open cru
+				html += " <a class=\"bt-fdt\" style='margin:0;' href=\"javascript:SelectArchivo('" + NombreCampo + "','forma1')\"><i class=\"far fa-folder-open\" title=\"" + msgseleccionar + "\"></i></a>";
+				html += "</div></div>";
 				break
 			default:
 				// default value in case of a new record

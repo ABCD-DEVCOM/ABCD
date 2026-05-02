@@ -79,7 +79,12 @@ class TextRenderer {
             if ($rep == "1") {
             }
             if ($tipo == "XF") $len = $cols . " maxlength=$cols";
-            if (($numl > 1 or $rep == "1") and $tipo != "AI") {
+
+            // --- START OF UPLOAD INTERCEPTION ---
+            if ($tipo == "U") {
+                UploadRenderer::renderInput($tag, $campo, $numl, $cols, "", $maxlength);
+            } else {
+                if (($numl > 1 or $rep == "1") and $tipo != "AI") {
                 if ($len == 0) $len = "100%";
                 if ($tipo == "RO" or $tipo == "SRO" or $tipo == "MRO")
                     $it = "text\" onfocus=blur()";
@@ -193,12 +198,10 @@ class TextRenderer {
                             }
                         }
                     }
-                }
-                if ($tipo == "U") {
-                    echo "<a class=\"bt-fdt\" href=\"javascript:EnviarArchivo('tag$tag')\"><i class=\"fas fa-upload\"  title=\"" . $msgstr["uploadfile"] . "\"></i></a> \n";
-                    echo "<a class=\"bt-fdt\" href=\"javascript:SelectArchivo('tag$tag','forma1')\"><i class=\"far fa-folder-open\" title=\"" . $msgstr["selfile"] . "\"></i></a>\n";
-                }
-                if ($tipo == "P" or $tipo == "PR") {
+                } 
+            }
+
+            if ($tipo == "P" or $tipo == "PR") {
                     ?>
                     <script>tag_password='tag<?php echo $tag; ?>'
             mandatory_password='<?php echo $mandatory; ?>'

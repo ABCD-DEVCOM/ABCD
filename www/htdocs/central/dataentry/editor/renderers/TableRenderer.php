@@ -234,9 +234,13 @@ class TableRenderer
                     case "U":
                         if (isset($ver)) echo $campo;
                         else {
-                            echo "<input tabindex='0' type=text name=tag" . $Etq . " id=tag" . $Etq . " size=$n style=\"$style_input\" value=\"" . htmlspecialchars($campo, ENT_QUOTES) . "\">";
-                            echo "<a class=\"bt-fdt\" href=javascript:EnviarArchivo('tag$Etq')><i class=\"fas fa-upload\" title=\"" . $msgstr["uploadfile"] . "\"></i></a>";
-                            echo "<a class=\"bt-fdt\" href=javascript:SelectArchivo('tag$Etq','forma1')><i class=\"far fa-folder-open\" title=\"" . $msgstr["selfile"] . "\"></i></a>";
+                            $maxlength = 0;
+                            if ($td9 <> "") {
+                                $len_f = explode('/', $td9);
+                                $n = $len_f[0];
+                                if (isset($len_f[1])) $maxlength = $len_f[1];
+                            }
+                            UploadRenderer::renderInput($Etq, $campo, $td8, $n, $style_input, $maxlength);
                         }
                         break;
                     case "K":
@@ -319,7 +323,6 @@ class TableRenderer
             echo "<div style='margin-top: 12px; display: flex; gap: 10px;'>";
             echo "<a class='bt bt-blue' style='padding: 6px 12px;' href=javascript:addRow('" . $t[1] . "','$subc','add','$vd')><i class='fas fa-plus'></i> " . $msgstr["add"] . "</a>";
             echo "<a class='bt bt-blue' style='padding: 6px 12px;' href=javascript:addRow('" . $t[1] . "','$subc','duplicate','$vd')><i class='fas fa-copy'></i> " . $msgstr["duplicate_last"] . "</a>";
-            // BOTÃO ORGANIZAR REMOVIDO DAQUI
             echo "</div>";
         }
         echo "</td></tr>";

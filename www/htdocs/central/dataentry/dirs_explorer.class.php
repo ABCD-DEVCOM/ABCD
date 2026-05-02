@@ -234,7 +234,7 @@ global $arrHttp,$img_path,$msgstr,$targetForm;
 					   }
 					   echo "<img src=\"".$this->icons_dir."$icon\">";
 	                   if ($icon!="unident.gif")
-				       		echo "&nbsp; <a href=\"javascript:MostrarImagen('".$turinys["pavadinimas"][$i]."','file','".$arrHttp["base"]."','".$arrHttp["desde"]."','$path','$cont_type','mostrar')\">".$turinys["pavadinimas"][$i]."</a> <br>";
+							echo "&nbsp; <a href=\"javascript:MostrarImagen('" . $turinys["pavadinimas"][$i] . "','" . $arrHttp["base"] . "')\">" . $turinys["pavadinimas"][$i] . "</a> <br>";
 						else
 						    echo "&nbsp; ".$turinys["pavadinimas"][$i]."<br>";
 				    }

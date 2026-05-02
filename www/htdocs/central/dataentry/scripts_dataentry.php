@@ -567,21 +567,17 @@ function CancelarActualizacion(){
 	}
 
 	function EnviarArchivo(Tag) {
-		document.enviararchivo.Tag.value = Tag
-		document.enviararchivo.storein.value = top.img_dir
-		msgwin = window.open("", "Upload", "status=yes,resizable=yes,toolbar=no,menu=no,scrollbars=yes,width=600,height=750,top=300,left=5");
+		var img_dir = (typeof top.img_dir !== 'undefined') ? top.img_dir : '';
+		var url = "upload_file.php?base=<?php echo $arrHttp["base"] ?>&Tag=" + Tag + "&storein=" + img_dir;
+		msgwin = window.open(url, "Upload", "status=yes,resizable=yes,toolbar=no,menu=no,scrollbars=yes,width=600,height=750,top=300,left=5");
 		msgwin.focus();
-		document.enviararchivo.submit()
 	}
 
 	function SelectArchivo(Tag, Targetform) {
-		document.selectarchivo.tag.value = Tag
-		document.selectarchivo.storein.value = top.img_dir
-		document.selectarchivo.Opcion.value = "seleccionar"
-		document.selectarchivo.targetForm.value = Targetform
-		msgwin = window.open("", "Select", "status=yes,resizable=yes,toolbar=no,menu=no,scrollbars=yes,width=600,height=750,top=300,left=5");
+		var img_dir = (typeof top.img_dir !== 'undefined') ? top.img_dir : '';
+		var url = "dirs_explorer.php?base=<?php echo $arrHttp["base"] ?>&tag=" + Tag + "&Opcion=seleccionar&targetForm=" + Targetform + "&storein=" + img_dir;
+		msgwin = window.open(url, "Select", "status=yes,resizable=yes,toolbar=no,menu=no,scrollbars=yes,width=600,height=750,top=300,left=5");
 		msgwin.focus();
-		document.selectarchivo.submit()
 	}
 
 	function NuevaBusqueda() {
