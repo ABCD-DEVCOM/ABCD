@@ -127,7 +127,7 @@ include("../common/header.php");
 			});
 
 			// 2. Set the window header by inheriting the styles
-			msgwin.document.writeln("<!DOCTYPE html><html><head><title>Relatório de Validação</title>")
+			msgwin.document.writeln("<!DOCTYPE html><html><head><title>Validation Report</title>")
 			msgwin.document.writeln(headCSS)
 			msgwin.document.writeln("<style>")
 			msgwin.document.writeln("  body { font-size: 10pt; padding: 25px; background-color: #f4f6f9; }")
@@ -290,7 +290,7 @@ include("../common/header.php");
 							msg += displayRowfull + displayTagfull + " <?php echo $msgstr["misfdttitle"] ?>" + "<br>"
 						}
 					}
-					if (cell_type == "H" || cell_type == "L" || cell_type == "S" || cell_type == "LDR" || cell_type == "TAB") { //These fields do not require a tag
+					if (cell_type == "H" || cell_type == "L" || cell_type == "S" || cell_type == "IND" || cell_type == "LDR" || cell_type == "TAB") { //These fields do not require a tag
 						if (cell_tag != "" && cell_tag < 1) {
 							msg += displayRowfull + displayTagfull + " <?php echo $msgstr["tagnoreq"] ?>" + " " + cell_type + "<br>"
 						}
@@ -314,7 +314,7 @@ include("../common/header.php");
 							}
 						}
 					}
-					if (cell_type == "S") { // se determina que el subcampo esté precedido por un tipo T o por TB  o por M
+					if (cell_type == "S" || cell_type == "IND") { // Verifica se S ou IND tem um pai válido
 						res = false
 						for (ix = i - 1; ix >= 0; ix--) {
 							type = mygrid.cells2(ix, 1).getValue()
@@ -322,7 +322,7 @@ include("../common/header.php");
 								res = true
 								ix = -1
 							} else {
-								if (type != "S") ix = -1
+								if (type != "S" && type != "IND") ix = -1
 							}
 						}
 						if (res == false) {
@@ -335,7 +335,7 @@ include("../common/header.php");
 						} else {
 							ix = i + 1
 							type = mygrid.cells2(ix, 1).getValue()
-							if (type != "S" && FDT == "S") {
+							if (type != "S" && type != "IND" && FDT == "S") {
 								msg += displayRowfull + displayTagfull + " <?php echo $msgstr["missubfge"] ?>" + "<br>"
 							}
 						}
@@ -343,7 +343,9 @@ include("../common/header.php");
 						for (ix = i + 1; ix < rows; ix++) {
 							type = mygrid.cells2(ix, 1).getValue()
 							if (type == "S") {
-								ixsc = ixsc + 1
+								ixsc = ixsc + 1 // Conta apenas os subcampos reais (S)
+							} else if (type == "IND") {
+								// É um Indicador. Não soma na contagem, mas permite o loop continuar!
 							} else {
 								ix = rows + 99
 							}
@@ -841,6 +843,5 @@ include("../common/header.php");
 		else
 			echo "FDT='N'";
 		?>
-
 	</script>
 	<?php include("../common/footer.php"); ?>
