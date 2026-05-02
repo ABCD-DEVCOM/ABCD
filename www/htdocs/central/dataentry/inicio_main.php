@@ -854,13 +854,15 @@ include "../common/header.php";
 			// Usamos display: none para remover completamente a barra cinza
 			if (shouldCollapse) {
 				iframeMenu.style.display = 'none';
+				iframeHeader.style.display = 'none';
 				var currentMenuHeight = 0;
 			} else {
 				iframeMenu.style.display = 'block';
+				iframeHeader.style.display = 'block';
 				var currentMenuHeight = window.savedMenuHeight;
 			}
 
-			var folga = Todobody - headerHeight - currentMenuHeight;
+			var folga = Todobody - currentMenuHeight;
 			iframeMain.style.height = folga + 'px';
 
 			// Atualiza os ícones do botão que agora vive DENTRO do iframeMain

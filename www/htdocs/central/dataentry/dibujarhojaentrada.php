@@ -882,7 +882,7 @@ function PrepararFormato()
 	}
 
 	.abcd-tab-btn {
-		padding: 10px 20px;
+		padding: 10px;
 		background: #e8e8e8;
 		border: 1px solid #ccc;
 		border-bottom: none;
@@ -951,6 +951,10 @@ function PrepararFormato()
 		if (panes.length > 0) {
 			const form = document.querySelector('form[name="forma1"]');
 			if (form) form.classList.add('has-tabs');
+
+			// Hide the Expand/Collapse button (search by ID or Class, just to be sure)
+			const expandBtn = document.getElementById('expand_colapse_btn') || document.querySelector('.expand_colapse_btn');
+			if (expandBtn) expandBtn.style.display = 'none';
 
 			const nav = document.createElement('div');
 			nav.className = 'abcd-tabs-nav';
