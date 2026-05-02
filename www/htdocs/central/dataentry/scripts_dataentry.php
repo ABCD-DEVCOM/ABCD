@@ -923,8 +923,8 @@ function CancelarActualizacion(){
 
 <?php
 if (isset($arrHttp["encabezado"])) {
-	//IF A RECORD IS BEING CREATED FROM THE BROWSE.PHP SCRIPT	
-	if ($arrHttp["Opcion"] == "ver") {
+	//IF A RECORD IS BEING CREATED FROM THE BROWSE.PHP SCRIPT   
+	if (isset($arrHttp["Opcion"]) && $arrHttp["Opcion"] == "ver") {
 		include("../common/institutional_info.php");
 ?>
 		<div class="sectionInfo">
