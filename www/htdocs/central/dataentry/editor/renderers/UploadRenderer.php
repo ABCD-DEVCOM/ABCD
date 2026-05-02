@@ -76,7 +76,7 @@ class UploadRenderer
         echo "</td>\n";
     }
 
-    private static function injectAssets()
+    public static function injectAssets()
     {
         if (self::$assetsInjected) return;
         self::$assetsInjected = true;
