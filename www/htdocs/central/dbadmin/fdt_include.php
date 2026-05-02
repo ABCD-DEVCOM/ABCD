@@ -37,6 +37,7 @@
 	$field_type["M"]=$msgstr["ft_m"];		//Fixed Field
 	$field_type["M5"]=$msgstr["ft_m5"];		//Date(MARC 005)
 	$field_type["LDR"]=$msgstr["ft_ldr"];	//MARC-Leader
+	$field_type["IND"]=$msgstr["ft_ind"];	//MARC-Indicator
 	$field_type["TAB"] = $msgstr["ft_tab"];	//TAB
 	$field_type["T"]=$msgstr["ft_t"];		//Group
 	$field_type["L"]=$msgstr["ft_l"];		//Line

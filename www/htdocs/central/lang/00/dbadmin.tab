@@ -204,6 +204,7 @@ ft_s=Subfields
 ft_sub=Subfield
 ft_t=Group
 ft_tab=Tab
+ft_ind=MARC Indicator
 generateoutput=Generate output
 genfmt=Generate dataentry worksheet
 genformat=You must generate the display format (table of paragraph)
