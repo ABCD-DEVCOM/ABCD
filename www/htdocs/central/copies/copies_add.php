@@ -207,17 +207,25 @@ if ($err_copies=="Y"){
 	die;
 }
 
-	//GET LAST CONTROL NUMBER
-	$archivo = $db_path . $arrHttp["base"] . "/data/control_number.cn";
-	if (!file_exists($archivo)) {
-		$fp = fopen($archivo, "w");
-		$res = fwrite($fp, "");
-		fclose($fp);
-	} else {
-		$fp = file($archivo);
-		$last_cn = implode("", $fp);
-		$last_cn = trim($last_cn); // Garante que não há espaços em branco extras
-	}
+//GET LAST CONTROL NUMBER
+$archivo = $db_path . $arrHttp["base"] . "/data/control_number.cn";
+$last_cn = "0";
+if (!file_exists($archivo)) {
+	$fp = fopen($archivo, "w");
+	fwrite($fp, "0");
+	fclose($fp);
+} else {
+	$fp = file($archivo);
+	$last_cn = trim(implode("", $fp));
+	if ($last_cn === "") $last_cn = "0";
+}
+
+// Calculates the next number and adds leading zeros (if configured)
+$next_cn = intval($last_cn) + 1;
+$next_cn_padded = $next_cn;
+if (isset($max_inventory_length) && $max_inventory_length > 0) {
+	$next_cn_padded = str_pad($next_cn, $max_inventory_length, '0', STR_PAD_LEFT);
+}
 
 ?>
 	<div class="searchBox">
@@ -246,12 +254,24 @@ $arrHttp["cipar"]="copies.par";
 $fmt_test="S";
 $arrHttp["wks"]="new.fmt";
 $wks_avail["new"]=1;
-$valortag[10]=$db_addto;
-$arrHttp["db_addto"]=$db_addto;
 
-echo "<h4>".$msgstr["cn_last_number"]." ".$last_cn."</h4>";
+$valortag[10] = $db_addto;
+$arrHttp["db_addto"] = $db_addto;
+
+// Modern widget with an autofill button
+echo "<div style='display:flex; justify-content: space-between; align-items: center; background-color: #f8f9fa; padding: 15px; border: 1px solid #e0e4e8; border-radius: 4px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);'>";
+echo "   <div style='font-size: 1.1rem; color: #444;'>";
+echo "      <i class='fas fa-info-circle' style='color:#0056b3;'></i> " . $msgstr["cn_last_number"] . ": <strong style='color:#dc3545; font-size:1.3rem; margin-left:5px;'>" . $last_cn . "</strong>";
+echo "   </div>";
+echo "   <div>";
+echo "      <a href='javascript:void(0)' class='bt bt-green' onclick='document.getElementById(\"tag30\").value=\"" . $next_cn_padded . "\"; if(typeof CheckInventory === \"function\") { CheckInventory(); }' title='Preencher com o próximo inventário'>";
+echo "         <i class='fas fa-magic'></i> " . $msgstr["autofill"] . " (" . $next_cn_padded . ")";
+echo "      </a>";
+echo "   </div>";
+echo "</div>";
 
 include("../dataentry/plantilladeingreso.php");
+
 ConstruyeWorksheetFmt();
 include("../dataentry/dibujarhojaentrada.php");
 PrepararFormato();
