@@ -1911,109 +1911,53 @@ td {
     cursor: pointer;
     border: 1px solid #9d9d9d;
 }
-
 /* --- 7.4. Data input Table(.table-fdt) --- */
 .table-fdt {
-    border-spacing: 0px;
+    width: 100% !important;
+    /* Essencial para esticar o fundo branco */
     background: var(--abcd-white);
     max-width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
-    border-spacing: 0;  
-}
-
-.table-fdt th {
-    background: var(--abcd-white);
-    color: #000;
-    cursor: pointer;
-    padding: 8px;
-    font-weight: bold;
-}
-
-.table-fdt.browse tr:first-child {
-    border-bottom: 2px solid var(--abcd-light);
-}
-
-.table-fdt.browse tr:last-child {
-    border-top: 2px solid var(--abcd-light);
-}
-
-.table-fdt th.checkboxes,
-.table-fdt th.action {
-    cursor: default;
-}
-
-.table-fdt td,
-.table-fdt tbody tr td {
-    border-bottom: 1px solid var(--abcd-light);
-    vertical-align: middle;
-    padding: 0 0.3rem;
-}
-
-.table-fdt>tbody>tr>td>input[type=text],
-.table-fdt>tbody>tr>td>input[type=password],
-.table-fdt>tbody>tr>td>input[type=radio],
-.table-fdt>tbody>tr>td>textarea,
-.table-fdt>tbody>tr>td>select {
-    margin: 0.2rem 0.1rem;
-    color: var(--abcd-gray-900);
-    /* padding: 8px; fho4abcd reduce spacing */
-    padding-left: 8px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-right: 8px;
-    box-shadow: inset 1px 1px 3px 0.1px var(--abcd-gray-500);
-    -webkit-box-shadow: inset 1px 1px 3px 0.1px var(--abcd-gray-500);
-
-    /* --- CORREÇÃO DE LARGURA (FDT) --- */
-    box-sizing: content-box !important;
-    /* Faz o padding crescer para fora, respeitando o tamanho exato solicitado na FDT */
-    font-family: monospace;
-    /* Garante que 14 colunas caibam exatamente 14 caracteres */
-}
-
-td.input-fdt {
-    align-content: center;
-    vertical-align: middle;
-    margin: auto;
+    border-spacing: 0;
 }
 
 /* Colunas da tabela FDT */
 td.table-fdt-one {
     /* TAG */
-    min-width: 50px;
+    width: 50px !important;
 }
-/* Nowrap table cell fho4abcd added*/
+
 td.no-wrap {
     white-space: nowrap;
 }
 
-.table-fdt-two {
+td.table-fdt-two {
     /* BUTTONS */
-    min-width: 130px;
+    width: 130px !important;
 }
 
 /* Regra geral para todos os botões dentro dessa célula */
-.table-fdt-two .bt-fdt {
-    order: 1; /* Define que, por padrão, os botões ficam no início */
+td.table-fdt-two .bt-fdt {
+    order: 1;
 }
 
 /* Regra ESPECÍFICA para o botão de Ajuda (?) */
-.table-fdt-two .bt-fdt-question {
-    order: 2; /* Força o botão de ajuda a ir para o final da fila visualmente */
-    margin-left: 8px; /* Adiciona um respiro extra para separá-lo do grupo operacional */
-    opacity: 0.6; /* (Opcional) Deixa ele um pouco mais discreto */
+td.table-fdt-two .bt-fdt-question {
+    order: 2;
+    margin-left: 8px;
+    opacity: 0.6;
     transition: opacity 0.3s;
 }
 
-/* (Opcional) Ao passar o mouse, o botão de ajuda fica totalmente visível */
-.table-fdt-two .bt-fdt-question:hover {
+td.table-fdt-two .bt-fdt-question:hover {
     opacity: 1;
 }
 
-.table-fdt-three {
+td.table-fdt-three {
     /* NAME OF FIELD */
-    width: 250px;
+    width: 250px !important;
+    /* Trava o rótulo para não esticar */
     vertical-align: top;
     text-align: right;
     padding-right: 15px;
@@ -2024,15 +1968,14 @@ td.no-wrap {
     word-wrap: break-word;
 }
 
-.table-fdt-four {
+td.table-fdt-four {
     /* INPUT FORM */
-    width: auto;
-    /* Ocupa o resto do espaço */
+    width: auto !important;
+    /* Absorve sozinho toda a elasticidade da tela */
     vertical-align: top;
     padding-bottom: 8px;
     padding-right: 10px;
 }
-
 /* --- 7.5. Mass actions for tables(.tMacroActions) --- */
 .tMacroActions .checkboxAction {
     float: left;

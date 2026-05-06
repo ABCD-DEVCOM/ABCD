@@ -522,19 +522,20 @@ function PrepararFormato()
 									$linea01 = $vars[$ivars];
 									$ksc = 0;
 									$ldr_tit = array();
-									echo "<td>$titulo</td><td><table class='table-fdt' cellpadding=0 cellspacing=0>";
+
+									echo "<td style=\"max-width: 80px;\" class=\"table-fdt-three\">$titulo</td><td class=\"table-fdt-four input-fdt\"><table cellpadding=0 cellspacing=0 style='border:none; width:100%; margin:0; table-layout: auto;'>";
+
 									for ($ixsc = 1; $ixsc <= 100; $ixsc++) {
 										$ivars = $ivars + 1;
 										$linea = $vars[$ivars];
-										if (substr($linea, 0, 1) != "S") {    //para detectar el fin de la descripción del leader
+										if (substr($linea, 0, 1) != "S") {	//para detectar el fin de la descripción del leader
 											$ivars = $ivars - 1;
 											$ixsc = 999;
 										} else {
 											$ksc = $ksc + 1;
 											$filas[] = rtrim($linea);
 											$ld = explode('|', $linea);
-											$ldr_tit[$ksc] =  "<tr><td>" . $ld[2] . " (" . $ld[1] . ")</td>";
-											//echo "<td align=center>".$ld[2]." (".$ld[1].")</td>";
+											$ldr_tit[$ksc] =  "<tr><td style='border:none; text-align:right; padding:4px 15px 4px 0; color:#555; width:260px;'>" . $ld[2] . " (" . $ld[1] . ")</td>";
 										}
 									}
 									$ksc = 0;
@@ -542,7 +543,8 @@ function PrepararFormato()
 										$ksc = $ksc + 1;
 										echo $ldr_tit[$ksc];
 										$ld = explode("|", $linea);
-										echo "<td>";
+										// CORREÇÃO: Célula de input interna ajustada para não quebrar botões
+										echo "<td style='border:none; padding:4px 0; text-align:left;'>";
 										$ttmsel = "";
 										if ($ld[1] == 3006) {
 											if (isset($arrHttp["wk_tipom_1"])) {
