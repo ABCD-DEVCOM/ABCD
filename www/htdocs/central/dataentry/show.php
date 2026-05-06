@@ -116,7 +116,7 @@ if (!isset($arrHttp["Mfn"])){
 }
 if (!isset($arrHttp["hide"])) {
 	echo "<p>";
-	echo "&nbsp; &nbsp;<input type=submit value=".$msgstr["cerrar"]." onclick=self.close()>";
+	echo "&nbsp; &nbsp;<input class='bt bt-red' type=submit value=".$msgstr["cerrar"]." onclick=self.close()>";
 }
 ?>
 </form>
