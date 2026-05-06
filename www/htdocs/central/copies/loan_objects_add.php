@@ -6,11 +6,13 @@ session_start();
 if (!isset($_SESSION["permiso"])){
 	header("Location: ../common/error_page.php") ;
 }
-include("../common/get_post.php");
-include ("../config.php");
-include("../lang/acquisitions.php");
 
+include("../common/get_post.php");
+include("../config.php");
+$lang = $_SESSION["lang"]; /* <-- Variável adicionada aqui */
+include("../lang/acquisitions.php");
 include("../lang/admin.php");
+
 //foreach ($arrHttp as $var=>$value) echo "*$var=$value<br>";
 
 // SE LEE LA TABLA DE STATUS DE LAS COPIAS
@@ -212,7 +214,7 @@ include("../common/footer.php");
 //=====================================
 
 function Print_page(){
-    Global $arrHttp,$msgstr,$error,$meta_encoding;
+    Global $arrHttp,$msgstr,$error,$meta_encoding, $lang;
         $encabezado="";
         include("../common/header.php");
     ?>
