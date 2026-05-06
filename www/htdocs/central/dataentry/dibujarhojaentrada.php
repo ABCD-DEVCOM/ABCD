@@ -143,6 +143,11 @@ function PrepararFormato()
 		$linea = $vars[$ivars];
 		$t = explode('|', $linea);
 		if (isset($t[2])) $titulo = $t[2];
+
+		if ($t[0] == "S" || $t[0] == "IND") {
+			continue;
+		}
+		
 		if (isset($t[9])) $len = $t[9];
 		if (isset($t[4])) $rep = $t[4];
 		if (isset($t[1])) $tag = $t[1];

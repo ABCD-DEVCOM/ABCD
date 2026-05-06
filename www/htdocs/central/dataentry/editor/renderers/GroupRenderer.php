@@ -171,7 +171,7 @@ class GroupRenderer
         echo "<input type='hidden' id='tag{$tag}' name='tag{$tag}' value='" . self::sanitize($campo_valor) . "'>";
 
         echo "<div id='inline_container_{$tag}' class='abcd-inline-subfields' style='border: 1px solid #c0c0c0; border-left: 4px solid #0056b3; background-color: #fafcfc; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);'>";
-        echo "<table class='table-fdt' style='width:100%; margin:0; border:none; background: transparent;'>";
+        echo "<table class='table-fdt' style='width:100%; margin:0; border:none; background: transparent; border-collapse: collapse;'>";
         echo "<tbody id='tbody_{$tag}'>";
 
         $occurrences = explode("\n", $campo_valor);
@@ -192,13 +192,13 @@ class GroupRenderer
     private static function renderRow($tag, $idx, $occ_val, $subfield_defs, $isTemplate = false)
     {
         $display = $isTemplate ? "id='template_{$tag}' style='display:none'" : "class='inline-occ-row'";
-        $bgColor = ($idx % 2 == 0) ? '#ffffff' : '#f5f7f9';
+        $bgColor = ($idx % 2 == 0) ? '#ffffff' : '#eaf4f4';
 
-        echo "<tr $display style='background:{$bgColor}; border-bottom:1px solid #e5e5e5;'>";
+        echo "<tr $display style='background:{$bgColor};'>";
 
-        echo "<td class='row-num' style='width:30px; color:#777; font-size:11px; text-align:center; vertical-align:middle; font-weight:bold; border-right: 1px solid #eee;'>" . ($idx + 1) . "</td>";
+        echo "<td class='row-num' style='width:30px; color:#777; font-size:11px; text-align:center; vertical-align:middle; font-weight:bold; border-right: 1px solid #eee; border-bottom: 2px solid #b9d8d9;'>" . ($idx + 1) . "</td>";
 
-        echo "<td style='padding: 10px 15px;'>";
+        echo "<td style='padding: 10px 15px; border-bottom: 2px solid #b9d8d9;'>";
         echo "<div style='display: grid; grid-template-columns: minmax(120px, auto) 1fr; gap: 8px 15px; align-items: center;'>";
 
         // Vamos garantir que capturamos os 2 primeiros caracteres caso existam indicadores no banco
@@ -274,8 +274,9 @@ class GroupRenderer
 
         echo "</div></td>";
 
-        echo "<td style='width:50px; vertical-align:middle; text-align:center; border-left: 1px solid #eee;'>";
+        echo "<td style='width:50px; vertical-align:middle; text-align:center; border-left: 1px solid #eee; border-bottom: 2px solid #b9d8d9;'>";
         echo "<a href='javascript:void(0)' onclick='ABCD_addInlineRow(\"{$tag}\", this)' title='Adicionar' style='display:inline-block; margin-bottom: 8px;'><i class='fas fa-plus' style='color:#28a745; font-size: 14px;'></i></a><br>";
+        
         echo "<a href='javascript:void(0)' onclick='ABCD_removeInlineRow(\"{$tag}\", this)' title='Remover'><i class='fas fa-trash-alt' style='color:#dc3545; font-size: 14px;'></i></a>";
         echo "</td></tr>";
     }
@@ -390,6 +391,8 @@ class GroupRenderer
             document.querySelectorAll('#tbody_' + tag + ' .inline-occ-row').forEach((row, idx) => {
                 var cell = row.querySelector('.row-num');
                 if (cell) cell.textContent = idx + 1;
+                // Mantém o efeito zebra perfeito mesmo ao adicionar/remover linhas
+                row.style.background = (idx % 2 === 0) ? '#ffffff' : '#eaf4f4';
             });
         }
 

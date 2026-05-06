@@ -272,7 +272,7 @@ class UploadRenderer
                         if (response.success) {
                             let inputField = document.getElementById(tagId);
                             if (inputField) {
-                                if (inputField.tagName === 'TEXTAREA') {
+                            if (inputField.tagName === 'TEXTAREA') {
                                     let newNames = response.filenames.join('\\n');
                                     if (inputField.value.trim() !== '') {
                                         inputField.value += '\\n' + newNames;
@@ -282,6 +282,8 @@ class UploadRenderer
                                 } else {
                                     inputField.value = response.filenames[0];
                                 }
+                                
+                                inputField.dispatchEvent(new Event('change', { bubbles: true }));
                                 
                                 if (isFromModal) {
                                     setTimeout(() => document.getElementById('abcdUploadModal').remove(), 500);
