@@ -839,9 +839,37 @@ include("../common/header.php");
 		<?php
 		$xar = explode(".", $xarch);
 		if (strtoupper($xar[0]) == strtoupper($arrHttp["base"]))
-			echo "FDT='S'";
+			echo "FDT='S';\n";
 		else
-			echo "FDT='N'";
+			echo "FDT='N';\n";
+
+		// Verifica a extensão do arquivo atual (FDT ou FMT)
+		if (strtoupper(end($xar)) == "FDT") {
+			echo "var isFDT = true;\n";
+		} else {
+			echo "var isFDT = false;\n";
+		}
 		?>
+
+		if (isFDT) {
+			// OPÇÃO 1: Ocultar a coluna 20 completamente (Melhor UX)
+			mygrid.setColumnHidden(20, true);
+
+			/* OPÇÃO 2: Se preferir apenas travar e deixar cinza, 
+			   apague a linha acima e descomente o bloco abaixo:
+			   
+			for (var i = 0; i < mygrid.getRowsNum(); i++) {
+				mygrid.cells2(i, 20).setDisabled(true); 
+				mygrid.cells2(i, 20).setBgColor("#e9ecef");
+			}
+			mygrid.attachEvent("onCheck", function(rId, cInd, state) {
+				if (cInd == 20) { 
+				    mygrid.cells(rId, cInd).setValue(0); 
+				    return false; 
+				}
+				return true;
+			});
+			*/
+		}
 	</script>
 	<?php include("../common/footer.php"); ?>

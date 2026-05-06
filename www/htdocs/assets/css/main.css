@@ -1964,6 +1964,12 @@ td {
     padding-right: 8px;
     box-shadow: inset 1px 1px 3px 0.1px var(--abcd-gray-500);
     -webkit-box-shadow: inset 1px 1px 3px 0.1px var(--abcd-gray-500);
+
+    /* --- CORREÇÃO DE LARGURA (FDT) --- */
+    box-sizing: content-box !important;
+    /* Faz o padding crescer para fora, respeitando o tamanho exato solicitado na FDT */
+    font-family: monospace;
+    /* Garante que 14 colunas caibam exatamente 14 caracteres */
 }
 
 td.input-fdt {
