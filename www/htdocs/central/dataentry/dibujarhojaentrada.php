@@ -163,6 +163,11 @@ function PrepararFormato()
 
 		// --- START OF ABA INTERCEPTION (TAB) ---
 		if ($t[0] == "TAB") {
+			// Skip the generation of tabs entirely if you are in Read-Only mode (“ALL”)
+			if (isset($arrHttp["ver"]) && $arrHttp["ver"] == "S") {
+				continue;
+			}
+
 			if (!isset($tabopen)) $tabopen = false;
 
 			if ($tabopen) {
@@ -185,6 +190,15 @@ function PrepararFormato()
 			continue; // Skip to the next row in the FDT (do not draw the field table)
 		}
 		// --- END OF ABA INTERCEPTION (TAB) ---
+
+		// --- START OF HEADER INTERCEPTION (H/L) ---
+		if ($t[0] == "H" || $t[0] == "L") {
+			// Skip the generation of headers and accordions entirely if you are in Read-Only mode (“ALL”)
+			if (isset($arrHttp["ver"]) && $arrHttp["ver"] == "S") {
+				continue;
+			}
+		}
+		// --- END OF HEADER INTERCEPTION (H/L) ---
 
 		if (!$ver or $ver and isset($valortag[$t[1]]) or ($t[0] == "H" or $t[0] == "L")) {
 			if (($t[0] == "H" or $t[0] == "L" or $ivars == 0)) {
@@ -222,14 +236,14 @@ function PrepararFormato()
 					echo "\n<div id='wrapper_$ivars'>";
 					$wrapperopen = true;
 
-					// O Link do cabeçalho
+					// The header link
 					if ($t[0] == "H" and $numero_secciones > 0)
-						// Chamada simples. O JS resolve o ícone sozinho.
+						// Simple call. JS handles the icon on its own.
 						echo "\n<a class=\"header-fdt\" href=\"javascript:switchMenu('myvar_$ivars');\">";
 					else
 						echo "\n<a class=\"header-fdt disabled\">";
 
-					// O Ícone e o Título
+					// The Icon and the Title
 					if (substr($titulo, 0, 1) != "<" and $numero_secciones > 0)
 						// Importante: classes far fa-plus-square para o JS encontrar
 						echo "<i class=\"far fa-plus-square\" style=\"vertical-align:middle\"></i> <b>$titulo</b>";
@@ -244,7 +258,7 @@ function PrepararFormato()
 						}
 					}
 
-					// A div de conteúdo (alvo do switchMenu)
+					// The content div (target of the switchMenu)
 					echo "\n<div id=\"myvar_$ivars\" style=\"$display;\" class=\"group-fields\">";
 					$ixant = $ivars;
 				}
@@ -301,14 +315,18 @@ function PrepararFormato()
 				$tipo_e = "";
 				if (isset($t[7])) if ($t[7] == "TB") $tipo_e = "TB";
 				if ($tipo == "L") {
-					//$lin01=$titulo;
-					//if ($lin01=="") $lin01="&nbsp;";
-					//    if ($t[7]!="I") echo "\n<tr><td width=10>&nbsp;</td><td width=10 align=right> &nbsp; </td><td colspan=2  ><b>".$lin01."</b></td></tr>\n";
 				} else {
-					if (!isset($valortag[$tag]))
+					if (!isset($valortag[$tag])) {
 						$valortag[$tag] = "";
-					else
+					} else {
 						$valortag[$tag] = str_replace('"', "&quot;", $valortag[$tag]);
+
+						// Inserts the dashed line into the repeating fields only in the (ALL) view
+						if ($ver) {
+							$valortag[$tag] = trim($valortag[$tag]);
+							$valortag[$tag] = str_replace("\n", "<div style='border-bottom: 1px dashed #ccc; margin: 8px 0; width: 100%;'></div>", $valortag[$tag]);
+						}
+					}
 					$ayuda = "";
 					if (isset($valortag[$tag]) and $t[0] != "H" and $t[0] != "L") {
 						if ($ver && $valortag[$tag] || !$ver) {
