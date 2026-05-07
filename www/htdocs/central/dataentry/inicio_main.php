@@ -310,7 +310,9 @@ include "../common/header.php";
 				urlcopies = "&db_copies=Y"
 			else
 				urlcopies = ""
-			if (lock_db == "Y") return
+
+			// This allows Home and Config to work and prevents them from crashing!
+			if (lock_db == "Y" && Opcion != "home" && Opcion != "administrar") return;
 			switch (Opcion) {
 				case "cancelar":
 				case "actualizar":
@@ -844,7 +846,7 @@ include "../common/header.php";
 			var isEditing = (typeof xeditar !== 'undefined' && xeditar === "S");
 			var shouldCollapse = (manualMenuOverride !== null) ? !manualMenuOverride : isEditing;
 
-			if (!window.savedMenuHeight) window.savedMenuHeight = 77;
+			if (!window.savedMenuHeight) window.savedMenuHeight = 95;
 			try {
 				var actualHeight = iframeMenu.contentWindow.document.body.scrollHeight;
 				if (actualHeight > 20) window.savedMenuHeight = actualHeight;
