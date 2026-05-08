@@ -404,3 +404,5 @@ prc_after_conversion=AFTER - Converted:
 prc_commit_warning=Please note: If the conversion above is correct, click below to apply it. The database will be overwritten.
 prc_commit_changes=Apply Conversion to the Main Database
 prc_commit_confirm=Are you sure? This will replace the main database with the converted database.
+prc_adjust_preview_range=Change MFN range
+prc_refresh_preview=Refresh Preview
