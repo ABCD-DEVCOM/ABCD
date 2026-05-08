@@ -7,6 +7,9 @@
 *
 * CHANGE LOG:
 * 2026-03-21 rogercgui Sets the display of records to the raw format.
+* 2026-03-20 rogercgui Initial development of the PRC Conversion Interface.
+* 2026-05-08 rogercgui Added a safety lock to limit the preview to a maximum of 50 records at a time to prevent overloading WXIS/the server. Implemented range selection for MFNs in the preview.
+* 2026-05-08 rogercgui Improved the user interface for range selection and added clear instructions for users. Updated the commit process to ensure that the temporary database is properly checked before attempting to replace the original.
 */
 
 session_start();
@@ -35,6 +38,17 @@ $prc_file    = $pfts_dir . "fix.prc";
 $acao = isset($_POST['acao']) ? $_POST['acao'] : '';
 $prc_content = isset($_POST['prc_content']) ? $_POST['prc_content'] : '';
 
+// --- Capturing the MFN range ---
+$mfn_start = isset($_POST['mfn_start']) ? max(1, intval($_POST['mfn_start'])) : 1;
+$mfn_end   = isset($_POST['mfn_end'])   ? max($mfn_start, intval($_POST['mfn_end'])) : 5;
+
+// Safety lock: limits the preview to a maximum of 50 records at a time
+// to avoid overloading WXIS/the server
+if (($mfn_end - $mfn_start) > 50) {
+    $mfn_end = $mfn_start + 50;
+}
+// ------------------------------------------
+
 if ($acao == '' && file_exists($prc_file)) {
     $prc_content = file_get_contents($prc_file);
 }
@@ -57,6 +71,7 @@ if ($acao == 'preview') {
     $cmd_create = escapeshellcmd($mx_path) . " " . escapeshellarg($db_original) . " \"proc=@" . $prc_file . "\" create=" . escapeshellarg($db_temp) . " now -all 2>&1";
     shell_exec($cmd_create);
 
+
     $cmd_reorder = escapeshellcmd($mx_path) . " " . escapeshellarg($db_temp) . " \"proc='S'\" copy=" . escapeshellarg($db_temp) . " now -all 2>&1";
     shell_exec($cmd_reorder);
 
@@ -70,7 +85,7 @@ if ($acao == 'preview') {
 
     // ---- READ ORIGINAL (Before) ----
     $preview_before = "";
-    for ($mfn = 1; $mfn <= 5; $mfn++) {
+    for ($mfn = $mfn_start; $mfn <= $mfn_end; $mfn++) {
         $query = "&base=" . $base . "&cipar=" . $db_path . $actparfolder . $base . ".par&Mfn=" . $mfn . "&Opcion=ver&Formato=ALL";
         $contenido = array();
         include("../common/wxis_llamar.php");
@@ -94,7 +109,7 @@ if ($acao == 'preview') {
     // ---- READ TEMP (After / _conv) ----
     $preview_after = "";
     if (file_exists($db_temp . ".mst")) {
-        for ($mfn = 1; $mfn <= 5; $mfn++) {
+        for ($mfn = $mfn_start; $mfn <= $mfn_end; $mfn++) {
             $query = "&base=" . $base . "_conv&cipar=" . $db_path . $actparfolder . $base . "_conv.par&Mfn=" . $mfn . "&Opcion=ver&Formato=ALL";
             $contenido = array();
             include("../common/wxis_llamar.php");
@@ -196,7 +211,7 @@ $n_wiki_help = "abcd-administration/field_manipulation_with_proc";
                         </div>
 
                         <div style="flex: 1;">
-                            <strong style="color:#388e3c;"><i class="fas fa-database"></i> <?php echo $msgstr['prc_after_conversion']." ".$base."_conv"; ?></strong>
+                            <strong style="color:#388e3c;"><i class="fas fa-database"></i> <?php echo $msgstr['prc_after_conversion'] . " " . $base . "_conv"; ?></strong>
                             <div style="background: #e8f5e9; border: 1px solid #a5d6a7; padding: 15px; height: 450px; overflow-y: auto; font-family: Consolas, monospace; white-space: pre-wrap; font-size: 0.9em; border-radius:4px;">
                                 <?php echo $preview_after; ?>
                             </div>
@@ -204,13 +219,34 @@ $n_wiki_help = "abcd-administration/field_manipulation_with_proc";
 
                     </div>
 
-                    <div style="text-align: center; background: #fff3e0; padding: 20px; border: 1px solid #ffcc80; border-radius: 5px;">
-                        <p style="color: #e65100; margin-top: 0; font-size:1.05em;"><?php echo $msgstr['prc_commit_warning']; ?></p>
-                        <button type="button" class="bt bt-green" style="font-size:1.1em; padding:10px 20px;" onclick="if(confirm('<?php echo $msgstr['prc_commit_confirm']; ?>')){ document.getElementById('acao').value='commit'; document.getElementById('form_prc').submit(); }">
-                            <i class="fas fa-check-double"></i> <?php echo $msgstr['prc_commit_changes']; ?>
+                    <div style="background: #f8f9fa; padding: 15px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 20px; display: flex; justify-content: center; align-items: center; gap: 15px;">
+                        <span style="font-weight: bold; color: #444;">
+                            <i class="fas fa-search-plus"></i> <?php echo $msgstr['prc_adjust_preview_range']; ?>:
+                        </span>
+
+                        <div>
+                            <label for="mfn_start" style="margin-right: 5px; color:#555;"><?php echo $msgstr['cg_from']; ?></label>
+                            <input type="number" name="mfn_start" id="mfn_start" value="<?php echo $mfn_start; ?>" min="1" style="width: 80px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+
+                        <div>
+                            <label for="mfn_end" style="margin-right: 5px; color:#555;"><?php echo $msgstr['cg_to']; ?></label>
+                            <input type="number" name="mfn_end" id="mfn_end" value="<?php echo $mfn_end; ?>" min="1" style="width: 80px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+
+                        <button type="button" class="bt bt-blue" style="padding: 6px 15px;" onclick="document.getElementById('acao').value='preview'; document.getElementById('form_prc').submit();">
+                            <i class="fas fa-sync-alt"></i> <?php echo $msgstr['prc_refresh_preview']; ?>
                         </button>
                     </div>
-                <?php endif; ?>
+                    <div style="text-align: center; background: #fff3e0; padding: 20px; border: 1px solid #ffcc80; border-radius: 5px;">
+
+                        <div style="text-align: center; background: #fff3e0; padding: 20px; border: 1px solid #ffcc80; border-radius: 5px;">
+                            <p style="color: #e65100; margin-top: 0; font-size:1.05em;"><?php echo $msgstr['prc_commit_warning']; ?></p>
+                            <button type="button" class="bt bt-green" style="font-size:1.1em; padding:10px 20px;" onclick="if(confirm('<?php echo $msgstr['prc_commit_confirm']; ?>')){ document.getElementById('acao').value='commit'; document.getElementById('form_prc').submit(); }">
+                                <i class="fas fa-check-double"></i> <?php echo $msgstr['prc_commit_changes']; ?>
+                            </button>
+                        </div>
+                    <?php endif; ?>
 
             </form>
         </div>
