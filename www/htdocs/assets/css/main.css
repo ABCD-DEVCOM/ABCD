@@ -3407,3 +3407,225 @@ div.ABCD_menu:hover {
         grid-area: input;
     }
 }
+
+/* ==========================================================================
+   13. STATISTICS AND REPORTS (To be reviewed and refactored)
+   ========================================================================== */
+
+    .dashboard-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+    margin: 15px;
+}
+
+#config_panel {
+    flex: 0 0 380px;
+    /* Levemente aumentado para acomodar os grupos */
+    background: #fdfdfd;
+}
+
+#preview_panel {
+    flex: 1;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    min-width: 0;
+    /* Força o painel a não crescer infinitamente */
+    min-height: 1000px;
+    max-height: 85vh;
+    /* Limita a altura a 85% da tela do usuário */
+    overflow: auto;
+    /* Habilita barra de rolagem horizontal e vertical automaticamente */
+}
+
+/* Estilização das Seções de Opção (O "OU") */
+.stat-option-group {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.stat-option-header {
+    background: #f8f9fa;
+    padding: 10px 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    transition: background 0.2s;
+}
+
+.stat-option-header:hover {
+    background: #f0f2f4;
+}
+
+.stat-option-header strong {
+    color: #0056b3;
+    font-size: 13px;
+}
+
+.stat-option-content {
+    padding: 15px;
+    display: none;
+    /* Controlado pelo JS */
+}
+
+/* Organização de Inputs e Botões */
+.input-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    margin-bottom: 10px;
+}
+
+.input-group {
+    flex: 1;
+}
+
+.input-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #555;
+}
+
+#config_panel select,
+#config_panel input[type="text"],
+#config_panel textarea {
+    width: 100% !important;
+    box-sizing: border-box;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn-block {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.or-separator {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 11px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Estilos para o Painel de Configuração (Cards) */
+.config-panel-wrapper {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #eee;
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.config-card {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 20px 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.config-card:hover {
+    background: #ffffff;
+    border-color: #b3d4fc;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.config-card i {
+    font-size: 28px;
+    color: #6c757d;
+    transition: color 0.2s;
+}
+
+.config-card:hover i {
+    color: #0056b3;
+}
+
+.config-card span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+}
+
+/* =======================================================
+    ESTILOS PARA IMPRESSÃO (MODO JANELA/PDF) - FORÇADO
+    ======================================================= */
+@media print {
+
+    /* 1. Esconde absolutamente tudo no corpo da página */
+    body * {
+        visibility: hidden;
+    }
+
+    /* 2. Torna visível apenas o painel de resultados e seus elementos internos */
+    #preview_panel,
+    #preview_panel * {
+        visibility: visible;
+    }
+
+    /* 3. Posiciona o painel de resultados no topo da folha A4 */
+    #preview_panel {
+        flex: 1;
+        background: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+        /* --- MÁGICA DA BARRA DE ROLAGEM (NOVO) --- */
+        min-width: 0;
+        /* Força o painel a não crescer infinitamente */
+        min-height: 1000px;
+        max-height: 85vh;
+        /* Limita a altura a 85% da tela do usuário */
+        overflow: auto;
+        /* Habilita barra de rolagem horizontal e vertical automaticamente */
+    }
+
+    /* 4. Esconde a barra de botões (Excel/Word/Janela) para não sair no PDF */
+    #stats_toolbar,
+    #stats_toolbar * {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* 5. Evita que um gráfico ou tabela seja cortado no meio pela quebra de página */
+    .analytics-card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        border: none !important;
+        box-shadow: none !important;
+        margin-bottom: 40px !important;
+    }
+
+    .echart-container {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+}

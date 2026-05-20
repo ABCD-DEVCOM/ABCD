@@ -1,386 +1,304 @@
 <?php
 /*
-20220215 fho4abcd back backbutton+div-helper+sanitize html
-20220220 fho4abcd resolved small error
-20220926 fho4abcd translations,resolve undefined variable, layout
+* @file        tables_cfg.php
+* @description Relational Tables Configuration (tabs.cfg) with TableEditor
+* @author      Refactored by Roger C. Guilherme
 */
 session_start();
 if (!isset($_SESSION["permiso"])) die;
 include("../common/get_post.php");
-include ("../config.php");
-// ARCHIVOD DE MENSAJES
+include("../config.php");
+
 include("../lang/admin.php");
 include("../lang/dbadmin.php");
 include("../lang/statistics.php");
 
-// ENCABEZAMIENTO HTML Y ARCHIVOS DE ESTILO
+if (isset($charset)) {
+	$content_charset = $charset;
+} elseif (isset($meta_encoding)) {
+	$content_charset = $meta_encoding;
+} else {
+	$content_charset = "ISO-8859-1";
+}
+$php_charset = (strtoupper($content_charset) == "ANSI") ? "ISO-8859-1" : $content_charset;
+
+$stat_file = $db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/stat.cfg";
+if (!file_exists($stat_file)) $stat_file = $db_path . $arrHttp["base"] . "/def/" . $lang_db . "/stat.cfg";
+
+$stat_vars = array();
+$error_stat = false;
+
+if (!file_exists($stat_file)) {
+	$error_stat = true;
+} else {
+	$fp = file($stat_file);
+	foreach ($fp as $line) {
+		$line = trim($line);
+		if ($line != "") {
+			$t = explode('|', $line);
+			$nome = isset($t[0]) ? trim($t[0]) : "";
+			$id = (isset($t[3]) && trim($t[3]) != "") ? trim($t[3]) : $nome;
+			$isLMP = (isset($t[2]) && $t[2] == "LMP");
+
+			$stat_vars[] = array(
+				'id' => htmlspecialchars($id, ENT_QUOTES, $php_charset),
+				'nome' => htmlspecialchars($nome, ENT_QUOTES, $php_charset),
+				'isLMP' => $isLMP
+			);
+		}
+	}
+}
+
+$tabs_file = $db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/tabs.cfg";
+if (!file_exists($tabs_file)) $tabs_file = $db_path . $arrHttp["base"] . "/def/" . $lang_db . "/tabs.cfg";
+
+$tabs_data = array();
+if (file_exists($tabs_file)) {
+	$fp = file($tabs_file);
+	foreach ($fp as $line) {
+		$line = trim($line);
+		if ($line != "") {
+			$t = explode('|', $line);
+			$id_tab = (isset($t[3]) && trim($t[3]) != "") ? trim($t[3]) : "tab_" . uniqid();
+			$expr = isset($t[4]) ? htmlspecialchars($t[4], ENT_QUOTES, $php_charset) : "";
+
+			$tabs_data[] = array(
+				'titulo' => isset($t[0]) ? htmlspecialchars($t[0], ENT_QUOTES, $php_charset) : "",
+				'row' => isset($t[1]) ? trim($t[1]) : "",
+				'col' => isset($t[2]) ? trim($t[2]) : "",
+				'id'  => htmlspecialchars($id_tab, ENT_QUOTES, $php_charset),
+				'expr' => $expr
+			);
+		}
+	}
+}
+
 include("../common/header.php");
-
-// LECTURA DE LA LISTA DE VARIABLES YA DEFINIDAS (STATS.CFG)
-$total=-1;
-$error="";
-$fields="";
-$cfg=array();
-$file=$db_path.$arrHttp["base"]."/def/".$lang."/stat.cfg";
-if (!file_exists($file)) $file=$db_path.$arrHttp["base"]."/def/".$lang_db."/stat.cfg";
-if (!file_exists($file)){
-	$error="S";
-}else{
-	$fp=file($file);
-	//$ix=-1;
-	foreach ($fp as $value) {
-		$value=trim($value);
-		if ($value!=""){
-			$t=explode('|',$value);
-			$fields.=trim($t[0]);
-			if (isset($t[2]) and $t[2]=="LMP") $fields.='%'."LMP";
-			$fields.="||";
-			//$ix++;
-			//$cfg[$ix]=$value;
-		}
-	}
-}
 ?>
+
 <body>
-<script>fields='<?php echo $fields?>'</script>
-
-<script language="JavaScript" type="text/javascript" src="../dataentry/js/lr_trim.js"></script>
-<script language=javascript>
-
-//LLEVA LA CUENTA DE TABLAS AGREGADAS A LA LISTA
-total=0
-
-
-//MARCA EL SELECT DE LAS FILAS Y COLUMNAS DE LAS TABLAS YA DEFINIDAS
-function IndexSelected(Ctrl,Var){
-	ix=Ctrl.length
-	for (i=0;i<ix;i++){
-		v=Trim(Ctrl.options[i].text)
-		if (v==Var) {
-			Ctrl.options[i].selected=true
-			i=999
-		}
-
-	}
-}
-
-function MarcarSeleccion(Ctrl,nvars,Var){
-	if (nvars==0){
-		IndexSelected(Ctrl,Var)
-	}else{
-		IndexSelected(Ctrl[nvars],Var)
-	}
-}
-
-//PARA AGREGAR NUEVAS VARIABLES A LA LISTA
-function returnObjById( id )
-{
-    if (document.getElementById)
-        var returnVar = document.getElementById(id);
-    else if (document.all)
-        var returnVar = document.all[id];
-    else if (document.layers)
-        var returnVar = document.layers[id];
-    return returnVar;
-}
-
-function getElement(psID) {
-	if(!document.all) {
-		return document.getElementById(psID);
-
+	<?php
+	if (isset($arrHttp["encabezado"])) {
+		include("../common/institutional_info.php");
+		$encabezado = "&encabezado=s";
 	} else {
-		return document.all[psID];
+		$encabezado = "";
 	}
-}
+	?>
 
-function DrawElement(ixEl,Title,ixRow,ixCol){
-	nuevo="<table width=800 bgcolor=#cccccc border=0>"
-	nuevo+="<td rowspan=3 bgcolor=white valign=top><a href=javascript:DeleteElement("+ixEl+")><img src=../dataentry/img/toolbarDelete.png alt=\"<?php echo $msgstr["delete"]?>\" text=\"<?php echo $msgstr["delete"]?>\"></a></td>\n";
-	nuevo+="<td width=300 bgcolor=white><?php echo $msgstr["title"]?></td>"
-	nuevo+="<td bgcolor=white><input type=text name=tit size=120 value='"+Title+"'></td>"
-    nuevo+="<tr><td bgcolor=white><?php echo $msgstr["rows"]?></td><td bgcolor=white><select name=rows><option></option>"
-    f=fields.split('||')
-    ix0=0
-    for (var opt in f){
-    	ix0++
-    	selected=""
-    	if (ix0==ixRow) selected=" selected"
-    	nuevo+="<option value=\""+f[opt]+"\""+selected+">"+f[opt]+"</option>\n"
-    }
-    nuevo+="</select></td>"
-    nuevo+="<tr><td bgcolor=white><?php echo $msgstr["cols"]?></td><td bgcolor=white><select name=cols><option></option>"
-    ix0=0
-    for (var opt in f){
-    	ix0++
-    	selected=""
-    	if (ix0==ixCol) selected=" selected"
-    	nuevo+="<option value=\""+f[opt]+"\""+selected+">"+f[opt]+"</option>\n"
-    }
-    nuevo+="</select></td></table><br>"
-    return nuevo
-}
+	<div class="sectionInfo">
+		<div class="breadcrumb">
+			<?php echo $msgstr["stats_conf"] . " - " . $msgstr["stat_cfg_tabs"] . ": " . $arrHttp["base"]; ?>
+		</div>
+		<div class="actions">
+			<?php
+			if (isset($arrHttp["from"]) and $arrHttp["from"] == "statistics")
+				$backtoscript = "tables_generate.php";
+			else
+				$backtoscript = "../dbadmin/menu_modificardb.php";
 
-function DeleteElement(ix){
-	seccion=returnObjById( "tabs" )
-	html_sec=""
-	Ctrl=eval("document.stats.tit")
-	ixLength=Ctrl.length
-	if (ixLength<3){
-		document.stats.tit[ix].value=""
-		document.stats.rows[ix].selectedIndex =0
-		document.stats.cols[ix].selectedIndex =0
-	}else{
-		ixE=-1
-		for (i=0;i<ixLength;i++){
-			if (i!=ix){
-				Ctrl_tit=document.stats.tit[i].value
-				Ctrl_rows=document.stats.rows[i].selectedIndex
-				Ctrl_cols=document.stats.cols[i].selectedIndex
-				ixE++
-				html=DrawElement(ixE,Ctrl_tit,Ctrl_rows,Ctrl_cols)
-    			html_sec+=html
-			}
-		}
-		seccion.innerHTML = html_sec
-	}
-
-}
-
-
-
-function AddElement(){
-	seccion=returnObjById( "tabs" )
-	html=""
-	Ctrl=document.stats.tit
-	if (Ctrl){
-		if (Ctrl.length){
-			ixLength=Ctrl.length
-			last=ixLength-1
-	        if (!ixLength) ixLength=1
-			if (ixLength>0){
-			    for (ia=0;ia<ixLength;ia++){
-			    	ixRow=document.stats.rows[ia].selectedIndex
-			    	ixCol=document.stats.cols[ia].selectedIndex
-			    	Title=document.stats.tit[ia].value
-			    	xhtm=DrawElement(ia,Title,ixRow,ixCol)
-			    	html+=xhtm
-			    }
-		    }
-		 }
-	 }else{
-		ia=0
-		ixRow=document.stats.rows.selectedIndex
-		ixCol=document.stats.cols.selectedIndex
-		Title=document.stats.tit.value
-		xhtm=DrawElement(ia,Title,ixRow,ixCol)
-		html+=xhtm
-	 }
-	nuevo=DrawElement(ia,"","","")
-	seccion.innerHTML = html+nuevo
-}
-
-//RECOLECTA LOS VALORES DE LA PAGINA Y ENVIA LA FORMA
-
-function Guardar(){
-	ValorCapturado=""
-	base="<?php echo $arrHttp["base"]?>"
-	total=document.stats.tit.length
-	if (total==0){
-		row=""
-		col=""
-		titulo=Trim(document.stats.tit.value)
-		ix=document.stats.rows.selectedIndex
-		if (ix>0) row=Trim(document.stats.rows.options[ix].value)
-		ix=document.stats.cols.selectedIndex
-		if (ix>0) col=Trim(document.stats.cols.options[ix].value)
-		if (titulo!="" && row=="" && col==""){
-			alert("<?php echo $msgstr["sel_rc"]?>")   //SELECCIONAR VARIABLE PARA LAS FILAS O LAS COLUMNAS
-			return;
-		}
-		if (titulo=="" && (row!="" || col!="")){
-			alert("<?php echo $msgstr["sel_tit"]?>")   //INDICAR EL TITULO DEL CUADRO
-			return;
-		}
-		ValorCapturado=titulo+"|"+row+"|"+col
-	}else{
-		for (i=0;i<total;i++){
-			row=""
-			col=""
-			titulo=Trim(document.stats.tit[i].value)
-			ix=document.stats.rows[i].selectedIndex
-            rr_len=0
-            cc_len=0
-			if (ix>0) {
-				row=Trim(document.stats.rows[i].options[ix].value)
-				rr=row.split('%');
-				row=rr[0]
-				rr_len=rr.length;
-			}
-			ix=document.stats.cols[i].selectedIndex
-			if (ix>0){
-				col=Trim(document.stats.cols[i].options[ix].value)
-				cc=col.split('%');
-				col=cc[0]
-				cc_len=cc.length;
-			}
-			if (titulo!="" && row=="" && col==""){
-				alert("<?php echo $msgstr["sel_rc"]?>")   //SELECCIONAR VARIABLE PARA LAS FILAS O LAS COLUMNAS
-				return;
-			}
-			if (titulo=="" && (row!="" || col!="")){
-				alert("<?php echo $msgstr["sel_tit"]?>")   //INDICAR EL TITULO DEL CUADRO
-				return;
-			}
-			if (col!="" && rr_len>1 || cc_len>1){
-				alert("Los mas prestados solo puede aparecer como fila")
-				return
-			}
-			if (titulo!="") ValorCapturado+=titulo+"|"+row+"|"+col+"\n"
-		}
-	}
-	document.enviar.base.value=base
-	document.enviar.ValorCapturado.value=ValorCapturado
-	document.enviar.submit()
-}
-
-</script>
-<style>
-td {
-  padding: 5px;
-}
-</style>
-<?php
-// VERIFICA SI VIENE DEL TOOLBAR O NO PARA COLOCAR EL ENCABEZAMIENTO
-if (isset($arrHttp["encabezado"])){
-	include("../common/institutional_info.php");
-	$encabezado="&encabezado=s";
-}else{
-	$encabezado="";
-}
-?>
-<div class="sectionInfo">
-	<div class="breadcrumb">
-        <?php echo $msgstr["stats"]." - ".$msgstr["stat_cfg_tabs"].": ".$arrHttp["base"];?>
-    </div>
-	<div class="actions">
-        <?php
-        if (isset($arrHttp["from"]) and $arrHttp["from"]=="statistics")
-            $backtoscript="tables_generate.php";
-        else
-            $backtoscript="../dbadmin/menu_modificardb.php";//old status where variables were defined in that script
-        include "../common/inc_back.php";
-        $savescript="javascript:Guardar()";
-        include "../common/inc_save.php";
-        ?>
-    </div>
-    <div class="spacer">&#160;</div>
-</div>
-<?php
-$ayuda="stats_config_tabs.html";
-include "../common/inc_div-helper.php";
-?>
-<div class="middle form">
-	<div class="formContent">
-<?php
-// SI FALTA EL ARCHIVO STATS.CFG SE DETIENE LA EJECUCIÓN
-if ($error=="S"){
-    $urlforvardef="../statistics/config_vars.php?base=".$arrHttp["base"]."&Opcion=Update&from=statistics".$encabezado;
-	echo "<h4>".$msgstr["mis_statscfg"]." (<a href='".$urlforvardef."'>".$msgstr["stats"]." - ".$msgstr["var_list"]. "</a>)</h4>";
-	die;
-}
-//LECTURA DE LOS CUADROS Y TABLA YA DEFINIDOS
-$file=$db_path.$arrHttp["base"]."/def/".$lang."/tabs.cfg";
-if (!file_exists($file)) $file=$db_path.$arrHttp["base"]."/def/".$lang_db."/tabs.cfg";
-$total=-1;
-echo "<form name=stats method=post>";
-echo  "<div id=tabs>\n";
-if (file_exists($file)){
-	$fp=file($file);
-}else{
-	$fp=array();
-}
-$cuenta=count($fp);
-if (count($fp)<3){
- 	$fp[]="||||||";
- 	$fp[]="||||||";
-}
-foreach ($fp as $value) {
-	$value=trim($value);
-	if ($value!=""){
-		$total++;
-		$t=explode('|',$value);
-        ?>
-		<table  bgcolor=#cccccc border=0 name=tbst>
-        <tr>
-            <td rowspan=4 bgcolor=white valign=top>
-                <a href=javascript:DeleteElement(<?php echo $total;?>)>
-                    <img src=../dataentry/img/toolbarDelete.png alt="<?php echo $msgstr["delete"];?>" title="<?php echo $msgstr["delete"];?>"></a>
-            </td>
-            <td bgcolor=white><?php echo $msgstr["title"];?></td>
-            <td bgcolor=white><input type=text name=tit size=120 value="<?php echo $t[0];?>"></td>
-        </tr>
-   		<tr>
-            <td bgcolor=white><?php echo $msgstr["stat_rows_by"];?></td>
-            <td bgcolor=white>
-                <select name=rows>
-                <option></option>
-                <?php
-                $f=explode('||',$fields);
-                foreach ($f as $opt_x) {
-                    $opt=explode('%',$opt_x);
-                    $selected="";
-                    if ($opt[0]==$t[1]) $selected=" selected";
-                    echo "<option value=\"$opt_x\" $selected>".$opt[0]."</option>\n";
-                }
-                ?>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td bgcolor=white><?php echo $msgstr["stat_cols_by"];?></td>
-            <td bgcolor=white>
-                <select name=cols>
-                <option></option>
-                <?php
-                $f=explode('||',$fields);
-                foreach ($f as $opt_x) {
-                    $selected="";
-                    $opt=explode('%',$opt_x);
-                    $selected="";
-                    if ($opt[0]==$t[2]) $selected=" selected";
-                    echo "<option value=\"$opt_x\" $selected>".$opt[0]."</option>\n";
-                }
-                ?>
-                </select>
-            </td>
-        </tr>
-        </table><br>
-        <script>
-            MarcarSeleccion(document.stats.rows,<?php echo $total ?>,'<?php echo $t[1];?>')
-            MarcarSeleccion(document.stats.cols,<?php echo $total ?>,'<?php echo $t[2];?>')
-        </script>
-        <?php
-	}
-}
-echo "<script>total=$total</script>\n";
-?>
-        </div>
-        <a href='javascript:AddElement()'><?php echo $msgstr["add"]?></a>
+			include "../common/inc_back.php";
+			$savescript = "javascript:Guardar()";
+			include "../common/inc_save.php";
+			?>
+		</div>
+		<div class="spacer">&#160;</div>
 	</div>
-</div>
-</form>
 
-<form name=enviar method=post action=tables_cfg_update.php>
-<input type=hidden name=base>
-<input type=hidden name=ValorCapturado>
-<?php
-if (isset($arrHttp["encabezado"])) echo "<input type=hidden name=encabezado value=S>\n";
-if (isset($arrHttp["from"])) echo "<input type=hidden name=from value=".$arrHttp["from"].">\n";
-?>
-</form>
-<script>
-	if (total==-1) AddElement()
-</script>
-<?php
-include("../common/footer.php");
-?>
+	<?php
+	$ayuda = "stats_config_tabs.html";
+	include "../common/inc_div-helper.php";
+	?>
+
+	<div class="middle formContent">
+
+		<?php if ($error_stat) {
+			$urlforvardef = "../statistics/config_vars.php?base=" . $arrHttp["base"] . "&Opcion=Update&from=statistics" . $encabezado;
+		?>
+			<div style="padding:20px; color:#d9534f; background:#f9f2f2; border:1px solid #dca7a7; border-radius:4px;">
+				<h4><i class="fas fa-exclamation-triangle"></i> <?php echo $msgstr["mis_statscfg"]; ?></h4>
+				<a href="<?php echo $urlforvardef; ?>" class="bt bt-blue" style="margin-top:10px;">
+					<?php echo $msgstr["stats"] . " - " . $msgstr["var_list"]; ?>
+				</a>
+			</div>
+		<?php die;
+		} ?>
+
+		<form name="stats" method="post" onsubmit="return false;">
+
+			<div class="mb-2">
+				<button type="button" class="bt bt-blue" onclick="addBlankRowTop()">
+					<i class="fas fa-plus"></i> <?php echo isset($msgstr["stat_blank_row"]) ? $msgstr["stat_blank_row"] : "Adicionar Tabela"; ?>
+				</button>
+			</div>
+
+			<table class="striped" id="tabsTable" style="width: 100%;">
+				<thead>
+					<tr>
+						<th width="30"></th>
+						<th width="30%"><?php echo $msgstr["title"]; ?></th>
+						<th width="20%"><?php echo $msgstr["stat_rows_by"]; ?></th>
+						<th width="20%"><?php echo $msgstr["stat_cols_by"]; ?></th>
+						<th width="20%">Expressão de Busca (Opcional)</th>
+						<th width="10%" class="text-center"><?php echo isset($msgstr["stat_actions"]) ? $msgstr["stat_actions"] : "Ações"; ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ($tabs_data as $tab) { ?>
+						<tr>
+							<td class="drag-handle text-center" style="cursor: move; vertical-align: middle;">
+								<input type="hidden" name="row_id" value="<?php echo $tab['id']; ?>">
+								<i class="fas fa-bars text-muted"></i>
+							</td>
+							<td valign="top">
+								<input type="text" name="row_tit" value="<?php echo $tab['titulo']; ?>" class="form-control">
+							</td>
+							<td valign="top">
+								<select name="row_row" class="form-control">
+									<option value=""></option>
+									<?php foreach ($stat_vars as $v) {
+										$selected = ($tab['row'] === $v['id'] || $tab['row'] === $v['nome']) ? "selected" : "";
+										echo "<option value='{$v['id']}' data-islmp='{$v['isLMP']}' $selected>{$v['nome']}</option>";
+									} ?>
+								</select>
+							</td>
+							<td valign="top">
+								<select name="row_col" class="form-control">
+									<option value=""></option>
+									<?php foreach ($stat_vars as $v) {
+										$selected = ($tab['col'] === $v['id'] || $tab['col'] === $v['nome']) ? "selected" : "";
+										echo "<option value='{$v['id']}' data-islmp='{$v['isLMP']}' $selected>{$v['nome']}</option>";
+									} ?>
+								</select>
+							</td>
+							<td valign="top">
+								<input type="text" name="row_expr" value="<?php echo $tab['expr']; ?>" class="form-control" placeholder='Ex: ("OPED_2026$")'>
+							</td>
+							<td nowrap class="text-center" valign="top">
+								<a class="bt bt-gray bt-mini" href="javascript:void(0)" onclick="tabsEditor.moveRow(this, -1)"><i class="fas fa-arrow-up"></i></a>
+								<a class="bt bt-gray bt-mini" href="javascript:void(0)" onclick="tabsEditor.moveRow(this, 1)"><i class="fas fa-arrow-down"></i></a>
+								<a class="bt bt-red bt-mini" href="javascript:void(0)" onclick="tabsEditor.deleteRow(this)"><i class="fas fa-trash"></i></a>
+							</td>
+						</tr>
+					<?php } ?>
+				</tbody>
+			</table>
+		</form>
+
+		<?php include("inc_stat_menu.php"); ?>
+	</div>
+
+	<form name="enviar" method="post" action="tables_cfg_update.php">
+		<input type="hidden" name="base" value="<?php echo $arrHttp["base"]; ?>">
+		<input type="hidden" name="ValorCapturado">
+		<?php
+		if (isset($arrHttp["encabezado"])) echo "<input type=hidden name=encabezado value=S>\n";
+		if (isset($arrHttp["from"])) echo "<input type=hidden name=from value=" . $arrHttp["from"] . ">\n";
+		?>
+	</form>
+
+	<template id="rowTemplate">
+		<tr>
+			<td class="drag-handle text-center" style="cursor: move; vertical-align: middle;">
+				<input type="hidden" name="row_id" value="">
+				<i class="fas fa-bars text-muted"></i>
+			</td>
+			<td valign="top">
+				<input type="text" name="row_tit" value="" class="form-control">
+			</td>
+			<td valign="top">
+				<select name="row_row" class="form-control">
+					<option value=""></option>
+					<?php foreach ($stat_vars as $v) {
+						echo "<option value='{$v['id']}' data-islmp='{$v['isLMP']}'>{$v['nome']}</option>";
+					} ?>
+				</select>
+			</td>
+			<td valign="top">
+				<select name="row_col" class="form-control">
+					<option value=""></option>
+					<?php foreach ($stat_vars as $v) {
+						echo "<option value='{$v['id']}' data-islmp='{$v['isLMP']}'>{$v['nome']}</option>";
+					} ?>
+				</select>
+			</td>
+			<td valign="top">
+				<input type="text" name="row_expr" value="" class="form-control" placeholder='Ex: ("OPED_2026$")'>
+			</td>
+			<td nowrap class="text-center" valign="top">
+				<a class="bt bt-gray bt-mini" href="javascript:void(0)" onclick="tabsEditor.moveRow(this, -1)"><i class="fas fa-arrow-up"></i></a>
+				<a class="bt bt-gray bt-mini" href="javascript:void(0)" onclick="tabsEditor.moveRow(this, 1)"><i class="fas fa-arrow-down"></i></a>
+				<a class="bt bt-red bt-mini" href="javascript:void(0)" onclick="tabsEditor.deleteRow(this)"><i class="fas fa-trash"></i></a>
+			</td>
+		</tr>
+	</template>
+
+	<?php include("../common/footer.php"); ?>
+
+	<script src="../../assets/js/Sortable.min.js"></script>
+	<script src="../../assets/js/table_editor.js"></script>
+
+	<script>
+		const tabsEditor = new TableEditor('tabsTable', {
+			enableDrag: true,
+			handleClass: '.drag-handle',
+			templateId: 'rowTemplate'
+		});
+
+		function generateTabId() {
+			return 'tab_' + Date.now() + Math.floor(Math.random() * 1000);
+		}
+
+		function addBlankRowTop() {
+			tabsEditor.addRow();
+			var tbody = document.querySelector("#tabsTable tbody");
+			var rows = tbody.querySelectorAll("tr");
+			if (rows.length > 0) {
+				var newRow = rows[rows.length - 1];
+				newRow.querySelector("input[name='row_id']").value = generateTabId();
+
+				if (rows.length > 1) {
+					tbody.insertBefore(newRow, tbody.firstChild);
+				}
+			}
+		}
+
+		if (document.querySelectorAll("#tabsTable tbody tr").length === 0) {
+			addBlankRowTop();
+		}
+
+		function Guardar() {
+			const content = tabsEditor.collectData(function(row) {
+				const id = row.querySelector("input[name='row_id']").value.trim();
+				const titulo = row.querySelector("input[name='row_tit']").value.trim();
+				const selectRow = row.querySelector("select[name='row_row']");
+				const selectCol = row.querySelector("select[name='row_col']");
+				const expr = row.querySelector("input[name='row_expr']").value.trim();
+
+				const rowVal = selectRow.value;
+				const colVal = selectCol.value;
+
+				const isColLmp = selectCol.options[selectCol.selectedIndex]?.getAttribute('data-islmp') === '1';
+
+				if (titulo === "" && rowVal === "" && colVal === "") return null;
+
+				if (titulo === "") {
+					alert("<?php echo $msgstr["sel_tit"]; ?>");
+					throw "Validation Error";
+				}
+				if (rowVal === "" && colVal === "") {
+					alert("<?php echo $msgstr["sel_rc"]; ?>");
+					throw "Validation Error";
+				}
+				if (isColLmp) {
+					alert("Os mais emprestados (Los más prestados) só podem aparecer como Linha.");
+					throw "Validation Error";
+				}
+
+				return titulo + "|" + rowVal + "|" + colVal + "|" + id + "|" + expr;
+			});
+
+			document.enviar.ValorCapturado.value = content;
+			document.enviar.submit();
+		}
+	</script>
