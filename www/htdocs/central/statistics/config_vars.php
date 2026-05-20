@@ -1,321 +1,349 @@
 <?php
 /*
-20220215 fho4abcd backbutton,div-helper,improve html, remove obsolete code
-20220926 fho4abcd translations
+* @file        config_vars.php
+* @description Statistics Variables Configuration with Assistant and TableEditor
+* @author      Refactored by Roger C. Guilherme
 */
 session_start();
 if (!isset($_SESSION["permiso"])) die;
 include("../common/get_post.php");
-include ("../config.php");
-// ARCHIVOD DE MENSAJES
+include("../config.php");
+
 include("../lang/admin.php");
 include("../lang/dbadmin.php");
 include("../lang/statistics.php");
 
-// ENCABEZAMIENTO HTML Y ARCHIVOS DE ESTILO
+if (isset($charset)) {
+	$content_charset = $charset;
+} elseif (isset($meta_encoding)) {
+	$content_charset = $meta_encoding;
+} else {
+	$content_charset = "ISO-8859-1";
+}
+$php_charset = (strtoupper($content_charset) == "ANSI") ? "ISO-8859-1" : $content_charset;
+
+$file_fdt = $db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . $arrHttp["base"] . ".fdt";
+if (!file_exists($file_fdt)) {
+	$file_fdt = $db_path . $arrHttp["base"] . "/def/" . $lang_db . "/" . $arrHttp["base"] . ".fdt";
+}
+$fdt_processed = array();
+if (file_exists($file_fdt)) {
+	$raw_fdt = file($file_fdt);
+	foreach ($raw_fdt as $line) {
+		$line = trim($line);
+		if ($line == "") continue;
+
+		$parts = explode('|', $line);
+		$type = $parts[0];
+		if (in_array($type, array('F', 'T', 'AI', 'M', 'OD'))) {
+			$tag = isset($parts[1]) ? $parts[1] : '';
+			if ($tag === "") continue;
+			$name = isset($parts[2]) ? $parts[2] : '';
+			$fdt_processed[$tag] = $name;
+		}
+	}
+}
+
 include("../common/header.php");
-
 ?>
+
 <body>
-<script language="JavaScript" type="text/javascript"  src="../dataentry/js/lr_trim.js"></script>
-<script language=javascript>
-
-//LLEVA LA CUENTA DE VARIABLES AGREGADAS A LA LISTA
-ix=-1
-total=0
-
-//PARA AGREGAR NUEVAS VARIABLES A LA LISTA
-function returnObjById( id )
-{
-    if (document.getElementById)
-        var returnVar = document.getElementById(id);
-    else if (document.all)
-        var returnVar = document.all[id];
-    else if (document.layers)
-        var returnVar = document.layers[id];
-    return returnVar;
-}
-
-function getElement(psID) {
-	if(!document.all) {
-		return document.getElementById(psID);
-
+	<?php
+	if (isset($arrHttp["encabezado"])) {
+		include("../common/institutional_info.php");
+		$encabezado = "&encabezado=s";
 	} else {
-		return document.all[psID];
+		$encabezado = "";
 	}
-}
+	?>
 
-function DrawElement(ixE,nombre,pft,date){
-//alert(date)
-	if (date)
-		xselected=" checked"
-	else
-		xselected=""
-	xhtml="<tr><td bgcolor=white width=220 valign=top>"
-	xhtml+="<a href=javascript:DeleteElement("+ixE+")><img src=../dataentry/img/toolbarDelete.png alt=\"<?php echo $msgstr["delete"]?>\" text=\"<?php echo $msgstr["delete"]?>\"></a>&nbsp; &nbsp;";
-	xhtml+="<input type=text name=\"nombre\" value=\""+nombre+"\" size=25></td><td bgcolor=white width=500><textarea name=pft style='width:500px;height:30px'>"+pft+"</textarea></td><td bgcolor=white valign=top><input type=hidden name=prefix size=5></a>";
-	xhtml+="<input type=checkbox name=date "+xselected+"><?php echo $msgstr["date_field"]?></td></tr>"
-    return xhtml
-}
+	<div class="sectionInfo">
+		<div class="breadcrumb">
+			<?php echo $msgstr["stats"] . " - " . $msgstr["stat_cfg_vars"] . ": " . $arrHttp["base"]; ?>
+		</div>
+		<div class="actions">
+			<?php
+			if (isset($arrHttp["from"]) and $arrHttp["from"] == "statistics")
+				$backtoscript = "tables_generate.php";
+			else
+				$backtoscript = "../dbadmin/menu_modificardb.php";
 
-function DeleteElement(ix){
-	seccion=returnObjById( "rows" )
-	html_sec="<table width=800 class=listTable border=0>"
-	Ctrl=eval("document.stats.nombre")
-	ixLength=Ctrl.length
-	if (ixLength<3){
-		document.stats.nombre[ix].value=""
-		document.stats.pft[ix].value=""
-		document.stats.date[ix].checked=false
-	}else{
-		ixE=-1
-		tags=new Array()
-		cont=new Array()
-		for (i=0;i<ixLength;i++){
-			if (i!=ix){
-				Ctrl_nombre=document.stats.nombre[i].value
-				Ctrl_pft=document.stats.pft[i].value
-				Ctrl_date=document.stats.date[i].checked
-				ixE++
-				html=DrawElement(ixE,Ctrl_nombre,Ctrl_pft,Ctrl_date)
-    			html_sec+=html
+			include "../common/inc_back.php";
+			$savescript = "javascript:Guardar()";
+			include "../common/inc_save.php";
+			?>
+		</div>
+		<div class="spacer">&#160;</div>
+	</div>
+
+	<?php
+	$ayuda = "stats_config_vars.html";
+	include "../common/inc_div-helper.php";
+
+	$file = $db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/stat.cfg";
+	if (!file_exists($file)) $file = $db_path . $arrHttp["base"] . "/def/" . $lang_db . "/stat.cfg";
+	$fp = file_exists($file) ? file($file) : array();
+
+	$lmp = "";
+	$excluir = "";
+	$stat_vars = array();
+
+	foreach ($fp as $value) {
+		$value = trim($value);
+		if ($value != "") {
+			$var = explode('|', $value);
+			if (isset($var[2]) and $var[2] == "LMP") {
+				$lmp = $var[1];
+				$excluir = isset($var[3]) ? $var[3] : "";
+			} else {
+				$stat_vars[] = $var;
 			}
 		}
-		seccion.innerHTML = html_sec+"</table>"
 	}
+	?>
 
-}
+	<div class="middle formContent">
+		<form name="stats" method="post" onsubmit="return false;">
 
+			<div class="helper-box" style="background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+				<h5 style="margin-top:0; color: #333; margin-bottom: 10px;"><i class="fas fa-magic"></i> <?php echo $msgstr["stat_ass_var"]; ?></h5>
 
+				<div class="form-row-custom" style="display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end;">
+					<div class="form-group-custom" style="flex: 1;">
+						<label style="font-weight: bold; font-size: 0.9em; display:block;"><?php echo $msgstr["stat_var_name_tab"]; ?></label>
+						<input type="text" id="new_var_name" class="form-control" placeholder="<?php echo $msgstr["stat_ex_author"]; ?>">
+					</div>
 
-function AddElement(){
-	seccion=returnObjById( "rows" )
-	html="<table width=800 class=listTable border=0>"
-	Ctrl=eval("document.stats.nombre")
-	if (Ctrl){
-		if (Ctrl.length){
-			ixLength=Ctrl.length
-			last=ixLength-1
-	        if (!ixLength) ixLength=1
-			if (ixLength>0){
-			    for (ia=0;ia<ixLength;ia++){
-			    	seltext=""
-			    	nombre=""
-			    	pft=""
-			    	nombre=document.stats.nombre[ia].value
-			    	pft=document.stats.pft[ia].value
-			    	date=document.stats.date[ia].checked
-			    	xhtm=DrawElement(ia,nombre,pft,date)
-			    	html+=xhtm
-			    }
-		    }
-		 }
-	 }else{
-		ia=0
-	 }
-	nuevo=DrawElement(ia,"","","","")
-	seccion.innerHTML = html+nuevo+"</table>"
-}
+					<div class="form-group-custom" style="flex: 2;">
+						<label style="font-weight: bold; font-size: 0.9em; display:block;"><?php echo $msgstr["stat_db_field_fdt"]; ?></label>
+						<select id="new_var_field" class="form-control">
+							<option value=""><?php echo $msgstr["stat_sel_field"]; ?></option>
+							<?php
+							foreach ($fdt_processed as $tag => $name) {
+								echo "<option value='$tag'>$tag - " . htmlspecialchars($name, ENT_QUOTES, $php_charset) . "</option>";
+							}
+							?>
+							<option value="CUSTOM"><?php echo $msgstr["stat_other_manual"]; ?></option>
+						</select>
+					</div>
 
-// PASA AL CAMPO DE TEXTO EL NOMBRE DE LA VARIABLE SELECCIONADA
-function Cambiar(ix){
+					<div class="form-group-custom" style="display: flex; align-items: center; height: 35px; gap: 5px;">
+						<input type="checkbox" id="new_var_date" value="true">
+						<label for="new_var_date" style="font-size: 0.9em; margin: 0;"><?php echo $msgstr["date_field"]; ?></label>
+					</div>
 
-		sel=document.stats.sel_text[ix].selectedIndex
-		if (sel==0){
-			document.stats.nombre[ix].value=""
-			document.stats.pft[ix].value=""
-		}else{
-			document.stats.nombre[ix].value=document.stats.sel_text[ix].options[sel].text
-			document.stats.pft[ix].value="v"+document.stats.sel_text[ix].options[sel].value
+					<div class="form-group-custom">
+						<button type="button" class="bt bt-blue" onclick="insertHelperRow()">
+							<i class="fas fa-plus"></i> <?php echo $msgstr["stat_insert_var"]; ?>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="mb-2">
+				<button type="button" class="bt bt-blue" onclick="addBlankRowTop()">
+					<i class="fas fa-plus"></i> <?php echo $msgstr["stat_blank_row"]; ?>
+				</button>
+			</div>
+
+			<table class="striped" id="varsTable" style="width: 100%;">
+				<thead>
+					<tr>
+						<th width="30"></th>
+						<th width="30%"><?php echo $msgstr["var"]; ?></th>
+						<th width="40%"><?php echo $msgstr["pft_ext"]; ?></th>
+						<th width="15%"><?php echo $msgstr["date_field"]; ?></th>
+						<th width="100" class="text-center"><?php echo $msgstr["stat_actions"]; ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+					foreach ($stat_vars as $var) {
+						$nome = isset($var[0]) ? $var[0] : "";
+						$pft = isset($var[1]) ? $var[1] : "";
+						$is_date = (isset($var[2]) && $var[2] == "true") ? "checked" : "";
+						$id_var = isset($var[3]) ? trim($var[3]) : "var_" . uniqid();
+					?>
+						<tr>
+							<td class="drag-handle text-center" style="cursor: move; vertical-align: middle;">
+								<input type="hidden" name="row_id" value="<?php echo htmlspecialchars($id_var, ENT_QUOTES, $php_charset); ?>">
+								<i class="fas fa-bars text-muted"></i>
+							</td>
+							<td>
+								<input type="text" name="row_nome" value="<?php echo htmlspecialchars($nome, ENT_QUOTES, $php_charset); ?>" class="form-control">
+							</td>
+							<td>
+								<textarea name="row_pft" rows="1" class="form-control" style="width:100%; resize:vertical;"><?php echo htmlspecialchars($pft, ENT_QUOTES, $php_charset); ?></textarea>
+							</td>
+							<td class="text-center" style="vertical-align: middle;">
+								<input type="checkbox" name="row_date" <?php echo $is_date; ?>>
+							</td>
+							<td nowrap class="text-center">
+								<a class="bt bt-gray bt-mini" href="javascript:void(0)" onclick="varsEditor.moveRow(this, -1)"><i class="fas fa-arrow-up"></i></a>
+								<a class="bt bt-gray bt-mini" href="javascript:void(0)" onclick="varsEditor.moveRow(this, 1)"><i class="fas fa-arrow-down"></i></a>
+								<a class="bt bt-red bt-mini" href="javascript:void(0)" onclick="varsEditor.deleteRow(this)"><i class="fas fa-trash"></i></a>
+							</td>
+						</tr>
+					<?php } ?>
+				</tbody>
+			</table>
+
+			<?php if ($arrHttp["base"] == "trans") { ?>
+				<div style="margin-top: 30px; border-top: 2px solid #eee; padding-top: 15px;">
+					<h5 style="color: #333;"><i class="fas fa-chart-bar"></i> <?php echo $msgstr["stat_spec_config"]; ?></h5>
+					<div class="form-row-custom" style="display: flex; gap: 20px;">
+						<div class="form-group-custom" style="flex: 2;">
+							<label style="font-weight: bold;"><?php echo $msgstr["mostborrowed"]; ?></label>
+							<textarea name="lmp" id="lmp" class="form-control" rows="2"><?php echo htmlspecialchars($lmp, ENT_QUOTES, $php_charset); ?></textarea>
+						</div>
+						<div class="form-group-custom" style="flex: 1;">
+							<label style="font-weight: bold;"><?php echo $msgstr["excludetotallt"]; ?></label>
+							<input type="text" name="excluir" class="form-control" value="<?php echo htmlspecialchars($excluir, ENT_QUOTES, $php_charset); ?>">
+						</div>
+					</div>
+				</div>
+			<?php } else { ?>
+				<input type="hidden" name="lmp" id="lmp" value="">
+				<input type="hidden" name="excluir" value="">
+			<?php } ?>
+
+		</form>
+
+		<?php include("inc_stat_menu.php"); ?>
+	</div>
+
+	<form name="enviar" method="post" action="config_vars_update.php">
+		<input type="hidden" name="base" value="<?php echo $arrHttp["base"]; ?>">
+		<input type="hidden" name="ValorCapturado">
+		<input type="hidden" name="lmp">
+		<input type="hidden" name="excluir">
+		<?php
+		if (isset($arrHttp["encabezado"])) echo "<input type=hidden name=encabezado value=S>\n";
+		if (isset($arrHttp["from"])) echo "<input type=hidden name=from value=" . $arrHttp["from"] . ">\n";
+		?>
+	</form>
+
+	<template id="rowTemplate">
+		<tr>
+			<td class="drag-handle text-center" style="cursor: move; vertical-align: middle;">
+				<input type="hidden" name="row_id" value="">
+				<i class="fas fa-bars text-muted"></i>
+			</td>
+			<td>
+				<input type="text" name="row_nome" value="" class="form-control">
+			</td>
+			<td>
+				<textarea name="row_pft" rows="1" class="form-control" style="width:100%; resize:vertical;"></textarea>
+			</td>
+			<td class="text-center" style="vertical-align: middle;">
+				<input type="checkbox" name="row_date">
+			</td>
+			<td nowrap class="text-center">
+				<a class="bt bt-gray bt-mini" href="javascript:void(0)" onclick="varsEditor.moveRow(this, -1)"><i class="fas fa-arrow-up"></i></a>
+				<a class="bt bt-gray bt-mini" href="javascript:void(0)" onclick="varsEditor.moveRow(this, 1)"><i class="fas fa-arrow-down"></i></a>
+				<a class="bt bt-red bt-mini" href="javascript:void(0)" onclick="varsEditor.deleteRow(this)"><i class="fas fa-trash"></i></a>
+			</td>
+		</tr>
+	</template>
+
+	<?php include("../common/footer.php"); ?>
+
+	<script src="../../assets/js/Sortable.min.js"></script>
+	<script src="../../assets/js/table_editor.js"></script>
+
+	<script>
+		const varsEditor = new TableEditor('varsTable', {
+			enableDrag: true,
+			handleClass: '.drag-handle',
+			templateId: 'rowTemplate'
+		});
+
+		function generateVarId() {
+			return 'var_' + Date.now() + Math.floor(Math.random() * 1000);
 		}
-}
 
-//RECOLECTA LOS VALORES DE LA PAGINA Y ENVIA LA FORMA
-function Guardar(){
-	ValorCapturado=""
-	base="<?php echo $arrHttp["base"]?>"
-	total=document.stats.nombre.length
-	if (total==0){
-		pft=Trim(document.stats.pft.value)
-		nombre=Trim(document.stats.nombre.value)
-		date=document.stats.date.checked
-		if (nombre=="" && pft!=""){
-			alert("<?php echo $msgstr["mustselectfield"]?>")
-			return;
+		function addBlankRowTop() {
+			varsEditor.addRow();
+			var tbody = document.querySelector("#varsTable tbody");
+			var rows = tbody.querySelectorAll("tr");
+			if (rows.length > 0) {
+				var newRow = rows[rows.length - 1];
+				newRow.querySelector("input[name='row_id']").value = generateVarId();
+
+				if (rows.length > 1) {
+					tbody.insertBefore(newRow, tbody.firstChild);
+				}
+			}
 		}
-		if (nombre!="" && pft==""){
-			alert("<?php echo $msgstr["misspft"]?>")
-			return;
-		}
-		if (pft!=""){
-			pft=pft.replace(new RegExp('\\n','g'),' ')
-			pft=pft.replace(new RegExp('\\r','g'),'')
-			ValorCapturado=Trim(nombre)+"|"+Trim(pft)+"|"+date
-		}
-	}else{
-		for (i=0;i<total;i++){
-			pft=Trim(document.stats.pft[i].value)
-			nombre=Trim(document.stats.nombre[i].value)
-			date=document.stats.date[i].checked
-			if (nombre=="" && pft!=""){
-				xi=i+1
-				alert("<?php echo $msgstr["mustselectfield"]?>"+" ("+xi+")")
+
+		function insertHelperRow() {
+			var name = document.getElementById("new_var_name").value.trim();
+			var tag = document.getElementById("new_var_field").value.trim();
+			var isDate = document.getElementById("new_var_date").checked;
+
+			if (name === "") {
+				alert("<?php echo $msgstr["stat_pls_var_name"]; ?>");
 				return;
 			}
-			if (nombre!="" && pft==""){
-				alert("<?php echo $msgstr["misspft"]?>")
-				return;
+
+			var pftFormat = "";
+			if (tag !== "" && tag !== "CUSTOM") {
+				pftFormat = "v" + tag;
 			}
-			if (pft!=""){
-				pft=pft.replace(new RegExp('\\n','g'),' ')
-				pft=pft.replace(new RegExp('\\r','g'),'')
-				ValorCapturado+=Trim(nombre)+"|"+Trim(pft)+"|"+date+"\n"
+
+			varsEditor.addRow();
+
+			var tbody = document.querySelector("#varsTable tbody");
+			var rows = tbody.querySelectorAll("tr");
+			var lastRow = rows[rows.length - 1];
+
+			if (lastRow) {
+				lastRow.querySelector("input[name='row_id']").value = generateVarId();
+				lastRow.querySelector("input[name='row_nome']").value = name;
+				lastRow.querySelector("textarea[name='row_pft']").value = pftFormat;
+				lastRow.querySelector("input[name='row_date']").checked = isDate;
+
+				if (rows.length > 1) {
+					tbody.insertBefore(lastRow, tbody.firstChild);
+				}
 			}
+
+			document.getElementById("new_var_name").value = "";
+			document.getElementById("new_var_field").value = "";
+			document.getElementById("new_var_date").checked = false;
+			document.getElementById("new_var_name").focus();
 		}
-	}
-	Ctrl=returnObjById( "lmp" )
-	if (Ctrl){
-		pft=Trim(document.stats.lmp.value)
-		pft=pft.replace(new RegExp('\\n','g'),' ')
-		pft=pft.replace(new RegExp('\\r','g'),'')
-    	if (Trim(pft)!=""){
-        	document.enviar.excluir.value=document.stats.excluir.value
-    		document.enviar.lmp.value=pft
-    	}
-    }
-	document.enviar.base.value=base
-	document.enviar.ValorCapturado.value=ValorCapturado
-	document.enviar.submit()
-}
 
-</script>
-<?php
-// VERIFICA SI VIENE DEL TOOLBAR O NO PARA COLOCAR EL ENCABEZAMIENTO
-if (isset($arrHttp["encabezado"])){
-	include("../common/institutional_info.php");
-	$encabezado="&encabezado=s";
-}else{
-	$encabezado="";
-}
-?>
-<div class="sectionInfo">
-	<div class="breadcrumb">
-        <?php echo $msgstr["stats"]." - ".$msgstr["stat_cfg_vars"].": ".$arrHttp["base"];?>
-    </div>
-	<div class="actions">
-        <?php
-        if (isset($arrHttp["from"]) and $arrHttp["from"]=="statistics")
-            $backtoscript="tables_generate.php";
-        else
-            $backtoscript="../dbadmin/menu_modificardb.php";//old status where variables were defined in that script
-        include "../common/inc_back.php";
-        $savescript="javascript:Guardar()";
-        include "../common/inc_save.php";
-        ?>
-    </div>
-    <div class="spacer">&#160;</div>
-</div>
-<?php
-$ayuda="stats_config_vars.html";
-include "../common/inc_div-helper.php";
-?>
-<div class="middle form">
-	<div class="formContent">
-    <form name=stats method=post>
-		<table width=800  class=listTable bgcolor=#bbbbbb>
-            <tr>
-			<td width=220 valign=top><strong><?php echo $msgstr["var"]?></strong></td>
-			<td width=450><strong><?php echo $msgstr["pft_ext"]?></strong></td>
-            </tr>
-		</table>
-        <div id=rows>
-    <?php
- 	$total=-1;
- 	$file=$db_path.$arrHttp["base"]."/def/".$lang."/stat.cfg";
- 	if (!file_exists($file)) $file=$db_path.$arrHttp["base"]."/def/".$lang_db."/stat.cfg";
-    ?>
- 	<table width=800 class=listTable>
-    <?php
- 	$ix=-1;
- 	$lmp="";
- 	$excluir="";
- 	if (file_exists($file)){
- 		$fp=file($file);
- 	}else{
- 		$fp=array();
- 	}
- 	$cuenta=count($fp);
- 	if ($cuenta<3){
- 		$fp[]="||||||";
- 		$fp[]="||||||";
- 	}
- 	$lineas=0;
- 		foreach ($fp as $value) {
- 			$value=trim($value);
- 			if ($value!=""){
- 				$var=explode('|',$value);
- 				if (isset($var[2]) and $var[2]=="LMP"){
- 					$lmp=$var[1];
- 					$excluir=$var[3];
+		function Guardar() {
+			const content = varsEditor.collectData(function(row) {
+				const id = row.querySelector("input[name='row_id']").value.trim();
+				const nome = row.querySelector("input[name='row_nome']").value.trim();
+				let pft = row.querySelector("textarea[name='row_pft']").value;
+				const isDate = row.querySelector("input[name='row_date']").checked ? "true" : "";
 
- 				}else{
- 					$xselected="";
- 					if (isset($var[2])){
- 						if ($var[2]=="true")
- 							$xselected=" checked";
- 					}
- 					$ix++;
- 					$total=$ix;
-                    ?>
-	 				<tr>
-                        <td bgcolor=white width=220 valign=top nowrap>
-                            <a href=javascript:DeleteElement("<?php echo $ix;?>")>
-                                <img src="../dataentry/img/toolbarDelete.png"
-                                     alt="<?php echo $msgstr["delete"];?>"
-                                     title="<?php echo $msgstr["delete"];?>"></a>&nbsp; &nbsp;
-                            <input type=text name="nombre" value="<?php echo $var[0];?>" size=25>
-                        </td>
-                        <td bgcolor=white width=500>
-                            <textarea name=pft style='width:500px;height:30px'><?php echo $var[1]?></textarea>
-                        </td>
-                        <td bgcolor=white valign=top>
-                            <input type=checkbox name=date <?php echo $xselected;?>><?php echo $msgstr["date_field"];?>
-                            <input type=hidden name=prefix size=5>
-                        </td>
-                    </tr>
-                    <?php
- 				}
- 			}
- 		}
-        ?>
-        </table>
-        </div>
+				if (nome === "" && pft === "") return null;
 
-		<a href="javascript:AddElement('rows')"><?php echo $msgstr["add"]?></a>
-        <?php
-        if ($arrHttp["base"]=="trans"){
-        ?>
-		<p>
-        <table width=800  class=listTable>
-        <tr><td bgcolor=white width=120 valign=top><?php echo $msgstr["mostborrowed"];?></td>
-            <td  bgcolor=white width=500><textarea name=lmp id=lmp style='width:500px;height:30px'><?php echo $lmp?></textarea></td>
-            <td><?php echo $msgstr["excludetotallt"];?> <input type=text name=excluir size=4 value="<?php echo $excluir?>"></td>
-        </tr>
-		</table>
-        <?php }?>
-    </form>
-	<iframe id="cframe" src="../dbadmin/fdt_leer.php?Opcion=<?php echo $arrHttp["Opcion"]?>&base=<?php echo $arrHttp["base"]?>" width=100% height=400 scrolling=yes name=fdt></iframe>
-</div>
-<form name=enviar method=post action=config_vars_update.php>
-<input type=hidden name=base>
-<input type=hidden name=ValorCapturado>
-<input type=hidden name=lmp>
-<input type=hidden name=excluir>
-<?php
-if (isset($arrHttp["encabezado"])) echo "<input type=hidden name=encabezado value=S>\n";
-if (isset($arrHttp["from"])) echo "<input type=hidden name=from value=".$arrHttp["from"].">\n";
-?>
-</form>
-<?php
-include("../common/footer.php");
-?>
+				if (nome === "") {
+					alert("<?php echo $msgstr["sel_tit"]; ?>");
+					throw "Validation Error";
+				}
+				if (pft === "") {
+					alert("<?php echo $msgstr["misspft"]; ?>");
+					throw "Validation Error";
+				}
+
+				pft = pft.replace(/(\r\n|\n|\r)/gm, " ");
+
+				return nome + "|" + pft + "|" + isDate + "|" + id;
+			});
+
+			var lmpField = document.getElementById("lmp");
+			if (lmpField && lmpField.value.trim() !== "") {
+				document.enviar.lmp.value = lmpField.value.replace(/(\r\n|\n|\r)/gm, " ");
+				document.enviar.excluir.value = document.stats.excluir ? document.stats.excluir.value : "";
+			}
+
+			document.enviar.ValorCapturado.value = content;
+			document.enviar.submit();
+		}
+	</script>
