@@ -316,7 +316,7 @@ include("../common/inc_get-dbinfo.php");
 
                         <div class="stat-option-group">
                             <div class="stat-option-header" onclick="toggleLayer('useextproc')">
-                                <strong>1. <?php echo $msgstr["stat_use_exist_pr"]; ?></strong>
+                                <strong><?php echo $msgstr["stat_use_exist_pr"]; ?></strong>
                                 <i class="fas fa-chevron-down"></i>
                             </div>
                             <div id="useextproc" class="stat-option-content">
@@ -339,11 +339,11 @@ include("../common/inc_get-dbinfo.php");
                             </div>
                         </div>
 
-                        <div class="or-separator"><?php echo $msgstr["or"] ?? "OU"; ?></div>
+                        <div class="or-separator"></div>
 
                         <div class="stat-option-group">
                             <div class="stat-option-header" onclick="toggleLayer('useextable')">
-                                <strong>2. <?php echo $msgstr["exist_tb"]; ?></strong>
+                                <strong><?php echo $msgstr["exist_tb"]; ?></strong>
                                 <i class="fas fa-chevron-down"></i>
                             </div>
                             <div id="useextable" class="stat-option-content">
@@ -367,11 +367,11 @@ include("../common/inc_get-dbinfo.php");
                             </div>
                         </div>
 
-                        <div class="or-separator"><?php echo $msgstr["or"] ?? "OU"; ?></div>
+                        <div class="or-separator"></div>
 
                         <div class="stat-option-group">
                             <div class="stat-option-header" onclick="toggleLayer('createtable')">
-                                <strong>3. <?php echo $msgstr["stat_create_tmp_tb"] ?></strong>
+                                <strong><?php echo $msgstr["stat_create_tmp_tb"] ?></strong>
                                 <i class="fas fa-chevron-down"></i>
                             </div>
                             <div id="createtable" class="stat-option-content">
@@ -416,7 +416,7 @@ include("../common/inc_get-dbinfo.php");
                         </div>
 
                         <div style="margin-top: 25px; padding-top: 15px; border-top: 2px solid #eee;">
-                            <h4 style="margin-bottom: 15px; font-size: 14px; color: #333;">4. <?php echo $msgstr["data_source"]; ?> (<?php echo $msgstr["generateoutput"] ?>)</h4>
+                            <h4 style="margin-bottom: 15px; font-size: 14px; color: #333;"><?php echo $msgstr["data_source"]; ?> (<?php echo $msgstr["generateoutput"] ?>)</h4>
 
                             <div class="stat-option-group" style="padding: 10px; border-style: dashed; margin-bottom: 10px; background-color: #fafafa;">
                                 <label style="font-weight: bold; font-size: 13px; cursor: pointer; display: block;">
