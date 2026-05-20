@@ -86,7 +86,6 @@ stat_blank_row=Blank Row
 stat_actions=Actions
 stat_spec_config=Special Settings
 stat_pls_var_name=Please enter the variable name.
-
 processing=Processing...
 not_enough_data=Not enough data to display.
 chart_error=Error rendering chart.
