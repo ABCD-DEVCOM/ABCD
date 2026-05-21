@@ -65,7 +65,7 @@ if (!isset($arrHttp["Opcion"])) $arrHttp["Opcion"]="";
             $backtoscript="pft.php?Modulo=dataentry";
             include "../common/inc_back.php";
 		}else{
-            $backtoscript="menu_modificardb.php";
+            $backtoscript="pft.php";
             include "../common/inc_back.php";
             include "../common/inc_home.php";
         }
