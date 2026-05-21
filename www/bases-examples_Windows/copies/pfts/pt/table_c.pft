@@ -1,0 +1,20 @@
+'<tr style="font-family:arial;font-size:smaller;vertical-align:top" >','<td>'v1+|; | if a(v1) then '&nbsp;' fi,'</td>'/
+'<td>'v10+|; | if a(v10) then '&nbsp;' fi,'</td>'/
+'<td>'v20+|; | if a(v20) then '&nbsp;' fi,'</td>'/
+'<td>'v30+|; | if a(v30) then '&nbsp;' fi,'</td>'/
+'<td>'(| |v200^a||,| |v200^b||, if iocc<>nocc(v200) and p(v200) then '<br>' fi) if a(v200) then '&nbsp;' fi,'</td>'/
+'<td>'v35+|; | if a(v35) then '&nbsp;' fi,'</td>'/
+'<td>'v40+|; | if a(v40) then '&nbsp;' fi,'</td>'/
+'<td>'v50+|; | if a(v50) then '&nbsp;' fi,'</td>'/
+'<td>'v60+|; | if a(v60) then '&nbsp;' fi,'</td>'/
+'<td>'v63+|; | if a(v63) then '&nbsp;' fi,'</td>'/
+'<td>'(| |v68^a||,| |v68^b||, if iocc<>nocc(v68) and p(v68) then '<br>' fi) if a(v68) then '&nbsp;' fi,'</td>'/
+'<td>'v70+|; | if a(v70) then '&nbsp;' fi,'</td>'/
+'<td>'v80+|; | if a(v80) then '&nbsp;' fi,'</td>'/
+'<td>'v85+|; | if a(v85) then '&nbsp;' fi,'</td>'/
+'<td>'v90+|; | if a(v90) then '&nbsp;' fi,'</td>'/
+'<td>'v95+|; | if a(v95) then '&nbsp;' fi,'</td>'/
+'<td>'v100+|; | if a(v100) then '&nbsp;' fi,'</td>'/
+'<td>'v110+|; | if a(v110) then '&nbsp;' fi,'</td>'/
+'<td>'v300+|; | if a(v300) then '&nbsp;' fi,'</td>'/
+'<td>'v400+|; | if a(v400) then '&nbsp;' fi,'</td>'/

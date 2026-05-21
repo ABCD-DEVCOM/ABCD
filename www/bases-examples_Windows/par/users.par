@@ -1,5 +1,5 @@
 users.*=%path_database%users/data/users.*
 prologoact.pft=%path_database%www/prologoact.pft
 epilogoact.pft=%path_database%www/epilogoact.pft
-isisac.tab=%path_database%users/data/isisac.tab
-isisuc.tab=%path_database%users/data/isisuc.tab
+isisac.tab=%path_database%isisac.tab
+isisuc.tab=%path_database%isisuc.tab

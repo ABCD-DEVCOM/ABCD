@@ -1,9 +1,0 @@
-if (ref->copies(L->copies('IN_'v1),v1)='')
-
-
-then   'book with barcode <B>'v1'</B> <font color="red"> 
-
-is missing in COPIES database </font><BR>' 
- else 'ok  book with barcode 'v1' found on shelves' 
-
-fi, 

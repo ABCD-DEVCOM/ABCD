@@ -1,0 +1,7 @@
+proc('a1000~' if p(v84[1]) then v84[1] else v90[1] fi'~'),/
+(if p(v1) then ,
+   '*INV*'V1'*INV*'
+   `<center><br><span  style="font-family:'Bar Code 39 e HR' ; font-size:40px">`
+   v1`</span><p>`
+   v1000^a[1],|.|v1000^b[1],|.|v1000^c[1],|.|v1000^d[1] '%%%'/
+fi)

@@ -1,0 +1,1 @@
+if  npost(['loanobjects'],'IN_'v30)>0 then 'A cópia está habilitada em empréstimo. Não pode emprestar' fi/

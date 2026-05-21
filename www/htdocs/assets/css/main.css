@@ -250,7 +250,7 @@ textarea.tooltip {
     margin: 10px 0;
 }
 
-.panel table    {
+.panel table {
     width: 100%;
 }
 
@@ -532,7 +532,7 @@ table.alert:before {
 }
 
 .badge {
-    background-color:var(--abcd-gray-200);
+    background-color: var(--abcd-gray-200);
     color: var(--abcd-gray-800);
     display: inline-block;
     padding: 0.65em 0.65em;
@@ -1780,21 +1780,23 @@ a.homeButton img {
 table {
     border-collapse: separate;
     border-spacing: 3px;
-   /* width: 100%;*/
+    /* width: 100%;*/
 }
+
 /* fho4abcd added*/
 table.center {
-    margin-left:auto;
-    margin-right:auto;
+    margin-left: auto;
+    margin-right: auto;
 }
+
 th,
 td {
     text-align: left;
     /*padding: 8px 5px; fho4abcd reduce spacing*/
-    padding-top:0px;
-    padding-bottom:0px;
-    padding-left:5px;
-    padding-right:5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .striped {
@@ -1911,6 +1913,7 @@ td {
     cursor: pointer;
     border: 1px solid #9d9d9d;
 }
+
 /* --- 7.4. Data input Table(.table-fdt) --- */
 .table-fdt {
     width: 100% !important;
@@ -1962,6 +1965,7 @@ td.table-fdt-three {
     text-align: right;
     padding-right: 15px;
     padding-top: 8px;
+    /* Alinha visualmente com o input */
     font-weight: 500;
     color: var(--abcd-gray-700);
     line-height: 1.5;
@@ -1976,6 +1980,7 @@ td.table-fdt-four {
     padding-bottom: 8px;
     padding-right: 10px;
 }
+
 /* --- 7.5. Mass actions for tables(.tMacroActions) --- */
 .tMacroActions .checkboxAction {
     float: left;
@@ -2013,6 +2018,7 @@ td.table-fdt-four {
     height: 28px;
     box-sizing: border-box;
 }
+
 .btn-limpar-abcd:hover {
     background-color: #e8e8e8;
     color: #d9534f;
@@ -3065,7 +3071,7 @@ div.ABCD_menu:hover {
     background: var(--abcd-white);
     border: 1px solid var(--abcd-gray-200);
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s, box-shadow 0.2s;
     display: flex;
     flex-direction: column;
@@ -3074,7 +3080,7 @@ div.ABCD_menu:hover {
 
 .admin-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     border-color: var(--abcd-gray-500);
 }
 
@@ -3121,7 +3127,8 @@ div.ABCD_menu:hover {
 }
 
 .admin-link:hover {
-    background-color: #f0f8ff; /* Azul bem claro para hover */
+    background-color: #f0f8ff;
+    /* Azul bem claro para hover */
     color: var(--abcd-blue);
     text-decoration: none;
     border-left-color: var(--abcd-blue);
@@ -3419,7 +3426,6 @@ div.ABCD_menu:hover {
     }
 }
 
-
 /* ==========================================================================
    USABILITY FIX: MINIMUM WIDTH FOR FIELDS (FDT)
    ========================================================================== */
@@ -3440,7 +3446,8 @@ div.ABCD_menu:hover {
 /* ==========================================================================
    MODERN LOADING SCREEN (FONT AWESOME)
    ========================================================================== */
-#preloader, #loading {
+#preloader,
+#loading {
     position: fixed !important;
     inset: 0 !important;
     background-color: rgba(255, 255, 255, 0.85) !important;
@@ -3452,8 +3459,228 @@ div.ABCD_menu:hover {
     padding: 0 !important;
 }
 
-#preloader i, #loading-image {
+#preloader i,
+#loading-image {
     font-size: 50px !important;
     color: #0056b3 !important;
     text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ==========================================================================
+   13. STATISTICS AND REPORTS (To be reviewed and refactored)
+   ========================================================================== */
+/* Prevents table fields and subfields from becoming illegible or squashed 
+   when configured with a small number of columns in the FDT (e.g. cols = 5 or 10) */
+
+.dashboard-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+    margin: 15px;
+}
+
+#config_panel {
+    flex: 0 0 380px;
+    /* Levemente aumentado para acomodar os grupos */
+    background: #fdfdfd;
+}
+
+#preview_panel {
+    flex: 1;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    min-width: 0;
+    /* Força o painel a não crescer infinitamente */
+    min-height: 1000px;
+    max-height: 85vh;
+    /* Limita a altura a 85% da tela do usuário */
+    overflow: auto;
+    /* Habilita barra de rolagem horizontal e vertical automaticamente */
+}
+
+/* Estilização das Seções de Opção (O "OU") */
+.stat-option-group {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.stat-option-header {
+    background: #f8f9fa;
+    padding: 10px 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    transition: background 0.2s;
+}
+
+.stat-option-header:hover {
+    background: #f0f2f4;
+}
+
+.stat-option-header strong {
+    color: #0056b3;
+    font-size: 13px;
+}
+
+.stat-option-content {
+    padding: 15px;
+    display: none;
+    /* Controlado pelo JS */
+}
+
+/* Organização de Inputs e Botões */
+.input-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    margin-bottom: 10px;
+}
+
+.input-group {
+    flex: 1;
+}
+
+.input-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #555;
+}
+
+#config_panel select,
+#config_panel input[type="text"],
+#config_panel textarea {
+    width: 100% !important;
+    box-sizing: border-box;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn-block {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.or-separator {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 11px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Estilos para o Painel de Configuração (Cards) */
+.config-panel-wrapper {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #eee;
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.config-card {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 20px 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.config-card:hover {
+    background: #ffffff;
+    border-color: #b3d4fc;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.config-card i {
+    font-size: 28px;
+    color: #6c757d;
+    transition: color 0.2s;
+}
+
+.config-card:hover i {
+    color: #0056b3;
+}
+
+.config-card span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+}
+
+/* =======================================================
+    ESTILOS PARA IMPRESSÃO (MODO JANELA/PDF) - FORÇADO
+    ======================================================= */
+@media print {
+
+    /* 1. Esconde absolutamente tudo no corpo da página */
+    body * {
+        visibility: hidden;
+    }
+
+    /* 2. Torna visível apenas o painel de resultados e seus elementos internos */
+    #preview_panel,
+    #preview_panel * {
+        visibility: visible;
+    }
+
+    /* 3. Posiciona o painel de resultados no topo da folha A4 */
+    #preview_panel {
+        flex: 1;
+        background: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        min-width: 0;
+        min-height: 1000px;
+        max-height: 85vh;
+        overflow: auto;
+    }
+
+    /* 4. Esconde a barra de botões (Excel/Word/Janela) para não sair no PDF */
+    #stats_toolbar,
+    #stats_toolbar * {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* 5. Evita que um gráfico ou tabela seja cortado no meio pela quebra de página */
+    .analytics-card {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        border: none !important;
+        box-shadow: none !important;
+        margin-bottom: 40px !important;
+    }
+
+    .echart-container {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
 }

@@ -1,437 +1,86 @@
-'<TABLE>
-  <tr>
-     <td class=textbody03 colspan=3>
-         <font size="1" face=verdana color=#666600 size=-1><b>MFN: ',f(mfn,1,0)'</a>',"  ("v1001"/"v1002")" 
-                ' - Nº de controle: ',v1,'<br></b>
-     </td></font>
- </tr>'
- if p(v50) or p(v82) then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Número de chamada:</TD>
-            <TD valign=top ><font face=arial size=2>'
-                v50^a,"."v50^b,v82^a,"/"v82^b,"/"v82^2'<BR>
-            </TD>'
- fi/  
- (if p(v60) then 
-    if occ=1 then '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Nº chmada NLM:</TD><TD valign=top ><font face=arial size=2>' 
-    fi,v60^a,"."v60^b,'<BR>'/
- fi/),"</TD>"D60 ,
- if s(v100,v110,V111)<>'' then 
-    '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Autor:</TD>
-         <TD valign=top ><font face=arial size=2>',
-             v100^a,v100^b,v100^c,v100^q,v100^d,v100^e,v100^u,mhl,v110*3, mpl, v111^a,| |v111^n,| |v111^d,| |v111^c,| |v111^e, | |v111^u,/
- fi,  
-    if s(v100,v110,V111)<>'' then '</td>' 
-    fi/ 
- if p(v240) then 
-    '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Título uniforme:</TD>
-         <TD valign=top ><font face=arial size=2>'
-             mdl,v240^a, v240^d, v240^f, v240^g, v240^h, v240^k, v240^l, v240^m, v240^n, v240^o, v240^p, v240^r, v240^s, mpl, 
-         '</td>'/
- fi,  
-(if p(v210) then 
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Título abreviado:</TD>
-            <TD valign=top ><font face=arial size=2>' 
-    fi,v210^a,| (|v210^b|)| ,'<BR>'/
-fi/)
-    if p(v210) then '</td>' 
-    fi, 
-(if p(v222) then 
-   if occ=1 then 
-      '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Título chave:</TD>
-           <TD valign=top ><font face=arial size=2>' 
-   fi,v222^a,| (|v222^b|)| ,'<BR>'/
-fi/) 
-   if p(v222) then '</td>' 
-   fi, 
-if p(v245) then 
-   '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Título:</TD>
-        <TD valign=top ><font face=arial size=2>',
-            v245^a, | |v245^n, | |v245^p, | |v245^h, | |v245^b, | |v245^c,
-       '</TD>
-    </TR>'
-fi/ 
-(if p(v246) then 
-    '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>'     
-   if v246*1.1='0' or v246*1.1=' ' then 'Parte do título:</TD>
-      <TD valign=top ><font face=arial size=2>',
-   fi,      
-   if v246*1.1='1' then 'Título paralelo:</TD>
-      <TD valign=top ><font face=arial size=2>',
-   fi,      
-   if v246*1.1='2' then 'Título diferente:</TD>
-      <TD valign=top ><font face=arial size=2>',
-   fi,      
-   if v246*1.1='3' then 'Outro título:</TD>
-      <TD valign=top ><font face=arial size=2>',
-   fi,      
-   if v246*1.1='4' then 'Título de capa:</TD>
-      <TD valign=top ><font face=arial size=2>',
-   fi,      
-   if v246*1.1='5' then 'Título secundário:</TD>
-      <TD valign=top ><font face=arial size=2>',
-   fi,      
-   if v246*1.1='6' then 'Título legenda:</TD>
-      <TD valign=top ><font face=arial size=2>',
-   fi,      
-   if v246*1.1='7' then 'Título corrente:</TD>
-      <TD valign=top ><font face=arial size=2>',
-   fi,      
-   if v246*1.1='8' then 'Título de prateleira:</TD>
-      <TD valign=top ><font face=arial size=2>',
-   fi,
-          v246^i,| |v246^a,| |v246^n,| |v246^f,| |v246^p,| |v246^h,| |v246^b,| |v246^g, 
-     '</TD><BR>'/
-fi/) 
-if p(v242) then 
-   '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Título traduzido:</TD>
-        <TD valign=top ><font face=arial size=2>',     v242^a,| |v242^n, | |v242^p, | |v242^h, | |v242^b, | |v242^c,| (|v242^y|)| ,'</td>'/
-fi/ 
-if p(v773) then 
-   '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Em: ',
-        v773^a, v773^t, v773^b, v773^h, |, |v773^g, v773^d, v773^x, v773^z, v773^i, v773^n, ,'</td>'/
-fi/ 
-(if p(v730) then 
-    if occ=1 then 
-      '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Título uniforme:</TD>
-           <TD valign=top ><font face=arial size=2>',
-    fi,v730^a, | |v730^n, | |v730^p ,'<BR>'/
-fi/),
-    if p(v730) then '</td>' 
-    fi, 
-(if p(v740) then 
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Título relacionado:</TD>
-        <TD valign=top ><font face=arial size=2>',
-    fi,v740^a, ,'<BR>'/
-fi/) 
-    if p(v740) then '</td>' 
-    fi, 
-if p(v250) then 
-      '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Edição:</TD>'
-          '<TD valign=top ><font face=arial size=2>',v250^a+|  |,
-          '</TD>
-       </TR>'/
-fi/, 
-if p(v260) then 
-   '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Publicação:</TD>'
-       '<TD valign=top ><font face=arial size=2>',v260^a,| |v260^b,| |v260^c+|  |,
-       '</TD>'/
-fi/, 
-if p(v300) then 
-   '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Descrição:</td>'
-       '<TD valign=top ><font face=arial size=2>',v300^a| |,v300^b| |,v300^c| |,v300^e| |,
-       '</TD>'/
-fi/ 
-if p(v362) then 
-  '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Data de publicação:</TD>
-       <TD valign=top ><font face=arial size=2>',,v362^a/ '</td>' 
-fi, 
-if p(v310) then 
-   '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Frequência:</TD>
-        <TD valign=top ><font face=arial size=2>',,v310^a , '</td>',/
-fi, 
-(if p(v440) or p(v490) then 
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Informações de série:</TD>
-            <TD valign=top ><font face=arial size=2>',
-    fi,v440^a,| |v440^n,| |v440^p,| |v440^v,| |v440^x,v490^a,| |v490^n,| |v490^p,| |v490^v,| |v490^x,,'<BR>'/
-fi/) 
-    if p(v440) then '</td>' 
-    fi, 
-(if p(v856) then 
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Localização eletrônica:</TD>
-            <TD valign=top ><font face=arial size=2>' 
-    fi,v856^u, |, Nota: |v856^z,,'<BR>'/
-fi/),  
-    if p(v856) then '</td>' 
-    fi, 
-(if p(v500) then 
-    if occ=1 then 
-      '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Notas gerais:</TD>
-           <TD valign=top ><font face=arial size=2>',
-    fi,,v500^a+|;  |,,'<BR>'/
-fi/), 
-    if p(v500) then '</td>' 
-    fi,  
-(if p(v504) then 
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Bibliografia:</TD>
-            <TD valign=top ><font face=arial size=2>' 
-    fi,,v504^a+|;  |, V504^b| refs.  |,'<BR>'/
-fi/), 
-    if p(v504) then '</td>' 
-    fi,  
-(if p(v505) then 
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Conteúdo:</TD>
-            <TD valign=top ><font face=arial size=2>' 
-    fi,,v505^a+|;  | ,'<BR>'/
-fi/), 
-    if p(v505) then '</td>' 
-    fi,  
-(if p(v520) then 
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Resumo:</TD>
-            <TD valign=top ><font face=arial size=2>' 
-    fi,,v520^a+|;  | ,'<BR>'/
-fi/),
-    if p(v520) then '</td>' 
-    fi,  
-(if p(v521) then 
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Público alvo:</TD>
-            <TD valign=top ><font face=arial size=2>' 
-    fi,,v521^a+|;  | ,'<BR>'/
-fi/),
-    if p(v521) then '</td>' 
-    fi,  
-(if p(v533) then 
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Reprodução:</TD>
-            <TD valign=top ><font face=arial size=2>',
-    fi,,v533^a| |, v533^c| |,       v533^b| |, v533^d| |, v533^e| |, v533^f| |, v533^m| |, v533^n| |,'<BR>'/
-fi/),
-    if p(v533) then '</td>' 
-    fi,  
-(if p(v534) then  
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Versão original:</TD>
-            <TD valign=top ><font face=arial size=2>',
-    fi,,v534^a| |, v534^t| |,      v534^b| |,v534^d| |, v534^c| |, v534^e| |, v534^p| |,,'<BR>'/
-fi/),
-    if p(v534) then '</td>' 
-    fi,  
-(if p(v538) then 
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Detalhes do sistema:</TD>
-            <TD valign=top ><font face=arial size=2>',
-    fi,,v538^a+|;  |  ,'<BR>'/
-fi/), 
-    if p(v538) then '</td>' 
-    fi,  
-(if p(v546) then 
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Nota de idioma:</TD>
-            <TD valign=top ><font face=arial size=2>',
-    fi,|; |+v546^a| |, v546^b,'<BR>'/
-fi/) , 
-    if p(v546) then '</td>' 
-    fi,  
-(if p(v586) then 
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Homenagens:</TD>
-            <TD valign=top ><font face=arial size=2>' 
-    fi,, v586^a+|;  | ,'<BR>'/
-fi/), 
-    if p(v586) then '</td>' 
-    fi,  
-(if p(v20) then 
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>ISBN:</TD>
-            <TD valign=top ><font face=arial size=2>',
-    fi,,v20^a, v20^c| |, |  |v20^z| ISBN inválido|, ,'<BR>'/
-fi/), 
-    if p(v20) then '</td>' 
-    fi,  
-(if p(v22) then 
-    if occ=1 then 
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>ISSN:</TD>
-            <TD valign=top ><font face=arial size=2>' 
-    fi,v22^a, | |v22^y|ISSN incorreto |, | |v22^z|ISSN cancelado |,,'<BR>'/
-fi/), 
-    if p(v22) then '</td>' 
-    fi,  
-(if p(v24) then 
-   '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>'     
-            if v24*0.1='0' then 'ISRC:</TD>
-               <TD valign=top ><font face=arial size=2>',
-            fi,     
-            if v24*0.1='1' then 'UPC:</TD>
-               <TD valign=top ><font face=arial size=2>',
-            fi,     
-            if v24*0.1='2' then 'ISMN:</TD>
-               <TD valign=top ><font face=arial size=2>',
-            fi,     
-            if v24*0.1='3' then 'EAN:</TD>
-               <TD valign=top ><font face=arial size=2>',
-            fi,     
-            if v24*0.1='4' then 'SICI:</TD>
-               <TD valign=top ><font face=arial size=2>',
-            fi,     
-            if v24*0.1='7' then 'XXX:</TD>
-               <TD valign=top ><font face=arial size=2>',
-            fi,     
-            if v24*0.1='8' then 'Códico não especificado:</TD>
-               <TD valign=top ><font face=arial size=2>',
-            fi ,v24^a| |, v24^c| |, v24^d| |, v24^z| | ,'<BR>'/
-fi/), 
-   if p(v24) then '</td>' 
-   fi,  
-(if p(v28) then  
-    if occ=1 then ,
-       '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Número do editor',/
-    fi    
-    if v28*0.1='0' then 
-       '     Número da edição:</TD>
-      <TD valign=top ><font face=arial size=2>',
-    fi,     
-    if v28*0.1='1' then 
-       '  Número da matriz:</TD>
-       <TD valign=top ><font face=arial size=2>',
-    fi,     
-    if v28*0.1='2' then '  Número da placa:</TD>
-       <TD valign=top ><font face=arial size=2>',
-    fi,     
-    if v28*0.1='3' then ' Outro nº da músicaTD>
-       <TD valign=top ><font face=arial size=2>',
-    fi,     
-    if v28*0.1='4' then ' Gravação de vídeo:</TD>
-       <TD valign=top ><font face=arial size=2>',
-    fi,     
-    if v28*0.1='5' then '   Outro nº do editor:</TD>
-       <TD valign=top ><font face=arial size=2>',
-    fi,v28^a, |, |v28^b, ,'<BR>'/
-fi/) , 
-    if p(v28) then '</td>' 
-    fi,
-if s(v600,v610,v611,v630,v650,v651,v653,v655)<>'' then 
-   '<tr><td width="20%"  align=right><font face=arial size=2><u>Assunto(s):</u></td><td></td>'/    
-   (if p(v600) then 
-       if occ=1 then 
-          '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>   Nome pessoal:</TD>
-               <TD valign=top ><font face=arial size=2>' 
-       fi,v600^a, | |v600^b, | |v600^c,  | |v600^d,| |v600^e,| |v600^q,| |v600^t,| |v600^u,| -- |v600^x,| -- |v600^z,| -- |v600^y,| -- |v600^v,,'<BR>'/
-   fi/)   
-   (if p(v610) then 
-       if occ=1 then 
-          '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>    Nome corporativo:</TD>
-               <TD valign=top ><font face=arial size=2>' 
-       fi,v610^a,| |v610^b,| |v610^e,| |v610^t,| |v610^u,| -- |v610^x,| -- |v610^z,| -- |v610^y,| -- |v610^v,,'<BR>'/
-   fi/)   
-   (if p(v611) then 
-       if occ=1 then 
-          '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Nome de evento:</TD>
-               <TD valign=top ><font face=arial size=2>' 
-       fi,v611^a,| |v611^n,| |v611^d,| |v611^c,| |v611^e,| -- |v611^x,| -- |v611^z,| -- |v611^y,| -- |v611^v,,'<BR>'/
-   fi/),   
-   (if p(v630) then 
-       if occ=1 then 
-          '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>      Título uniforme:</TD>
-               <TD valign=top ><font face=arial size=2>' 
-       fi,v630^a,| |v630^n,| |v630^p,| -- |v630^x,| -- |v630^z,| -- |v630^y,| -- |v630^v,'<BR>'/
-   fi/)   
-   (if p(v650) then 
-       if occ=1 then 
-          '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>         Termo tópico:</TD>
-               <TD valign=top ><font face=arial size=2>' 
-       fi,v650^a,| |v650^e,| -- |v650^x,| -- |v650^z,| -- |v650^y,| -- |v650^v,/
-   fi)   
-   (if p(v651) then 
-       if occ=1 then 
-          '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>       Nome geográfico:</TD>
-               <TD valign=top ><font face=arial size=2>' 
-       fi,v651^a,| -- |v651^x,| -- |v651^z,| -- |v651^y,| -- |v651^v,/
-   fi)   
-   (if p(v653) then 
-       if occ=1 then 
-          '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Termo índice (não controlado):</TD>
-               <TD valign=top ><font face=arial size=2>',
-       fi,v653^a,/
-   fi)   
-   (if p(v655) then 
-       if occ=1 then 
-          '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>  Termo gênero/forma:</TD>
-               <TD valign=top ><font face=arial size=2>' 
-       fi,v655^a,| -- |v655^x,| -- |v655^z,| -- |v655^y,| -- |v655^v,| (|v655^v|)|,/
-   fi),
-fi/,
-   if s(v600,v610,v611,v630,v650,v651,v653,v655)<>'' then '</td>' 
-   fi, 
-if s(v700,v710,v711,v720)<>'' then ,
-   '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><u>Entrada(s) secunária(s):</u></TD>
-        <TD valign=top ><font face=arial size=2>', /    
-   (if p(v700) then 
-       if occ=1 then 
-          '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Autor:</TD>
-               <TD valign=top ><font face=arial size=2>',
-       fi,v700^a,| |v700^b,| |v700^c,| |v700^q, | |v700^d,| |v700^e,| |v700^u,/
-   fi)    
-   (if p(v720) then ,v720^a, | |v720^e/
-   fi)    
-   (if p(v710) then 
-       if occ=1 then '<TR>
-          <TD valign=top  width="20%"  align=right><font face=arial size=2><b>Entidade:</TD>
-          <TD valign=top ><font face=arial size=2>',
-       fi,mdl, v710^a,/
-   fi),mpl,
-   (if p(v711) then 
-       if occ=1 then 
-          '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Evento:</TD>
-               <TD valign=top ><font face=arial size=2>',
-       fi,v711^a,| |v711^n,| |v711^d,| |v711^c,| |v711^e,| |v711^t,| |v711^u,/
-   fi) / 
-fi, 
-   if s(v700,v710,v711,v720)<>'' then ,'</td>' 
-   fi,
-if s(v72,v80,v82,v43,v44,v45)<>'' then 
-   '<tr><TD valign=top  colspan=2><font face=arial size=2>Informações administrativas','  -  </td>',/ 
-    (if p(v72) then 
-       if occ=1 then 
-          '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Categoria de assunto:</TD>
-            <TD valign=top ><font face=arial size=2>',
-       fi,v72^a,|--|v72^x, | (|v72^2|)|, /
-    fi)/
-       if p(v72) then ,'</td>' 
-       fi, 
-   (if p(v80) then 
-       if occ=1 then 
-          '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Classificação CDU:</TD>
-               <TD valign=top ><font face=arial size=2>',
-       fi,,v80^a, v80^b, v80^x,  | -- cdu |v80^2,
-   fi/) 
-       if p(v80) then ,'</td>' 
-       fi,
-   (if p(v82) then 
-       if occ=1 then 
-          '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Classificação CDD:</TD>
-               <TD valign=top ><font face=arial size=2>',
-       fi,v82^a, | -- dc |v82^2,
-   fi/)
-       if p(v82) then ,'</td>' 
-       fi,
-   (if p(v84) then 
-      if occ=1 then 
-         '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Outra classificação:</TD>
-           <TD valign=top ><font face=arial size=2>',
-      fi,v84^a,| |v84^b,|(|v84^2|)|,
-   fi/)  /
-      if p(v84) then ,'</td>' 
-      fi,
-    (if p(v43) then 
-      if occ=1 then 
-         '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Área geográfica:</TD>
-           <TD valign=top ><font face=arial size=2>',
-      fi,v43^a,
-   fi/)  /
-      if p(v43) then ,'</td>' 
-      fi,
-    (if p(v44) then 
-      if occ=1 then 
-         '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>País:</TD>
-           <TD valign=top ><font face=arial size=2>',
-      fi,v44^a,
-   fi/)  /
-      if p(v44) then ,'</td>' 
-      fi,
-    (if p(v45) then 
-      if occ=1 then 
-         '<TR><TD valign=top  width="20%"  align=right><font face=arial size=2><b>Período cronológica:</TD>
-           <TD valign=top ><font face=arial size=2>',
-      fi,v45^a,
-   fi/)  /
-      if p(v45) then ,'</td>' 
-      fi,
-fi, 
-'</table>'   
+'<style>'/
+'.rda-container { font-family: "Noto Sans", Arial, sans-serif; color: #333; line-height: 1.6; padding: 15px; max-width: 950px; }'/
+'.rda-title { font-size: 22px; font-weight: bold; color: #005a8c; margin-bottom: 5px; line-height: 1.2; }'/
+'.rda-author { font-size: 15px; color: #555; margin-bottom: 25px; border-bottom: 1px solid #eaeaea; padding-bottom: 15px; }'/
+'.rda-table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }'/
+'.rda-table th { text-align: right; vertical-align: top; font-weight: 600; color: #444; padding: 8px 15px 8px 0; width: 220px; border-bottom: 1px solid #f9f9f9; font-size: 13px; }'/
+'.rda-table td { padding: 8px 0; color: #222; border-bottom: 1px solid #f9f9f9; font-size: 13px; }'/
+'.rda-copies { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }'/
+'.rda-copies th { background: #f4f8fb; padding: 10px; text-align: left; border-bottom: 2px solid #005a8c; color: #333; font-weight: bold; }'/
+'.rda-copies td { padding: 10px; border-bottom: 1px solid #eaeaea; }'/
+'</style>'/
+
+'<div class="rda-container">'/
+
+/* T�TULO EM DESTAQUE (245) */
+if p(v245) then '<div class="rda-title">'v245^a, if p(v245^b) then v245^b fi, if p(v245^c) then v245^c fi, '</div>' fi/
+
+/* AUTOR(ES) PRINCIPAL EM DESTAQUE (1XX) */
+if p(v100) or p(v110) or p(v111) then
+  '<div class="rda-author">Por: '
+  if p(v100) then (v100^a, if p(v100^d) then ', 'v100^d fi, if iocc<>nocc(v100) then '; ' fi) fi,
+  if p(v110) then (v110^a, if p(v110^b) then '. 'v110^b fi, if iocc<>nocc(v110) then '; ' fi) fi,
+  if p(v111) then (v111^a, if p(v111^c) then ' 'v111^c fi, if iocc<>nocc(v111) then '; ' fi) fi,
+  '</div>'
+fi/
+
+/* TABELA DE METADADOS LIMPA */
+'<table class="rda-table">'/
+
+/* N�MEROS E C�DIGOS PRINCIPAIS */
+if p(v20) then '<tr><th>ISBN</th><td>'(| |v20^a||, | |v20^c||, | |v20^q||, if iocc<>nocc(v20) and p(v20) then '<br>' fi),'</td></tr>' fi/
+if p(v22) then '<tr><th>ISSN</th><td>'(| |v22^a||, if iocc<>nocc(v22) and p(v22) then '<br>' fi),'</td></tr>' fi/
+if p(v90) then '<tr><th>N� de chamada local</th><td>'(| |v90^a||,| |v90^b||,| |v90^c||, if iocc<>nocc(v90) and p(v90) then '<br>' fi),'</td></tr>' fi/
+if p(v82) then '<tr><th>Classifica��o CDD</th><td>'(| |v82^a||,| |v82^b||, if iocc<>nocc(v82) and p(v82) then '<br>' fi),'</td></tr>' fi/
+if p(v80) then '<tr><th>Classifica��o CDU</th><td>'(| |v80^a||,| |v80^x||, if iocc<>nocc(v80) and p(v80) then '<br>' fi),'</td></tr>' fi/
+
+/* PUBLICA��O E DESCRI��O */
+if p(v250) then '<tr><th>Edi��o</th><td>'(| |v250^a||,| |v250^b||, if iocc<>nocc(v250) and p(v250) then '<br>' fi),'</td></tr>' fi/
+if p(v260) then '<tr><th>Publica��o (Imprenta)</th><td>'(| |v260^a||,| |v260^b||,| |v260^c||, if iocc<>nocc(v260) and p(v260) then '<br>' fi),'</td></tr>' fi/
+if p(v264) then '<tr><th>Produ��o / Distribui��o</th><td>'(| |v264^a||,| |v264^b||,| |v264^c||, if iocc<>nocc(v264) and p(v264) then '<br>' fi),'</td></tr>' fi/
+if p(v300) then '<tr><th>Descri��o f�sica</th><td>'(| |v300^a||,| |v300^b||,| |v300^c||,| |v300^e||, if iocc<>nocc(v300) and p(v300) then '<br>' fi),'</td></tr>' fi/
+if p(v490) then '<tr><th>S�rie</th><td>'(| |v490^a||,| |v490^v||, if iocc<>nocc(v490) and p(v490) then '<br>' fi),'</td></tr>' fi/
+
+/* NOTAS BIBLIOGR�FICAS */
+if p(v500) then '<tr><th>Nota Geral</th><td>'(| |v500^a||, if iocc<>nocc(v500) and p(v500) then '<br>' fi),'</td></tr>' fi/
+if p(v502) then '<tr><th>Tese/Disserta��o</th><td>'(| |v502^a||,| |v502^c||,| |v502^d||, if iocc<>nocc(v502) and p(v502) then '<br>' fi),'</td></tr>' fi/
+if p(v504) then '<tr><th>Bibliografia</th><td>'(| |v504^a||, if iocc<>nocc(v504) and p(v504) then '<br>' fi),'</td></tr>' fi/
+if p(v505) then '<tr><th>Conte�do</th><td>'(| |v505^a||, if iocc<>nocc(v505) and p(v505) then '<br>' fi),'</td></tr>' fi/
+if p(v520) then '<tr><th>Resumo</th><td>'(| |v520^a||, if iocc<>nocc(v520) and p(v520) then '<br>' fi),'</td></tr>' fi/
+if p(v590) then '<tr><th>Notas locais</th><td>'(| |v590^a||, if iocc<>nocc(v590) and p(v590) then '<br>' fi),'</td></tr>' fi/
+
+/* ASSUNTOS */
+if p(v650) then '<tr><th>Assunto(s) T�pico(s)</th><td>'(| |v650^a||,| -- |v650^x||,| -- |v650^y||,| -- |v650^z||, if iocc<>nocc(v650) and p(v650) then '<br>' fi),'</td></tr>' fi/
+if p(v600) then '<tr><th>Assunto (Nome)</th><td>'(| |v600^a||,| -- |v600^x||, if iocc<>nocc(v600) and p(v600) then '<br>' fi),'</td></tr>' fi/
+if p(v610) then '<tr><th>Assunto (Entidade)</th><td>'(| |v610^a||,| -- |v610^x||, if iocc<>nocc(v610) and p(v610) then '<br>' fi),'</td></tr>' fi/
+if p(v651) then '<tr><th>Assunto Geogr�fico</th><td>'(| |v651^a||,| -- |v651^x||,| -- |v651^y||,| -- |v651^z||, if iocc<>nocc(v651) and p(v651) then '<br>' fi),'</td></tr>' fi/
+if p(v655) then '<tr><th>G�nero/Forma</th><td>'(| |v655^a||,| -- |v655^x||, if iocc<>nocc(v655) and p(v655) then '<br>' fi),'</td></tr>' fi/
+
+/* OUTROS ACESSOS E LINKS */
+if p(v700) then '<tr><th>Coautor(es)</th><td>'(| |v700^a||,| |v700^d||, if iocc<>nocc(v700) and p(v700) then '<br>' fi),'</td></tr>' fi/
+if p(v710) then '<tr><th>Coautor(es) Corporativo(s)</th><td>'(| |v710^a||,| |v710^b||, if iocc<>nocc(v710) and p(v710) then '<br>' fi),'</td></tr>' fi/
+if p(v856) then '<tr><th>Acesso Eletr�nico</th><td>'(|<a href="|v856^u|" target="_blank" style="color:#005a8c; text-decoration:none;">|v856^u|</a>| ,| |v856^z||, if iocc<>nocc(v856) and p(v856) then '<br>' fi),'</td></tr>' fi/
+
+'</table>'/
+
+/* TABELA DE EXEMPLARES (COPIES) */
+if npost(['copies'],'CN_'v5001'_'v1)>0 then
+  '<p><dd><dd><dd>
+  <table>
+    <tr>
+      <td colspan=6 bgcolor=#ffffff><b>Total de exemplares</b>:'                
+          f(npost(['copies'],'CN_'v5001'_'v1),1,0)
+     '</td>
+    </tr>
+    <tr>
+        <th>Controle</th>
+        <th>Tombo</th>
+        <th>Situa��o</th>
+        <th>No. c�pias</th>
+        <th>Disponibilidade</th>'/   
+       /'$$REF:copies,inven,CN_'v5001'_'v1/
+     '</tr>
+  </table>'
+fi,
+
+'</div>'

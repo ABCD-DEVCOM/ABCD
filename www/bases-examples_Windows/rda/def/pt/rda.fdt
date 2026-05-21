@@ -77,13 +77,14 @@ S||C骴igo de Cutter|0|0|b||X|||||||||0||1|0|||
 S||Edi玢o/Ano|0|0|c||X|||||||||0||1|0|||
 S||Informa珲es adicionais|0|0|d||X|||||||||0||1|0|||
 H||1XX: Campos de entrada principais|0|0||||||||||||0||1|0|||
-T|100|Autor Pessoal|0|0|共abcdq||X||100|D||AU_|@autoridades.pft|||1||1|0|||
+T|100|Autor Pessoal|0|0|共abcdeq||X||100|D||AU_|@autoridades.pft|||1||1|0|||
 S||Indicador 1|0|0|箌|S||1|P|100-ind1.tab|||||0||1|0|||
 S||Indicador 2|0|0|瞸|S||1|P|Ind-b.tab|||||0||1|0|||
 S||Sobrenome e nome|0|0|a||X|||||||||0||1|0|||
 S||Numera玢o|0|0|b||X|||||||||0||1|0|||
 S||T韙ulo/palavras associadas|0|0|c||X|||||||||0||1|0|||
 S||Data de nac. e morte|0|0|d||X|||||||||0||1|0|||
+S||Termo Relator (R)|0|0|e||X|||||||||0||1|0|||
 S||Nome Completo|0|0|q||X|||||||||0||1|0|||
 T|110|Autor Entidade Coletiva|0|0|共ab||X||100|D||AI_|@autoridades.pft|||1||1|0|||
 S||Indicador 1|0|0|箌|S||1|P|110-ind1.tab|||||0||1|0|||
@@ -381,6 +382,8 @@ T|586|Nota de Premia玢o|0|1|共a||X||100|||||||1||1|0|||
 S||Indicador 1|0|0|箌|X||1|P|586-ind1.tab|||||0||1|0|||
 S||Indicador 2|0|0|瞸|X||1|P|586-ind2.tab|||||0||1|0|||
 S||Premia玢o|0|0|a||X|||||||||0||1|0|||
+T|590|Nota local de cataloga玢o|0|0|a||X|5|100|||||||0||0|0|||
+S||Nota|0|0|a||X|||||||||0||0|0|||
 H||6XX: Campos de acesso do sujeito|0|0||||||||||||0||1|0|||
 T|600|Nome pessoal como assunto|0|1|共abcdqvxy||X|2|100|D||AU_|@autoridades.pft|||1||1|0|||
 S||Indicador 1|0|0|箌|X||1|P|600-ind1.tab|||||0||1|0|||

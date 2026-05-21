@@ -1,9 +1,0 @@
-'d3',
-ref->copies(
-  l->copies('IN_'v1),
-  if v1<>'' then
-   '<3>',
-    v1
-   '</3>'
-  fi,
-)

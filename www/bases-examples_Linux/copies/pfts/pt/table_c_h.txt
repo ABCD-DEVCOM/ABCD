@@ -1,0 +1,20 @@
+Número de controle
+Base de dados
+Número de chamada
+Número de inventário
+Status
+Biblioteca Central
+Biblioteca Setorial
+Tomo
+Volume/Parte
+Número da Cópia
+Tipo de aquisição
+Fornecedor/Doador/Instituição
+Data de chegada
+Data de chegada ISO
+Preço
+Fornecedor
+Ordem de compra
+Número da sugestão
+Condições
+Em troca de

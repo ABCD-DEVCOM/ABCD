@@ -1,531 +1,602 @@
 <?php
-/* Modifications
-20211216 fho4abcd Backbutton & helper by included file+ improve date prefix
-20220220 fho4abcd Make search for MFN and by expression equal to Reports.
-20220220 fh04abcd The option to search by date is covered by expression (and better) : removed completely
-20220220 fh04abcd Removed global process: too much code fails. Unclear what it should do. Sanitized html
-20220227 fho4abcd Always show backbutton. Other back if institutional info not shown
-20220918 fho4abcd Explode base before config.php (to get correct value for $actparfolder)
-20220926 fh04abcd Make search expression buttons work + translations + Remove obsolete code
+/*
+* @file        tables_generate.php
+* @author      Roger Craveiro Guilherme
+* @date        2026-05-20
+* @description Main Orchestrator for ABCD Statistics: Generates tables based on user selection, processes data, and renders output. Handles charset conversion, multi-loop execution, and output formatting (HTML/Excel/Word). Integrates with existing configuration files and provides a unified interface for statistics generation.
+* @changelog   2026-05-20: Refactored by Roger C. Guilherme - Initial version.
 */
-// ==================================================================================================
-// GENERA LOS CUADROS ESTADÍSTICOS
-// ==================================================================================================
-//
 
 session_start();
 include("../common/get_post.php");
+include("../config.php");
+include("../lang/admin.php");
+include("../lang/dbadmin.php");
+include("../lang/statistics.php");
 
-//foreach ($arrHttp as $key => $value) echo "$key = $value <br>";
-//SE EXTRAE EL NOMBRE DE LA BASE DE DATOS
-$x=explode('|',$arrHttp["base"]);
-$arrHttp["base"]=$x[0];
-if (!isset($arrHttp["Opcion"]))$arrHttp["Opcion"]="";
+$sys_charset = isset($charset) && trim($charset) != "" ? strtolower(trim($charset)) : (isset($meta_encoding) && trim($meta_encoding) != "" ? strtolower(trim($meta_encoding)) : 'iso-8859-1');
 
-if (isset($arrHttp["encabezado"]))
-	$encabezado="&encabezado=S";
-else
-	$encabezado="";
+// EXPORT INTERCEPTOR (Excel / Word / Window)
+if (isset($arrHttp["html"]) && trim($arrHttp["html"]) != "") {
+    $opcao = isset($arrHttp["Opcion"]) ? $arrHttp["Opcion"] : "";
 
-include ("../config.php");
-include ("../lang/admin.php");
-include ("../lang/dbadmin.php");
-include ("../lang/statistics.php");
-$backtoscript="../common/inicio.php"; // The default return script
+    if ($opcao == "W") {
+        header("Content-type: application/vnd.ms-excel; charset=$sys_charset");
+        header("Content-Disposition: attachment; filename=estatisticas.xls");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+    } elseif ($opcao == "D") {
+        header("Content-type: application/vnd.ms-word; charset=$sys_charset");
+        header("Content-Disposition: attachment; filename=estatisticas.doc");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+    }
 
+    echo "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=$sys_charset\"></head><body style='font-family: Arial, sans-serif;'>";
+    echo "<style>table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid #000; padding: 5px; text-align: left; } th { background-color: #f2f2f2; font-weight:bold; }</style>";
+    echo stripslashes($arrHttp["html"]);
 
-//HEADER DEL LA PÁGINA HTML Y ARCHIVOS DE ESTIVO
+    if ($opcao == "P") {
+        echo "<script>window.print();</script>";
+    }
+    echo "</body></html>";
+    die;
+}
+
+$x = explode('|', $arrHttp["base"]);
+$arrHttp["base"] = $x[0];
+if (!isset($arrHttp["Opcion"])) $arrHttp["Opcion"] = "";
+$encabezado = isset($arrHttp["encabezado"]) ? "&encabezado=S" : "";
+
+$backtoscript = "../common/inicio.php";
 include("../common/header.php");
-include ("../common/inc_get-dbinfo.php");// sets $arrHttp["MAXMFN"]
-
+include("../common/inc_get-dbinfo.php");
 ?>
+
 <body>
-<script language="JavaScript" type="text/javascript" src="../dataentry/js/lr_trim.js"></script>
-<style type=text/css>
-div#useextproc{
-	display: none;
-	margin: 0px 20px 0px 20px;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color: #000000;
-}
+    <script src="../dataentry/js/lr_trim.js"></script>
+    <script src="../../assets/js/echarts.min.js"></script>
 
-div#useextable{
-	display: none;
-	margin: 0px 20px 0px 20px;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color: #000000;
-}
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
 
-div#createtable{
-<?php if ($arrHttp["Opcion"]!="new") echo "display: none;\n"?>
-	margin: 0px 20px 0px 20px;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color: #000000;
-}
+            #preview_panel,
+            #preview_panel * {
+                visibility: visible;
+            }
 
-div#generate{
-	display: none;
-	margin: 0px 20px 0px 20px;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color: #000000;
-}
+            #preview_panel {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100% !important;
+                max-height: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                overflow: visible !important;
+            }
 
-div#configure{
-	display: none;
-	margin: 0px 20px 0px 20px;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color: #000000;
-}
-</style>
-<script languaje=javascript>
+            #stats_toolbar,
+            #stats_toolbar * {
+                display: none !important;
+                visibility: hidden !important;
+            }
 
-TipoFormato=""
-C_Tag=Array()
-var strValidChars = "0123456789$";
+            .analytics-card {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                border: none !important;
+                box-shadow: none !important;
+                margin-bottom: 40px !important;
+            }
 
-function EsconderVentana( whichLayer ){
-var elem, vis;
-	if( document.getElementById ) // this is the way the standards work
-		elem = document.getElementById( whichLayer );
-	else if( document.all ) // this is the way old msie versions work
-		elem = document.all[whichLayer];
-	else if( document.layers ) // this is the way nn4 works
-		elem = document.layers[whichLayer];
-	vis = elem.style;
-	// if the style.display value is blank we try to figure it out here
-	if( vis.display == '' && elem.offsetWidth != undefined && elem.offsetHeight != undefined )
-		vis.display = 'none';
-	vis.display =  'none';
-}
-
-function toggleLayer( whichLayer ){
-	var elem, vis;
-
-	switch (whichLayer){
-        case "useextproc":
-            EsconderVentana("useextable")
-			EsconderVentana("createtable")
-			break
-		case "useextable":
-            EsconderVentana("useextproc")
-			EsconderVentana("createtable")
-			break
-		case "createtable":
-            EsconderVentana("useextproc")
-            EsconderVentana("useextable")
-			break
-	}
-	if( document.getElementById ) // this is the way the standards work
-		elem = document.getElementById( whichLayer );
-	else if( document.all ) // this is the way old msie versions work
-		elem = document.all[whichLayer];
-	else if( document.layers ) // this is the way nn4 works
-		elem = document.layers[whichLayer];
-	vis = elem.style;
-	// if the style.display value is blank we try to figure it out here
-	if( vis.display == '' && elem.offsetWidth != undefined && elem.offsetHeight != undefined )
-		vis.display = ( elem.offsetWidth != 0 && elem.offsetHeight != 0 ) ? 'block':'none';
-	vis.display = ( vis.display == '' || vis.display == 'block' ) ? 'none':'block';
-}
-
-function EnviarForma(Desde){
-	switch (Desde){
-		case 1:
-			break
-		case 2:
-			de=Trim(document.forma1.Mfn.value)
-  			a=Trim(document.forma1.to.value)
-  			Se=""
-			blnResult=true
-   	//  test strString consists of valid characters listed above
-   			for (i = 0; i < de.length; i++){
-    			strChar = de.charAt(i);
-    			if (strValidChars.indexOf(strChar) == -1){
-    				alert("<?php echo $msgstr["inv_mfn"]?>")
-	    			return
-    			}
-    		}
-    		for (i = 0; i < a.length; i++){
-    			strChar = a.charAt(i);
-    			if (strValidChars.indexOf(strChar) == -1){
-    				alert("<?php echo $msgstr["inv_mfn"]?>")
-	    			return
-    			}
-    		}
-    		de=Number(de)
-    		a=Number(a)
-    		if (de<=0 || a<=0 || de>a ||a><?php echo $arrHttp["MAXMFN"]?>){
-	    		alert("<?php echo $msgstr["inv_mfn"]?>")
-	    		return
-			}
-			document.forma1.Opcion.value="MFN"
-			break
-		case 3:
-			if (Trim(document.forma1.Expresion.value)==""){
-				alert("<?php echo $msgstr["selreg"]?>")
-				return
-			}
-			document.forma1.Opcion.value="BUSQUEDA"
-			break
-	}
-    if (document.forma1.proc.selectedIndex<1 && document.forma1.tables.selectedIndex<1 && document.forma1.rows.selectedIndex<1 && document.forma1.cols.selectedIndex<1){
-	  	alert("<?php echo $msgstr["seltab"]?>")
-	  	return
-	}
-	i=0
-	if (document.forma1.proc.selectedIndex>0 ){
-		document.forma1.Accion.value="Procesos"
-		i=i+1
-	}
-	if (document.forma1.tables.selectedIndex>0 ){
-		document.forma1.Accion.value="Tablas"
-		i=i+1
-	}
-    if ( document.forma1.rows.selectedIndex>0 || document.forma1.cols.selectedIndex>0){
-    	document.forma1.Accion.value="Variables"
-    	i=i+1
-    }
-    if (i>1){
-    	alert("<?php echo $msgstr["seltab"]?>")
-	  	return
-    }
-	document.forma1.submit();
-}
-
-
-function Configure(Option){
-	if (document.configure.base.value==""){
-		alert("<?php echo $msgstr["seldb"]?>")
-		return
-	}
-	switch (Option){
-		case "stats_gen":
-			document.configure.action="stats_gen_cfg.php"
-			break
-		case "stats_var":
-			document.configure.action="config_vars.php"
-			break
-		case "stats_tab":
-			document.configure.action="tables_cfg.php"
-			break
-		case "stats_proc":
-			document.configure.action="proc_cfg.php"
-			break
-		case "stats_pft":
-			document.configure.action="config_tables.php"
-			break
-	}
-	document.configure.submit()
-}
-<!-- functions for record selection/output generation. Identical for PFT -->
-function Buscar(){
-	base=document.forma1.base.value
-	cipar=document.forma1.cipar.value
-  	Url="../dataentry/buscar.php?Opcion=formab&Target=s&Tabla=Expresion&base="+base+"&cipar="+cipar
-  	msgwin=window.open(Url,"Buscar","menu=no, resizable,scrollbars,width=750,height=400")
-	msgwin.focus()
-}
-function CopiarExpresion(){
-	Expr=document.forma1.Expr.options[document.forma1.Expr.selectedIndex].value
-	document.forma1.Expresion.value=Expr
-}
-function GuardarBusqueda(){
-	document.savesearch.Expresion.value=Trim(document.forma1.Expresion.value)
-	if (document.savesearch.Expresion.value==""){
-		alert("<?php echo $msgstr["faltaexpr"]?>")
-		return
-	}
-	Descripcion=document.forma1.Descripcion.value
-	if (Trim(Descripcion)==""){
-		alert("<?php echo $msgstr["errsave"]?>")
-		return
-	}
-	document.savesearch.Descripcion.value=Descripcion
-	var winl = (screen.width-300)/2;
-	var wint = (screen.height-200)/2;
-	msgwin=window.open("","savesearch","menu=no,status=yes,width=300, height=200,left="+winl+",top="+wint)
-	msgwin.focus()
-	document.savesearch.submit()
-}
-</script>
-<?php
-if (isset($arrHttp["encabezado"])){
-	include("../common/institutional_info.php");
-	$encabezado="&encabezado=s";
-}
-?>
-<div class="sectionInfo">
-	<div class="breadcrumb">
-    <?php echo $msgstr["stats"].": ".$arrHttp["base"]?>
-	</div>
-
-	<div class="actions">
-    <?php
-        if (isset($arrHttp["encabezado"])) {
-            include "../common/inc_back.php";
-        } else {
-            $backtoscript="../dataentry/inicio_main.php";
-            include "../common/inc_back.php";
+            .echart-container {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
         }
-    ?>
+
+        #preview_panel {
+            flex: 1;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            min-width: 0;
+            min-height: 500px;
+            max-height: 85vh;
+            overflow: auto;
+        }
+    </style>
+
+    <script language="javascript">
+        var strValidChars = "0123456789$";
+
+        function toggleLayer(whichLayer) {
+            var layers = ['useextproc', 'useextable', 'createtable'];
+            layers.forEach(function(layer) {
+                var elem = document.getElementById(layer);
+                if (!elem) return;
+                if (layer === whichLayer) {
+                    elem.style.display = (elem.style.display === 'none' || elem.style.display === '') ? 'block' : 'none';
+                } else {
+                    elem.style.display = 'none';
+                    var selects = elem.getElementsByTagName('select');
+                    for (var i = 0; i < selects.length; i++) selects[i].selectedIndex = 0;
+                }
+            });
+        }
+
+        function alternarModoBusca(modo) {
+            var inputMfn = document.getElementById('Mfn');
+            var inputTo = document.getElementById('to');
+            var inputExpresion = document.getElementById('Expresion');
+            var selectExpr = document.getElementById('Expr');
+            var btnBuscar = document.getElementById('btnBuscar');
+            var btnSalvar = document.getElementById('btnSalvarBusca');
+            var inputDesc = document.getElementById('Descripcion');
+
+            if (modo === 'mfn') {
+                inputMfn.disabled = false;
+                inputTo.disabled = false;
+                inputMfn.value = "1";
+                inputTo.value = "<?php echo trim($arrHttp['MAXMFN']); ?>";
+                inputExpresion.disabled = true;
+                if (selectExpr) selectExpr.disabled = true;
+                btnBuscar.disabled = true;
+                btnSalvar.disabled = true;
+                inputDesc.disabled = true;
+            } else {
+                inputMfn.disabled = true;
+                inputTo.disabled = true;
+                inputMfn.value = "";
+                inputTo.value = "";
+                inputExpresion.disabled = false;
+                if (selectExpr) selectExpr.disabled = false;
+                btnBuscar.disabled = false;
+                btnSalvar.disabled = false;
+                inputDesc.disabled = false;
+            }
+        }
+
+        function popularExpressaoTabela(selectObj) {
+            var selected = selectObj.options[selectObj.selectedIndex];
+            var expr = selected.getAttribute('data-expr');
+            var inputExpresion = document.getElementById('Expresion');
+            var radioSearch = document.querySelector('input[name="fonte_dados"][value="search"]');
+
+            if (expr && expr.trim() !== "") {
+                inputExpresion.value = expr;
+                radioSearch.checked = true;
+                alternarModoBusca('search');
+            }
+        }
+
+        function EnviarFormaUnificada() {
+            var fonte = document.querySelector('input[name="fonte_dados"]:checked').value;
+
+            if (fonte === 'mfn') {
+                var de = Trim(document.forma1.Mfn.value);
+                var a = Trim(document.forma1.to.value);
+                for (var i = 0; i < de.length; i++) {
+                    if (strValidChars.indexOf(de.charAt(i)) == -1) {
+                        alert("<?php echo $msgstr["especificarvaln"] ?>");
+                        return;
+                    }
+                }
+                for (var i = 0; i < a.length; i++) {
+                    if (strValidChars.indexOf(a.charAt(i)) == -1) {
+                        alert("<?php echo $msgstr["especificarvaln"] ?>");
+                        return;
+                    }
+                }
+                if (Number(de) <= 0 || Number(a) <= 0 || Number(de) > Number(a) || Number(a) > <?php echo $arrHttp["MAXMFN"] ?>) {
+                    alert("<?php echo $msgstr["numfr"] ?>");
+                    return;
+                }
+                document.forma1.Opcion.value = "MFN";
+            } else {
+                if (Trim(document.forma1.Expresion.value) == "") {
+                    alert("<?php echo $msgstr["selreg"] ?>");
+                    return;
+                }
+                document.forma1.Opcion.value = "BUSQUEDA";
+            }
+
+            if (document.forma1.proc.selectedIndex < 1 && document.forma1.tables.selectedIndex < 1 && document.forma1.rows.selectedIndex < 1 && document.forma1.cols.selectedIndex < 1) {
+                alert("<?php echo $msgstr["seltab"] ?>");
+                return;
+            }
+
+            if (document.forma1.proc.selectedIndex > 0) document.forma1.Accion.value = "Procesos";
+            if (document.forma1.tables.selectedIndex > 0) document.forma1.Accion.value = "Tablas";
+            if (document.forma1.rows.selectedIndex > 0 || document.forma1.cols.selectedIndex > 0) document.forma1.Accion.value = "Variables";
+
+            AtualizarDashboard();
+        }
+
+        function AtualizarDashboard() {
+            var area = document.getElementById('results_area');
+            var toolbar = document.getElementById('stats_toolbar');
+            area.innerHTML = '<div class="stats-spinner"><i class="fa fa-spinner fa-spin fa-2x"></i><br><br><?php echo $msgstr["processing"]; ?></div>';
+
+            var formData = new FormData(document.forma1);
+            var params = new URLSearchParams(formData).toString();
+
+            fetch('stats_ajax.php?' + params)
+                .then(function(response) {
+                    if (!response.ok) throw new Error('Request error');
+                    return response.text();
+                })
+                .then(function(html) {
+                    area.innerHTML = html;
+                    setTimeout(RenderCharts, 100);
+                    if (typeof toolbar !== 'undefined' && toolbar) toolbar.style.display = 'block';
+                })
+                .catch(function(err) {
+                    area.innerHTML = '<div class="alert alert-danger">Error: ' + err.message + '</div>';
+                });
+        }
+
+        function ExportarStats(opcao) {
+            if (opcao === 'P') {
+                window.print();
+                return;
+            }
+            var htmlContent = document.getElementById('results_area').innerHTML;
+            var form = document.sendto;
+            form.html.value = htmlContent;
+            form.Opcion.value = opcao;
+            form.target = "_self";
+            form.submit();
+        }
+
+        function Buscar() {
+            var base = document.forma1.base.value;
+            var cipar = document.forma1.cipar.value;
+            var Url = "../dataentry/buscar.php?Opcion=formab&Target=s&Tabla=Expresion&base=" + base + "&cipar=" + cipar;
+            var msgwin = window.open(Url, "Buscar", "menu=no, resizable,scrollbars,width=750,height=400");
+            msgwin.focus();
+        }
+
+        function CopiarExpresion() {
+            var sel = document.getElementById('Expr');
+            var Expr = sel.options[sel.selectedIndex].value;
+            document.forma1.Expresion.value = Expr;
+        }
+
+        function GuardarBusqueda() {
+            document.savesearch.Expresion.value = Trim(document.forma1.Expresion.value);
+            if (document.savesearch.Expresion.value == "") {
+                alert("<?php echo $msgstr["faltaexpr"] ?>");
+                return;
+            }
+            var Descripcion = document.getElementById('Descripcion').value;
+            if (Trim(Descripcion) == "") {
+                alert("<?php echo $msgstr["errsave"] ?>");
+                return;
+            }
+            document.savesearch.Descripcion.value = Descripcion;
+            var winl = (screen.width - 300) / 2;
+            var wint = (screen.height - 200) / 2;
+            var msgwin = window.open("", "savesearch", "menu=no,status=yes,width=300, height=200,left=" + winl + ",top=" + wint);
+            msgwin.focus();
+            document.savesearch.submit();
+        }
+    </script>
+
+    <?php if (isset($arrHttp["encabezado"])) include("../common/institutional_info.php"); ?>
+    <div class="sectionInfo">
+        <div class="breadcrumb">
+            <?php echo $msgstr["stats"] . ": " . $arrHttp["base"] ?>
+        </div>
+        <div class="actions">
+            <?php include "../common/inc_back.php"; ?>
+        </div>
+        <div class="spacer">&#160;</div>
     </div>
-    <div class="spacer">&#160;</div>
-</div>
-<?php
-include "../common/inc_div-helper.php";
-?>
+    <?php include "../common/inc_div-helper.php"; ?>
 
-<div class="middle form">
-<div class="formContent">
+    <div class="middle form">
+        <div class="formContent">
+            <div class="dashboard-wrapper">
+                <div id="config_panel">
+                    <form name="forma1" method="post" action="tables_generate.php" onsubmit="Javascript:return false">
+                        <?php if (isset($arrHttp["encabezado"])) echo "<input type=hidden name=encabezado value=s>\n"; ?>
+                        <input type=hidden name=base value=<?php echo $arrHttp["base"] ?>>
+                        <input type=hidden name=cipar value=<?php echo $arrHttp["base"] ?>.par>
+                        <input type=hidden name=Opcion>
+                        <input type=hidden name=Accion>
 
-<form name=forma1 method=post action=tables_generate_ex.php onsubmit="Javascript:return false">
-<?php if (isset($arrHttp["encabezado"])) echo "<input type=hidden name=encabezado value=s>\n";?>
-<input type=hidden name=base value=<?php echo $arrHttp["base"]?>>
-<input type=hidden name=cipar value=<?php echo $arrHttp["base"]?>.par>
-<input type=hidden name=Opcion>
-<input type=hidden name=Accion>
+                        <div class="stat-option-group">
+                            <div class="stat-option-header" onclick="toggleLayer('useextproc')">
+                                <strong><?php echo $msgstr["stat_use_exist_pr"]; ?></strong>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div id="useextproc" class="stat-option-content">
+                                <select name="proc">
+                                    <option value=""><?php echo $msgstr["seltab"] ?></option>
+                                    <?php
+                                    $file = $db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/proc.cfg";
+                                    if (!file_exists($file)) $file = $db_path . $arrHttp["base"] . "/def/" . $lang_db . "/proc.cfg";
+                                    if (file_exists($file)) {
+                                        foreach (file($file) as $value) {
+                                            $value = trim($value);
+                                            if ($value != "") {
+                                                $t = explode('||', $value);
+                                                echo "<option value=\"" . urlencode($value) . "\">" . trim($t[0]) . "</option>";
+                                            }
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
 
-<!-- USAR UN PROCESO PRE-DEFINIDO/ USE PROCESS -->
-&nbsp; <A HREF="javascript:toggleLayer('useextproc')"> <strong><?php echo $msgstr["stat_use_exist_pr"];?></strong></a>
-<div id=useextproc><br>
-    <select name=proc  style="width:300px">
-        <option value=''>
-        <?php
-        unset($fp);
-        $file=$db_path.$arrHttp["base"]."/def/".$lang."/proc.cfg";
-        if (!file_exists($file)) $file=$db_path.$arrHttp["base"]."/def/".$lang_db."/proc.cfg";
-        if (!file_exists($file)){
-            $error="S";
-        }else{
-            $fp=file($file);
-            $fields="";
-            foreach ($fp as $value) {
-                $value=trim($value);
-                if ($value!=""){
-                    $t=explode('||',$value);
-                    echo "<option value=".urlencode($value).">".trim($t[0])."</option>";
-                }
-            }
-        }
-        ?>
-    </select>
-</div>
-<p>
-<!-- USAR UNA TABLA YA EXISTENTE / USE EXISTING TABLE -->
-&nbsp; <A HREF="javascript:toggleLayer('useextable')"> <strong><?php echo $msgstr["exist_tb"];?></strong></a>
-<div id=useextable>
-    <select name=tables  style="width:300">
-        <option value=''>
-        <?php
-        unset($fp);
-        $file=$db_path.$arrHttp["base"]."/def/".$lang."/tabs.cfg";
-        if (!file_exists($file)) $file=$db_path.$arrHttp["base"]."/def/".$lang_db."/tabs.cfg";
-        if (!file_exists($file)){
-            $error="S";
-        }else{
-            $fp=file($file);
-            $fields="";
-            foreach ($fp as $value) {
-                $value=trim($value);
-                if ($value!=""){
-                    $t=explode('|',$value);
-                    echo "<option value=".urlencode($value).">".trim($t[0])."</option>";
-                }
-            }
-        }
-        $file=$db_path.$arrHttp["base"]."/def/".$lang."/tables.cfg";
-        if (!file_exists($file)) $file=$db_path.$arrHttp["base"]."/def/".$lang_db."/tables.cfg";
-        if (!file_exists($file)){
-            $error="S";
-        }else{
-            $fp=file($file);
-            $fields="";
-            foreach ($fp as $value) {
-                $value=trim($value);
-                if ($value!=""){
-                    $t=explode('|',$value);
-                    echo "<option value=\"".$value.'{{PFT'."\">".trim($t[0])."</option>";
-                }
-            }
-        }
-        ?>
-    </select>
-</div>
-<p>
-<!-- CONSTRUIR UNA TABLA SELECCIONANDO FILAS Y COLUMNAS / CREATE TABLE -->
-&nbsp; <A HREF="javascript:toggleLayer('createtable')"><strong><?php echo $msgstr["stat_create_tmp_tb"]?></strong></a>
-<div id=createtable>
-<table>
-    <tr>
-    <td>
-        <strong><?php echo $msgstr["stat_rows_by"]?></strong><br>
-        <Select name=rows style="width:250px">
-        <option value=""></option>
-        <?php
-        unset($fp);
-        $file=$db_path.$arrHttp["base"]."/def/".$lang."/stat.cfg";
-        if (!file_exists($file)) $file=$db_path.$arrHttp["base"]."/def/".$lang_db."/stat.cfg";
-        if (!file_exists($file)){
-            $error="S";
-        }else{
-            $fp=file($file);
-            foreach ($fp as $value) {
-                $value=trim($value);
-                if ($value!=""){
-                    $t=explode('|',$value);
-                    echo "<option value=".urlencode($value).">".trim($t[0])."</option>";
-                }
-            }
-        }
-        ?>
-        </select>
-    </td>
-    <td>
-        <strong><?php echo $msgstr["stat_cols_by"]?></strong><br>
-        <Select name=cols style="width:250px">
-        <option value=""></option>
-        <?php
-            foreach ($fp as $value) {
-                $value=trim($value);
-                if ($value!=""){
-                    $t=explode('|',$value);
-                    echo "<option value=\"".$value."\">".trim($t[0])."</option>";
-                }
-            }
-        ?>
-        </select>
-    </td>
-    </tr>
-</table>
-</div>
-<p>
-<!-- SELECCION DE LOS REGISTROS  / RECORD SELECTION-->
-&nbsp; <A HREF="javascript:toggleLayer('generate')"><strong><?php echo $msgstr["generateoutput"]?></strong></a>
-<div id=generate><p>
-    <table>
-        <tr> <!-- row 1 record selection by MFN range -->
-        <td><?php echo $msgstr["r_recsel"]?><br>
-            <b><?php echo $msgstr["r_mfnr"]?></b>
-        </td>
-        <td>
-            <?php echo $msgstr["r_desde"]?>: <input type=text name=Mfn size=10>&nbsp; &nbsp; &nbsp; &nbsp;
-            <?php echo $msgstr["r_hasta"]?>: <input type=text name=to size=10>
-            &nbsp;<?php echo $msgstr["maxmfn"]?>:&nbsp;<?php echo $arrHttp["MAXMFN"] ?>
-            &nbsp; &nbsp; 
-            <button class="bt-blue" type="button"
-                title="<?php echo $msgstr["send"]?>" onclick='EnviarForma(2)'>
-                <i class="fa fa-step-forward"></i> <?php echo $msgstr["send"]?></button>
-        </td>
-        </tr>
-        <tr><td></td><td><hr class="color-gray-100"><br></td></tr>
-        
-        <tr> <!-- row 2 record selection by Search -->
-        <td><?php echo $msgstr["r_recsel"]?><br>
-            <b><?php echo $msgstr["r_busqueda"]?></b>
-        </td>
-        <td>
-        <table>
-            <tr><td colspan=2>
-                <?php // proces a possible search expression table
-                unset($fp);
-                if (file_exists($db_path.$arrHttp["base"]."/pfts/".$_SESSION["lang"]."/search_expr.tab"))
-                    $fp = file($db_path.$arrHttp["base"]."/pfts/".$_SESSION["lang"]."/search_expr.tab");
-                else
-                    if (file_exists($db_path.$arrHttp["base"]."/pfts/".$lang_db."/search_expr.tab"))
-                        $fp = file($db_path.$arrHttp["base"]."/pfts/".$lang_db."/search_expr.tab");
-                if (isset($fp)){
-                    ?>
-                    <?php echo $msgstr["copysearch"]?> :&nbsp;
-                    <select name=Expr  onChange=CopiarExpresion()>
-                        <option value=''>
-                        <?php
-                        foreach ($fp as $value){
-                            $value=trim($value);
-                            if ($value!=""){
-                                $pp=explode('|',$value);
-                                ?>
-                                <option value='<?php echo $pp[1]?>'><?php echo $pp[0]?></option>
+                        <div class="or-separator"></div>
+
+                        <div class="stat-option-group">
+                            <div class="stat-option-header" onclick="toggleLayer('useextable')">
+                                <strong><?php echo $msgstr["exist_tb"]; ?></strong>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div id="useextable" class="stat-option-content">
+                                <select name="tables" onchange="popularExpressaoTabela(this)">
+                                    <option value=""><?php echo $msgstr["seltab"] ?></option>
+                                    <?php
+                                    $file_tabs = $db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/tabs.cfg";
+                                    if (!file_exists($file_tabs)) $file_tabs = $db_path . $arrHttp["base"] . "/def/" . $lang_db . "/tabs.cfg";
+                                    if (file_exists($file_tabs)) {
+                                        foreach (file($file_tabs) as $value) {
+                                            $value = trim($value);
+                                            if ($value != "") {
+                                                $t = explode('|', $value);
+                                                $expr = isset($t[4]) ? trim($t[4]) : "";
+                                                echo "<option value=\"" . urlencode($value) . "\" data-expr=\"" . htmlspecialchars($expr, ENT_QUOTES) . "\">" . trim($t[0]) . "</option>";
+                                            }
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="or-separator"></div>
+
+                        <div class="stat-option-group">
+                            <div class="stat-option-header" onclick="toggleLayer('createtable')">
+                                <strong><?php echo $msgstr["stat_create_tmp_tb"] ?></strong>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div id="createtable" class="stat-option-content">
                                 <?php
-                            }
-                        }
-                        ?>
-                    </select> &nbsp; &nbsp;
-                    <?php
-                }
-                ?>
-                <button class="bt-green" type="button"
-                    title="<?php echo $msgstr["pftcreatesrcexpr"]?>"
-                    onclick='javascript:Buscar()'>
-                    <i class="far fa-plus-square"></i> &nbsp;<?php echo $msgstr["pftcreatesrcexpr"]?></button>
-                </td>
-            </tr>
-            <tr><td>
-                <textarea rows=2 cols=100 name=Expresion><?php if (isset($Expresion)) echo $Expresion?></textarea>
-            </td>
-            <td> &nbsp;
-                <button class="bt-blue" type="button"
-                    title="<?php echo $msgstr["send"]?>" onclick='javascript:EnviarForma(3)'>
-                    <i class="fa fa-step-forward"></i> <?php echo $msgstr["send"]?></button>
-            </td>
-            </tr>
-            <?php
-            if (isset($_SESSION["permiso"]["CENTRAL_ALL"]) or
-                isset($_SESSION["permiso"]["CENTRAL_SAVEXPR"])  or
-                isset($_SESSION["permiso"][$arrHttp["base"]."_CENTRAL_ALL"]) or
-                isset($_SESSION["permiso"][$arrHttp["base"]."_CENTRAL_SAVEXPR"])){
-                ?>
-                <tr><td>
-                    <button class="bt-green" type="button"
-                        title="<?php echo $msgstr["savesearch"]?>"
-                        onclick="javascript:GuardarBusqueda()">
-                        <i class="far fa-save"></i> &nbsp;<?php echo $msgstr["savesearch"]?></button>
-                    <?php echo $msgstr["r_desc"].": " ?>
-                    <input type=text name=Descripcion size=40>
-                </td>
-                <?php
-            }
-            ?>
-        </table>
-        </td>
-        </tr>
-    </table>
-</div>
-</form>
-<form name=savesearch action=../dataentry/busqueda_guardar.php method=post target=savesearch>
-	<input type=hidden name=base value=<?php echo $arrHttp["base"]?>>
-	<input type=hidden name=Expresion value="">
-	<input type=hidden name=Descripcion value="">
-</form>
+                                $file_stat = $db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/stat.cfg";
+                                if (!file_exists($file_stat)) $file_stat = $db_path . $arrHttp["base"] . "/def/" . $lang_db . "/stat.cfg";
+                                $fp_stat = file_exists($file_stat) ? file($file_stat) : array();
+                                ?>
+                                <div class="input-row">
+                                    <div class="input-group">
+                                        <label><?php echo $msgstr["stat_rows_by"] ?></label>
+                                        <select name="rows">
+                                            <option value=""></option>
+                                            <?php
+                                            foreach ($fp_stat as $value) {
+                                                $value = trim($value);
+                                                if ($value != "") {
+                                                    $t = explode('|', $value);
+                                                    echo "<option value=\"" . urlencode($value) . "\">" . trim($t[0]) . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label><?php echo $msgstr["stat_cols_by"] ?></label>
+                                        <select name="cols">
+                                            <option value=""></option>
+                                            <?php
+                                            foreach ($fp_stat as $value) {
+                                                $value = trim($value);
+                                                if ($value != "") {
+                                                    $t = explode('|', $value);
+                                                    echo "<option value=\"" . urlencode($value) . "\">" . trim($t[0]) . "</option>";
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-<?php
-if (isset($_SESSION["permiso"]["CENTRAL_STATCONF"]) or isset($_SESSION["permiso"]["CENTRAL_ALL"])){
-    ?>
-    <hr>
-    &nbsp; <a href="javascript:toggleLayer('configure')"> <strong><?php echo $msgstr["stats_conf"]?></strong></a>
-    <div id=configure>
-    <ul>
-        <li><a href='javascript:Configure("stats_var")'><?php echo $msgstr["stat_cfg_vars"]?></a></li>
-        <li><a href='javascript:Configure("stats_pft")'><?php echo $msgstr["def_pre_tabs"]?></a></li>
-        <li><a href='javascript:Configure("stats_tab")'><?php echo $msgstr["stat_cfg_tabs"]?></a></li>
-        <li><a href='javascript:Configure("stats_proc")'><?php echo $msgstr["stat_cfg_procs"]?></a></li>
-        <!--<li><a href='javascript:Configure("stats_gen")'><?php echo $msgstr["stats_gen"]?></a><p></li>-->
-    </ul>
+                        <div style="margin-top: 25px; padding-top: 15px; border-top: 2px solid #eee;">
+                            <h4 style="margin-bottom: 15px; font-size: 14px; color: #333;"><?php echo $msgstr["data_source"]; ?> (<?php echo $msgstr["generateoutput"] ?>)</h4>
+
+                            <div class="stat-option-group" style="padding: 10px; border-style: dashed; margin-bottom: 10px; background-color: #fafafa;">
+                                <label style="font-weight: bold; font-size: 13px; cursor: pointer; display: block;">
+                                    <input type="radio" name="fonte_dados" value="mfn" checked onclick="alternarModoBusca('mfn')">
+                                    <?php echo $msgstr["r_mfnr"] ?> (<?php echo $msgstr["entire_database"]; ?>)
+                                </label>
+                                <div class="input-row" style="margin-top: 8px; margin-left: 20px;">
+                                    <div class="input-group">
+                                        <label><?php echo $msgstr["r_desde"] ?></label>
+                                        <input type="text" name="Mfn" id="Mfn" value="1">
+                                    </div>
+                                    <div class="input-group">
+                                        <label><?php echo $msgstr["r_hasta"] ?></label>
+                                        <input type="text" name="to" id="to" value="<?php echo trim($arrHttp["MAXMFN"]); ?>">
+                                    </div>
+                                </div>
+                                <small style="margin-left: 20px;">Max MFN: <?php echo trim($arrHttp["MAXMFN"]); ?></small>
+                            </div>
+
+                            <div class="stat-option-group" style="padding: 10px; border-style: dashed; background-color: #fafafa;">
+                                <label style="font-weight: bold; font-size: 13px; cursor: pointer; display: block;">
+                                    <input type="radio" name="fonte_dados" value="search" onclick="alternarModoBusca('search')">
+                                    <?php echo $msgstr["r_busqueda"] ?> (<?php echo $msgstr["filtered"]; ?>)
+                                </label>
+                                <div style="margin-top: 8px; margin-left: 20px;">
+                                    <?php
+                                    $file_search = $db_path . $arrHttp["base"] . "/pfts/" . $_SESSION["lang"] . "/search_expr.tab";
+                                    if (!file_exists($file_search)) $file_search = $db_path . $arrHttp["base"] . "/pfts/" . $lang_db . "/search_expr.tab";
+
+                                    if (file_exists($file_search)) {
+                                        echo "<select id='Expr' class='form-control' style='margin-bottom: 8px; width: 100%;' disabled onchange='CopiarExpresion()'>";
+                                        echo "<option value=''>-- " . $msgstr["copysearch"] . " --</option>";
+                                        $fp_search = file($file_search);
+                                        foreach ($fp_search as $value) {
+                                            $value = trim($value);
+                                            if ($value != "") {
+                                                $pp = explode('|', $value);
+                                                if (isset($pp[1])) {
+                                                    echo "<option value='" . htmlspecialchars($pp[1], ENT_QUOTES) . "'>" . htmlspecialchars($pp[0], ENT_QUOTES) . "</option>";
+                                                }
+                                            }
+                                        }
+                                        echo "</select>";
+                                    }
+                                    ?>
+                                    <textarea name="Expresion" id="Expresion" style="height: 60px; width: 100%;" placeholder="<?php echo $msgstr['search_expression']; ?>" disabled></textarea>
+
+                                    <div class="input-row" style="margin-top: 8px; gap: 5px;">
+                                        <button class="bt-green" type="button" onclick="Buscar()" title="<?php echo $msgstr['create_search']; ?>" id="btnBuscar" disabled style="padding: 5px 10px;">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                        <input type="text" name="Descripcion" id="Descripcion" placeholder="<?php echo $msgstr['name_to_save']; ?>" style="flex:1;" disabled>
+                                        <button class="bt-gray" type="button" onclick="GuardarBusqueda()" title="<?php echo $msgstr['save_search']; ?>" id="btnSalvarBusca" disabled style="padding: 5px 10px;">
+                                            <i class="far fa-save"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="bt-blue" type="button" onclick="EnviarFormaUnificada()" style="width: 100%; margin-top: 15px; height: 40px; font-size: 16px;">
+                                <i class="fa fa-play"></i> <?php echo $msgstr["generate_statistics"]; ?>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <form name=savesearch action=../dataentry/busqueda_guardar.php method=post target=savesearch>
+                    <input type=hidden name=base value=<?php echo $arrHttp["base"] ?>>
+                    <input type=hidden name=Expresion value="">
+                    <input type=hidden name=Descripcion value="">
+                </form>
+
+                <div id="preview_panel">
+                    <div id="stats_toolbar" style="display:none; margin-bottom: 15px; padding: 10px; background: #eee; border-radius: 4px;">
+                        <strong><?php echo $msgstr["sendto"]; ?>:</strong> &nbsp;
+                        <button class="bt-blue" type="button" onclick="ExportarStats('W')"><i class="fa fa-file-excel"></i> <?php echo $msgstr["excel"] ?? "Excel"; ?></button>
+                        <button class="bt-blue" type="button" onclick="ExportarStats('D')"><i class="fa fa-file-word"></i> <?php echo $msgstr["word"] ?? "Word"; ?></button>
+                        <button class="bt-blue" type="button" onclick="ExportarStats('P')"><i class="fas fa-desktop"></i> <?php echo $msgstr["window"] ?? "Window"; ?></button>
+                    </div>
+
+                    <div id="results_area">
+                        <p style="text-align:center; color:#999; margin-top:100px;">
+                            <?php echo $msgstr["select_params_generate"]; ?>
+                        </p>
+                    </div>
+                </div>
+            </div> 
+            
+            <?php include("inc_stat_menu.php"); ?>
+
+        </div>
     </div>
-<?php } ?>
+    <form name="sendto" method="post" action="tables_generate.php">
+        <input type="hidden" name="html" value="">
+        <input type="hidden" name="Opcion" value="">
+        <input type="hidden" name="base" value="<?php echo $arrHttp["base"]; ?>">
+        <?php if (isset($arrHttp["encabezado"])) echo "<input type=hidden name=encabezado value=s>"; ?>
+    </form>
 
-</div>
-</div>
-<form name=configure onSubmit="return false">
-	<input type=hidden name=Opcion value=update>
-	<input type=hidden name=from value="statistics">
-	<input type=hidden name=base value=<?php echo $arrHttp["base"]?>>
-	<?php if (isset($arrHttp["encabezado"])) echo "<input type=hidden name=encabezado value=s>";?>
-</form>
-<?php
-include("../common/footer.php");
-?>
+    <script>
+        function RenderCharts() {
+            const containers = document.querySelectorAll('.echart-container');
+            containers.forEach(container => {
+                try {
+                    const b64Data = container.getAttribute('data-chart');
+                    if (!b64Data) return;
+
+                    const binStr = window.atob(b64Data);
+                    const bytes = new Uint8Array(binStr.length);
+                    for (let i = 0; i < binStr.length; i++) {
+                        bytes[i] = binStr.charCodeAt(i);
+                    }
+
+                    const jsonString = new TextDecoder('utf-8').decode(bytes);
+                    const data = JSON.parse(jsonString);
+
+                    if (data.labels.length === 0) {
+                        container.innerHTML = "<p style='text-align:center; color:#999; margin-top:150px;'><?php echo $msgstr['not_enough_data']; ?></p>";
+                        return;
+                    }
+
+                    const myChart = echarts.init(container);
+                    const option = {
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        legend: {
+                            type: 'scroll',
+                            top: 0,
+                            padding: [0, 50]
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '20%',
+                            containLabel: true
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                magicType: {
+                                    type: ['line', 'bar', 'stack']
+                                },
+                                restore: {},
+                                saveAsImage: {
+                                    title: '<?php echo $msgstr['export_chart']; ?>'
+                                }
+                            }
+                        },
+                        dataZoom: [{
+                                type: 'inside',
+                                start: 0,
+                                end: data.labels.length > 15 ? 30 : 100
+                            },
+                            {
+                                type: 'slider',
+                                bottom: 0,
+                                start: 0,
+                                end: data.labels.length > 15 ? 30 : 100
+                            }
+                        ],
+                        xAxis: {
+                            type: 'category',
+                            data: data.labels
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: data.series
+                    };
+                    myChart.setOption(option);
+                    window.addEventListener('resize', () => myChart.resize());
+                } catch (e) {
+                    console.error("Chart Error: ", e);
+                    container.innerHTML = "<p style='color:#d9534f; text-align:center; margin-top:150px;'><i class='fas fa-exclamation-triangle'></i> <?php echo $msgstr['chart_error']; ?></p>";
+                }
+            });
+        }
+    </script>
+    <?php include("../common/footer.php"); ?>

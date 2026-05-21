@@ -3,4 +3,6 @@ iso|Y|download|Baixar ISO|
 word|Y|file-word|MS Word|
 email|Y|envelope|Enviar por email|
 reserve|Y|book|Reservar|
-permalink|Y|link|Permalink|v1
+bookmark|N|bookmark|Bookmark|
+permalink|Y|link|Permalink|v993
+copy|N|copy|Copy|

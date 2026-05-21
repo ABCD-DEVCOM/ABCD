@@ -1,0 +1,8 @@
+'<record>'/
+(if p(V100) then '<contributor>',if p(V100^a) then V100^a,' ' fi,'</contributor>' fi/)
+(if p(v510) then '<coverage>',if p(v510^a) then v510^a,' ' fi,'</coverage>' fi/)
+(if p(V100) then '<creator>',if p(V100^a) then V100^a,' ' fi,'</creator>' fi/)
+(if p(v260) then '<date>',if p(v260^c) then v260^c,' ' fi,'</date>' fi/)
+(if p(v260) then '<publisher>',if p(v260^b) then v260^b,' ' fi,'</publisher>' fi/)
+(if p(v245) then '<title>',if p(v245^a) then v245^a,' ' fi,'</title>' fi/)
+'</record>'/

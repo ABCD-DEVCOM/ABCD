@@ -1,11 +1,11 @@
 [title]
-fields = "210, 222, 240, 242, 245, 246"
+fields = "210, 222, 240, 242, 243, 245, 246"
 
 [subject]
-fields = "600, 610, 611, 630, 648, 650, 651, 653"
+fields = "600, 610, 611, 630, 648, 650, 651, 655"
 
 [general]
-fields = "20, 22, 41, 80, 82, 100, 110, 111, 130, 500, 590"
+fields = "20, 22, 41, 80, 82, 100, 110, 111, 130, 500, 590, 653"
 
 [restriction]
 restriction_field = "13"
@@ -15,4 +15,7 @@ not_restricted_users = "ad"
 
 [permalink]
 prefix = "CN_"
+
+[author]
+fields = "700, 710"
 

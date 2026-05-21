@@ -1,0 +1,28 @@
+proc('a1000~' if p(v90[1]) then v90[1]  fi'~'),/
+(if p(v900^n) then ,
+'*INV*'V900^n'*INV*'
+'^XA~TA0~JSO^LT0^MMT^MNW^MTT^PON^PMN^LH0,0^JMA^PR2,2^MD30^JUS^LRN^CI0^XZ',/
+'^XA^LL0203',/
+'^PW831',/
+'^FO,31^FS',/
+'^FT97,41^A0N,25,43^FH^FD',v1000^a[1]'^FS',/
+'^FO,31^FS',/
+'^FT97,72^A0N,25,43^FH^FD'v1000^b[1]'^FS',/
+'^FO,31^FS',/
+'^FT97,103^A0N,25,43^FH^FD'v1000^c[1],'^FS',/
+'^FO,31^FS',/ 
+'^FT97,134^A0N,25,43^FH^FD'v1000^d[1]'^FS',/
+'^FO,31^FS',/,
+if p(v1000^d) then '^FT97,165^A0N,25,43^FH^FD' else '^FT97,134^A0N,25,43^FH^FD' fi,if a(v900^m) and a(v900^e) then |Ej. |v900^l, else if a(v900^m) and p(v900^e) then |T. |v900^e,| Ej. |v900^l else if p(v900^m) then |Vol. |v900^m, | T. |v900^e,|  Ej. |v900^l fi,fi,fi,'^FS',/
+'^FO,31^FS',/
+if p(v1000^d) then '^FT97,196^A0N,25,43^FH^FD' else '^FT97,165^A0N,25,43^FH^FD' fi,if p(v1000^f) then v1000^f fi'^FS',/
+'^FO,31^FS',/
+'^FT97,196^A0N,25,43^FH^FD'v1000^k'^FS',/
+'^BY3,3,86^FT501,145^BCN,,N,N',/
+'^FD>:*INV*'v900^n'^FS',/
+'^FO,27^FS',/
+'^FT498,36^A0N,22,28^FH^FDBIBLIOTECA UNINCCA^FS',/
+'^FO,23^FS',/
+'^FT596,168^A0N,19,33^FH^FD',v900^n,'^FS',/
+'^PQ1,0,1,Y^XZ',/'%%%'
+fi/)

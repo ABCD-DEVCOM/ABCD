@@ -1,4 +1,5 @@
 copies.*=%path_database%copies/data/copies.*
+rda.*=%path_database%rda/data/rda.*
 loanobjects.*=%path_database%loanobjects/data/loanobjects.*
 STW=%path_database%copies/data/copies.stw
 copies.pft=%path_database%copies/pfts/%lang%/copies.pft
@@ -9,3 +10,6 @@ epilogoact.pft=%path_database%www/epilogoact.pft
 isisac.tab=%path_database%copies/data/isisac.tab
 isisuc.tab=%path_database%copies/data/isisuc.tab
 users.*=%path_database%users/data/users.*
+inven*.pft=%path_database%copies/pfts/pt/inven.pft
+inven=%path_database%copies/pfts/pt/inven.pft
+cnclean.pft=%path_database%copies/pfts/pt/cnclean.pft

@@ -1,4 +1,0 @@
-stock.*=%path_database%stock/data/stock.*
-stock.pft=%path_database%stock/pfts/en/stock.pft
-prologoact.pft=%path_database%www/prologoact.pft
-epilogoact.pft=%path_database%www/epilogoact.pft

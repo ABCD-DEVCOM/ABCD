@@ -1,0 +1,16 @@
+'<tr>
+	<td valign=top bgcolor=#ffffff><font face=arial size=2>'v1+|; | if a(v1) then ' ' fi,'</td>'/
+	'<td valign=top bgcolor=#ffffff><font face=arial size=2>'v30+|; | if a(v30) then ' ' fi,'</td>'/
+	'<td valign=top bgcolor=#ffffff><font face=arial size=2>'(if p(v200) then | |v200^a,| |v200^b, if iocc<>nocc(v200) then '<br>' fi fi/) if a(v200) then ' ' fi,'</td>'/
+	'<td valign=top bgcolor=#ffffff><font face=arial size=2>'v35+|; | if a(v35) then ' ' fi,'</td>'/
+	'<td valign=top bgcolor=#ffffff><font face=arial size=2>'v63+|; | if a(v63) then ' ' fi,'</td>'/
+	,s1:=(v30),
+	if npost(['loanobjects'],'CN_'v10'_'v1)=0 then 
+		'<td align=center bgcolor=#ffffff>&nbsp;</td>'
+	else
+		ref(['loanobjects']l(['loanobjects'],'CN_'v10'_'v1),
+			(if p(v959) and v959^i=s1 then proc('a9999~1~'),'<td align=center bgcolor=#ffffff><font face=arial size=2>' v959^o'</td>' fi/)
+		if a(v9999) then '<td align=center bgcolor=#ffffff>&nbsp;</td>' fi
+		)
+	fi
+

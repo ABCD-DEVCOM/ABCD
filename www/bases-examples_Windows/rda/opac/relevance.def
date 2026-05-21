@@ -1,0 +1,15 @@
+[permalink]
+prefix = "CN_"
+
+[title]
+fields = "222, 240, 245, 246"
+
+[author]
+fields = "100, 700, 710, 711, 730, 740"
+
+[subject]
+fields = "600, 650"
+
+[general]
+fields = "20"
+

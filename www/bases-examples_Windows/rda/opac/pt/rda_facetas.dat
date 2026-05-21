@@ -1,8 +1,8 @@
-Lugar de publicação|(v264^a/),(v260^a/)
-Editor/Publicador|(v264^b/),(v260^b/)
-Ano|(v264^c/),(v260^c/)
-ISBN/ISSN|(v20^a/)
-Autor pessoal|v100^a[1]
-Autor institucional|v110^a[1]
-Título|v245^a': 'v245^b
-Assunto (Tópico)|(v650^a/)
+Assunto (Tópico)|(v650^a/)|MA_|A
+Autor pessoal|v100^a[1]|AU_|A
+Autor institucional|v110^a[1]|AI_|A
+Título|(v245^a': 'v245^b/)|TIP_|A
+Lugar de publicação|(v260^a/)(v264^a/)|PA_|A
+Editor/Publicador|(v260^b/)(v264^b/)|PU_|A
+Ano|(v260^c/)(v264^c/)|DT_|A
+ISBN/ISSN|(v20^a/)|IS_|A

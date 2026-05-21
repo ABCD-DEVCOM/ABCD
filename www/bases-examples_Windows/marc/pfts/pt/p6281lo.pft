@@ -1,0 +1,76 @@
+'<style>
+  table.etiquetas {
+    border-collapse: collapse;
+    width: 225mm;
+    table-layout: fixed;
+  }
+
+  table.etiquetas td.unidade {
+    max-width: 101.6mm;
+    width: 101.6mm;
+    height: 25.4mm;
+    padding: 2mm;
+    box-sizing: border-box;
+    vertical-align: middle;
+    border: 1px dashed #ccc; /* Remova para impressão final */
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+  }
+
+  .conteudo-etiqueta {
+    display: flex;
+    max-width: 100mm;
+    width: 101.6mm;
+    height: 25.4mm;
+    align-items: center;
+    vertical-align: middle;
+    /*justify-content: flex-start;*/
+  }
+
+ .localizacao {
+    text-align: left;
+    font-weight: bold;
+    white-space: pre-line;
+    padding-left: 25px;
+    flex-grow: 1;
+  }
+
+  .barcode {
+    width: 55%;
+    padding: 8px 0;
+    align-items: center;
+    height: 25.3mm;
+    display: inline-flex;
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
+    align-content: flex-start;
+  }
+
+  .barcode span {
+    width: 55%;
+    margin: 80px 0 0 0;
+    align-items: center;
+    vertical-align: middle;
+    height: 25.3mm;
+    font-family: "Bar Code 39 e HR"; 
+    font-size:30px;
+    display: contents;
+  }
+
+  .localizacao-area {
+    width: 65%;
+  }
+</style>'
+
+'<div class="conteudo-etiqueta">'/
+'  <div class="barcode">'/
+    (if p(v1) then ,
+      '*INV*'V1'*INV*'
+      `<span>`
+      REF->copies(L->copies(|CN_marc_|v1),v30'<br>'v90[1]^d'<br>'v264^c/),`</span>`
+      v1000^a[1],|.|v1000^b[1],|.|v1000^c[1],|.|v1000^d[1] /
+    fi)
+'  </div>'/
+'    <div class="localizacao">'v90^a'<br>'v90^b'<br>'v90^c'<br>'v264^c'</div>'/
+'</div>'/
+'%%%'

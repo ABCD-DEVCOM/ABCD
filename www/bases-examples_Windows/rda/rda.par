@@ -1,11 +1,14 @@
 rda.*=%path_database%rda/data/rda.*
+isisac.tab=%path_database%isisac.tab
+isisuc.tab=%path_database%isisuc.tab
+FRBRkey.pft=%path_database%rda/pfts/%lang%/FRBRkey.pft
+FRBRbase.pft=%path_database%rda/pfts/%lang%/FRBRbase.pft
+rda_opac.pft=%path_database%rda/pfts/%lang%/rda_opac.pft
 prologoact.pft=%path_database%www/prologoact.pft
 prologo.pft=%path_database%www/prologo.pft
 epilogoact.pft=%path_database%www/epilogoact.pft
 epilogo.pft=%path_database%www/epilogo.pft
-autoridades.pft=%path_database%rda/pfts/pt/autoridades.pft 
-isisac.tab=%path_database%rda/data/isisac.tab
-isisuc.tab=%path_database%rda/data/isisuc.tab
+autoridades.pft=%path_database%rda/pfts/%lang%/autoridades.pft 
 STW=%path_database%rda/data/rda.stw
 copies.*=%path_database%copies/data/copies.*
 copies.pft=%path_database%copies/pfts/pt/copies.pft

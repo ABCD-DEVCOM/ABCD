@@ -1,3 +1,4 @@
+mrclte_c|Completo Alternativo
 table|Tabela Completa|T|VBAR|0|0
 rda|Formato RDA||||
 P6280-CB|Codigo barras
@@ -5,7 +6,5 @@ P6280-LO|Lombada
 P6282-LO|Lombada
 p6281lo|Lombada P6281-LO|CT||0|0
 adrda_c|Formato completo||||
-mrclte_c|Completo Alternativo
-breve|Breve||||
 prda|prda||||
 opac|Opac - Formato público|T|VBAR|0|0

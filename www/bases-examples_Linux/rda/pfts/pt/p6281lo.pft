@@ -1,73 +1,48 @@
-'<style>
-  table.etiquetas {
-    border-collapse: collapse;
-    width: 220mm;
-    table-layout: fixed;
-  }
+'<style>'/
+'  .conteudo-etiqueta {'/
+'    display: flex;'/
+'    align-items: center;'/
+'    width: 101.6mm;'/
+'    max-width: 100%;'/
+'    box-sizing: border-box;'/
+'    padding: 3mm;'/
+'  }'/
 
-  table.etiquetas td {
-    width: 101.6mm;
-    height: 25.4mm;
-    padding: 2mm;
-    box-sizing: border-box;
-    vertical-align: middle;
-    border: 1px dashed #ccc; /* Remova para impressão final */
-    font-family: Arial, sans-serif;
-    font-size: 10pt;
-  }
+'  .barcode {'/
+'    width: 55%;'/
+'    text-align: center;'/
+'  }'/
 
-  .conteudo-etiqueta {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-  }
+'  .barcode span {'/
+'    font-size: 25pt;'/
+'  }'/
 
-  .conteudo-etiqueta img {
-    width: 50%;
-   /*max-width: 100mm;
-    height: 12mm;*/
-  }
+'  .localizacao-area {'/
+'    width: 45%;'/
+'    padding-left: 5mm;'/
+'    box-sizing: border-box;'/
+'  }'/
 
-  .localizacao {
-    text-align: center;
-    font-weight: bold;
-    white-space: pre-line;
-    padding-left: 5px;
-    flex-grow: 1;
-  }
+'  .localizacao {'/
+'    text-align: left;'/
+'    font-weight: bold;'/
+'    white-space: pre-line;'/
+'    font-size: 11pt;'/
+'    line-height: 1.2;'/
+'  }'/
+'</style>'/
 
-  .barcode {
-    width: 55%;
-  }
-
-  .localizacao-area {
-    width: 65%;
-  }
-</style>
-
-<table class="etiquetas">
-  <tr>
-    <td>
-      <div class="conteudo-etiqueta">
-        <div class="barcode">
-          <img src="/barcode.php?f=svg&s=code-128&h=90&ts=20&th=19&pv=20&d='/'$$REF:copies,cnclean,CN_'v5001'_'v1/'" alt="Código de Barras">
-        </div>
-        <div class="localizacao-area">
-          <div class="localizacao">'v90[1]^a'<br>'v90[1]^b'<br>'v90[1]^c'</div>
-        </div>
-      </div>
-    </td>
-    <td>
-      <div class="conteudo-etiqueta">
-        <div class="barcode">
-          <img src="/barcode.php?f=svg&s=code-128&h=90&ts=20&th=19&pv=20&d='/'$$REF:copies,cnclean,CN_'v5001'_'v1/'" alt="Código de Barras">
-        </div>
-        <div class="localizacao-area">
-          <div class="localizacao">'v90[1]^a'<br>'v90[1]^b'<br>'v90[1]^c'</div>
-        </div>
-      </div>
-    </td>
-  </tr>
-
-  <!-- Continue adicionando <tr>...</tr> para novas linhas com 3 etiquetas -->
-</table>'
+'<div class="conteudo-etiqueta">'/
+'  <div class="barcode">'/
+(if p(v1) then ,
+   '*INV*'V1'*INV*'
+   `<center><br><span  style="font-family:'Bar Code 39 e HR' ; font-size:40px">`
+   v1`</span><p>`
+   v1000^a[1],|.|v1000^b[1],|.|v1000^c[1],|.|v1000^d[1] /
+fi)
+'  </div>'/
+'  <div class="localizacao-area">'/
+'    <div class="localizacao">'v90^a'<br>'v90^b'<br>'v90^c'<br>'v264^c'</div>'/
+'  </div>'/
+'</div>'/
+'%%%'

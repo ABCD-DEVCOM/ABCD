@@ -1,0 +1,8 @@
+print|Y|print|Imprimir|
+iso|Y|download|Baixar ISO|
+word|Y|file-word|MS Word|
+email|N|envelope|Enviar por email|
+reserve|N|book|Reservar|
+bookmark|N|bookmark|Bookmark|
+permalink|Y|link|Permalink|v1
+copy|N|copy|Copy|
