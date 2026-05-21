@@ -121,6 +121,15 @@ $path_wks = $db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/format
 if (!file_exists($path_wks)) $path_wks = $db_path . $arrHttp["base"] . "/def/" . $lang_db . "/formatos.wks";
 if (file_exists($path_wks)) $fp_wks = file($path_wks);
 
+// --- VERIFICAR TIPOS DE REGISTRO (typeofrecord.tab) ---
+$typeofrecord = "";
+$path_tor = $db_path_db . "def/" . $_SESSION["lang"] . "/typeofrecord.tab";
+if (!file_exists($path_tor)) {
+	$path_tor = $db_path_db . "def/" . $lang_db . "/typeofrecord.tab";
+}
+if (file_exists($path_tor)) {
+	$typeofrecord = "S"; // Sinaliza que o arquivo existe
+}
 
 if (empty($formatos)) {
 	// Fallback: at least “ALL” is always available (default value in inicio_main.php)
@@ -857,13 +866,13 @@ if (file_exists($wksfile)) {
 	</form>
 
 	<script>
-		// Sincroniza o frame principal no momento em que a barra de ferramentas termina de carregar
+		// Synchronizes the main frame when the toolbar finishes loading
 		window.addEventListener('load', function() {
+			top.typeofrecord = "<?php echo $typeofrecord; ?>";
+
 			<?php if (isset($arrHttp["inicio"]) && $arrHttp["inicio"] == "s"): ?>
-				// É o primeiro carregamento: injeta a tela de "Último MFN" no frame principal
 				top.main.location.href = "inicio_base.php?inicio=s&base=" + top.base + "&cipar=" + top.cipar + "&per=" + top.db_permiso;
 			<?php elseif (!isset($arrHttp["reload"])): ?>
-				// Não é o início, mas garante que o frame principal não fique em branco
 				if (top.main && top.main.location) {
 					var currentUrl = top.main.location.href;
 					if (currentUrl && currentUrl.indexOf('about:blank') === -1) {
