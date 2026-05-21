@@ -515,3 +515,5 @@ set_log_empty=O arquivo de log está vazio.
 set_log_notfound=Arquivo de log não encontrado em
 set_log_permission=Certifique-se que o diretório log tem permissão de escrita.
 set_log_cleared=Log limpo com sucesso.
+hide_top_bar=Ocultar barra superior
+show_top_bar=Exibir barra superior

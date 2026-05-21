@@ -29,6 +29,8 @@
  *
  * == END LICENSE ==
 */
+
+ob_start();
 session_start();
 if (!isset($_SESSION["permiso"])){
 	header("Location: ../common/error_page.php") ;
@@ -47,14 +49,17 @@ and !isset($_SESSION["permiso"][$db."_CENTRAL_ALL"])){
 	die;
 }
 
-if (!isset($ext_allowed)){	//extension allowed for uploading files (used in dataentry/)
-	$ext_allowed=array("jpg","gif","png","pdf","doc","docx","xls","xlsx","odt");}
+if (!isset($ext_allowed)){
+	//extension allowed for uploading files (used in dataentry/)
+	$ext_allowed=array("jpg","gif","png","pdf","doc","docx","xls","xlsx","odt");
+}
 $lang=$_SESSION["lang"];
 include("../lang/admin.php");
 include("../lang/dbadmin.php");
 include("../lang/soporte.php");
 
-function NoImage(){	global $msgstr,$arrHttp;
+function NoImage(){
+	global $msgstr,$arrHttp;
 	echo "<form name=regresar method=post action=upload_file.php>\n";
 	foreach($arrHttp as $var=>$value){
 		echo "<input type=hidden name=$var value=$value>\n";
@@ -62,7 +67,8 @@ function NoImage(){	global $msgstr,$arrHttp;
 	echo "</form>";
 	echo "<font color=red face=arial size=2>".$msgstr["nouploadfile"]."<font color=black><p>";
 	echo "<a href=javascript:document.regresar.submit()>".$msgstr["regresar"]."<a>";
-	die;}
+	die;
+}
 
 //foreach($arrHttp as $var=>$value) echo "$var=$value<br>";
 // =========== See equivalent code in dirs_explorer.php==========//
@@ -81,9 +87,11 @@ if ($img_path==""){
     $name_path="%path_database%".$arrHttp["base"]."/";
 }
 
-if (!is_dir($img_path)){    echo "<h3>".$msgstr["dirne"]." (".$name_path.")</h3> ";
+if (!is_dir($img_path)){
+    echo "<h3>".$msgstr["dirne"]." (".$name_path.")</h3> ";
 	NoImage();
-	die;}
+	die;
+}
 
 $files = $_FILES['userfile'];
 
@@ -93,17 +101,27 @@ if (isset($arrHttp["storein"])){
 	$len=strlen($store_in);
 	if (substr($store_in,$len-1,1)!="/")  $store_in.="/";
 }
+$uploaded_filenames = [];
 foreach ($files['name'] as $key=>$name) {
-	if (trim($name)==""){		NoImage();
-		break;	}
-	if ($name!=""){	  	echo "$name<br>";
+	if (trim($name)==""){
+		NoImage();
+		break;
+	}
+	if ($name!=""){
+	  	echo "$name<br>";
 	  	$max=get_cfg_var ("upload_max_filesize");
-	    if ((int)$files['size'][$key]==0){	    	$max=get_cfg_var ("upload_max_filesize");
-	    	echo "upload_max_filesize = $max<br>";	    	echo "File to big. Could not be uploaded. Modify the parameter upload_max_filesize in php.ini";
-	    	die;	    }
-	    foreach ($ext_allowed as $value){	    	$ext_allowed[]=strtoupper($value);	    }
+	    if ((int)$files['size'][$key]==0){
+	    	$max=get_cfg_var ("upload_max_filesize");
+	    	echo "upload_max_filesize = $max<br>";
+	    	echo "File to big. Could not be uploaded. Modify the parameter upload_max_filesize in php.ini";
+	    	die;
+	    }
+	    foreach ($ext_allowed as $value){
+	    	$ext_allowed[]=strtoupper($value);
+	    }
 	    $ext = pathinfo($name, PATHINFO_EXTENSION);
-		if(!in_array(strtoupper($ext),$ext_allowed) ) {			echo $msgstr["validextensions"]." ";
+		if(!in_array(strtoupper($ext),$ext_allowed) ) {
+			echo $msgstr["validextensions"]." ";
 			foreach ($ext_allowed as $value) echo "$value ";
 			echo ' &nbsp; (<b>$ext_allowed</b> in <b>config.php</b>)<br>';
     		NoImage();
@@ -123,18 +141,30 @@ foreach ($files['name'] as $key=>$name) {
 			echo "<body>\n";
 			echo "<font face=verdana>\n";
 			//echo "location: ".$location;
-	  		if (!copy($files['tmp_name'][$key],$location)){
-			    echo "<p>". $msgstr["archivo"]." ".$location." ".$msgstr["notransferido"];
-			}else{
-			  	echo "<p>*** ". $msgstr["archivo"]." ".$location." ".$msgstr["transferido"];
-			  	$subc_a="";
-			  	if (isset($arrHttp["Tag"])){			  		if (strpos($arrHttp["Tag"],"_")===false){				  		if (isset($arrHttp["subc"])){				  			if (strlen($arrHttp["subc"])>1){				  				$subc_a=substr($arrHttp["subc"],0,1);				  				if ($subc_a!="-")
+			if (!copy($files['tmp_name'][$key], $location)) {
+				echo "<p>" . $msgstr["archivo"] . " " . $location . " " . $msgstr["notransferido"];
+			} else {
+				$uploaded_filenames[] = $loc . $name; // GRAVA NO NOSSO ARRAY PARA O JSON
+				echo "<p>*** " . $msgstr["archivo"] . " " . $location . " " . $msgstr["transferido"];
+				$subc_a="";
+			  	if (isset($arrHttp["Tag"])){
+			  		if (strpos($arrHttp["Tag"],"_")===false){
+				  		if (isset($arrHttp["subc"])){
+				  			if (strlen($arrHttp["subc"])>1){
+				  				$subc_a=substr($arrHttp["subc"],0,1);
+				  				if ($subc_a!="-")
 				  					$subc_a="^".$subc_a;
 								else
 									$subc_a="";
-				  				$subc_b="^".substr($arrHttp["subc"],1,1);				  			}else{				  				$subc_a="";
-				  				$subc_b="^".substr($arrHttp["subc"],0,1);				  			}				  		}else{				  			$subc_a="";
-				  			$subc_b="^d";				  		}
+				  				$subc_b="^".substr($arrHttp["subc"],1,1);
+				  			}else{
+				  				$subc_a="";
+				  				$subc_b="^".substr($arrHttp["subc"],0,1);
+				  			}
+				  		}else{
+				  			$subc_a="";
+				  			$subc_b="^d";
+				  		}
 					}
 				  	echo "<script>
 						  campo=window.opener.document.forma1.".$arrHttp["Tag"].".value
@@ -159,6 +189,18 @@ foreach ($files['name'] as $key=>$name) {
 	 }
 }
 
-	echo "</body>\n";
-	echo "</html>\n";
+// --- RESPOSTA AJAX DE LOTE (Fora do foreach) ---
+if (isset($_POST['ajax_upload']) && $_POST['ajax_upload'] == '1') {
+	ob_end_clean(); // Apaga o HTML da memória
+	header('Content-Type: application/json');
+	echo json_encode([
+		'success' => count($uploaded_filenames) > 0,
+		'filenames' => $uploaded_filenames,
+		'message' => $msgstr["upload_success"] ?? 'Upload concluído com sucesso',
+	]);
+	die();
+}
+// -----------------------------------------------
+echo "</body>\n";
+echo "</html>\n";
 ?>

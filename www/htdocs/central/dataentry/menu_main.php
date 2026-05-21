@@ -1,690 +1,896 @@
 <?php
-/* Modifications
-2021-01-05 fho4abcd Modified comment for button with incorrect reference. This restores button bar.
-2021-05-03 fho4abcd Correct header. Ensures that encoding fits with db encoding+header with DOCTYPE
-2021-05-03 fho4abcd Rewrite html: standardized & improved layout
-2021-08-02 fho4abcd Import PDF in menu bar
-2021-08-29 fho4abcd Modified Import PDF into Upload Document
-2021-12-08 fho4abcd Quick search layout + some translations + translation/modify edit pft button+removed some dividers.Code layout more readable
-2023-01-19 fho4abcd Menu "default" to buttons + removed unused size parameters
-2023-01-20 fho4abcd Use better buttons for "default".
-2023-01-27 fho4abcd Layout improvements+more titles. Moved code for field dropdown to inline
-2023-01-29 fho4abcd quick fix to make browse by menu work again
-2023-02-03 fho4abcd Improve browse by, add code for selected records
-2024-04-02 fho4abcd More translations, layout
-2024-06-06 fho4abcd Free search->Search, result in list
-2025-02-12 rogercgui Check if the.fst file exists before trying to open it
-2025-08-05 fho4abcd Store fst data in array (corrupted by last change), add minimal comment
-*/
+
+/**
+ * Name: menu_main.php
+ * Author: Roger C. Guilherme
+ * Created: 2026-05-02
+ * 
+ * Description: This file generates the HTML and JavaScript for the main menu toolbar in the data entry interface of ABCD. It includes buttons for various actions (search, edit, import, etc.) and dropdowns for selecting display formats and navigation modes. The toolbar is designed to be responsive and user-friendly, with icons and tooltips for better usability.
+ *
+ * Modifications
+ * 2021-01-05 fho4abcd Modified comment for button with incorrect reference. This restores button bar.
+ * 2021-05-03 fho4abcd Correct header. Ensures that encoding fits with db encoding+header with DOCTYPE
+ * 2021-05-03 fho4abcd Rewrite html: standardized & improved layout
+ * 2021-08-02 fho4abcd Import PDF in menu bar
+ * 2021-08-29 fho4abcd Modified Import PDF into Upload Document
+ * 2021-12-08 fho4abcd Quick search layout + some translations + translation/modify edit pft button+removed some dividers.Code layout more readable
+ * 2023-01-19 fho4abcd Menu "default" to buttons + removed unused size parameters
+ * 2023-01-20 fho4abcd Use better buttons for "default".
+ * 2023-01-27 fho4abcd Layout improvements+more titles. Moved code for field dropdown to inline
+ * 2023-01-29 fho4abcd quick fix to make browse by menu work again
+ * 2023-02-03 fho4abcd Improve browse by, add code for selected records
+ * 2024-04-02 fho4abcd More translations, layout
+ * 2024-06-06 fho4abcd Free search->Search, result in list
+ * 2025-02-12 rogercgui Check if the.fst file exists before trying to open it
+ * 2025-08-05 fho4abcd Store fst data in array (corrupted by last change), add minimal comment
+ * 2026-05-07 rogercgui Replace the structure in dhtmlX with a more standard HTML/CSS layout, improving readability and maintainability. This also includes the addition of FontAwesome icons for better visual cues on the buttons. The JavaScript functions are kept inline for simplicity, but could be further modularized if needed.
+ */
+
+
 session_start();
-if (!isset($_SESSION["permiso"])){
-	header("Location: ../common/error_page.php") ;
+
+if (!isset($_SESSION["permiso"])) {
+	header("Location: ../common/error_page.php");
+	die;
 }
+
+global $arrHttp, $valortag, $xFormato;
+$valortag = array();
+$arrHttp  = array();
 
 include("../common/get_post.php");
-include("../config.php");
-include("../common/header.php");
-include ("../lang/admin.php");
-include ("../lang/dbadmin.php");
-$db=$arrHttp["base"];
+require_once("../config.php");
 
+if (!isset($_SESSION["lang"])) {
+	$_SESSION["lang"] = $lang;
+}
 
-// Check if the.fst file exists before trying to open it
-$fst_path = $db_path.$arrHttp["base"]."/data/".$arrHttp["base"].".fst";
-if (file_exists($fst_path)) {
-  $fst_file = file($fst_path);
+include("../lang/admin.php");
+include("../lang/soporte.php");
+include("../lang/lang.php");
 
-  $prefix_W="";
-  // Store fst lines in array
-  foreach ($fst_file as $value){
-      if (trim($value)!=""){
-          $fst[]=trim($value);
-      }
-  }
+// Determinar base de dados ativa
+$db       = "";
+$db_path_db = "";
+
+if (isset($arrHttp["base"]) && $arrHttp["base"] != "") {
+	$db = trim($arrHttp["base"]);
+} elseif (isset($_SESSION["base"])) {
+	$db = $_SESSION["base"];
 } else {
-  echo "<h4>".$msgstr["misfile"]." ".$fst_path."</h4>";
-}
-
-
-?>
-
-<body class="toolbar-dataentry">
-<script>permiso='<?php echo $_SESSION["permiso"]["profilename"]?>'</script>
-
-<script>
-Ctrl_activo=""
-lang='<?php echo $_SESSION["lang"]?>'
-document.onkeypress =
-  function (evt) {
-    var c = document.layers ? evt.which
-            : document.all ? event.keyCode
-            : evt.keyCode;
-	if (c==13){
-       switch (Ctrl_activo){
-       		case "blibre":
-       			Buscar("TW_")
-       			break
-       		default:
-       			top.Menu('ira')
-       			break
-       }
-	}
-    return true;
-  };
-
-function FocoEn(Ctrl){
-	Ctrl_activo=Ctrl
-}
-
-function Diccionario(){
-	ix=document.forma1.blibre.selectedIndex
-	Prefijo=document.forma1.blibre.options[ix].value
-	p=Prefijo.split('|')
-	prefijo=p[0]
-	nombrec=document.forma1.blibre.options[ix].text
-	msgwin=window.open("","Diccionario","status=yes,resizable=yes,toolbar=no,menu=no,scrollbars=yes,height=500,width=700")
-	msgwin.focus()
-	i=document.forma1.formato.selectedIndex
-	document.diccio.Formato.value=document.forma1.formato.options[i].value
-	document.diccio.campo.value=escape(nombrec)
-	document.diccio.prefijo.value=prefijo
-	document.diccio.id.value=p[1]
-	document.diccio.Diccio.value="document.forma1.busqueda_palabras"
-	document.diccio.submit()
-}
-
-function Buscar(Prefijo){
-	ix=document.forma1.blibre.selectedIndex
-	Prefijo=document.forma1.blibre.options[ix].value
-	EB=Trim(document.forma1.busqueda_palabras.value)
-	if (EB=="")
-		return
-	Expr=""
-	p=Prefijo.split('|')
-	Prefijo=p[0]
-	if (p[1]=="W"){
-        EB=EB.replace(/,/g,' ')
-        EB=EB.replace(/\./g,' ')
-        EB=EB.replace(/-/g,' ')
-		EB=EB.replace(/  /g,' ')
-		p=EB.split(" ")
-		for (term in p){
-			if (Trim(p[term])!=""){
-				if (Expr=="")
-					Expr=Prefijo+p[term]
-				else
-					Expr+=" and "+Prefijo+p[term]
-			}
-		}
-	}else{
-		Expr=Prefijo+EB
-	}
-	top.Expresion=Expr;
-	top.Menu("ejecutarbusqueda")
-}
-function AbrirAyuda(){
-	msgwin=window.open("../documentacion/ayuda.php?help="+lang+"/dataentry_toolbar.html","Ayuda","status=yes,resizable=yes,toolbar=no,menu=no,scrollbars=yes,width=750,height=500,top=10,left=5")
-    msgwin.focus()
-}
-
-function EditarFormato(){
-	i=document.forma1.formato.selectedIndex
-	if (i==-1){
-	}else{
-	  	pft=document.forma1.formato.options[i].value
-	  	descripcion=document.forma1.formato.options[i].text
-		if (pft!='ALL') {
-			document.editpft.base.value=top.base
-			document.editpft.cipar.value=top.base+".par";
-			document.editpft.archivo.value=pft
-			document.editpft.descripcion.value=descripcion
-			msgwin=window.open("","editpft","width=800, height=400, scrollbars, resizable")
-			document.editpft.submit()
-			msgwin.focus()
-		}else{
-
+	// Fallback: pegar a primeira base do permiso de sessão
+	foreach ($_SESSION["permiso"] as $key => $value) {
+		if (substr($key, 0, 3) == "db_") {
+			$db = substr($key, 3);
+			break;
 		}
 	}
 }
 
-function GenerarDespliegue(){
-	base=top.base
-	if (base==""){
-		alert("<?php echo $msgstr["seldb"]?>")
-		return
-	}
-	if(top.xeditar=="S"){
-		alert("<?php echo $msgstr["aoc"]?>")
-		return
-	}
-	i=document.forma1.formato.selectedIndex
-	if (i==-1){
-	}else{
-	  	pft=document.forma1.formato.options[i].value
-		if (pft!='ALL') {
-		}else{
-		}
-	}
-	top.Menu('same')
+$db_path_db = $db_path . $db . "/";
+$lang_sess  = $_SESSION["lang"];
+
+// Carregar FST para processamento dos campos de busca rápida
+$fst = array();
+$fstfile = $db_path_db . "data/" . $db . ".fst";
+if (file_exists($fstfile)) {
+	$fst = file($fstfile);
 }
 
-function GenerarWks(){
-	base=top.base
-	if (base==""){
-		alert("<?php echo $msgstr["seldb"]?>")
-	}
-	if(top.xeditar=="S"){
-		alert("<?php echo $msgstr["aoc"]?>")
-	}
-	i=document.forma1.wks.selectedIndex
-	if (i==-1){
-		top.wks=""
-	}else{
-	  	top.wks=document.forma1.wks.options[i].value
-	}
-}
-</script>
-<form name=forma1 onsubmit="return false" method=post>
-<script language="JavaScript" type="text/javascript" src="js/dhtmlXProtobar.js?<?php echo time();?>"></script>
-<script language="JavaScript" type="text/javascript" src="js/dhtmlXToolbar.js?<?php echo time();?>"></script>
-<script language="JavaScript" type="text/javascript" src="js/dhtmlXCommon.js?<?php echo time();?>"></script>
-<script language="JavaScript" type="text/javascript" src="js/lr_trim.js?<?php echo time();?>"></script>
-
-<!--SETS UP THE DATA ENTRY TOOLBAR-->
-<table class="toolbar-dataentry" >
-    <tr> <!-- row with cells for the toolbar top row-->
-        <td class="ph-10">
-        <!-- goto record -->
-        <label><?php echo $msgstr["m_ir"]?></label>
-        <input type=text  name=ir_a size=15 value=''
-			title='<?php echo $msgstr["m_typerecno"]." &rarr; ".$msgstr["src_enter"]?>'
-			onfocus="FocoEn('ira')" onClick="javascript:this.value=''" >
-		<td class="ph-10">
-        <!-- quick search -->
-		<?php
-        // Create the label + dropdown + icon for the quick serach
-        if (file_exists($db_path.$arrHttp["base"]."/pfts/".$_SESSION["lang"]."/camposbusqueda.tab")){
-            $fpb=file($db_path.$arrHttp["base"]."/pfts/".$_SESSION["lang"]."/camposbusqueda.tab");
-            ?>
-			<label for="blibre"><?php echo $msgstr["m_searchby"]?></label>
-            <select id=blibre name=blibre onchange="document.forma1.busqueda_palabras.value=''" title='<?php echo $msgstr["selcampob"];?>'>
-            <?php
-            foreach ($fpb as $value){
-                if (trim($value)!=""){
-                    $y=explode('|',$value);
-                    $y[2]=trim($y[2]);
-                    foreach ($fst as $linea){
-                        if (stripos($linea,$y[2])>0){
-                            $y[2]=$y[2].'|';
-                            $linea=str_replace("  "," ",$linea);
-                            $it=explode(" ",$linea);
-			    // If fst inedx is "by word" add 'W'"
-                            if ($it[1]==8) $y[2].='W';
-                            break;
-                        }
-                    }
-                    ?>
-                    <option value="<?php echo trim($y[2])?>" ><?php echo trim($y[0]);?></option>
-                    <?php
-                }
-            }
-            unset($fpb);
-            ?>
-            </select>
-            <a class='btn-toolbar-blue' href="javascript:Diccionario()">
-                <i class='fab fa-searchengin' title="<?php echo $msgstr["m_quicksrcwith"]?>"></i>
-            </a>
-			<input style="width:30%" type="text"  name="busqueda_palabras" onfocus="FocoEn('blibre')" value=''
-				title="<?php echo $msgstr["m_enterterms"];?>">
-            <?php
-        }
-        ?>
-		</td>
-		<td class="ph-10">
-        <div class="GenerarWks">	
-            <label><?php echo $msgstr["displaypft"]?> </label>
-            <select name=formato onChange="Javascript:GenerarDespliegue()">
-            </select>
-            <?php
-            if (isset($_SESSION["permiso"]["CENTRAL_ALL"]) or
-                isset($_SESSION["permiso"]["CENTRAL_EDPFT"]) or
-                isset($_SESSION["permiso"][$db."_CENTRAL_ALL"])  or
-                isset($_SESSION["permiso"][$db."_CENTRAL_EDPFT"])){
-                ?>
-                <a class="btn-toolbar-blue" href="javascript:EditarFormato()">
-                    <i class="fas fa-edit" alt="edit display format" title="<?php echo $msgstr["m_editdispform"];?>"></i>
-                </a>
-            <?php } ?>
-        </div>
-        </td>
-    </tr>
-    <tr><!-- row and cell with toolbar object + worksheet select-->
-        <td class="ph-10" colspan=3>
-            <div id="toolbarBox" style="position:relative"></div>
-            <div class="GenerarWks">
-                <label><?php echo $msgstr["fmt"]?> </label>
-                <select name="wks" onChange="Javascript:GenerarWks()"></select>
-            </div>
-        </td>
-    </tr>
-</table>
-
-
-
-<script>
-    //horizontal toolbar
-    toolbar=new dhtmlXToolbarObject("toolbarBox","400","24","ABCD");
-    toolbar.setOnClickHandler(onButtonClick);
-    toolbar.addItem(new dhtmlXImageButtonObject('../../assets/svg/catalog/ic_fluent_arrow_previous_24_regular.svg',24,24,1,'0_primero','<?php echo $msgstr["m_primero"]?>'))
-    toolbar.addItem(new dhtmlXImageButtonObject('../../assets/svg/catalog/ic_fluent_ios_arrow_left_24_regular.svg',24,24,2,'0_anterior','<?php echo $msgstr["m_anterior"]?>'))
-    toolbar.addItem(new dhtmlXImageButtonObject('../../assets/svg/catalog/ic_fluent_ios_arrow_right_24_regular.svg',24,24,3,'0_siguiente','<?php echo $msgstr["m_siguiente"]?>'))
-    toolbar.addItem(new dhtmlXImageButtonObject('../../assets/svg/catalog/ic_fluent_arrow_next_24_regular.svg',24,24,4,'0_ultimo','<?php echo $msgstr["m_ultimo"]?>'))
-    selectobj=new dhtmlXSelectButtonObject('browseby',
-        'mfn,search,selected_records,undo_selected',
-        'Mfn,<?php echo $msgstr["busqueda"]?>,<?php echo $msgstr["selected_records"]?>,<?php echo $msgstr["undo_selected"]?>',
-        'browse',120,100,'<?php echo $msgstr["browse"]?>')
-        toolbar.addItem(selectobj)
-    selectobj.setSelected('mfn')
-    toolbar.addItem(new dhtmlXToolbarDividerXObject('div_1'))
-    toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_search_24_regular.svg","24","24",5,"1_buscar","<?php echo $msgstr["m_buscar"]?>"))
-    toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_clipboard_search_24_regular.svg","24","24",5,"search_history","<?php echo $msgstr["m_history"]?>"))
-
-    <?php if (isset($tesaurus)) {
-        ?>
-        toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_notebook_24_regular.svg","24","24",5,"tesaurus","<?php echo $msgstr["m_tesaurussrc"]?>"))
-    <?php }?>
-    toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_database_search_24_regular.svg","24","24",5,"1_busquedalibre","<?php echo $msgstr["freesearch_title"]?>"))
-    toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_book_search_24_regular.svg","24","24",6,"1_alfa","<?php echo $msgstr["m_indiceaz"]?>"))
-    toolbar.addItem(new dhtmlXToolbarDividerXObject('div_2'))
-
-    <?php
-        if (isset($_SESSION["permiso"]["CENTRAL_ALL"]) or isset($_SESSION["permiso"]["CENTRAL_CREC"])  or isset($_SESSION["permiso"][$db."_CENTRAL_ALL"]) or isset($_SESSION["permiso"][$db."_CENTRAL_CREC"])) {
-        ?>
-        toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_document_add_24_regular.svg","24","24",7,"2_nuevo","<?php echo $msgstr["m_crear"]?>"))
-    <?php }
-        if (isset($_SESSION["permiso"]["CENTRAL_ALL"]) or isset($_SESSION["permiso"]["CENTRAL_CAPTURE"]) or isset($_SESSION["permiso"][$db."_CENTRAL_ALL"])  or isset($_SESSION["permiso"][$db."_CENTRAL_CAPTURE"])){
-    ?>
-        toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_document_copy_24_regular.svg","24","24",9,"2_capturar","<?php echo $msgstr["m_capturar"]?>"))
-    <?php }
-        if (isset($_SESSION["permiso"]["CENTRAL_ALL"]) or isset($_SESSION["permiso"]["CENTRAL_CREC"])  or isset($_SESSION["permiso"][$db."_CENTRAL_ALL"]) or isset($_SESSION["permiso"][$db."_CENTRAL_CREC"])) {
-            //CHECK IF THE DATABASE ACCEPT IMPORT documents
-            $collection="";
-            if (isset($def_db["COLLECTION"]))         $collection=trim($def_db["COLLECTION"]);
-            if ($collection!=""){
-            ?>
-            toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_arrow_upload_24_regular.svg","24","24",7,"2_nuevoDoc","<?php echo $msgstr["dd_upload"]?>"))
-    <?php } }
-        if (isset($_SESSION["permiso"]["CENTRAL_ALL"]) or isset($_SESSION["permiso"]["CENTRAL_Z3950CAT"]) or isset($_SESSION["permiso"][$db."_CENTRAL_ALL"])  or isset($_SESSION["permiso"][$db."_CENTRAL_Z3950CAT"])){
-        ?>
-        toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_arrow_download_24_regular.svg","24","24",19,"2_z3950","<?php echo $msgstr["m_z3950"]?>"))
-    <?php }
-        ?>
-        toolbar.addItem(new dhtmlXToolbarDividerXObject('div_3'))
-    <?php
-        if (isset($_SESSION["permiso"]["CENTRAL_ALL"]) or isset($_SESSION["permiso"]["CENTRAL_VALDEF"]) or isset($_SESSION["permiso"][$db."_CENTRAL_ALL"])  or isset($_SESSION["permiso"][$db."_CENTRAL_VALDEF"])){
-        ?>
-        toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_book_template_24_regular.svg","24","24",13,"editdv","<?php echo $msgstr["editar"].' '.$msgstr["valdef"]?>"))
-        toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_book_trace_template_24_regular.svg","24","24",13,"deletedv","<?php echo $msgstr["eliminar"].' '.$msgstr["valdef"]?>"))
-        toolbar.addItem(new dhtmlXToolbarDividerXObject('div_4'))
-    <?php }
-        if ((isset($_SESSION["permiso"]["CENTRAL_ALL"]) or isset($_SESSION["permiso"]["CENTRAL_BARCODE"]) or
-            isset($_SESSION["permiso"][$db."_CENTRAL_ALL"]) or isset($_SESSION["permiso"][$db."_CENTRAL_BARCODE"]))
-            and (isset($_SESSION["BARCODE"])or isset($_SESSION["BARCODE_SIMPLE"]))){
-        ?>
-        toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_barcode_scanner_24_regular.svg","24","24",13,"barcode","<?php echo "barcode"?>"))
-    <?php }
-        if (isset($_SESSION["permiso"]["CENTRAL_ALL"]) or
-            isset($_SESSION["permiso"]["CENTRAL_PREC"]) or
-            isset($_SESSION["permiso"][$db."_CENTRAL_ALL"])  or
-            isset($_SESSION["permiso"][$db."_CENTRAL_PREC"])){
-        ?>
-        toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_print_24_regular.svg","24","24",12,"3_imprimir","<?php echo $msgstr["m_reportes"]?>"))
-        /*toolbar.addItem(new dhtmlXImageButtonObject("img/mail_p.png","26","24",14,"email","<?php echo $msgstr["m_email"]?>"))*/
-    <?php }
-        if (isset($_SESSION["permiso"]["CENTRAL_ALL"])      or
-            isset($_SESSION["permiso"]["CENTRAL_UTILS"])    or
-            isset($_SESSION["permiso"]["CENTRAL_IMPEX"])    or
-            isset($_SESSION["permiso"]["CENTRAL_GLOBC"])    or
-            isset($_SESSION["permiso"]["CENTRAL_IMPORT"])   or
-            isset($_SESSION["permiso"]["CENTRAL_EXPORT"])   or
-            isset($_SESSION["permiso"]["CENTRAL_COPYDB"])   or
-            isset($_SESSION["permiso"]["CENTRAL_UNLOCKDB"]) or
-            isset($_SESSION["permiso"]["CENTRAL_LISTBKREC"])   or
-            isset($_SESSION["permiso"]["CENTRAL_UNLOCKDBREC"]) or
-            isset($_SESSION["permiso"]["CENTRAL_FULLINV"]) or
-            isset($_SESSION["permiso"][$db."_CENTRAL_ALL"])    or
-            isset($_SESSION["permiso"][$db."_CENTRAL_UTILS"])  or
-            isset($_SESSION["permiso"][$db."_CENTRAL_IMPEX"])  or
-            isset($_SESSION["permiso"][$db."_CENTRAL_GLOBC"])  or
-            isset($_SESSION["permiso"][$db."_CENTRAL_IMPORT"]) or
-            isset($_SESSION["permiso"][$db."_CENTRAL_EXPORT"]) or
-            isset($_SESSION["permiso"][$db."_CENTRAL_COPYDB"]) or
-            isset($_SESSION["permiso"][$db."_CENTRAL_UNLOCKDB"])  or
-            isset($_SESSION["permiso"][$db."_CENTRAL_LISTBKREC"]) or
-            isset($_SESSION["permiso"][$db."_CENTRAL_FULLINV"]) or
-            isset($_SESSION["permiso"][$db."_CENTRAL_UNLOCKDBREC"])
-            ){
-        ?>
-        toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_toolbox_24_regular.svg","20","20",13,"config","<?php echo $msgstr["mantenimiento"]?>"))
-    <?php }?>
-    toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_arrow_sync_24_regular.svg","20","20",14,"refresh_db","<?php echo $msgstr["refresh_db"]?>"))
-    toolbar.addItem(new dhtmlXToolbarDividerXObject('div_5'))
-
-    <?php $select="";
-        if (isset($_SESSION["permiso"]["CENTRAL_ALL"]) or isset($_SESSION["permiso"]["CENTRAL_STATGEN"])  or isset($_SESSION["permiso"]["CENTRAL_STATCONF"])  or isset($_SESSION["permiso"][$db."_CENTRAL_ALL"])   or isset($_SESSION["permiso"][$db."_CENTRAL_STATGEN"])  or isset($_SESSION["permiso"][$db."_CENTRAL_STATCONF"])){
-        ?>
-        toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_data_usage_24_regular.svg","20","20",13,"stats","<?php echo $msgstr["estadisticas"]?>"))
-    <?php }?>
-    toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_question_circle_24_regular.svg","20","20",14,"5_ayuda","<?php echo $msgstr["m_ayuda"]?>"))
-    toolbar.addItem(new dhtmlXImageButtonObject("../../assets/svg/catalog/ic_fluent_home_24_regular.svg","20","20",14,"home","<?php echo $msgstr["inicio"]?>"))
-    toolbar.showBar();
-
-	function onButtonClick(itemId,itemValue){
-		switch (itemId){
-			case "browseby":
-				switch (itemValue){
-					case "mfn":
-						top.browseby="mfn"
-						top.mfn=top.Mfn_Search -1
-						if (top.mfn<=0) top.mfn=1
-						top.Menu("proximo")
-						break
-					case "search":
-						if (top.Expresion==""){
-							alert("<?php echo $msgstr["faltaexpr"]?>")
-							var item=top.menu.toolbar.getItem('browseby');
-							item.selElement.options[0].selected =true
-							top.browseby="mfn"
-							top.Menu("proximo")
-							return
-						}
-						top.browseby="search"
-						top.mfn=top.Search_pos -1
-						if (top.mfn<=0) top.mfn=1
-						top.Menu("proximo")
-						break
-					case "selected_records":
-						if (top.RegistrosSeleccionados==""){
-							alert("<?php echo $msgstr["no_sel_records"]?>")
-							var item=top.menu.toolbar.getItem('browseby');
-							item.selElement.options[0].selected =true
-							top.browseby="mfn"
-							top.Menu("proximo")
-							return
-						}
-						top.browseby="selected_records"
-						top.Listar_pos=top.Listar_pos-1
-						if (top.Listar_pos<-1) top.Listar_pos=-1
-						top.Menu("proximo")
-						break
-					case "undo_selected":
-						if(top.RegistrosSeleccionados=="") {
-							alert("<?php echo $msgstr["s_no_mfn"]." ".$msgstr["bmfn"];?>");
-						} else {
-							top.RegistrosSeleccionados=""
-							alert("<?php echo $msgstr["s_mfn_cleared"]." ".$msgstr["bmfn"];?>");
-						}
-						var item=top.menu.toolbar.getItem('browseby');
-						item.selElement.options[0].selected =true
-						top.browseby="mfn"
-						top.Menu("proximo")
-				}
-				break
-			case "editdv":
-				top.Menu('editdv')
-				break;
-			case "deletedv":
-				top.Menu('deletedv')
-				break;
-			case "database":
-				top.Menu('database')
-				break;
-			case "b_lang":
-				top.location.href="inicio_main.php?Opcion=admin&lang="+itemValue+"&cipar=bases.par&cambiolang=S"
-				return;
-			case "config":
-				top.Menu('administrar')
-				break;
-			case "0_ir":
-				top.Menu('ira')
-				break
-			case "0_primero":
-				top.Menu('primero')
-				break
-			case "0_anterior":
-				top.Menu('anterior')
-				break
-			case "0_siguiente":
-				top.Menu('proximo')
-				break
-			case "0_ultimo":
-				top.Menu('ultimo')
-				break
-			case "1_alfa":
-				top.Menu('alfa')
-				break
-			case "1_buscar":
-				top.Menu('buscar')
-				break
-			case "1_tabla":
-				top.Menu('tabla')
-				break
-			case "1_busquedalibre":
-				top.Menu('busquedalibre')
-				break
-			case "2_nuevo":
-				top.Menu('nuevo')
-				break
-			case "2_nuevoDoc":
-				top.Menu("importarDoc")
-				break
-			case "2_editar":
-				top.Menu('editar')
-				break
-			case "2_z3950":
-				top.Menu('z3950')
-				break
-			case "2_capturar":
-				top.Menu('capturar_bd')
-				break
-			case "4_eliminar":
-				top.Menu('eliminar')
-				break
-			case "4_guardar":
-				if (top.xeditar!="S"){
-  					alert("<?php echo $msgstr["menu_edit"]?>")
-    				return
-  				}
-				top.main.EnviarForma()
-				break
-			case "4_cancelar":
-				if (top.xeditar!="S" && top.xeditar!="valdef"){
-  					alert("<?php echo $msgstr["menu_canc"]?>")
-    				return
-  				}
-				top.Menu('cancelar')
-				break
-			case "addcopies":
-			    top.Menu('addcopies')
-			    break
-			case "5_ayuda":
-				AbrirAyuda()
-				break
-			case "3_cglobal":
-				top.Menu('global')
-				break
-			case "3_imprimir":
-				top.Menu('imprimir')
-				break
-			case "stats":
-				top.Menu('stats')
-				break;
-			case "refresh_db":
-				top.Menu('refresh_db')
-				break
-			case "barcode":
-				top.Menu('barcode')
-				break;
-			case "home":
-				top.Menu('home')
-                break;
-    		case "search_history":
-    			top.SearchHistory()
-    			break;
-    		case "tesaurus":
-    			top.Tesaurus()
-    			break;
-    		case "email":
-    			top.Mail()
-    			break
-		}
-	};
-</script>
-</form>
-
-<script>
-    top.ModuloActivo="catalog"
-</script>
-
-<script>
-<?php
-unset($fp);
-if (isset($arrHttp["base"])){
-	if (file_exists($db_path.$arrHttp["base"]."/pfts/".$_SESSION["lang"]."/formatos.dat")){
-		$fp = file($db_path.$arrHttp["base"]."/pfts/".$_SESSION["lang"]."/formatos.dat");
-	}else{
-		if (file_exists($db_path.$arrHttp["base"]."/pfts/".$lang_db."/formatos.dat")){
-			$fp = file($db_path.$arrHttp["base"]."/pfts/".$lang_db."/formatos.dat");
-		}
-	}
-	$i=-1;
-	if (isset($fp)) {
-		foreach($fp as $linea){
-			if (trim($linea)!="") {
-				$linea=trim($linea);
-				$ll=explode('|',$linea);
-				$cod=$ll[0];
-				$nom=$ll[1];
-				if (isset($_SESSION["permiso"][$db."_pft_ALL"]) or isset($_SESSION["permiso"][$db."_pft_".$ll[0]])
-						or isset($_SESSION["permiso"]["CENTRAL_ALL"]) or isset($_SESSION["permiso"][$db."_CENTRAL_ALL"])){
-					$i=$i+1;
-					echo "if (top.ModuloActivo==\"catalog\") top.menu.document.forma1.formato.options[$i]=new Option('$nom','$cod')\n";
-				}
-			}
-		}
-
-	}else{
-		echo "document.forma1.formato.options.length=0\n";
-	}
-	$i=$i+1;
-	if (isset($_SESSION["permiso"][$db."_pft_ALL"]) or isset($_SESSION["permiso"]["CENTRAL_ALL"]) or isset($_SESSION["permiso"][$db."_CENTRAL_ALL"])
-
-	){
-		echo "document.forma1.formato.options[$i]=new Option('".$msgstr["all"]."','')\n";
-		echo "document.forma1.formato.options[$i+1]=new Option('".$msgstr["noformat"]."','ALL')\n";
-	}
-	unset($fp);
-	//Se leen las hojas de entrada disponibles
-	if (file_exists($db_path.$arrHttp["base"]."/def/".$_SESSION["lang"]."/formatos.wks")){
-		$fp = file($db_path.$arrHttp["base"]."/def/".$_SESSION["lang"]."/formatos.wks");
-	}else{
-		if (file_exists($db_path.$arrHttp["base"]."/def/".$lang_db."/formatos.wks"))
-			$fp = file($db_path.$arrHttp["base"]."/def/".$lang_db."/formatos.wks");
-	}
-	$i=-1;
-	if (isset($_SESSION["permiso"][$db."_fmt_ALL"]) or isset($_SESSION["permiso"]["CENTRAL_ALL"])  or isset($_SESSION["permiso"][$db."_CENTRAL_ALL"]) ){
-		echo "if (top.ModuloActivo==\"catalog\") top.menu.document.forma1.wks.options[0]=new Option('','')\n";
-		$i=0;
-	}
-
-
-	$wks_p=array();
-	$wks_p=array();
-	if (isset($fp)) {
-		foreach($fp as $linea){
-			if (trim($linea)!="") {
-				$linea=trim($linea);
-				$l=explode('|',$linea);
-				$cod=trim($l[0]);
-				$nom=trim($l[1]);
-				if (isset($_SESSION["permiso"][$db."_fmt_ALL"]) or isset($_SESSION["permiso"][$db."_fmt_".$cod])
-						or isset($_SESSION["permiso"]["CENTRAL_ALL"])  or isset($_SESSION["permiso"][$db."_CENTRAL_ALL"])){
-					$i=$i+1;
-					$wks_p[$cod]="Y";
-					echo "if (top.ModuloActivo==\"catalog\") top.menu.document.forma1.wks.options[$i]=new Option('$nom','$cod')\n";
-				}
-			}
-		}
-	}
-	$i=$i+1;
+// Verificar se tesauro existe para esta base 
+$tesaurus = null;
+$tesfile  = $db_path_db . "def/" . $lang_sess . "/tesaurus.tab";
+if (file_exists($tesfile)) {
+	$tesaurus = true;
 }
 
-//Se lee la tabla de tipos de registro
-unset($fp);
-if (file_exists($db_path.$arrHttp["base"]."/def/".$_SESSION["lang"]."/typeofrecord.tab")){
-	$fp = file($db_path.$arrHttp["base"]."/def/".$_SESSION["lang"]."/typeofrecord.tab");
-}else{
-	if (file_exists($db_path.$arrHttp["base"]."/def/".$lang_db."/typeofrecord.tab"))
-		$fp = file($db_path.$arrHttp["base"]."/def/".$lang_db."/typeofrecord.tab");
+// Carregar definição da base (def_db)
+$def_db = array();
+$deffile = $db_path_db . "def/" . $db . ".def";
+if (!file_exists($deffile)) {
+	$deffile = $db_path_db . "def/abcd.def";
 }
-$i=0;
-$typeofr="";
-if (isset($fp)) {
-	foreach($fp as $linea){
-           if ($i==0){
-           	$l=explode(" ",$linea);
-           	echo "top.tl='".trim($l[0])."'\n";
-           	if (isset($l[1]))
-           		echo "top.nr='".trim($l[1])."'\n";
-           	else
-           	    echo "top.nr=''\n";
-           	$i=1;
-           }else{
-			if (trim($linea)!="") {
-				$l=explode('|',$linea);
-				$cod=$l[0];
-				$ix=strpos($cod,".");
-				$cod=substr($cod,0,$ix);
-				if (isset($wks_p[$cod]))
-					$typeofr.=trim($linea)."$$$";
-    		}
+if (file_exists($deffile)) {
+	$lines = file($deffile);
+	foreach ($lines as $line) {
+		$line = trim($line);
+		if ($line == "" || substr($line, 0, 1) == "#") continue;
+		$parts = explode("=", $line, 2);
+		if (count($parts) == 2) {
+			$def_db[trim($parts[0])] = trim($parts[1]);
 		}
 	}
-	echo "top.typeofrecord=\"$typeofr\"\n";
-}else{
-	echo "top.typeofrecord=\"\"\n";
 }
-if (isset($arrHttp["inicio"]) and $arrHttp["inicio"]=="s"){
-	echo 'top.main.location.href="inicio_base.php?inicio=s&base="+top.base+"&cipar="+top.base+".par&per="+top.db_permiso';
-}else{
-	if (!isset($arrHttp["reload"]))
-		echo "url=top.main.location.href
-	top.main.location.href=url\n";
+
+
+/*
+ * The formats are read from prologoact.tab in the database's PFT folder.
+ * File format: value|label  (one entry per line)
+ * If the file does not exist, the select will default to “ALL”.
+ */
+
+// --- READING THE FORMATS (.dat) ---
+$fp_formatos = array();
+$path_fmt = $db_path . $arrHttp["base"] . "/pfts/" . $_SESSION["lang"] . "/formatos.dat";
+if (!file_exists($path_fmt)) $path_fmt = $db_path . $arrHttp["base"] . "/pfts/" . $lang_db . "/formatos.dat";
+if (file_exists($path_fmt)) $fp_formatos = file($path_fmt);
+
+// --- READING THE WORKSHEETS (.wks) ---
+$fp_wks = array();
+$path_wks = $db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/formatos.wks";
+if (!file_exists($path_wks)) $path_wks = $db_path . $arrHttp["base"] . "/def/" . $lang_db . "/formatos.wks";
+if (file_exists($path_wks)) $fp_wks = file($path_wks);
+
+// --- VERIFICAR TIPOS DE REGISTRO (typeofrecord.tab) ---
+$typeofrecord = "";
+$path_tor = $db_path_db . "def/" . $_SESSION["lang"] . "/typeofrecord.tab";
+if (!file_exists($path_tor)) {
+	$path_tor = $db_path_db . "def/" . $lang_db . "/typeofrecord.tab";
+}
+if (file_exists($path_tor)) {
+	$typeofrecord = "S"; // Sinaliza que o arquivo existe
+}
+
+if (empty($formatos)) {
+	// Fallback: at least “ALL” is always available (default value in inicio_main.php)
+	$formatos[] = array("val" => "ALL", "label" => "ALL");
+}
+
+/*
+ * Worksheets são os arquivos .wkf (ou listados em worksheets.tab).
+ * Se nenhum arquivo de lista existir, varre os arquivos .wkf na pasta de PFTs.
+ */
+$worksheets = array();
+$wksfile    = $db_path_db . "pfts/" . $lang_sess . "/worksheets.tab";
+if (!file_exists($wksfile)) {
+	$wksfile = $db_path_db . "pfts/" . $lang_db . "/worksheets.tab";
+}
+if (file_exists($wksfile)) {
+	foreach (file($wksfile) as $line) {
+		$line = trim($line);
+		if ($line == "" || substr($line, 0, 1) == "#") continue;
+		$parts = explode("|", $line, 2);
+		if (count($parts) == 2) {
+			$worksheets[] = array("val" => trim($parts[0]), "label" => trim($parts[1]));
+		}
+	}
+} else {
+	// Fallback: varredura de arquivos .wkf na pasta de PFTs
+	$wks_dir = $db_path_db . "pfts/" . $lang_sess . "/";
+	if (is_dir($wks_dir)) {
+		foreach (glob($wks_dir . "*.wkf") as $wkf) {
+			$name = basename($wkf, ".wkf");
+			$worksheets[] = array("val" => $name, "label" => $name);
+		}
+	}
 }
 ?>
-</script>
+<!DOCTYPE html>
+<html lang="<?php echo htmlspecialchars($lang_sess); ?>">
 
-<form name=editpft method=post action=../dbadmin/leertxt.php target=editpft>
-<input type=hidden name=desde value=dataentry>
-<input type=hidden name=base>
-<input type=hidden name=cipar>
-<input type=hidden name=archivo>
-<input type=hidden name=descripcion>
-</form>
-<form name=diccio method=post action=../dataentry/diccionario.php target=Diccionario>
-<input type=hidden name=base value=<?php echo $arrHttp["base"]?>>
-<input type=hidden name=cipar value=<?php echo $arrHttp["base"]?>.par>
-<input type=hidden name=Formato value="">
-<input type=hidden name=Opcion value=diccionario>
-<input type=hidden name=prefijo value="">
-<input type=hidden name=campo value="">
-<input type=hidden name=id value="">
-<input type=hidden name=Diccio value="">
-<input type=hidden name=Decode value="">
-<input type=hidden name=toolbar value="Y">
-<input type=hidden name=desde value=dataentry><input type=hidden name=prologo value=prologoact>
-</form>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+		crossorigin="anonymous" referrerpolicy="no-referrer">
+
+	<style>
+		/* Reset mínimo */
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		/*
+   * Setting `overflow: hidden` on the `body` element is MANDATORY.
+   * Without it, the iframe's `scrollHeight` may exceed the expected ~95px
+   * when the operating system renders a scrollbar (an extra 15–17px),
+   * which corrupts the `RecalculateLayout()` calculation in inicio_main.php.
+   */
+		body {
+			overflow: hidden;
+			font-family: sans-serif;
+		}
+
+		/* Main toolbar container */
+		.abcd-toolbar-container {
+			display: flex;
+			flex-direction: column;
+			background-color: #f8f9fa;
+			border-bottom: 1px solid #ddd;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+			padding: 6px 12px;
+		}
+
+		/* Each horizontal line on the toolbar */
+		.abcd-toolbar-row {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 3px 0;
+		}
+
+		/* Grupo de controles: label + input/select */
+		.abcd-toolbar-group {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			flex-shrink: 0;
+		}
+
+		.abcd-toolbar-group label {
+			font-size: 11px;
+			color: #555;
+			font-weight: 600;
+			white-space: nowrap;
+		}
+
+		.abcd-toolbar-group input[type="text"],
+		.abcd-toolbar-group select {
+			padding: 3px 7px;
+			border: 1px solid #ced4da;
+			border-radius: 4px;
+			font-size: 11px;
+			color: #333;
+			height: 26px;
+			background-color: #fff;
+		}
+
+		.abcd-toolbar-group input[type="text"]:focus,
+		.abcd-toolbar-group select:focus {
+			outline: none;
+			border-color: #86b7fe;
+			box-shadow: 0 0 0 2px rgba(13, 110, 253, .15);
+		}
+
+		/* Grupo de botões */
+		.abcd-toolbar-buttons {
+			display: flex;
+			align-items: center;
+			gap: 2px;
+			flex-wrap: nowrap;
+			/* Nunca quebra linha — mantém altura estável */
+		}
+
+		/* Botão individual */
+		.btn-toolbar {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			background: transparent;
+			border: 1px solid transparent;
+			border-radius: 4px;
+			padding: 4px 7px;
+			cursor: pointer;
+			color: #495057;
+			transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+			min-width: 32px;
+			height: 32px;
+			flex-shrink: 0;
+			/* Nunca encolhe — evita deformação em telas estreitas */
+		}
+
+		.btn-toolbar:hover:not(:disabled) {
+			background-color: #e2e6ea;
+			border-color: #adb5bd;
+			color: #0056b3;
+		}
+
+		.btn-toolbar:active:not(:disabled) {
+			background-color: #d3d9df;
+			transform: scale(0.96);
+		}
+
+		.btn-toolbar i {
+			font-size: 15px;
+			pointer-events: none;
+			/* Evita que o ícone intercepte o onclick do botão */
+		}
+
+		/* Botão azul (links de ação secundária) */
+		.btn-toolbar-blue {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			color: #0d6efd;
+			background: transparent;
+			border: 1px solid transparent;
+			border-radius: 4px;
+			height: 26px;
+			padding: 0 7px;
+			cursor: pointer;
+			text-decoration: none;
+			transition: background-color 0.15s ease, border-color 0.15s ease;
+			flex-shrink: 0;
+		}
+
+		.btn-toolbar-blue:hover {
+			background-color: #e7f0ff;
+			border-color: #86b7fe;
+		}
+
+		.btn-toolbar-blue i {
+			font-size: 14px;
+			pointer-events: none;
+		}
+
+		/* Separador vertical entre grupos de botões */
+		.toolbar-divider {
+			width: 1px;
+			height: 20px;
+			background-color: #ced4da;
+			margin: 0 4px;
+			flex-shrink: 0;
+		}
+
+		/* Select de modo de navegação (browseby) */
+		#browseby {
+			height: 26px;
+			font-size: 11px;
+			border: 1px solid #ced4da;
+			border-radius: 4px;
+			padding: 0 4px;
+			background-color: #fff;
+			cursor: pointer;
+			margin: 0 4px;
+			flex-shrink: 0;
+		}
+
+		/*
+   * Em monitores com largura < 900px, esconder os rótulos de texto dos
+   * grupos de controles preserva o layout sem scroll horizontal,
+   * mantendo a altura do iframe estável.
+   */
+		@media (max-width: 900px) {
+			.abcd-toolbar-group label {
+				display: none;
+			}
+		}
+	</style>
+</head>
+
+<body>
+
+	<script src="js/lr_trim.js?<?php echo time(); ?>"></script>
+	<script>
+		/*
+		 *================================================================================
+		 *  LOCAL FUNCTIONS IN menu_main.php
+		 *
+		 *  All of the functions below operate INSIDE the iframe#menu.
+		 *  To communicate with the parent frame (inicio_main.php), they use the prefix “top.”.
+		 *================================================================================
+		 */
+
+		/**
+		 * FocoEn(field)
+		 * Updates the “ep” (entry point) variable in the parent frame, indicating
+		 * which search field is active. Used by search_words and blibre.
+		 * @param {string} field — ‘ira’, ‘blibre’, or another identifier.
+		 */
+
+		function FocoEn(campo) {
+			try {
+				top.ep = campo;
+			} catch (e) {
+				/* Seguro se o pai ainda não carregou */
+			}
+		}
+
+		/**
+		 * GenerarDespliegue()
+		 * Called when the “format” dropdown changes.
+		 * Updates top.Format and reloads the current record with the new format,
+		 * but only if a record is already being displayed.
+		 */
+		function GenerarDespliegue() {
+			var sel = document.forma1.formato;
+			if (!sel || sel.selectedIndex < 0) return;
+			var novoFormato = sel.options[sel.selectedIndex].value;
+			try {
+				top.Formato = novoFormato;
+				/* Recarrega somente se há um registro ativo (mfn > 0 ou busca ativa) */
+				if (top.mfn > 0 || top.Mfn_Search > 0) {
+					top.Menu('ver');
+				}
+			} catch (e) {}
+		}
+
+		/**
+		 * GenerarWks()
+		 * Called when the “wks” (worksheet) selection changes.
+		 * Updates top.wks, which is read by Menu() in inicio_main.php.
+		 */
+		function GenerarWks() {
+			var sel = document.forma1.wks;
+			if (!sel || sel.selectedIndex < 0) return;
+			try {
+				top.wks = sel.options[sel.selectedIndex].value;
+			} catch (e) {}
+		}
+
+		/**
+		 * onButtonClick(tipo, valor)
+		 * Manages the browseby mode selection.
+		 * “undo_selected” is a pseudo-option: clears the selection and returns to MFN.
+		 * @param {string} type  — always ‘browseby’ in the current toolbar.
+		 * @param {string} value — ‘mfn’ | ‘search’ | ‘selected_records’ | 'undo_selected'
+		 */
+		function onButtonClick(tipo, valor) {
+			if (tipo !== 'browseby') return;
+			try {
+				if (valor === 'undo_selected') {
+					top.RegistrosSeleccionados = '';
+					top.browseby = 'mfn';
+					/* Devolve o select visualmente para "Mfn" */
+					document.getElementById('browseby').value = 'mfn';
+				} else {
+					top.browseby = valor;
+				}
+			} catch (e) {}
+		}
+
+		/**
+		 * Diccionario()
+		 * Abre a janela de índice/dicionário para o campo de busca rápida selecionado.
+		 * Extrai o prefixo do campo selecionado em "blibre" e delega ao Menu('alfa').
+		 */
+		function Diccionario() {
+			try {
+				var sel = document.forma1.blibre;
+				if (sel && sel.selectedIndex >= 0) {
+					var rawVal = sel.options[sel.selectedIndex].value;
+					/* Remove sufixo '|W' ou '|' que indicam tipo de índice no FST */
+					var prefijo = rawVal.replace(/\|W$/, '').replace(/\|$/, '');
+					top.prefijo_indice = prefijo;
+				}
+				top.Menu('alfa');
+			} catch (e) {}
+		}
+
+		/**
+		 * AbrirAyuda()
+		 * Delega para a função de ajuda definida em inicio_main.php.
+		 * NÃO chama window.open diretamente — evita duplicação de lógica.
+		 */
+		function AbrirAyuda() {
+			try {
+				top.AbrirVentanaAyuda();
+			} catch (e) {}
+		}
+
+		function EditarFormato() {
+			i = document.forma1.formato.selectedIndex
+			if (i == -1) {} else {
+				pft = document.forma1.formato.options[i].value
+				descripcion = document.forma1.formato.options[i].text
+				if (pft != 'ALL') {
+					document.editpft.base.value = top.base
+					document.editpft.cipar.value = top.base + ".par";
+					document.editpft.archivo.value = pft
+					document.editpft.descripcion.value = descripcion
+					msgwin = window.open("", "editpft", "width=800, height=400, scrollbars, resizable")
+					document.editpft.submit()
+					msgwin.focus()
+				} else {
+
+				}
+			}
+		}
+	</script>
+
+	<form name="forma1" method="post" onsubmit="return false">
+
+		<div class="abcd-toolbar-container">
+			<div class="abcd-toolbar-row">
+
+				<div class="abcd-toolbar-group">
+					<label for="ir_a_field"><?php echo $msgstr["m_ir"]; ?></label>
+
+					<input type="text"
+						id="ir_a_field"
+						name="ir_a"
+						size="10"
+						value=""
+						title="<?php echo htmlspecialchars($msgstr["m_typerecno"] . " → " . $msgstr["src_enter"]); ?>"
+						onfocus="FocoEn('ira')"
+						onclick="this.value=''"
+						onkeypress="if(event.keyCode==13||event.which==13){top.Menu('ira');return false;}">
+				</div>
+
+				<?php
+				$camposbusqueda_file = $db_path_db . "pfts/" . $lang_sess . "/camposbusqueda.tab";
+				if (!file_exists($camposbusqueda_file)) {
+					$camposbusqueda_file = $db_path_db . "pfts/" . $lang_db . "/camposbusqueda.tab";
+				}
+				if (file_exists($camposbusqueda_file)):
+					$fpb = file($camposbusqueda_file);
+				?>
+					<div class="abcd-toolbar-group">
+						<label for="blibre"><?php echo $msgstr["m_searchby"]; ?></label>
+						<select id="blibre"
+							name="blibre"
+							onchange="document.forma1.busqueda_palabras.value=''"
+							title="<?php echo htmlspecialchars($msgstr["selcampob"]); ?>">
+							<?php
+							foreach ($fpb as $value) {
+								$value = trim($value);
+								if ($value == "") continue;
+								$y = explode('|', $value);
+								$y[2] = isset($y[2]) ? trim($y[2]) : "";
+								/* Detecta se o campo tem indexação por palavras (tipo 8 no FST) */
+								foreach ($fst as $linea) {
+									if ($y[2] != "" && stripos($linea, $y[2]) !== false) {
+										$y[2] = $y[2] . '|';
+										$linea = str_replace("  ", " ", $linea);
+										$it = explode(" ", trim($linea));
+										if (isset($it[1]) && $it[1] == 8) {
+											$y[2] .= 'W';
+										}
+										break;
+									}
+								}
+								$label = isset($y[0]) ? trim($y[0]) : "";
+								$val   = trim($y[2]);
+								echo "<option value=\"{$val}\">{$label}</option>\n";
+							}
+							unset($fpb);
+							?>
+						</select>
+
+						<!-- Ícone de abertura do dicionário/índice -->
+						<a href="javascript:Diccionario()"
+							class="btn-toolbar-blue"
+							title="<?php echo htmlspecialchars($msgstr["m_quicksrcwith"]); ?>">
+							<i class="fab fa-searchengin"></i>
+						</a>
+
+						<!-- Campo de termos para busca rápida -->
+						<input type="text"
+							name="busqueda_palabras"
+							style="width:180px"
+							value=""
+							onfocus="FocoEn('blibre')"
+							title="<?php echo htmlspecialchars($msgstr["m_enterterms"]); ?>"
+							onkeypress="if(event.keyCode==13||event.which==13){top.Menu('ejecutarbusqueda');return false;}">
+					</div>
+				<?php endif; /* camposbusqueda.tab */ ?>
+
+				<!-- Formato de exibição + botão de edição de formato (se com permissão) ─ -->
+				<div class="abcd-toolbar-group" style="margin-left:auto;">
+					<label for="fmt_select"><?php echo $msgstr["displaypft"]; ?></label>
+					<select name="formato" onchange="GenerarDespliegue()">
+						<?php
+						foreach ($fp_formatos as $line) {
+							$line = trim($line);
+							if ($line != "") {
+								$f = explode('|', $line);
+								$cod = $f[0];
+								$nom = $f[1];
+								$selected = (isset($arrHttp["formato"]) && $arrHttp["formato"] == $cod) ? " selected" : "";
+								echo "<option value=\"$cod\"$selected>$nom</option>\n";
+							}
+						}
+						?>
+						<option value=""><?php echo $msgstr["all"] ?></option>
+						<option value="ALL"><?php echo $msgstr["noformat"] ?></option>
+					</select>
+
+					<?php
+					/* Botão de editar formato: visível apenas para usuários com permissão */
+					if (
+						isset($_SESSION["permiso"]["CENTRAL_ALL"])      ||
+						isset($_SESSION["permiso"]["CENTRAL_EDPFT"])    ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_ALL"])  ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_EDPFT"])
+					): ?>
+						<a class="btn-toolbar-blue" href="javascript:EditarFormato()">
+							<i class="fas fa-edit" alt="edit display format" title="<?php echo $msgstr["m_editdispform"]; ?>"></i>
+						</a>
+					<?php endif; ?>
+				</div>
+
+			</div><!-- /.abcd-toolbar-row (linha 1) -->
+
+
+			<div class="abcd-toolbar-row" style="justify-content:space-between;">
+
+				<div class="abcd-toolbar-buttons">
+
+					<!-- Navegação de registros -->
+					<button type="button" class="btn-toolbar"
+						onclick="top.Menu('primero')"
+						title="<?php echo htmlspecialchars($msgstr["m_primero"]); ?>">
+						<i class="fas fa-step-backward"></i>
+					</button>
+					<button type="button" class="btn-toolbar"
+						onclick="top.Menu('anterior')"
+						title="<?php echo htmlspecialchars($msgstr["m_anterior"]); ?>">
+						<i class="fas fa-backward"></i>
+					</button>
+					<button type="button" class="btn-toolbar"
+						onclick="top.Menu('proximo')"
+						title="<?php echo htmlspecialchars($msgstr["m_siguiente"]); ?>">
+						<i class="fas fa-forward"></i>
+					</button>
+					<button type="button" class="btn-toolbar"
+						onclick="top.Menu('ultimo')"
+						title="<?php echo htmlspecialchars($msgstr["m_ultimo"]); ?>">
+						<i class="fas fa-step-forward"></i>
+					</button>
+
+					<!-- Modo de navegação (browseby) -->
+					<select id="browseby"
+						onchange="onButtonClick('browseby', this.value)"
+						title="<?php echo htmlspecialchars($msgstr["m_browseby"] ?? "Modo de navegação"); ?>">
+						<option value="mfn" selected>Mfn</option>
+						<option value="search"><?php echo htmlspecialchars($msgstr["busqueda"]); ?></option>
+						<option value="selected_records"><?php echo htmlspecialchars($msgstr["selected_records"]); ?></option>
+						<option value="undo_selected"><?php echo htmlspecialchars($msgstr["undo_selected"]); ?></option>
+					</select>
+
+					<div class="toolbar-divider"></div>
+
+					<!-- Busca -->
+					<button type="button" class="btn-toolbar"
+						onclick="top.Menu('buscar')"
+						title="<?php echo htmlspecialchars($msgstr["m_buscar"]); ?>">
+						<i class="fas fa-search"></i>
+					</button>
+					<button type="button" class="btn-toolbar"
+						onclick="top.SearchHistory()"
+						title="<?php echo htmlspecialchars($msgstr["m_history"]); ?>">
+						<i class="fas fa-clipboard-list"></i>
+					</button>
+					<?php if (isset($tesaurus)): ?>
+						<button type="button" class="btn-toolbar"
+							onclick="top.Tesaurus()"
+							title="<?php echo htmlspecialchars($msgstr["m_tesaurussrc"]); ?>">
+							<i class="fas fa-book"></i>
+						</button>
+					<?php endif; ?>
+					<button type="button" class="btn-toolbar"
+						onclick="top.Menu('busquedalibre')"
+						title="<?php echo htmlspecialchars($msgstr["freesearch_title"]); ?>">
+						<i class="fas fa-database"></i>
+					</button>
+					<button type="button" class="btn-toolbar"
+						onclick="top.Menu('alfa')"
+						title="<?php echo htmlspecialchars($msgstr["m_indiceaz"]); ?>">
+						<i class="fas fa-sort-alpha-down"></i>
+					</button>
+
+					<div class="toolbar-divider"></div>
+
+					<!-- Criação de registros (com verificação de permissão) -->
+					<?php
+					if (
+						isset($_SESSION["permiso"]["CENTRAL_ALL"])     ||
+						isset($_SESSION["permiso"]["CENTRAL_CREC"])    ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_ALL"]) ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_CREC"])
+					): ?>
+						<button type="button" class="btn-toolbar"
+							onclick="top.Menu('nuevo')"
+							title="<?php echo htmlspecialchars($msgstr["m_crear"]); ?>">
+							<i class="fas fa-file-medical"></i>
+						</button>
+					<?php endif; ?>
+
+					<?php
+					if (
+						isset($_SESSION["permiso"]["CENTRAL_ALL"])        ||
+						isset($_SESSION["permiso"]["CENTRAL_CAPTURE"])    ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_ALL"]) ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_CAPTURE"])
+					): ?>
+						<button type="button" class="btn-toolbar"
+							onclick="top.Menu('capturar_bd')"
+							title="<?php echo htmlspecialchars($msgstr["m_capturar"]); ?>">
+							<i class="fas fa-copy"></i>
+						</button>
+					<?php endif; ?>
+
+					<?php
+					/* Importar documento: só aparece se a base tem COLLECTION definida */
+					if (
+						isset($_SESSION["permiso"]["CENTRAL_ALL"])     ||
+						isset($_SESSION["permiso"]["CENTRAL_CREC"])    ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_ALL"]) ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_CREC"])
+					):
+						$collection = isset($def_db["COLLECTION"]) ? trim($def_db["COLLECTION"]) : "";
+						if ($collection != ""): ?>
+							<button type="button" class="btn-toolbar"
+								onclick="top.Menu('importarDoc')"
+								title="<?php echo htmlspecialchars($msgstr["dd_upload"]); ?>">
+								<i class="fas fa-file-upload"></i>
+							</button>
+					<?php endif;
+					endif; ?>
+
+					<?php
+					if (
+						isset($_SESSION["permiso"]["CENTRAL_ALL"])          ||
+						isset($_SESSION["permiso"]["CENTRAL_Z3950CAT"])     ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_ALL"])   ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_Z3950CAT"])
+					): ?>
+						<button type="button" class="btn-toolbar"
+							onclick="top.Menu('z3950')"
+							title="<?php echo htmlspecialchars($msgstr["m_z3950"]); ?>">
+							<i class="fas fa-download"></i>
+						</button>
+					<?php endif; ?>
+
+					<div class="toolbar-divider"></div>
+
+					<!-- Valores padrão -->
+					<?php
+					if (
+						isset($_SESSION["permiso"]["CENTRAL_ALL"])        ||
+						isset($_SESSION["permiso"]["CENTRAL_VALDEF"])     ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_ALL"]) ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_VALDEF"])
+					): ?>
+						<button type="button" class="btn-toolbar"
+							onclick="top.Menu('editdv')"
+							title="<?php echo htmlspecialchars($msgstr["editar"] . ' ' . $msgstr["valdef"]); ?>">
+							<i class="fas fa-tasks"></i>
+						</button>
+						<button type="button" class="btn-toolbar"
+							onclick="top.Menu('deletedv')"
+							title="<?php echo htmlspecialchars($msgstr["eliminar"] . ' ' . $msgstr["valdef"]); ?>">
+							<i class="fas fa-eraser"></i>
+						</button>
+						<div class="toolbar-divider"></div>
+					<?php endif; ?>
+
+					<!-- Código de barras -->
+					<?php
+					if ((isset($_SESSION["permiso"]["CENTRAL_ALL"])       ||
+							isset($_SESSION["permiso"]["CENTRAL_BARCODE"])   ||
+							isset($_SESSION["permiso"][$db . "_CENTRAL_ALL"]) ||
+							isset($_SESSION["permiso"][$db . "_CENTRAL_BARCODE"])) &&
+						(isset($_SESSION["BARCODE"]) || isset($_SESSION["BARCODE_SIMPLE"]))
+					): ?>
+						<button type="button" class="btn-toolbar"
+							onclick="top.Menu('barcode')"
+							title="Barcode">
+							<i class="fas fa-barcode"></i>
+						</button>
+					<?php endif; ?>
+
+					<!-- Imprimir / Relatórios -->
+					<?php
+					if (
+						isset($_SESSION["permiso"]["CENTRAL_ALL"])      ||
+						isset($_SESSION["permiso"]["CENTRAL_PREC"])     ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_ALL"]) ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_PREC"])
+					): ?>
+						<button type="button" class="btn-toolbar"
+							onclick="top.Menu('imprimir')"
+							title="<?php echo htmlspecialchars($msgstr["m_reportes"]); ?>">
+							<i class="fas fa-print"></i>
+						</button>
+					<?php endif; ?>
+
+					<!-- Administrar -->
+					<?php
+					if (
+						isset($_SESSION["permiso"]["CENTRAL_ALL"])       ||
+						isset($_SESSION["permiso"]["CENTRAL_UTILS"])     ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_ALL"]) ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_UTILS"])
+					): ?>
+						<button type="button" class="btn-toolbar"
+							onclick="top.Menu('administrar')"
+							title="<?php echo htmlspecialchars($msgstr["mantenimiento"]); ?>">
+							<i class="fas fa-cogs"></i>
+						</button>
+					<?php endif; ?>
+
+					<!-- Atualizar base -->
+					<button type="button" class="btn-toolbar"
+						onclick="top.Menu('refresh_db')"
+						title="<?php echo htmlspecialchars($msgstr["refresh_db"]); ?>">
+						<i class="fas fa-sync-alt"></i>
+					</button>
+
+					<div class="toolbar-divider"></div>
+
+					<!-- Estatísticas -->
+					<?php
+					if (
+						isset($_SESSION["permiso"]["CENTRAL_ALL"])        ||
+						isset($_SESSION["permiso"]["CENTRAL_STATGEN"])    ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_ALL"]) ||
+						isset($_SESSION["permiso"][$db . "_CENTRAL_STATGEN"])
+					): ?>
+						<button type="button" class="btn-toolbar"
+							onclick="top.Menu('stats')"
+							title="<?php echo htmlspecialchars($msgstr["estadisticas"]); ?>">
+							<i class="fas fa-chart-bar"></i>
+						</button>
+					<?php endif; ?>
+
+					<!-- Ajuda -->
+					<button type="button" class="btn-toolbar"
+						onclick="AbrirAyuda()"
+						title="<?php echo htmlspecialchars($msgstr["m_ayuda"]); ?>">
+						<i class="fas fa-question-circle"></i>
+					</button>
+
+					<!-- Home -->
+					<button type="button" class="btn-toolbar"
+						style="color:#005aa9;"
+						onclick="top.Menu('home')"
+						title="<?php echo htmlspecialchars($msgstr["inicio"]); ?>">
+						<i class="fas fa-home"></i>
+					</button>
+
+				</div><!-- /.abcd-toolbar-buttons -->
+
+
+
+				<!-- Planilha (worksheet) — agora lado a lado com os botões -->
+				<div class="abcd-toolbar-group">
+					<label><?php echo $msgstr["fmt"] ?> </label>
+					<select name="wks" onchange="GenerarWks()">
+						<option value=""></option>
+						<?php
+						foreach ($fp_wks as $line) {
+							$line = trim($line);
+							if ($line != "") {
+								$f = explode('|', $line);
+								$cod = $f[0];
+								$nom = $f[1];
+								echo "<option value=\"$cod\">$nom</option>\n";
+							}
+						}
+						?>
+					</select>
+				</div>
+
+
+
+
+
+			</div><!-- /.abcd-toolbar-row (linha 2) -->
+
+		</div>
+	</form>
+
+	<script>
+		// Synchronizes the main frame when the toolbar finishes loading
+		window.addEventListener('load', function() {
+			top.typeofrecord = "<?php echo $typeofrecord; ?>";
+
+			<?php if (isset($arrHttp["inicio"]) && $arrHttp["inicio"] == "s"): ?>
+				top.main.location.href = "inicio_base.php?inicio=s&base=" + top.base + "&cipar=" + top.cipar + "&per=" + top.db_permiso;
+			<?php elseif (!isset($arrHttp["reload"])): ?>
+				if (top.main && top.main.location) {
+					var currentUrl = top.main.location.href;
+					if (currentUrl && currentUrl.indexOf('about:blank') === -1) {
+						top.main.location.href = currentUrl;
+					}
+				}
+			<?php endif; ?>
+		});
+	</script>
+
+	<form name="editpft" method="post" action="../dbadmin/leertxt.php" target="editpft">
+		<input type="hidden" name="desde" value="dataentry">
+		<input type="hidden" name="base">
+		<input type="hidden" name="cipar">
+		<input type="hidden" name="archivo">
+		<input type="hidden" name="descripcion">
+	</form>
 
 </body>
-</html>
 
+</html>

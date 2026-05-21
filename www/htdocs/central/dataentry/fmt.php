@@ -157,7 +157,7 @@ function CambiarFormatoRegistro(){  // ChangeRegisterFormat
     $ValorCapturado="";
     foreach ($valortag as $key => $lin){
 	if (trim($key)!=""){
-	    $lin=stripslashes($lin);
+	    //$lin=stripslashes($lin);
 	    $sal=explode("\n",$lin);
 	    foreach ($sal as $l){
 		$ValorCapturado.="<$key 0>".$l."</$key>";
@@ -367,7 +367,7 @@ function CargarMatriz($var){ // LoadMatrix
     foreach ($filas as $lin){
 	$lin=trim($lin);
 	if (trim($lin)!=""){
-	    $lin= stripslashes($lin);
+	    //$lin= stripslashes($lin);
 	    $pos=strpos($lin, " ");
 	    if (is_integer($pos)) {
 		$indice=substr($lin,0,$pos);
@@ -758,30 +758,43 @@ switch ($arrHttp["Opcion"]) {
 	}
 	$_SESSION["history"][$ix]=$arrHttp["base"].'$$|$$'.$arrHttp["Expresion"].'$$|$$'.$Total_Search;
 	$_SESSION["refinar"]=$arrHttp["Expresion"];
-	/*	if (isset($arrHttp["Expresion"]))
+		/*	if (isset($arrHttp["Expresion"]))
 		if (!isset($_SESSION["Expresion"][$arrHttp["base"]][$arrHttp["Expresion"]]))
 			$_SESSION["Expresion"][$arrHttp["base"]][$arrHttp["Expresion"]]=$resultado;
 	*/
-	if ($resultado=="0"){
-	    include "../common/inc_div-helper.php";
-	    $arrHttp["Opcion"]=="ninguna";
-	    echo "<div class=\"middle form\">
-		<div class=\"formContent\">
-		<table style='width:100%'><tr><td>\n";
-	    echo $msgstr["expresion"].":<br>\n";
-	    echo "<textarea name=nueva_b cols=150 rows=1>".stripslashes($arrHttp["Expresion"])."</textarea>\n";
-	    echo "<br><a class='bt bt-green' href=\"javascript:NuevaBusqueda()\">".$msgstr["buscar"]."</a>";
-	    InsertarEnlaces($arrHttp["base"]);
-	    echo "<h4>".$msgstr["selected_records"].": ".$resultado."</h4>\n";
-	    $arrHttp["Mfn"] =1;
-	    ColocarMfn();
-	    echo "</td></tr></table>";
-	    echo "</div></div>";
-	    echo ("</form>"); // closes open form from scripts_dataentry
-	    if (!isset($arrHttp["footer"]) or (isset($arrHttp["footer"]) and strtoupper($arrHttp["footer"])!="N"))
-		include("../common/footer.php");
-	    die;
-	    break;
+		if ($resultado === "0" || $resultado === 0) {
+			include "../common/inc_div-helper.php";
+
+			$arrHttp["Opcion"] = "ninguna";
+
+			// PHP 8.1+: Safe extraction and protection against XSS in textarea
+			$safe_expression = isset($arrHttp["Expresion"]) ? htmlspecialchars((string)$arrHttp["Expresion"], ENT_QUOTES, 'UTF-8') : '';
+
+			echo "<div class=\"middle form\">\n";
+			echo "    <div class=\"formContent\">\n";
+			echo "        <table style='width:100%'><tr><td>\n";
+			echo "            " . $msgstr["expresion"] . ":<br>\n";
+			echo "            <textarea name=\"nueva_b\" cols=\"150\" rows=\"1\">" . $safe_expression . "</textarea>\n";
+			echo "            <br><a class='bt bt-green' href=\"javascript:NuevaBusqueda()\">" . $msgstr["buscar"] . "</a>\n";
+
+			InsertarEnlaces($arrHttp["base"]);
+
+			echo "            <h4>" . $msgstr["selected_records"] . ": " . htmlspecialchars((string)$resultado, ENT_QUOTES, 'UTF-8') . "</h4>\n";
+
+			$arrHttp["Mfn"] = 1;
+			ColocarMfn();
+
+			echo "        </td></tr></table>\n";
+			echo "    </div>\n";
+			echo "</div>\n";
+			echo "</form>\n"; // closes open form from scripts_dataentry
+
+			// PHP 8.1+: Simplified validation logic (short-circuit)
+			if (!isset($arrHttp["footer"]) || strtoupper($arrHttp["footer"]) !== "N") {
+				include("../common/footer.php");
+			}
+
+			die;
 	}else{
 	    include("toolbar_record.php");
 	    if ($resultado!="no"){	//resultado=no indica que ya se formateo el registro

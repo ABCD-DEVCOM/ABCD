@@ -1,6 +1,7 @@
 <?php
 /*
 20211123 fho4abcd/edsz Avoid undefined index + correct line ends
+20260505 rogercgui Update to PHP 8.2, remove deprecated features, and improve code readability.
 */
 function ConstruyeWorksheetFMT(){
 
@@ -58,56 +59,69 @@ global $arrHttp,$vars,$db_path,$lang_db,$base_fdt,$wks_avail,$msgstr;
     $ix=-1;
     reset($fp);
     $copiado="N";
-	foreach ($fp as $value){
-		$value=trim($value);
-		if ($value!=""){
+	foreach ($fp as $value) {
+		$value = trim($value);
+		if ($value != "") {
 			unset($tx);
-			$tx=explode('|',$value) ;
-			if (isset($tx[18]) and $tx[18]==1){
-				$copiado="S";
-				$primeravez="S";
-				reset($base_fdt);
-				foreach ($base_fdt as $lin){
-					unset($vx);
-					$vx=explode('|',$lin);
-					if ($vx[1]==$tx[1] or $primeravez=="N"){
+			$tx = explode('|', $value);
 
-						if ($primeravez=="S"){
-							$ix=$ix+1;
-							$vars[$ix]=$lin;
-							$primeravez="N";
-						}else{
-							if (trim($vx[1])!="" or $vx[0]=="H"){       //Si la columna de tag no tiene un blanco se termina la lista de los subcampos
+			// FDT Inheritance: Allows everything to be inherited, except for standalone subfields
+			if (isset($tx[18]) and $tx[18] == 1 and $tx[0] != "S" and $tx[0] != "IND") {
+				$copiado = "S";
+				$primeravez = "S";
+				reset($base_fdt);
+				foreach ($base_fdt as $lin) {
+					unset($vx);
+					$vx = explode('|', $lin);
+
+					// FDT Inheritance: Allows everything to be inherited, except for standalone subfields
+					$match = false;
+					if (trim($tx[1]) != "") {
+						$match = (trim($vx[1]) == trim($tx[1]));
+					} else {
+						$match = (trim($vx[1]) == trim($tx[1]) && trim($vx[0]) == trim($tx[0]));
+					}
+
+					if ($match or $primeravez == "N") {
+						if ($primeravez == "S") {
+							$ix = $ix + 1;
+							$vars[$ix] = $lin;
+							$primeravez = "N";
+						} else {
+							// FDT Inheritance: Allows everything to be inherited, except for standalone subfields
+							if (trim($vx[0]) != "S" && trim($vx[0]) != "IND") {
 								break;
-							}else{
-								$ix=$ix+1;
-								$vars[$ix]=$lin;
+							} else {
+								$ix = $ix + 1;
+								$vars[$ix] = $lin;
 							}
 						}
 					}
 				}
-			}else{
-				if ($copiado=="S" and $tx[1]=="" and $tx[0]!="H" and $tx[0]!="L"){
+			} else {
+				// FDT Inheritance: Allows everything to be inherited, except for standalone subfields
+				if ($copiado == "S" and ($tx[0] == "S" or $tx[0] == "IND")) {
 					continue;
-				}else{
-					$copiado="N";
+				} else {
+					$copiado = "N";
 				}
-				if ($tx[0]=="LDR"){
-					$Leader="S";
-					$Marc="S";
-					if (file_exists($db_path.$base."/def/".$_SESSION["lang"]."/leader.fdt"))
-						$fixed=file($db_path.$base."/def/".$_SESSION["lang"]."/leader.fdt");
+
+				if ($tx[0] == "LDR") {
+					$Leader = "S";
+					$Marc = "S";
+					if (file_exists($db_path . $base . "/def/" . $_SESSION["lang"] . "/leader.fdt"))
+						$fixed = file($db_path . $base . "/def/" . $_SESSION["lang"] . "/leader.fdt");
 					else
-						$fixed=file($db_path.$base."/def/".$lang_db."/leader.fdt");
-					foreach ($fixed as $fx){
-						if (trim($fx)!="") {
-							$ix=$ix+1;
-							$vars[$ix]=$fx;
+						$fixed = file($db_path . $base . "/def/" . $lang_db . "/leader.fdt");
+					foreach ($fixed as $fx) {
+						if (trim($fx) != "") {
+							$ix = $ix + 1;
+							$vars[$ix] = $fx;
 						}
 					}
-				}else{
-                	$ix=$ix+1;
-					$vars[$ix]=$value;
+				} else {
+					$ix = $ix + 1;
+					$vars[$ix] = $value;
 				}
 			}
 		}

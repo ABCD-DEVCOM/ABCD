@@ -250,7 +250,7 @@ textarea.tooltip {
     margin: 10px 0;
 }
 
-.panel table    {
+.panel table {
     width: 100%;
 }
 
@@ -532,7 +532,7 @@ table.alert:before {
 }
 
 .badge {
-    background-color:var(--abcd-gray-200);
+    background-color: var(--abcd-gray-200);
     color: var(--abcd-gray-800);
     display: inline-block;
     padding: 0.65em 0.65em;
@@ -574,7 +574,71 @@ table.alert:before {
     text-align: center;
 }
 
-/* Tooltip */
+/* ==========================================================================
+   TOOLTIP DO HELP.TAB 
+   ========================================================================== */
+a.tooltip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: help;
+    text-decoration: none;
+    color: var(--abcd-blue);
+    padding: 4px;
+    margin-right: 4px;
+}
+
+/* Hide the message and get the floating balloon ready */
+a.tooltip span {
+    visibility: hidden;
+    width: 280px;
+    /* A comfortable width for reading */
+    background-color: #ffffff;
+    color: #333333;
+    text-align: left;
+    border-radius: 6px;
+    padding: 10px 12px;
+    position: absolute;
+    z-index: 999999;
+    bottom: 130%;
+    left: -10px;
+    /* Align to the right to avoid horizontal scrolling*/
+    border: 1px solid #b9d8d9;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.4;
+    white-space: normal;
+}
+
+/* The little arrow on the balloon (CSS Triangle) */
+a.tooltip span::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    /* It's at the bottom of the balloon */
+    right: 10px;
+    /* Point to the icon */
+    margin-left: -6px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: #b9d8d9 transparent transparent transparent;
+}
+
+/* Show the tooltip when you hover over it */
+a.tooltip:hover span {
+    visibility: visible;
+    opacity: 1;
+}
+
+a.tooltip:hover i {
+    color: var(--abcd-orange);
+    /* Visual feedback on the icon */
+}
+
 div.tooltip-data {
     margin: 16px 0;
     padding: 4px 0;
@@ -1716,21 +1780,23 @@ a.homeButton img {
 table {
     border-collapse: separate;
     border-spacing: 3px;
-   /* width: 100%;*/
+    /* width: 100%;*/
 }
+
 /* fho4abcd added*/
 table.center {
-    margin-left:auto;
-    margin-right:auto;
+    margin-left: auto;
+    margin-right: auto;
 }
+
 th,
 td {
     text-align: left;
     /*padding: 8px 5px; fho4abcd reduce spacing*/
-    padding-top:0px;
-    padding-bottom:0px;
-    padding-left:5px;
-    padding-right:5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 .striped {
@@ -1850,101 +1916,51 @@ td {
 
 /* --- 7.4. Data input Table(.table-fdt) --- */
 .table-fdt {
-    border-spacing: 0px;
+    width: 100% !important;
+    /* Essencial para esticar o fundo branco */
     background: var(--abcd-white);
     max-width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
-    border-spacing: 0;  
-}
-
-.table-fdt th {
-    background: var(--abcd-white);
-    color: #000;
-    cursor: pointer;
-    padding: 8px;
-    font-weight: bold;
-}
-
-.table-fdt.browse tr:first-child {
-    border-bottom: 2px solid var(--abcd-light);
-}
-
-.table-fdt.browse tr:last-child {
-    border-top: 2px solid var(--abcd-light);
-}
-
-.table-fdt th.checkboxes,
-.table-fdt th.action {
-    cursor: default;
-}
-
-.table-fdt td,
-.table-fdt tbody tr td {
-    border-bottom: 1px solid var(--abcd-light);
-    vertical-align: middle;
-    padding: 0 0.3rem;
-}
-
-.table-fdt>tbody>tr>td>input[type=text],
-.table-fdt>tbody>tr>td>input[type=password],
-.table-fdt>tbody>tr>td>input[type=radio],
-.table-fdt>tbody>tr>td>textarea,
-.table-fdt>tbody>tr>td>select {
-    margin: 0.2rem 0.1rem;
-    color: var(--abcd-gray-900);
-    /* padding: 8px; fho4abcd reduce spacing */
-    padding-left: 8px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-right: 8px;
-    box-shadow: inset 1px 1px 3px 0.1px var(--abcd-gray-500);
-    -webkit-box-shadow: inset 1px 1px 3px 0.1px var(--abcd-gray-500);
-}
-
-td.input-fdt {
-    align-content: center;
-    vertical-align: middle;
-    margin: auto;
+    border-spacing: 0;
 }
 
 /* Colunas da tabela FDT */
 td.table-fdt-one {
     /* TAG */
-    min-width: 50px;
+    width: 50px !important;
 }
-/* Nowrap table cell fho4abcd added*/
+
 td.no-wrap {
     white-space: nowrap;
 }
 
-.table-fdt-two {
+td.table-fdt-two {
     /* BUTTONS */
-    min-width: 130px;
+    width: 130px !important;
 }
 
 /* Regra geral para todos os botões dentro dessa célula */
-.table-fdt-two .bt-fdt {
-    order: 1; /* Define que, por padrão, os botões ficam no início */
+td.table-fdt-two .bt-fdt {
+    order: 1;
 }
 
 /* Regra ESPECÍFICA para o botão de Ajuda (?) */
-.table-fdt-two .bt-fdt-question {
-    order: 2; /* Força o botão de ajuda a ir para o final da fila visualmente */
-    margin-left: 8px; /* Adiciona um respiro extra para separá-lo do grupo operacional */
-    opacity: 0.6; /* (Opcional) Deixa ele um pouco mais discreto */
+td.table-fdt-two .bt-fdt-question {
+    order: 2;
+    margin-left: 8px;
+    opacity: 0.6;
     transition: opacity 0.3s;
 }
 
-/* (Opcional) Ao passar o mouse, o botão de ajuda fica totalmente visível */
-.table-fdt-two .bt-fdt-question:hover {
+td.table-fdt-two .bt-fdt-question:hover {
     opacity: 1;
 }
 
-.table-fdt-three {
+td.table-fdt-three {
     /* NAME OF FIELD */
-    width: 300px;
-    /* Largura fixa um pouco maior para acomodar textos longos */
+    width: 250px !important;
+    /* Trava o rótulo para não esticar */
     vertical-align: top;
     text-align: right;
     padding-right: 15px;
@@ -1956,10 +1972,10 @@ td.no-wrap {
     word-wrap: break-word;
 }
 
-.table-fdt-four {
+td.table-fdt-four {
     /* INPUT FORM */
-    width: auto;
-    /* Ocupa o resto do espaço */
+    width: auto !important;
+    /* Absorve sozinho toda a elasticidade da tela */
     vertical-align: top;
     padding-bottom: 8px;
     padding-right: 10px;
@@ -2002,6 +2018,7 @@ td.no-wrap {
     height: 28px;
     box-sizing: border-box;
 }
+
 .btn-limpar-abcd:hover {
     background-color: #e8e8e8;
     color: #d9534f;
@@ -2016,7 +2033,7 @@ textarea+.btn-limpar-abcd {
 /* Ensures that no field is wide enough to break the row of buttons */
 .table-fdt-four input[type="text"],
 .table-fdt-four textarea {
-    max-width: calc(100% - 150px) !important;
+    max-width: calc(100% - 80px) !important;
 }
 
 /* ==========================================================================
@@ -2821,7 +2838,7 @@ div[id^="myvar_"] {
 .table-fdt input[type="text"],
 .table-fdt textarea,
 .table-fdt select {
-    border: 1px solid #d1d5db;
+    /* border: 1px solid #d1d5db; */
     border-radius: 4px;
     font-family: inherit;
     box-sizing: border-box;
@@ -3054,7 +3071,7 @@ div.ABCD_menu:hover {
     background: var(--abcd-white);
     border: 1px solid var(--abcd-gray-200);
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s, box-shadow 0.2s;
     display: flex;
     flex-direction: column;
@@ -3063,7 +3080,7 @@ div.ABCD_menu:hover {
 
 .admin-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     border-color: var(--abcd-gray-500);
 }
 
@@ -3110,7 +3127,8 @@ div.ABCD_menu:hover {
 }
 
 .admin-link:hover {
-    background-color: #f0f8ff; /* Azul bem claro para hover */
+    background-color: #f0f8ff;
+    /* Azul bem claro para hover */
     color: var(--abcd-blue);
     text-decoration: none;
     border-left-color: var(--abcd-blue);
@@ -3409,10 +3427,52 @@ div.ABCD_menu:hover {
 }
 
 /* ==========================================================================
+   USABILITY FIX: MINIMUM WIDTH FOR FIELDS (FDT)
+   ========================================================================== */
+/* Prevents table fields and subfields from becoming illegible or squashed 
+   when configured with a small number of columns in the FDT (e.g. cols = 5 or 10) */
+
+.table-fdt input[type="text"],
+.table-fdt input[type="number"],
+.table-fdt input[type="password"],
+.table-fdt select {
+    min-width: 40px !important;
+}
+
+.table-fdt textarea {
+    min-width: 40px !important;
+}
+
+/* ==========================================================================
+   MODERN LOADING SCREEN (FONT AWESOME)
+   ========================================================================== */
+#preloader,
+#loading {
+    position: fixed !important;
+    inset: 0 !important;
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    z-index: 999999 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#preloader i,
+#loading-image {
+    font-size: 50px !important;
+    color: #0056b3 !important;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ==========================================================================
    13. STATISTICS AND REPORTS (To be reviewed and refactored)
    ========================================================================== */
+/* Prevents table fields and subfields from becoming illegible or squashed 
+   when configured with a small number of columns in the FDT (e.g. cols = 5 or 10) */
 
-    .dashboard-wrapper {
+.dashboard-wrapper {
     display: flex;
     flex-direction: row;
     gap: 20px;
@@ -3597,15 +3657,10 @@ div.ABCD_menu:hover {
         border-radius: 4px;
         padding: 20px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-
-        /* --- MÁGICA DA BARRA DE ROLAGEM (NOVO) --- */
         min-width: 0;
-        /* Força o painel a não crescer infinitamente */
         min-height: 1000px;
         max-height: 85vh;
-        /* Limita a altura a 85% da tela do usuário */
         overflow: auto;
-        /* Habilita barra de rolagem horizontal e vertical automaticamente */
     }
 
     /* 4. Esconde a barra de botões (Excel/Word/Janela) para não sair no PDF */

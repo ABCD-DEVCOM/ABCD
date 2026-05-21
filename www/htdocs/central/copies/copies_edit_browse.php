@@ -116,18 +116,14 @@ $savescript='loan_objects_add.php?cn='.$arrHttp["Expresion"].'&base='.$arrHttp["
 include "../common/inc_save.php";
 ?>
 
-
 	</div>
 	<div class="spacer">&#160;</div>
 </div>
 
 <?php
-$ayuda="copies/copies_edit_browse.html";
-include "../common/inc_div-helper.php";
-
+	$ayuda="copies/copies_edit_browse.html";
+	include "../common/inc_div-helper.php";
 ?>
-
-
 
 		<div class="middle form">
 		<div class="formContent">
@@ -165,23 +161,27 @@ foreach ($inventary as $value){
 		$Status=$u[1];
 		$desde=$u[2];
 		$hasta=$u[3];
-		echo "<td>".$u[2]."/",$u[3];
-		if ($Status==1) echo "<img src=\"../../assets/images/delete.png\" align=absmiddle alt=\"excluir base de dados\" title=\"excluir base de dados\" />";
+		echo "<td>" . $u[2] . "/", $u[3];
+		if ($Status == 1) echo '&nbsp;<i class="fas fa-trash-alt" style="color:var(--abcd-red);" title="' . $msgstr["recdel"] . '"></i>';
 		echo "</td>";
-		for ($ix=4;$ix<count($u);$ix++) echo "<td>" .$u[$ix]."</td>";
-		echo "<td class=\"action\">
-			<a href=javascript:Editar($Mfn,$Status)>
-			<img src=\"../../assets/images/edit.png\" alt=\"editar base de dados\" title=\"editar base de dados\" /></a>
-			<a href=../dataentry/show.php?base=copies&cipar=copies.par&Mfn=$Mfn".$encabezado."&Opcion=editar  target=_blank><img src=\"../../assets/images/zoom.png\"/></a>";
-		if ($Status==0) echo "
-			<a href=\"javascript:Eliminar($Mfn)\"><img src=\"../../assets/images/delete.png\" alt=\"".$msgstr["eliminar"]."\" title=\"".$msgstr["eliminar"]."\" /></a>";
-		else {
-			switch ($Status){
+		for ($ix = 4; $ix < count($u); $ix++) echo "<td>" . $u[$ix] . "</td>";
+
+		echo '<td class="action" nowrap>';
+
+		$lbl_show = isset($msgstr["show"]) ? $msgstr["show"] : "Visualizar";
+		echo '<button class="button_browse show bt-blue" type="button" onclick="window.open(\'../dataentry/show.php?base=copies&cipar=copies.par&Mfn=' . $Mfn . $encabezado . '&Opcion=editar\', \'_blank\')"><i class="far fa-eye" title="' . $lbl_show . '"></i> ' . $lbl_show . '</button> ';
+
+		echo '<button class="button_browse edit bt-green" type="button" onclick="Editar(' . $Mfn . ',' . $Status . ')"><i class="fas fa-edit" title="' . $msgstr["edit"] . '"></i> ' . $msgstr["edit"] . '</button> ';
+
+		if ($Status == 0) {
+			echo '<button class="button_browse delete bt-red" type="button" onclick="Eliminar(' . $Mfn . ')"><i class="far fa-trash-alt" title="' . $msgstr["eliminar"] . '"></i> ' . $msgstr["eliminar"] . '</button>';
+		} else {
+			switch ($Status) {
 				case -2:
-					echo $msgstr["recblock"];
+					echo '<button class="button_browse edit" type="button" onclick="Editar(' . $Mfn . ',' . $Status . ')"><i class="fas fa-lock" title="' . $msgstr["recblock"] . '"></i> ' . $msgstr["recblock"] . '</button>';
 					break;
 				case 1:
-					echo $msgstr["recdel"];
+					echo '<button class="button_browse" type="button" disabled style="background:#ccc; color:#666; cursor:not-allowed; border:none;"><i class="fas fa-trash" title="' . $msgstr["recdel"] . '"></i> ' . $msgstr["recdel"] . '</button>';
 					break;
 			}
 		}

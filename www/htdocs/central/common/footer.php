@@ -161,13 +161,19 @@ if (in_array($current_script, $allowed_scripts) && $config_show_lang == "Y") {
 	</div>
 	<div class="spacer">&#160;</div>
 
+	<script src="/assets/js/main.js"></script>
+
+
 </footer>
+
+</body>
+
+</html>
+
 <?php
 
 if ((!isset($def["CHECK_VERSION"])) || ($def["CHECK_VERSION"] != "N")) {
-
-	if (isset($_SESSION["permiso"])) { // Verifica se está logado
-
+	if (isset($_SESSION["permiso"])) { // Verifies if the user is logged in
 		if (isset($update_info) && $update_info['update_available']): ?>
 
 			<div id="update-notification" style="bottom: 0; margin: 0 0 0 0; width: 100%; background-color: #ffc107; color: #333; text-align: center; z-index: 9999; border-top: 1px solid #e0a800;">
@@ -180,23 +186,3 @@ if ((!isset($def["CHECK_VERSION"])) || ($def["CHECK_VERSION"] != "N")) {
 }
 
 ?>
-
-<?php if ($show_lang_selector == "Y") { ?>
-	<script>
-		function CambiarLenguaje() {
-			if (document.cambiolang.lenguaje.selectedIndex >= 0) {
-				var base = document.cambiolang.base.value;
-				if (!base && typeof top.base !== 'undefined') {
-					base = top.base;
-				}
-				var lang = document.cambiolang.lenguaje.options[document.cambiolang.lenguaje.selectedIndex].value;
-				self.location.href = "?base=" + base + "&reinicio=s&lang=" + lang;
-			}
-		}
-	</script>
-
-<?php } ?>
-
-</body>
-
-</html>

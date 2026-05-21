@@ -22,6 +22,7 @@
 */
 require_once("combo_inc.php");
 require_once("../common/inc_calendar.php");
+require_once("editor/loader.php");
 
 //include for translate
 include("../lang/dbadmin.php");
@@ -29,7 +30,7 @@ include("../lang/admin.php");
 include("../lang/prestamo.php");
 include("../lang/opac.php");
 
-// ---------------- functions ------- This file contains only functions ---------
+
 function AsociarVinculo($linea)
 {
 	$ix = strpos($linea, "<");
@@ -40,1905 +41,973 @@ function AsociarVinculo($linea)
 
 function Calendario($campo, $type_de, $iso_tag, $Etq)
 {
-	global $config_date_format;
-	$date_format = ConvertDateSpec($config_date_format); // format of the input field
-	echo "<!-- calendar attaches to existing form element -->
-	<input tabindex='0' type=text size=10 name=tag$Etq id=tag$Etq value='";
-	if (trim($campo) != "") echo $campo;
-	echo "'";
-	if ($type_de == "D") {
-		if ($iso_tag != "")
-			echo " onChange='Javascript:DateToIso(this.value,document.forma1.tag$iso_tag)'";
-	}
-	if ($type_de == "ISO")
-		echo " onChange='Javascript:DateToIso(this.value,document.forma1.tag$Etq)'";
-	echo "><a class=\"bt-fdt\"  href='javascript:CalendarSetup(\"tag$Etq\",\"$date_format\",\"f_tag$Etq\", \"\",true )'><i class=\"far fa-calendar-alt\" id=\"f_tag$Etq\" title=\"Date selector\"
-			align=top></i></a>";
+	CalendarHelper::render($campo, $type_de, $iso_tag, $Etq);
 }
 
 function DibujarHtmlArea($tag, $linea, $numl, $tipoH)
 {
-	global $valortag, $fdt, $ver, $arrHttp, $Path, $xEditor, $xUrlEditor, $FCKConfigurationsPath, $FCKEditorPath, $db_path, $msgstr;
-	if (trim($numl) == "") $numl = 20;
-	$numl = $numl * 30;
-	if ($tipoH != "B") {
-		if (!isset($valortag[$tag])) {
-			$valortag[$tag] = "";
-		} else {
-			$valortag[$tag] = trim($valortag[$tag]);
-		}
-	} else {
-		$fp = file($db_path . $arrHttp["base"] . "/html/" . trim($valortag[$tag]));
-		$valortag[$tag] = "";
-		foreach ($fp as $value) $valortag[$tag] .= trim($value);
-	}
-	$valortag[$tag] = str_replace("\r", "", $valortag[$tag]);
-	$valortag[$tag] = str_replace("\n", "", $valortag[$tag]);
-	echo '<td class="table-fdt-four">';
-	echo '<textarea  id="tag' . $tag . '" name="tag' . $tag . '" rows="' . $numl . '" >';
-	echo str_replace("'", "`", $valortag[$tag]);
-	echo '</textarea>';
-	echo '</td>';
-?>
-	<script>
-		CKEDITOR.replace('<?php echo "tag$tag" ?>', {
-			height: 260
-		});
-	</script>
-	<!--script>
-// Automatically calculates the editor base path based on the _samples directory.
-// This is usefull only for these samples. A real application should use something like this:
-//   oFCKeditor.BasePath = '/fckeditor/' ;    // '/fckeditor/' is the default value.
-//   var sBasePath = document.location.pathname.substring(0,document.location.pathname.lastIndexOf('_testcases')) ;
-    var sBasePath='<?php echo $FCKEditorPath; ?>'
-    var oFCKeditor = new FCKeditor( 'tag<?php echo $tag ?>','800',<?php echo $numl ?> ) ;
-    oFCKeditor.BasePath    = sBasePath ;
-    oFCKeditor.Config["CustomConfigurationsPath"] = "<?php echo $FCKConfigurationsPath ?>"
-    oFCKeditor.Config["DefaultLanguage"]	= "<?php echo $_SESSION["lang"] ?>" ;
-    oFCKeditor.Value    = '<?php echo str_replace("'", "`", $valortag[$tag]) ?>' ;
-    //oFCKeditor.Config['EnterMode'] = 'br';
-    oFCKeditor.Create() ;
-</script -->
-	<?php
+	HtmlAreaRenderer::render($tag, $linea, $numl, $tipoH);
 }
 
 function SubCampo($campo, $ksc)
-{ //subfield
-	$ixpos = strpos($campo, '^' . $ksc);
-	if ($ixpos === false) {
-		$campo = "";
-	} else {
-		$campo = substr($campo, $ixpos + 2);
-		$ixpos = strpos($campo, '^');
-		if ($ixpos === false) {
-		} else {
-			$campo = substr($campo, 0, $ixpos);
-		}
-	}
-	return $campo;
+{
+	return SubfieldHelper::extract($campo, $ksc);
 }
 
 function DibujarTextRepetible($tag, $fondocelda, $field_t)
 {
-	global $valortag, $fdt, $ver, $arrHttp, $Path, $db_path, $lang_db, $config_date_format, $msgstr;
-	$filas = explode("\n", $valortag[$tag]);
-	$t = explode('|', $field_t);
-	$cant_fil = $t[8];
-	if ($ver = "") unset($ver);
-	$xtb = explode('/', $t[8]);
-	if (count($xtb) > 1) {
-		$fixed_rows = $xtb[0];
-		$size = $xtb[1];
-	} else {
-		if ($t[7] == 'TB') {
-			$fixed_rows = $xtb[0];
-			$size = 1;
-		} else {
-			$fixed_rows = "";
-			$size = $xtb[0];
-		}
-	}
-	$tope = count($filas);
-	if ($tope == 0) $tope = 1;
-	if ($fixed_rows > 1) {
-		$tope = $fixed_rows;
-		for ($ixr = count($filas); $ixr <= $fixed_rows; $ixr++) {
-			$filas[] = "";
-		}
-	}
-	echo '<td class="td td.no-wrap">' . $t[2] . '<table id=id_$tag >';
-	$i = -1;
-	$n = 100;
-	for ($i = 0; $i < $tope; $i++) {
-		if ($i > count($filas)) {
-			$campo = "";
-		} else {
-			$campo = $filas[$i];
-		}
-		if (!$ver) {
-			$Etq = $tag . "_" . $i;
-			$maxlength = 0;
-			if ($t[9] <> "") {
-				$len_f = explode('/', $t[9]);
-				$n = $len_f[0];
-				if (isset($len_f[1])) $maxlength = $len_f[1];
-			}
-			echo "<tr><td width=20>";
-			switch ($t[7]) {
-				case "ISO":
-					$date_format = ConvertDateSpec($config_date_format); // format of the input field
-					echo "<!-- calendar attaches to existing form element -->
-			    <input tabindex='0' type=text size=8 name=tag$Etq id=tag$Etq value='";
-					if (trim($campo) != "") echo $campo;
-					echo "'";
-					if ($type_de[7] = "ISO") echo " onChange='Javascript:DateToIso(this.value,document.forma1.tag$Etq)'";
-					echo ">
-			<a class=\"bt-fdt\" href='javascript:CalendarSetup(\"tag$Etq\",\"$date_format\",\"f_tag$Etq\", \"\",true )'>
-			 <i class=\"far fa-calendar-alt\" id=\"f_tag$Etq\" style=\"cursor: pointer;\" title=\"Date selector\"
-			      /></i></a>";
-					break;
-				default:
-					if ($size > 1) {
-						if ($t[9] == 0 || $t[9] == "") $t[9] = 100;
-						echo "<textarea name=tag" . $Etq . " rows=$size cols=" . $t[9] . " class=td";
-						if ($maxlength != 0) {
-							echo " onKeyDown=\"textCounter(document.forma1.tag" . $Etq . ",document.forma1.rem$Etq,$maxlength)\"
-				      onKeyUp=\"textCounter(document.forma1.tag" . $Etq . ",document.forma1.rem$Etq,$maxlength)\"";
-						}
-						if (isset($t[20]) and $t[20] == "U")
-							echo " onKeyUp=\"CheckInventory($Etq)\"";
-						echo "> " . $campo . "</textarea>";
-						if ($maxlength != 0) {
-							echo "\n<script>max_l['$Etq']=$maxlength</script>\n";
-							$lengthmax = strlen($campo);
-							if ($lengthmax == 0) {
-								$lengthmax = $maxlength;
-							} else {
-								$lengthmax = $maxlength - $lengthmax;
-							}
-							echo "<br><span align=right><input type=\"text\" name=\"rem$Etq\" size=\"3\" maxlength=\"$maxlength\" value=\"$lengthmax\" class=charCount onfocus=blur()>" . $msgstr["avalchars"] . "</span>\n";
-						}
-					} else {
-						if ($maxlength != 0)
-							echo "<a style=\"text-decoration:none\" onMouseover=\"ddrivetip(document.forma1.tag" . $Etq . ".value,'linen',200 )\"; onMouseout=\"hideddrivetip()\"; onclick=\"hideddrivetip()\">";
-						echo "<input type=text name=tag" . $Etq . " size=$n";
-						if ($maxlength != 0) echo " maxlength=$maxlength";
-						echo " class=td value=\"$campo\">";
-						if ($maxlength != 0) echo "</a>";
-					}
-					if ($t[10] == "D" or $t[10] == "T") {
-						$sc_col = "";
-						$separa = ";";
-						$base_alfa = $t[11];
-						if ($base_alfa == "") $base_alfa = $arrHttp["base"];
-						$Formato_alfa = $t[13];
-						$prefijo = $t[12];
-						if ($t[10] == "T")
-							echo "<a class=\"bt-fdt\" href='javascript:AbrirTesauro(\"tag$Etq\",\"" . $type_de[11] . "\",\"0\")'><i class=\"fas fa-cubes\"></i></a>";
-						echo "<a class=\"bt-fdt\" href='javascript:AbrirIndiceAlfabetico(document.forma1.tag$Etq,\"$prefijo\",\"$sc_col\",\"$separa\",\"$base_alfa\",\"$base_alfa.par\",\"tag$Etq\",\"1\",\"\",\"$Formato_alfa\")'><i class=\"fas fa-search\"></i></a>";
-					}
-			}
-			echo "</td>";
-		} else {
-			echo "<tr><td width=20>" . $campo . "</td></tr>";
-		}
-	}
-	echo "</table>";
-	if ($fixed_rows == "" and !$ver) {
-		echo "<a href=javascript:addRow('" . $t[1] . "','','','')>" . $msgstr["add"] . "</a><br><br>";
-	}
+	RepeatableRenderer::render($tag, $fondocelda, $field_t);
 }
 
 function ColocarSelect($tag, $subc, $nombrec, $lista_opciones, $campo, $picklist)
 {
-	global $msgstr, $base;
-	$opcion = explode(';', $lista_opciones);
-	echo "<select name=" . $nombrec . " id=$nombrec>\n";
-	echo "<option value=''></option>";
-	foreach ($opcion as $lin) {
-		if (trim($lin) != "") {
-			$lt = explode('|', $lin);
-			if (!isset($lt[0]) or $lt[0] == "") $lt[0] = $lt[1];
-			if (!isset($lt[1]) or $lt[1] == "") $lt[1] = $lt[0];
-			echo "<option value=\"";
-			echo trim($lt[0]) . "\"";
-			if (trim(strtoupper($campo)) == trim(strtoupper($lt[0])) && $campo != "")
-				echo " selected";
-			echo ">";
-			if (trim($lt[1]) == "")
-				echo $lt[0];
-			else
-				echo trim($lt[1]);
-			echo " \n";
-		}
-	}
-	echo "</select>";
-	if (isset($_SESSION["permiso"])) {
-		if (
-			isset($_SESSION["permiso"]["db_ALL"]) or isset($_SESSION["permiso"]["CENTRAL_ALL"]) or
-			isset($_SESSION["permiso"][$base . "_CENTRAL_ALL"])  or
-			isset($_SESSION["permiso"][$base . "_CENTRAL_ACTPICKLIST"])
-		) {
-			echo " <a class=\"bt-fdt\" href=\"javascript:AgregarPicklist('$picklist','$nombrec','$campo')\"><i class=\"fas fa-edit\" title='" . $msgstr["mod_picklist"] . "' ></i></a>";
-		}
-		echo " <a class=\"bt-fdt\" href=\"javascript:RefrescarPicklist('$picklist','$nombrec','$campo')\"><i class=\"fas fa-redo\" title='" . $msgstr["reload_picklist"] . "'></i></a>";
-	}
+	SelectRenderer::renderColocarSelect($tag, $subc, $nombrec, $lista_opciones, $campo, $picklist);
 }
 
 function DibujarTabla($filas, $tag, $fondocelda, $field_t)
 {
-	//foreach ($filas as $l) echo "$l<br>";
-	global $valortag, $fdt, $ver, $arrHttp, $Path, $db_path, $lang_db, $config_date_format, $msgstr;
-	$TablaLeida = "";
-	$cipar = $arrHttp["cipar"];
-	$seleccion = "";
-	$celda = "";
-	$cols = -1;
-	$columnas = array();
-	$val_def = array();
-	$size = array("");
-	$t = explode('|', $field_t);
-	$subc = $t[5];
-	if ($ver == "")  unset($ver);
-	if (substr($subc, 0, 1) == '-')  $subc = "_" . substr($subc, 1);
-	$cant_cols = strlen($subc);
-	if (isset($ver)) {
-		$celda = " cellpadding=0 cellspacing=5 border=0 ";
-		if (count($filas) == 0) return;
-	}
-	$seleccion = array();
-	$ind = array();
-	echo "<td class=\"table-fdt-three\">" . $t[2] . "</td>";
-	echo "<td  class='table-fdt-four'>
-		<table id=id_" . $t[1] . " " . $celda . ">";
-	echo "<td colspan=$cant_cols ></td>\n<tr>";
-	$indice_alfa = "";  // para desplegar el índice alfabético del campo
-
-	foreach ($filas as $lin) {
-		global $msgstr;
-		if (trim($lin) != "") {
-			$l = explode('|', $lin);
-			$cols = $cols + 1;
-			$val_def[$l[5]] = $l[15];
-			$len = $l[9];
-			$size[$cols] = $len;
-			$Tabla = $l[10];
-			$Tab_name = $l[11];
-			if (trim($Tabla) != "") {
-				switch ($Tabla) {
-					case "P":
-						$Tab_name = str_replace("%path_database%", $db_path, $Tab_name);
-						$xx = explode('/', $Tab_name);
-						$fp = array();
-						if (count($xx) > 1 and file_exists($Tab_name)) {
-							$fp = file($Tab_name);
-						} else {
-							if (file_exists($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . $Tab_name))
-								$fp = file($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . $Tab_name);
-							else
-				 if (file_exists($db_path . $arrHttp["base"] . "/def/" . $lang_db . "/" . $Tab_name))
-								$fp = file($db_path . $arrHttp["base"] . "/def/" . $lang_db . "/" . $Tab_name);
-						}
-						foreach ($fp as $tab) {
-							if (trim($tab) != "") {
-								// if the table is bases.dat and the databases are purchaseorder or suggestions, include only the databases wich has copies database
-								if ($Tab_name == $db_path . "bases.dat" and ($arrHttp["base"] == "purchaseorder" or $arrHttp["base"] == "suggestions")) {     // aqui se filtran las bases de datos para adquisiciones
-									$tbz = explode('|', $tab);
-									if (isset($tbz[2]) and trim($tbz[2]) == "Y") {
-									} else {
-										continue;
-									}
-								}
-								if (!isset($seleccion[$cols]) or $seleccion[$cols] == "")
-									$seleccion[$cols] = $tab;
-								else
-									$seleccion[$cols] .= ";" . $tab;
-							}
-						}
-						break;
-				}
-			}
-			$ind[$cols] = $lin;
-			if (count($filas) > 1) {
-				if (trim($l[2]) != "" and $l[7] != "I") {     //columns title
-					echo "<th>" . trim($l[2]) . "</th>";
-				}
-			}
-		}
-	}
-	$filas = explode("\n", $valortag[$tag]);
-	$tope = count($filas);
-	if ($tope == 0) $tope = 1;
-	$cant_fil = $t[8];
-	$fixed_rows = $cant_fil;
-	if ($cant_fil == 0) $cant_fil = 2;
-	if ($fixed_rows > 1) {
-		$tope = $fixed_rows;
-		for ($ixr = count($filas); $ixr <= $fixed_rows; $ixr++) {
-			$filas[$ixr] = "";
-		}
-	}
-	for ($i = 0; $i < $tope; $i++) {
-		if ($i >= count($filas)) {
-			$valorf = "";
-		} else {
-			$valorf = trim($filas[$i]);
-		}
-		if (substr($subc, 0, 1) == '_')
-			$valorf = "^_" . $valorf;
-		for ($isc = 0; $isc < strlen($subc); $isc++) {
-			$delim = substr($subc, $isc, 1);
-			$pos = strpos(strtoupper($valorf), "^" . strtoupper($delim));
-			$campo = "";
-			if (is_integer($pos)) {
-				$campo = substr($valorf, $pos + 2, strlen($valorf));
-				$pos = strpos($campo, "^");
-				if (!is_integer($pos)) $pos = strlen($campo);
-				$campo = substr($campo, 0, $pos);
-				$columnas[$isc] = $campo;
-			} else {
-				if (isset($ver)) {
-					$columnas[$isc] = "&nbsp;";
-				} else {
-					if (isset($val_def[$delim]))
-						$columnas[$isc] = $val_def[$delim];
-					else
-						$columnas[$isc] = "";
-				}
-			}
-		}
-		echo "<tr>";
-		//    $iseq=$i+1;
-		for ($j = 0; $j <= $cols; $j++) {
-			$n = $size[$j];
-			if ($n == 0) $n = 100;
-			$campo = "";
-			if (count($columnas) > 0) {
-				if ($i < count($filas)) {
-					$campo = $columnas[$j];
-				} else {
-					if ($ver) {
-						$campo = " &nbsp; ";
-					} else {
-						$campo = "";
-					}
-				}
-			}
-			$linea = $ind[$j];
-			$type_de = explode('|', $linea);
-			$Etq = $tag . "_" . $i . "_" . substr($subc, $j, 1);
-			echo "<td class='td td.no-wrap'>";
-			if ($j == 0) {
-				if (isset($Etq) and !isset($ver)) echo "<a class=\"bt-fdt-red\" href=javascript:RowClean('$Etq','$subc')><i class=\"fas fa-eraser\"></i> " . $msgstr["erase"] . "</a> ";
-				//echo substr($subc,$j,1);
-			}
-			if ($type_de[7] != "COMBO" and $type_de[7] != "COMBORO") {
-				if ($type_de[10] == "D" or $type_de[12] != "") {
-					if ($j == 0) {
-						$sc_col = $subc;
-					} else {
-						$sc_col = substr($subc, $j, 1);
-					}
-					$separa = ";";
-					$base_alfa = $type_de[11];
-					if ($base_alfa == "") $base_alfa = $arrHttp["base"];
-					$Formato_alfa = $type_de[13];
-					if (trim($type_de[14]) != "") $Formato_alfa .= ",`$$$`," . $type_de[14];
-					$prefijo = $type_de[12];
-					if (!isset($ver)) {
-						echo "<a class=\"bt-fdt\" href='javascript:AbrirIndiceAlfabetico(document.forma1.tag$Etq,\"$prefijo\",\"$sc_col\",\"$separa\",\"$base_alfa\",\"$base_alfa.par\",\"tag$Etq\",\"1\",\"\",\"$Formato_alfa\")'><i class=\"fas fa-search\"></i></a>";
-						if ($type_de[7] != "I" and $type_de[10] == "T") {
-							echo "<a class=\"bt-fdt\" href='javascript:AbrirTesauro(\"tag$Etq\",\"" . $type_de[11] . "\",\"0\")'><i class=\"fas fa-cubes\"></i></a>&nbsp;";
-						}
-					}
-				}
-			}
-			// echo ($campo);
-			$iso_tag = "";
-			switch ($type_de[7]) {
-				case "I":
-					if (isset($ver)) {
-						echo $campo;
-					} else {
-						echo "<input type=hidden name=tag$Etq id=tag$Etq value=\"" . $campo . "\">\n";
-					}
-					break;
-				case "S":
-					$nombrec = "tag" . $tag . "_" . $i . "_" . substr($subc, $j, 1);
-					if (isset($seleccion[$j]) && ($seleccion[$j] != "")) {
-						if (!isset($ver)) {
-							ColocarSelect($tag, substr($subc, $j, 1), $nombrec, $seleccion[$j], $campo, $type_de[11]);
-						} else {
-							echo $campo;
-						}
-					}
-					break;
-				case "D":    //date, the calendar is presented
-					if (isset($ind[$j + 1])) {
-						$next_field = explode('|', $ind[$j + 1]);  //IF THE NEXT FIELD IS AN ISO FIELD CALL THE CONVERSION PROCEDURE
-						if (trim($next_field[7]) == "ISO") {
-							$iso_tag = $tag . "_" . $i . "_" . substr($subc, $j + 1, 1);
-						} else {
-							$iso_tag = "";
-						}
-					}
-				case "ISO":
-					if (isset($ver))
-						echo $campo;
-					else
-						Calendario($campo, $type_de[7], $iso_tag, $Etq);
-					break;
-				case "C":
-					if (isset($ver))
-						echo $campo;
-					else
-						DibujarCheck($filas, $fondocelda, $valor, $tag, $opciones, $tope, $tipo, $subc);
-					break;
-				case " ":
-				case "":
-				case "X":
-					$maxlength = 0;
-					if ($type_de[9] <> "") {
-						$len_f = explode('/', $type_de[9]);
-						$n = $len_f[0];
-						if (isset($len_f[1]))  $maxlength = $len_f[1];
-					}
-					if ($type_de[8] > 1) {
-						if (!isset($ver)) {
-							echo "<textarea name=tag" . $Etq . " rows=" . $type_de[8] . " cols=" . $n . " class=td";
-							if ($maxlength > 0) {
-								echo " onKeyDown=\"textCounter(document.forma1.tag" . $Etq . ",document.forma1.rem$Etq,$maxlength)\"
-					   onKeyUp=\"textCounter(document.forma1.tag" . $Etq . ",document.forma1.rem$Etq,$maxlength)\"";
-							} else {
-								if (isset($type_de[20]) and $type_de[20] == "U")
-									echo " onKeyUp=\"CheckInventory($Etq)\"";
-							}
-							echo " id=tag" . $Etq . ">" . $campo . "</textarea>";
-							if ($i == 0) echo "\n<script>max_l['$Etq']=$maxlength</script>\n";
-							if ($maxlength > 0) {
-								$lengthmax = strlen($campo);
-								if ($lengthmax == 0)
-									$lengthmax = $maxlength;
-								else
-									$lengthmax = $maxlength - $lengthmax;
-								// Displayed in type Table TB
-								echo "<input tabindex='0' type=\"text\" name=\"rem$Etq\" size=\"3\" maxlength=\"$maxlength\" value=\"$lengthmax\" class=charCount onfocus=blur()>" . $msgstr["avalchars"] . "\n";
-							}
-						} else {
-							echo nl2br($campo);
-						}
-					} else {
-						if (!isset($ver)) {
-							if ($maxlength != 0)
-								echo "<a style=\"text-decoration:none\"; onMouseover=\"ddrivetip(document.forma1.tag" . $Etq . ".value,'linen',200 )\"; onMouseout=\"hideddrivetip()\";>";
-							echo "<input tabindex='0' type=text name=tag" . $Etq . "  id=tag" . $Etq . " size=$n";
-							if ($maxlength != 0) {
-								echo " maxlength=$maxlength";
-								echo "  onBlur=\"hideddrivetip();document.forma1.tag" . $Etq . ".size=$n\"
-				  onFocus=\"hideddrivetip();document.forma1.tag" . $Etq . ".size=$maxlength\";";
-							}
-							echo " class=td value=\"$campo\">";
-							if ($maxlength != 0) echo "</a>";
-						} else {
-							echo nl2br($campo);
-						}
-					}
-					break;
-				case "XF":
-					if (isset($ver))
-						echo $campo;
-					else
-						echo "<input tabindex='0' type=text name=tag" . $Etq . " id=tag" . $Etq . " size=$n maxlength=$n class=td value=\"$campo\">";
-					break;
-				case "U":
-					if (isset($ver)) {
-						echo $campo;
-					} else {
-						echo "<input tabindex='0' type=text name=tag" . $Etq . " id=tag" . $Etq . " size=$n class=td value=\"$campo\">";
-						echo "<a class=\"bt-fdt\" href=javascript:EnviarArchivo('tag$Etq')><i class=\"fas fa-upload\" title=\"" . $msgstr["uploadfile"] . "\"></i></a>";
-						echo "<a class=\"bt-fdt\" href=javascript:SelectArchivo('tag$Etq','forma1')><i class=\"far fa-folder-open\" title=\"" . $msgstr["selfile"] . "\"></i></a>";
-					}
-					break;
-				case "K":
-					if (isset($ver)) {
-						echo $campo;
-					} else {
-						echo "<input tabindex='0' type=text name=tag" . $Etq . " id=tag" . $Etq . " size=$n class=td value=\"$campo\">";
-						echo "<a class=\"bt-fdt\" href=javascript:EnviarArchivo('tag$Etq')><i class=\"fas fa-upload\" alt=\"Subir archivo al servidor\"></i></a>";
-						echo "<a href=javascript:EditarArchivo('tag$Etq')><i class=\"far fa-edit\" alt=\"Editar archivo existente\"></i></a>";
-					}
-					break;
-				case "AI":
-					if (isset($ver)) {
-						echo $campo;
-					} else {
-						echo "<input type=hidden name=autoincrement value=$Etq>";
-						echo "<input type=hidden name=tag" . $Etq . " size=$n class=td value=\"$campo\">$campo";
-					}
-					break;
-				case "N":
-					if (isset($ver)) {
-						echo $campo;
-					} else {
-						echo "<input type='number' name=tag" . $Etq . " size=$n class=td value=\"$campo\">$campo";
-					}
-					break;
-				case "RO":
-					if (isset($ver)) {
-						echo $campo;
-					} else {
-						echo $campo;
-						echo "<input type=hidden name=tag" . $Etq . " id=tag" . $Etq . " size=$n class=td value=\"$campo\" onfocus=blur()>";
-					}
-					break;
-				case "DC":
-					if (isset($ver)) {
-						echo $campo;
-					} else {
-						Calendario($campo, $type_de[7], $iso_tag, $Etq);
-						if ($campo == "") {
-							echo "<a class=\"bt-fdt\" href=javascript:AgregarFecha('tag$Etq')><i class=\"fas fa-plus\" title='" . $msgstr["add"] . "'></i></a>";
-						}
-					}
-					break;
-				case "OC":
-					if (isset($ver)) {
-						echo $campo;
-					} else {
-						echo "<input tabindex='0' type=text name=tag" . $Etq . " name=tag" . $Etq . " size=10 class=td value=\"$campo\" onfocus=blur()>";
-						if ($campo == "")
-							echo "<a class=\"bt-fdt\" href=javascript:AgregarOperador('tag$Etq')><i class=\"fas fa-plus\"  title='" . $msgstr["add"] . "'></i></a>";
-						break;
-					}
-			}
-			echo "\n";
-		}
-	}
-	echo "</td></tr></table>";
-	if ($t[4] == 1 and $fixed_rows == "" and !isset($ver)) {
-		$vd = "";
-		if (count($val_def) > 0) {
-			foreach ($val_def as $key => $value) {
-				$vd .= $key . "|" . $value . "$$$";
-			}
-		}
-		echo "<a class='bt bt-blue' href=javascript:addRow('" . $t[1] . "','$subc','add','$vd')>" . $msgstr["add"] . "</a>";
-		echo "<a class='bt bt-blue' href=javascript:addRow('" . $t[1] . "','$subc','duplicate','$vd')>" . $msgstr["duplicate_last"] . "</a>";
-		echo "<a class='bt bt-blue'  href=javascript:Organizar('" . $t[1] . "','$subc')>" . $msgstr["orglist"] . "</a>";
-	}
-	echo "<br></td>";
-	echo "\n</td></td>";
+	TableRenderer::render($filas, $tag, $fondocelda, $field_t);
 }
 
 function DecodificaSubCampos($campo, $numsubc, $subc, $delimsc)
 {
-	if (trim($delimsc) == "") return $salida;
-	$valores = explode("\n", $campo);
-	$salida = "";
-	foreach ($valores as $lin) {
-		for ($isc = 0; $isc < strlen($subc); $isc++) {
-			$delim = substr($subc, $isc, 1);
-			$pos = strpos($lin, "^" . $delim);
-			if (is_integer($pos)) {
-				if ($isc == 0)
-					$delim = "";
-				else
-					$delim = substr($delimsc, $isc, 1) . " ";
-				$lin = substr($lin, 0, $pos) . $delim . substr($lin, $pos + 2);
-			}
-		}
-		$salida = $salida . "\n" . $lin;
-	}
-	return $salida;
+	return SubfieldHelper::decode($campo, $numsubc, $subc, $delimsc);
 }
 
 function DibujarCheck($filas, $fondocelda, $valor, $tag, $opciones, $tope, $tipo, $subc)
 {
-	global $ver, $base, $arrHttp, $Path, $db_path, $lang_db, $msgstr;
-	echo "<td class='table-fdt-four input-fdt'>";
-	if (!$ver) {
-		// $tope is the number of colums for the Table
-		// Radio button: from the fdt (can be 1)
-		// Check button: no example found, assumed from fdt
-		// Protect record: 1 (fixed in code)
-		// So we can always use a table to show the buttons
-		echo "<table>\n";
-		// $opciones is the name of the file with textstrings
-		//  echo $db_path.$arrHttp["base"]."/".$opciones;
-		if ($opciones == 1) {
-			$fp = array(1);
-		} else {
-			$fp = array();
-			if (strpos($opciones, '%path_database%') === false) {
-				if (file_exists($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . $opciones))
-					$fp = file($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . $opciones);
-				elseif (file_exists($db_path . $arrHttp["base"] . "/def/" . $lang_db . "/" . $opciones))
-					$fp = file($db_path . $arrHttp["base"] . "/def/" . $lang_db . "/" . $opciones);
-			} else {
-				if (file_exists(str_replace('%path_database%', $db_path, $opciones)))
-					$fp = file(str_replace('%path_database%', $db_path, $opciones));
-			}
-		}
-		$countcols = 0;
-		if ($tope == "") $tope = 1;
-		$val = explode("\n", $valor);
-		if (count($fp) == 0) {
-			echo "<tr><td class=class='td td.no-wrap'><font color=red>" . $msgstr["missing"] . " $opciones</font></td>";
-		}
-		foreach ($fp as $linea) {
-			$linea = trim($linea);
-			if ($linea != "") {
-				if ($countcols == 0) {
-					echo "<tr>";
-				}
-				$countcols++;
-				echo "<td class='td td.no-wrap'>";
-				$opc = explode('|', $linea);
-				if (!isset($opc[1])) $opc[1] = "";
-				if ($opc[0] == "") $opc[0] = $opc[1];
-				if ($opc[1] == "") $opc[1] = $opc[0];
-				if (!isset($opc[1])) $opc[1] = $opc[0];
-				$opcVal = $opc[0];
-				if (trim($subc) != "") {
-					$opcVal = "^" . substr($subc, 0, 1) . $opc[0] . "^" . substr($subc, 1, 1) . $opc[1];
-				}
-				if (strpos($opcVal, "<") === true) {
-					$opcVal = str_replace('"', '´', $opcVal);
-				}
-				if ($tipo == "R") echo "<input tabindex='0' type=radio name=tag$tag value='" . $opcVal . "'";
-				if ($tipo == "C" or $tipo == "RP") echo "<input tabindex='0' type=checkbox name=tag$tag id=tag$tag value=\"" . $opcVal . "\"";
-				foreach ($val as $check) {
-					if ($subc != "") {
-						$cc = explode('^', $check);
-						if (isset($cc[1])) $check = substr($cc[1], 1);
-					}
-					if (trim($check) == trim($opc[0])) echo " checked";
-				}
-				if ($opciones == 1)
-					echo  ">";
-				else
-					echo ">&nbsp;" . $opc[1] . " &nbsp; &nbsp;\n";
-				echo "</td>";
-				if ($countcols == $tope) {
-					$countcols = 0;
-					echo "</tr>";
-				}
-			}
-		}
-		if ($countcols != 0 and $countcols < $tope) {
-			for ($i = $countcols; $i < $tope; $i++) {
-				echo "<td></td>";
-			}
-			echo "</tr>";
-		}
-		echo "</table>";
-	} else {
-		$filas = explode("\n", $valor);
-		$ix = 0;
-		//      echo "<td>";
-		foreach ($filas as $lin) {
-			$ix = $ix + 1;
-			$lin = trim($lin);
-			echo "$lin";
-			if ($ix < count($filas)) echo "<br>";
-		}
-	}
+	CheckRenderer::render($filas, $fondocelda, $valor, $tag, $opciones, $tope, $tipo, $subc);
 }
 
 function DibujarSelect($linea, $fondocelda, $valor, $tag, $ksc, $opciones, $rep, $subc)
 {
-	global $ver, $base, $arrHttp, $Path, $Tabla_sel, $db_path, $lang_db, $msgstr;
-	$t = explode('|', $linea);
-	$tipo = rtrim($t[7]);
-	$rep = $t[4];
-	$subc = rtrim($t[5]);
-	$ksc = strlen($subc);
-	$delimsc = rtrim($t[6]);
-	echo "<td>";
-	$TipoS = "";
-	if ($rep == 1) $TipoS = " multiple";
-	if (!$ver) {
-		$file_options = "";
-		$fp = array();
-		$opc = array();
-		if (strpos($opciones, '%path_database%') === false) {
-			if (file_exists($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . $opciones)) {
-				$file_options = $db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . $opciones;
-				$fp = file($file_options);
-			} else {
-				if (file_exists($db_path . $arrHttp["base"] . "/def/" . $lang_db . "/" . $opciones)) {
-					$file_options = $db_path . $arrHttp["base"] . "/def/" . $lang_db . "/" . $opciones;
-					$fp = file($file_options);
-				}
-			}
-		} else {
-			$file_options = str_replace('%path_database%', $db_path, $opciones);
-			if (file_exists($file_options))  //echo $file_options;
-				$fp = file($file_options);
-		}
-		$i = 0;
-		$lensel = count($fp);
-		if ($lensel > 10)
-			$lensel = 0;
-		else
-			$lensel = $lensel + 1;
-
-		$val = explode("\n", $valor);
-		foreach ($fp as $linea) {
-			if ($opciones == "%path_database%bases.dat" and ($arrHttp["base"] == "purchaseorder"
-				or $arrHttp["base"] == "suggestions")) {     // This is where the databases for acquisitions are filtered.
-				$tbz = explode('|', $linea);
-				if (isset($tbz[2]) and trim($tbz[2]) == "Y") {
-				} else {
-					continue;
-				}
-			}
-			$linea = trim($linea);
-			$pp = explode('|', $linea);
-			if ($linea != "") {
-				// The line contains "key|value" or "key"
-				if ($pp[0] != "") {
-					$key1 = $pp[0];
-				} else {
-					$key1 = $pp[1];
-				}
-				if (!isset($pp[1]) or $pp[1] == "") {
-					$key2 = $key1;
-				} else {
-					$key2 = $pp[1];
-				}
-				$opc[$key2] = $key1;
-			}
-		}
-		/* determine if any option is selected */
-		$check = "";
-		$selected = false;
-		foreach ($opc as $key1 => $key2) {
-			$opcVal = $key2;
-			if (trim($subc) != "") {
-				$opcVal = "^" . substr($subc, 0, 1) . $key2 . "^" . substr($subc, 1, 1) . $key1;
-			}
-			foreach ($val as $check) {
-				if (trim($check) != "") {
-					if ($subc != "") {
-						$cc = explode('^', $check);
-						$check = substr($cc[1], 1);
-					}
-					if (trim($check) == trim($key2) and trim($key2) != "") $selected = true;
-				}
-			}
-		}
-		/* Display the select statement. Set the size of multiselect according to a found selected option*/
-		$subc = rtrim($t[5]);
-		echo "<select name=tag$tag $TipoS id=tag$tag";
-		if ($lensel <> 0 and $TipoS == " multiple") {
-			if ($selected == true) $lensel--;
-			echo " size=$lensel";
-		}
-		echo ">\n";
-		/* Display the the first option */
-		if ($selected == false) {
-			echo "<option disabled selected>-" . $msgstr['seloption'] . "-</option>";
-		}
-		/* Display the other single or multiselect list options*/
-		$check = "";
-		foreach ($opc as $key1 => $key2) {
-			$opcVal = $key2;
-			if (trim($subc) != "") {
-				$opcVal = "^" . substr($subc, 0, 1) . $key2 . "^" . substr($subc, 1, 1) . $key1;
-			}
-			echo "<option value=\"" . $opcVal . "\"";
-			foreach ($val as $check) {
-				if (trim($check) != "") {
-					if ($subc != "") {
-						$cc = explode('^', $check);
-						$check = substr($cc[1], 1);
-					}
-					if (trim($check) == trim($key2) and trim($key2) != "") echo " selected";
-				}
-			}
-			echo ">" . $key1 . " &nbsp; &nbsp;\n";
-		}
-		echo "</select>";
-		if ($file_options != "" or $file_options == "") {
-			$opciones = urlencode($opciones);
-			if (isset($_SESSION["permiso"])) {
-				echo "<td>";/* extra cell to get the buttons centered next to the selection list*/
-				if (isset($_SESSION["permiso"]["db_ALL"]) or isset($_SESSION["permiso"]["CENTRAL_ALL"]) or  isset($_SESSION["permiso"][$base . "_CENTRAL_ALL"])  or  isset($_SESSION["permiso"][$base . "_CENTRAL_ACTPICKLIST"])) {
-					echo " <a class=\"bt-fdt\" href=\"javascript:AgregarPicklist('$opciones','tag$tag','$check')\"><i class=\"fas fa-edit\" title='" . $msgstr["mod_picklist"] . "' ></i></a>";
-				}
-				echo " <a class=\"bt-fdt\" href=\"javascript:RefrescarPicklist('$opciones','tag$tag','$check')\"><i class=\"fas fa-redo\" title='" . $msgstr["reload_picklist"] . "' ></i></a>";
-			}
-		}
-	} else {
-		$filas = explode("\n", $valor);
-		$ix = 0;
-		foreach ($filas as $lin) {
-			$ix = $ix + 1;
-			$lin = trim($lin);
-			echo "$lin";
-			if ($ix < count($filas)) echo "<br>";
-		}
-	}
-	echo "\n</td></tr>\n";
+	SelectRenderer::renderDibujarSelect($linea, $fondocelda, $valor, $tag, $ksc, $opciones, $rep, $subc);
 }
 
 function TextBox($linea, $fondocelda, $titulo, $ver, $len, $tag, $ksc, $rep, $delimrep, $ayuda)
 {
-	global $ixicampo, $valortag, $arrHttp, $Path, $Marc, $db_path, $lang_db, $msgstr, $MD5, $SECURE_PASSWORD_LEVEL, $SECURE_PASSWORD_LENGTH;
-	$maxlength = 0;
-	$linea .= "|||||||||";
-	$t = explode('|', $linea);
-	//This is for the changes that were made to the fdt regarding the field type and the type of entry
-	switch ($t[0]) {
-		case "OD":
-			$t[0] = "F";
-			$t[7] = "OD";
-			break;
-		case "OC":
-			$t[0] = "F";
-			$t[7] = "OC";
-			break;
-		case "ISO":
-			$t[0] = "F";
-			$t[7] = "ISO";
-			break;
-		case "DC":
-			$t[7] = "DC";
-			break;
-	}
-	$tipo = rtrim($t[7]);
-	if ($t[0] == "AI") {
-		$tipo = "AI";
-		if ($arrHttp["Mfn"] == "New")
-			$valortag[$tag] = "";
-	}
-	$rep = $t[4];
-	$subc = rtrim($t[5]);
-	$ksc = strlen($subc);
-	$delimsc = rtrim($t[6]);
-	$mandatory = trim($t[19]);
-	$numl = $t[8];
-	$cols = $t[9];
-	if ($cols == 0 || $cols == "") $cols = 100;
-	$len = $cols;
-	$tag = $t[1];
-	$pref = $t[12];
-	$help = "";
-	if (isset($t[16])) $help = $t[16];
-	// $upload=substr($linea,53,1);
-	if ($tipo != "I") {
-		echo "<td class=\"table-fdt-three\">";
-		$titulo = trim($t[2]);
-		echo $titulo;
-		echo "</td>";
-		echo "<td class='table-fdt-four input-fdt'>";
-	}
-	if ($rep == 1 and $numl == 0) $numl = 1;
-	if ($numl == 0) $numl = 1;
-	$valortag[$tag] = rtrim($valortag[$tag]);
-	$dummy = explode("\n", $valortag[$tag]);
-	$occurs = count($dummy);
-	if ($ver) {
-		foreach ($dummy as $lin) {
-			if ($ksc > 0 and trim($delimsc) != "") $lin = DecodificaSubCampos($lin, $ksc, $subc, $delimsc);
-			if ($tipo != "I") echo $lin . "";
-		}
-	} else {
-		$campo = rtrim($valortag[$tag]);
-		//if ($ksc>0 && $campo!=""  and trim($delimsc)!="") $campo=DecodificaSubCampos($campo,$ksc,$subc,$delimsc);
-		if ($numl < count($dummy)) $numl = count($dummy);
-		if ($numl > 30) {
-			$numl = 30;
-		}
-		$arrow = "";
-		if ($rep == "1") {
-			//$arrow="ONKEYDOWN=\"return checkKey(this, event,document.forma1.tag$tag,$ixicampo)\"";
-		}
-		if ($tipo == "XF") $len = $cols . " maxlength=$cols";
-		if (($numl > 1 or $rep == "1") and $tipo != "AI") {
-			//if ($numl<=1 ) $numl=2;
-			if ($len == 0) $len = "100%";
-			if ($tipo == "RO" or $tipo == "SRO" or $tipo == "MRO")
-				$it = "text\" onfocus=blur()";
-			else
-				$it = "";
-			$maxlength = 0;
-			if ($t[9] == 0 || $t[9] == "") {
-				$t[9] = 100;
-			}
-			if ($t[9] != "") {
-				$lenf = explode('/', $t[9]);
-				$len = $lenf[0];
-				if (isset($lenf[1]))
-					$maxlength = $lenf[1];
-			}
-	?>
-			<textarea rows="<?php echo $numl; ?>" cols="<?php echo $len; ?>" name="tag<?php echo $tag; ?>"
-				id="tag<?php echo $tag; ?>" <?php echo $arrow; ?> <?php echo $it; ?>
-				<?php
-				// Edited by rogercgui to send textarea 
-				if (isset($_REQUEST[$campo])) {
-					$campo = $_REQUEST[$campo];
-				} else {
-					$campo = $campo;
-				}
-				if ($maxlength > 0) {
-					echo " onKeyDown=\"textCounter(document.forma1.tag" . $tag . ", document.forma1.rem$tag, $maxlength)\"
-               onKeyUp=\"textCounter(document.forma1.tag" . $tag . ", document.forma1.rem$tag, $maxlength)\"";
-				}
-				echo ' onKeyUp="CheckInventory()" >' . $campo . "</textarea>";
-				if ($maxlength > 0)
-					echo "<input aaa readonly type=\"text\" name=\"rem$tag\" size=\"3\" maxlength=\"$maxlength\" value=\"$maxlength\" class=charCount>" . $msgstr["avalchars"] . "\n";
-			} else {
-				$onfocus = "";
-				if ($len == 0 || $len == "") $len = "100";
-				switch ($tipo) {
-					case "P":
-					case "PR":
-						$it = "password\"";
-						if ((isset($SECURE_PASSWORD_LEVEL) and $SECURE_PASSWORD_LEVEL != "") or
-							(isset($SECURE_PASSWORD_LENGTH) and $SECURE_PASSWORD_LENGTH != "")
-						)
-							$it .= " onblur=\"" . "pwd_Validation('tag$tag')"; // strange but correct. " is added later
-						$len = 20;
-						if ($MD5 == 1) $campo = "";
-						break;
-					case "AI":
-						echo "<input type=hidden name=autoincrement value=$tag>";
-						$it = "text";
-						$onfocus = "onfocus=blur()";
-						break;
-					case "RO":
-					case "SRO":
-						$it = "text";
-						$onfocus = "onfocus=blur()";
-						break;
-					case "N":
-						$it = "text";
-						$onfocus = "onfocus=blur()";
-						break;
-					case "I":
-						$it = " hidden";
-						break;
-					default:
-						$maxlength = 0;
-						if ($t[9] != "") {
-							$lenf = explode('/', $t[9]);
-							$len = $lenf[0];
-							if (isset($lenf[1]))
-								$maxlength = $lenf[1];
-						}
-						$it = "text";
-						break;
-				}
-				if ($maxlength != 0)
-					echo "<a style=\"text-decoration:none\" onMouseover=\"ddrivetip(document.forma1.tag" . $tag . ".value,'linen',300 )\"; onMouseout=\"hideddrivetip()\"; onclick=\"hideddrivetip()\">";
-				if ($tipo != "AI") {
-					echo '<input type="' . $it . '" ' . $onfocus . ' name=tag' . $tag . ' id="tag' . $tag . '" size="' . $len . '"';
-					if ($maxlength > 0) {
-						echo ' maxlength="' . $maxlength . '" "';
-					}
-					echo ' value="' . $campo . '" ' . $arrow . '>';
-				}
-				if ($maxlength != 0)
-					echo "</a>";
-				if ($tipo == "AI") {
-					//Get last control number
-					$archivo = $db_path . $arrHttp["base"] . "/data/control_number.cn";
-					if (!file_exists($archivo)) {
-						$fp = fopen($archivo, "w");
-						$res = fwrite($fp, "");
-						fclose($fp);
-					} else {
-						$fp = file($archivo);
-						$last_cn = implode("", $fp) + 1;
-					}
-					echo '<input type="' . $it . '" ' . $onfocus . ' name=tag' . $tag . ' id="tag' . $tag . '" size="' . $len . '"';
-					if ($maxlength > 0) {
-						echo ' maxlength="' . $maxlength . '" "';
-					}
-					echo ' placeholder="' . $last_cn . '" value="' . $campo . '" ' . $arrow . '>';
-					if (
-						isset($_SESSION["permiso"]["CENTRAL_RESETLCN"]) or isset($_SESSION["permiso"]["CENTRAL_ALL"])  or
-						isset($_SESSION["permiso"][$arrHttp["base"] . "_CENTRAL_ALL"]) or
-						isset($_SESSION["permiso"][$arrHttp["base"] . "_CENTRAL_RESETLCN"]) or
-						isset($_SESSION["permiso"]["ACQ_ALL"]) or
-						isset($_SESSION["permiso"]["ACQ_RESETCN"])
-					) {
-						echo "\n <a class='bt-fdt-green' href='javascript:ChangeSeq($tag,\"$pref\")'><i class=\"fas fa-plus\"></i> " . $msgstr["assign"] . "</a>   ";
-						echo "\n<a class='bt-fdt-help' href='../documentacion/ayuda.php?help=" . $_SESSION["lang"] . "/autoincrement.html' target=_blank><i class=\"far fa-life-ring\"></i> " . $msgstr["help"] . "</a>   ";
-						if (isset($_SESSION["permiso"]["CENTRAL_EDHLPSYS"])) {
-							echo "\n<a class='bt-fdt-blue' href='../documentacion/edit.php?archivo=" . $_SESSION["lang"] . "/autoincrement.html' target=_blank><i class=\"far fa-edit\"></i> " . $msgstr["edhlp"] . "</a>";
-						}
-					}
-				}
-			}
-			if ($tipo == "U") {
-				echo "<a class=\"bt-fdt\" href=\"javascript:EnviarArchivo('tag$tag')\"><i class=\"fas fa-upload\"  title=\"" . $msgstr["uploadfile"] . "\"></i></a> \n";
-				echo "<a class=\"bt-fdt\" href=\"javascript:SelectArchivo('tag$tag','forma1')\"><i class=\"far fa-folder-open\" title=\"" . $msgstr["selfile"] . "\"></i></a>\n";
-			}
-			if ($tipo == "P" or $tipo == "PR") {
-				?>
-				<script>tag_password='tag<?php echo $tag; ?>'
-		mandatory_password='<?php echo $mandatory; ?>'
-	    </script>
-	    <a class="bt-fdt w-2" href="javascript:DisplayPassword('tag<?php echo $tag ?>')">
-		<i class="far fa-eye"></i> <?php echo $msgstr["ver"] ?></a>
-	    <?php
-				if ((isset($SECURE_PASSWORD_LEVEL) and $SECURE_PASSWORD_LEVEL != "") or
-					(isset($SECURE_PASSWORD_LENGTH) and $SECURE_PASSWORD_LENGTH != "")
-				) {
-		?>
-		<br><small class="bt-disabled">
-		<?php
-					if (isset($SECURE_PASSWORD_LENGTH) and $SECURE_PASSWORD_LENGTH != "")
-						echo $msgstr["pass_format_1"] . " " . $SECURE_PASSWORD_LENGTH . " " . $msgstr["characters"] . ". ";
-					if (isset($SECURE_PASSWORD_LEVEL) and $SECURE_PASSWORD_LEVEL != "" and $SECURE_PASSWORD_LEVEL > 1)
-						echo $msgstr["pass_format_" . $SECURE_PASSWORD_LEVEL];
-		?>
-		<span id="spnPwd" class="pwd_Strength"></span>
-		</small><br>
-		<?php
-				}
-		?>
-	    </td>
-	    <tr><td colspan=2></td>
-	    <td class='table-fdt-three'><?php echo $msgstr["confirmpass"]; ?></td>
-	    <td><input tabindex='0' type=password size=<?php echo $len ?> name=confirm id=confirmpwd  value="<?php echo $campo ?>"
-	    <?php
-				if ((isset($SECURE_PASSWORD_LEVEL) and $SECURE_PASSWORD_LEVEL != "")  or
-					(isset($SECURE_PASSWORD_LENGTH) and $SECURE_PASSWORD_LENGTH != "")
-				) {
-					echo " onfocus=\"VerificarPassword('tag$tag')\"";
-				}
-		?>
-	    >
-	    <a class="bt-fdt w-2" href="javascript:DisplayPassword('confirmpwd')">
-		<i class="far fa-eye"></i> <?php echo $msgstr["ver"]; ?></a>
-	    <?php
-			}
-		}
-		if ($tipo == "SRO" or $tipo == "MRO") {
-			echo "<a href=\"javascript:Limpiar(document.forma1.tag$tag)\">borrar</a>";
-		}
-		if ($tipo != "I") echo "</td></tr>\n";
-	}
+	TextRenderer::render($linea, $fondocelda, $titulo, $ver, $len, $tag, $ksc, $rep, $delimrep, $ayuda);
+}
 
-	function PrepararFormato()
-	{
-		global $msgstr, $vars, $ver, $fondocelda, $valortag, $ixicampo, $base, $cipar, $arrHttp, $FdtHtml, $Html_ingreso, $tagisis;
-		global $db_path, $lang_db, $default_values;
-		global $config_date_format, $base_fdt, $is_marc, $reintentar, $tag_tipol, $tag_nivel_r, $OpcionDeEntrada, $tag;
-		global $term_prefix, $term_tag, $refer_tag;
-		$tesaurus = "N";
-		if (file_exists($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . "tesaurus.rel")) {
-			include("../tesaurus/leer_relaciones.php");
-			$tesaurus = "Y";
+function PrepararFormato()
+{
+	global $msgstr, $vars, $ver, $fondocelda, $valortag, $ixicampo, $base, $cipar, $arrHttp, $FdtHtml, $Html_ingreso, $tagisis;
+	global $db_path, $lang_db, $default_values;
+	global $config_date_format, $base_fdt, $is_marc, $reintentar, $tag_tipol, $tag_nivel_r, $OpcionDeEntrada, $tag;
+	global $term_prefix, $term_tag, $refer_tag;
+	$tesaurus = "N";
+	if (file_exists($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . "tesaurus.rel")) {
+		include("../tesaurus/leer_relaciones.php");
+		$tesaurus = "Y";
+	}
+	// The file typeofrecords.tab is read to determine the fields where the literature type and record level
+	// are located for the assignment of field 08
+	$tag_tipol = "";
+	$tag_nivelr = "";
+	if (file_exists($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/typeofrecord.tab")) {
+		$f = fopen($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/typeofrecord.tab", 'r');
+		$tor = fgets($f);
+		$tor = explode(' ', trim($tor));
+		if (isset($tor[0])) $tag_tipol = $tor[0];
+		if (isset($tor[1])) $tag_nivelr = $tor[1];
+	}
+	// The online help file is read
+	if (file_exists($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/help.tab")) {
+		$hlp = file($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/help.tab");
+		foreach ($hlp as $value) {
+			if (trim($value) != "") {
+				$vhlp = explode('=', $value, 2);
+				$hlp_tip[$vhlp[0]] = $vhlp[1];
+			}
 		}
-		// The file typeofrecords.tab is read to determine the fields where the literature type and record level
-		// are located for the assignment of field 08
-		$tag_tipol = "";
-		$tag_nivelr = "";
-		if (file_exists($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/typeofrecord.tab")) {
-			$f = fopen($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/typeofrecord.tab", 'r');
-			$tor = fgets($f);
-			$tor = explode(' ', trim($tor));
-			if (isset($tor[0])) $tag_tipol = $tor[0];
-			if (isset($tor[1])) $tag_nivelr = $tor[1];
+	}
+	if ($ver == "S") $ver = true;
+	$cipar = $arrHttp["cipar"];
+	$ixTab = -1;
+	$ixicampo = 0;
+	$first_time = "Y";
+	$is_marc = "";
+	$cargar_texto = "";
+	$secciones = array();
+	$numero_secciones = 0;
+	$wrapperopen = false;
+	for ($ivars = 0; $ivars < count($vars); $ivars++) {
+		$linea = $vars[$ivars];
+		$t = explode('|', $linea);
+		if ($t[0] == "L"  or $t[0] == "H")
+			$numero_secciones = $numero_secciones + 1;
+	}
+	$obligatorio = "N";
+	for ($ivars = 0; $ivars < count($vars); $ivars++) {
+		$help_url = "";
+		$linea = $vars[$ivars];
+		$t = explode('|', $linea);
+		if (isset($t[2])) $titulo = $t[2];
+
+		if ($t[0] == "S" || $t[0] == "IND") {
+			continue;
 		}
-		// The online help file is read
-		if (file_exists($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/help.tab")) {
-			$hlp = file($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/help.tab");
-			foreach ($hlp as $value) {
-				if (trim($value) != "") {
-					$vhlp = explode('=', $value, 2);
-					$hlp_tip[$vhlp[0]] = $vhlp[1];
+		
+		if (isset($t[9])) $len = $t[9];
+		if (isset($t[4])) $rep = $t[4];
+		if (isset($t[1])) $tag = $t[1];
+		//    if (isset($rels[$tag]["tag"])) continue;
+		$delrep = "";
+		if (!isset($t[13])) $t[13] = "";
+		$fe = urlencode($t[13]);
+		if (isset($t[17])) {
+			if (trim($t[17]) != "") $help_url = $t[17];
+		}
+		$tipo_e = "";
+		$entryType = "";
+
+		// --- START OF ABA INTERCEPTION (TAB) ---
+		if ($t[0] == "TAB") {
+			// Skip the generation of tabs entirely if you are in Read-Only mode (“ALL”)
+			if (isset($arrHttp["ver"]) && $arrHttp["ver"] == "S") {
+				continue;
+			}
+
+			if (!isset($tabopen)) $tabopen = false;
+
+			if ($tabopen) {
+				if ($wrapperopen) {
+					echo "</div></div>\n"; // Close the header (H) that was left open
+					$wrapperopen = false;
 				}
+				echo "</div>\n"; // Close the tab pane (abcd-tab-pane)
+			}
+
+			$titulo_aba = trim($t[2]);
+
+			// Agnostic encoding replacement (Replaces the problematic `htmlspecialchars`)
+			$safe_titulo = str_replace(array("'", '"', '<', '>'), array('&#39;', '&quot;', '&lt;', '&gt;'), $titulo_aba);
+
+			// Opens a new invisible tab (it will be displayed by JavaScript when the tab is clicked)
+			echo "<div class='abcd-tab-pane' data-tab-title='" . $safe_titulo . "' style='display:none;'>\n";
+			$tabopen = true;
+
+			continue; // Skip to the next row in the FDT (do not draw the field table)
+		}
+		// --- END OF ABA INTERCEPTION (TAB) ---
+
+		// --- START OF HEADER INTERCEPTION (H/L) ---
+		if ($t[0] == "H" || $t[0] == "L") {
+			// Skip the generation of headers and accordions entirely if you are in Read-Only mode (“ALL”)
+			if (isset($arrHttp["ver"]) && $arrHttp["ver"] == "S") {
+				continue;
 			}
 		}
-		if ($ver == "S") $ver = true;
-		$cipar = $arrHttp["cipar"];
-		$ixTab = -1;
-		$ixicampo = 0;
-		$first_time = "Y";
-		$is_marc = "";
-		$cargar_texto = "";
-		$secciones = array();
-		$numero_secciones = 0;
-		$wrapperopen = false;
-		for ($ivars = 0; $ivars < count($vars); $ivars++) {
-			$linea = $vars[$ivars];
-			$t = explode('|', $linea);
-			if ($t[0] == "L"  or $t[0] == "H")
-				$numero_secciones = $numero_secciones + 1;
-		}
-		$obligatorio = "N";
-		?>
-    <div id="loading" style=opacity:0.95>
-	<br>
-	<table class=center>
-	    <tr><td>
-		    <select name="reorg" id="reorg" multiple size=20 style="max-width:600px">
-		    </select>
-		</td>
-		<td class='input-fdt'>
-		    <a class='bt bt-gray' href=# onClick="moveOptionUp(document.forma1.reorg)"><i class='fas fa-chevron-circle-up'></i></a>
-		    <br><br>
-		    <a class='bt bt-gray' href="javascript:moveOptionDown(document.forma1.reorg)"><i class='fas fa-chevron-circle-down'></i></a>
-		</td>
-	    </tr>
-	    <tr><td colspan=2>
-		    <a class='bt bt-green' href="javascript:OrganizarSalir('aceptar')"><?php echo $msgstr["aceptar"]; ?></a>
-		    <a class='bt bt-red' href="javascript:OrganizarSalir('cancelar')"><?php echo $msgstr["cancelar"]; ?></a>
-		</td>
-	    </tr>
-	</table>
-    </div>
-    <?php
-		for ($ivars = 0; $ivars < count($vars); $ivars++) {
-			$help_url = "";
-			$linea = $vars[$ivars];
-			$t = explode('|', $linea);
-			if (isset($t[2])) $titulo = $t[2];
-			if (isset($t[9])) $len = $t[9];
-			if (isset($t[4])) $rep = $t[4];
-			if (isset($t[1])) $tag = $t[1];
-			//    if (isset($rels[$tag]["tag"])) continue;
-			$delrep = "";
-			if (!isset($t[13])) $t[13] = "";
-			$fe = urlencode($t[13]);
-			if (isset($t[17])) {
-				if (trim($t[17]) != "") $help_url = $t[17];
-			}
-			$tipo_e = "";
-			$entryType = "";
-			if (!$ver or $ver and isset($valortag[$t[1]]) or ($t[0] == "H" or $t[0] == "L")) {
-				if (($t[0] == "H" or $t[0] == "L" or $ivars == 0)) {
-					if ($first_time == "Y") {
-						$first_time = "N";
-						if ($ivars == 0) {
-							$display = "";
-						} else {
-							$display = "display:none";
-						}
+		// --- END OF HEADER INTERCEPTION (H/L) ---
+
+		if (!$ver or $ver and isset($valortag[$t[1]]) or ($t[0] == "H" or $t[0] == "L")) {
+			if (($t[0] == "H" or $t[0] == "L" or $ivars == 0)) {
+				if ($first_time == "Y") {
+					$first_time = "N";
+					if ($ivars == 0) {
+						$display = "";
 					} else {
 						$display = "display:none";
-						if (isset($titulo_ant) and $titulo_ant != "*" and $numero_secciones > 0) {
-							echo "\n<a tabindex='-1' href=\"javascript:switchMenu('myvar_$ixant');\" style=\"text-decoration:none \">";
-							if (substr($titulo_ant, 0, 1) != "<") {
-								echo "<i class=\"far fa-minus-square\" style=\"vertical-align:middle\"></i> <b>" . $msgstr["cerrar"] . "</b> $titulo_ant</a> ";
-							} else {
-								echo $msgstr["cerrar"];
-							}
-						}
 					}
-					if ($t[0] == "L") $display = "";
-					if ($t[0] == "H" or $t[0] == "L") {
-						if ($ivars > 0) {
-							if ($t[0] == "H") {
-								$secciones["myvar_$ivars"] = "myvar_$ivars";
-								$titulo_ant = $titulo;
-							} else {
-								$titulo_ant = "*";
-							}
+				} else {
+					$display = "display:none";
+					if (isset($titulo_ant) and $titulo_ant != "*" and $numero_secciones > 0) {
+						echo "\n<a tabindex='-1' href=\"javascript:switchMenu('myvar_$ixant');\" style=\"text-decoration:none \">";
+						if (substr($titulo_ant, 0, 1) != "<") {
+							echo "<i class=\"far fa-minus-square\" style=\"vertical-align:middle\"></i> <b>" . $msgstr["cerrar"] . "</b> $titulo_ant</a> ";
+						} else {
+							echo $msgstr["cerrar"];
 						}
-						if ($wrapperopen == true) echo "</div></div>"; // fecha wrapper anterior
-
-						// Wrapper principal com ID
-						echo "\n<div id='wrapper_$ivars'>";
-						$wrapperopen = true;
-
-						// O Link do cabeçalho
-						if ($t[0] == "H" and $numero_secciones > 0)
-							// Chamada simples. O JS resolve o ícone sozinho.
-							echo "\n<a class=\"header-fdt\" href=\"javascript:switchMenu('myvar_$ivars');\">";
-						else
-							echo "\n<a class=\"header-fdt disabled\">";
-
-						// O Ícone e o Título
-						if (substr($titulo, 0, 1) != "<" and $numero_secciones > 0)
-							// Importante: classes far fa-plus-square para o JS encontrar
-							echo "<i class=\"far fa-plus-square\" style=\"vertical-align:middle\"></i> <b>$titulo</b>";
-						else
-							echo $titulo;
-
-						echo "</a>";
-
-						if (isset($t[17])) {
-							if (trim($t[17]) != "") {
-								echo "<div style='padding:5px 15px; color:#666; font-size:0.9em'>" . $hlp_tip[$t[17]] . "</div>";
-							}
-						}
-
-						// A div de conteúdo (alvo do switchMenu)
-						echo "\n<div id=\"myvar_$ivars\" style=\"$display;\" class=\"group-fields\">";
-						$ixant = $ivars;
-					}
-					if ($t[0] == "XL") {
-						$titulo_ant = $titulo;
-						echo "\n<div id=\"wrapper\">";
-						echo "\n<b>" . $titulo . "</b>\n";
-						$titulo_ant = "";
 					}
 				}
-				echo "\n<table  class=\"table-fdt\">\n";
-				if (isset($t[14])) if (substr($t[13], 0, 1) != "@") $fe .= urlencode('`$$$`' . $t[14]);
-				if ($t[0] == "H") {
-					$ixTab = $ixTab + 1;
-					$fondocelda = "";
-					$a = $t[2];
-					$pos = strpos($a, "[");
-					if ($pos === false) {
-					} else {
-						$a = substr($a, 0, $pos);
+				if ($t[0] == "L") $display = "";
+				if ($t[0] == "H" or $t[0] == "L") {
+					if ($ivars > 0) {
+						if ($t[0] == "H") {
+							$secciones["myvar_$ivars"] = "myvar_$ivars";
+							$titulo_ant = $titulo;
+						} else {
+							$titulo_ant = "*";
+						}
 					}
-					$a = trim($a);
+					if ($wrapperopen == true) echo "</div></div>"; // fecha wrapper anterior
+
+					// Wrapper principal com ID
+					echo "\n<div id='wrapper_$ivars'>";
+					$wrapperopen = true;
+
+					// The header link
+					if ($t[0] == "H" and $numero_secciones > 0)
+						// Simple call. JS handles the icon on its own.
+						echo "\n<a class=\"header-fdt\" href=\"javascript:switchMenu('myvar_$ivars');\">";
+					else
+						echo "\n<a class=\"header-fdt disabled\">";
+
+					// The Icon and the Title
+					if (substr($titulo, 0, 1) != "<" and $numero_secciones > 0)
+						// Importante: classes far fa-plus-square para o JS encontrar
+						echo "<i class=\"far fa-plus-square\" style=\"vertical-align:middle\"></i> <b>$titulo</b>";
+					else
+						echo $titulo;
+
+					echo "</a>";
+
+					if (isset($t[17])) {
+						if (trim($t[17]) != "") {
+							echo "<div style='padding:5px 15px; color:#666; font-size:0.9em'>" . $hlp_tip[$t[17]] . "</div>";
+						}
+					}
+
+					// The content div (target of the switchMenu)
+					echo "\n<div id=\"myvar_$ivars\" style=\"$display;\" class=\"group-fields\">";
+					$ixant = $ivars;
+				}
+				if ($t[0] == "XL") {
+					$titulo_ant = $titulo;
+					echo "\n<div id=\"wrapper\">";
+					echo "\n<b>" . $titulo . "</b>\n";
+					$titulo_ant = "";
+				}
+			}
+			echo "\n<table  class=\"table-fdt\">\n";
+			if (isset($t[14])) if (substr($t[13], 0, 1) != "@") $fe .= urlencode('`$$$`' . $t[14]);
+			if ($t[0] == "H") {
+				$ixTab = $ixTab + 1;
+				$fondocelda = "";
+				$a = $t[2];
+				$pos = strpos($a, "[");
+				if ($pos === false) {
 				} else {
-					$tipo = $t[0];
-					//This is for the changes that were made to the fdt regarding the field type and the input type
-					switch ($t[0]) {
-						case "OD":
-							$t[0] = "F";
-							$t[7] = "OD";
-							break;
-						case "OC":
-							$t[0] = "F";
-							$t[7] = "OC";
-							break;
-						case "ISO":
-							$t[0] = "F";
-							$t[7] = "ISO";
-							break;
-						case "DC":
-							$t[0] = "F";
-							$t[7] = "DC";
-							break;
-						case "AI":
-							$t[0] = "F";
-							$t[7] = "AI";
-					}
-					if (isset($t[1])) $tag = $t[1];
-					if (isset($t[5])) $subc = rtrim($t[5]);
-					if (isset($t[6])) $edit_subc = rtrim($t[6]);
-					if (isset($t[5])) $nsc = strlen(rtrim($t[5]));
-					$ksc = "";
-					if (isset($t[2])) $titulo = $t[2];
-					if (isset($t[7])) $entryType = $t[7];
-					$tipo_e = "";
-					if (isset($t[7])) if ($t[7] == "TB") $tipo_e = "TB";
-					if ($tipo == "L") {
-						//$lin01=$titulo;
-						//if ($lin01=="") $lin01="&nbsp;";
-						//    if ($t[7]!="I") echo "\n<tr><td width=10>&nbsp;</td><td width=10 align=right> &nbsp; </td><td colspan=2  ><b>".$lin01."</b></td></tr>\n";
+					$a = substr($a, 0, $pos);
+				}
+				$a = trim($a);
+			} else {
+				$tipo = $t[0];
+				//This is for the changes that were made to the fdt regarding the field type and the input type
+				switch ($t[0]) {
+					case "OD":
+						$t[0] = "F";
+						$t[7] = "OD";
+						break;
+					case "OC":
+						$t[0] = "F";
+						$t[7] = "OC";
+						break;
+					case "ISO":
+						$t[0] = "F";
+						$t[7] = "ISO";
+						break;
+					case "DC":
+						$t[0] = "F";
+						$t[7] = "DC";
+						break;
+					case "AI":
+						$t[0] = "F";
+						$t[7] = "AI";
+				}
+				if (isset($t[1])) $tag = $t[1];
+				if (isset($t[5])) $subc = rtrim($t[5]);
+				if (isset($t[6])) $edit_subc = rtrim($t[6]);
+				if (isset($t[5])) $nsc = strlen(rtrim($t[5]));
+				$ksc = "";
+				if (isset($t[2])) $titulo = $t[2];
+				if (isset($t[7])) $entryType = $t[7];
+				$tipo_e = "";
+				if (isset($t[7])) if ($t[7] == "TB") $tipo_e = "TB";
+				if ($tipo == "L") {
+				} else {
+					if (!isset($valortag[$tag])) {
+						$valortag[$tag] = "";
 					} else {
-						if (!isset($valortag[$tag]))
-							$valortag[$tag] = "";
-						else
-							$valortag[$tag] = str_replace('"', "&quot;", $valortag[$tag]);
-						$ayuda = "";
-						if (isset($valortag[$tag]) and $t[0] != "H" and $t[0] != "L") {
-							if ($ver && $valortag[$tag] || !$ver) {
-								if ($t[7] != "I") {
-									echo "<tr><td class='table-fdt-one'><span class=\"badge\">";
-									echo $tag . $ksc;
-								} else {
-									echo "&nbsp;";
-								}
-								if (isset($t[19]) and $t[19] == 1) {
-									echo " <span style='color:red;font-size:150%;'>*</span>";
-									$obligatorio = "S";
-								}
-								if ($t[7] != "I") echo "</span></td>\n";
-								$subc = rtrim($t[5]);
-								if (substr($subc, 0, 1) == "-") $subc = "_" . substr($subc, 1);
-								if (substr($subc, 0, 1) == " ") $subc = "+" . substr($subc, 1);
-								$delimsubc = rtrim($t[6]);
-								if (substr($delimsubc, 0, 1) == " ") $delimsubc = "+" . substr($delimsubc, 1);
-								if (substr($subc, 0, 1) == " ") $subc = "+" + substr($subc, 1);
-								$a = trim($t[12]);
-								$c = "";
-								$separa = "";
-								$autoridades = "";
-								if ($t[10] == "D") {
-									$autoridades = $t[11];
-									if ($autoridades == "") $autoridades = $arrHttp["base"];
-								}
-								$Repetible = "";
-								if ($t[4] == 1) $Repetible = "R";
-								$postings = 1;
-								if (!$ver) {
-									echo "<td class='table-fdt-two'>";
-									if ($t[7] != "COMBO" and $t[7] != "COMBORO") {
-										if ($a != "" or $t[10] == "T") {  //es una lista de autoridades o un tesauro
-											if ($t[7] != "I" and $t[7] != "TB" and $t[10] != "T" and ($t[10] != "")) echo "<a  class=\"bt-fdt\" href='javascript:AbrirIndiceAlfabetico(document.forma1.tag$tag,\"$a\",\"$c\",\"$separa\",\"$autoridades\",\"$autoridades.par\",\"tag$tag\",\"$postings\",\"$Repetible\",\"" . urlencode($fe) . "\")'><i class=\"fas fa-search\"></i></a>";
-											if ($t[7] != "I" and $t[10] == "T") {
-												echo "<a class=\"bt-fdt\" href='javascript:AbrirTesauro(\"tag$tag\",\"" . $t[11] . "\")'><i class=\"fas fa-cubes\"></i></a>";
-												if (trim($a) != "")
-													$autoridades = $arrHttp["base"];
-												if ($t[12] != "") {
-													echo "<br><a class=\"bt-fdt\" ";
-													echo "href='javascript:AbrirIndiceAlfabetico(document.forma1.tag$tag,\"$a\",\"$c\",\"$separa\",\"$autoridades\",\"$autoridades.par\",\"tag$tag\",\"$postings\",\"$Repetible\",\"" . urlencode($fe) . "\")'>";
-													echo "<i class=\"fas fa-search\"></i></a>";
-												}
+						$valortag[$tag] = str_replace('"', "&quot;", $valortag[$tag]);
+
+						// Inserts the dashed line into the repeating fields only in the (ALL) view
+						if ($ver) {
+							$valortag[$tag] = trim($valortag[$tag]);
+							$valortag[$tag] = str_replace("\n", "<div style='border-bottom: 1px dashed #ccc; margin: 8px 0; width: 100%;'></div>", $valortag[$tag]);
+						}
+					}
+					$ayuda = "";
+					if (isset($valortag[$tag]) and $t[0] != "H" and $t[0] != "L") {
+						if ($ver && $valortag[$tag] || !$ver) {
+							if ($t[7] != "I") {
+								echo "<tr><td class='table-fdt-one'><span class=\"badge\">";
+								echo $tag . $ksc;
+							} else {
+								echo "&nbsp;";
+							}
+							if (isset($t[19]) and $t[19] == 1) {
+								echo " <span style='color:red;font-size:150%;'>*</span>";
+								$obligatorio = "S";
+							}
+							if ($t[7] != "I") echo "</span></td>\n";
+							$subc = rtrim($t[5]);
+							if (substr($subc, 0, 1) == "-") $subc = "_" . substr($subc, 1);
+							if (substr($subc, 0, 1) == " ") $subc = "+" . substr($subc, 1);
+							$delimsubc = rtrim($t[6]);
+							if (substr($delimsubc, 0, 1) == " ") $delimsubc = "+" . substr($delimsubc, 1);
+							if (substr($subc, 0, 1) == " ") $subc = "+" + substr($subc, 1);
+							$a = trim($t[12]);
+							$c = "";
+							$separa = "";
+							$autoridades = "";
+							if ($t[10] == "D") {
+								$autoridades = $t[11];
+								if ($autoridades == "") $autoridades = $arrHttp["base"];
+							}
+							$Repetible = "";
+							if ($t[4] == 1) $Repetible = "R";
+							$postings = 1;
+							if (!$ver) {
+								echo "<td class='table-fdt-two'>";
+								if ($t[7] != "COMBO" and $t[7] != "COMBORO") {
+									if ($a != "" or $t[10] == "T") {  //es una lista de autoridades o un tesauro
+										if ($t[7] != "I" and $t[7] != "TB" and $t[10] != "T" and ($t[10] != "")) echo "<a  class=\"bt-fdt\" href='javascript:AbrirIndiceAlfabetico(document.forma1.tag$tag,\"$a\",\"$c\",\"$separa\",\"$autoridades\",\"$autoridades.par\",\"tag$tag\",\"$postings\",\"$Repetible\",\"" . urlencode($fe) . "\")'><i class=\"fas fa-search\"></i></a>";
+										if ($t[7] != "I" and $t[10] == "T") {
+											echo "<a class=\"bt-fdt\" href='javascript:AbrirTesauro(\"tag$tag\",\"" . $t[11] . "\")'><i class=\"fas fa-cubes\"></i></a>";
+											if (trim($a) != "")
+												$autoridades = $arrHttp["base"];
+											if ($t[12] != "") {
+												echo "<br><a class=\"bt-fdt\" ";
+												echo "href='javascript:AbrirIndiceAlfabetico(document.forma1.tag$tag,\"$a\",\"$c\",\"$separa\",\"$autoridades\",\"$autoridades.par\",\"tag$tag\",\"$postings\",\"$Repetible\",\"" . urlencode($fe) . "\")'>";
+												echo "<i class=\"fas fa-search\"></i></a>";
 											}
-										} else {
-											if ($t[7] != "I") echo "";
-										}
-									}
-									if ($tipo == "T"  and $tipo_e != "TB") {
-										if (!isset($arrHttp["wks_a"]))
-											$wks_a = "";
-										else
-											$wks_a = $arrHttp["wks_a"];
-										if ($t[7] != "I") echo "<a  class=\"bt-fdt\" href='javascript:Campos(document.forma1.tag$tag,$ixicampo,\"$fe\",\"$Repetible\",\"$help_url\",\"" . $wks_a . "\")'><i class=\"fas fa-plus\"></i></a>";
-									} else {
-										if ($tipo == "M") {
-											$fe = "";
-											if (isset($arrHttp["wks_a"])) {
-												$xxwk = explode('|', $arrHttp["wks_a"]);
-												if (isset($xxwk[4])) {
-													$fe = $xxwk[4];
-												} else {
-													if (isset($arrHttp["wks"]))
-														$fe = $arrHttp["wks"];
-													else
-														$fe = "";
-												}
-											}
-											if ($t[7] != "I") {
-												echo "<a class=\"bt-fdt\" href='javascript:CampoFijo(document.forma1.tag$tag,$ixicampo,\"$fe\",\"$base\",\"\",\"$help_url\",\"$tag_tipol\",\"$tag_nivelr\")'><i class=\"fas fa-plus\"></i></a>";
-											}
-										}
-										if ($tipo == "LDR") {
-											if (isset($arrHttp["wks"]))
-												$fe = $arrHttp["wks"];
-											else
-												$fe = "";
-										}
-									}
-									$help = "";
-									if (isset($t[16])) $help = $t[16];
-									if (isset($hlp_tip[$tag]))
-										echo "<a class=\"tooltip\"><i class=\"far fa-life-ring\"></i><span> " . $hlp_tip[$tag] . "</span></a>";
-									if ($help == 1 or $help_url != "") {
-										if ($help_url == "") {
-											if ($t[7] != "I") echo "<a tabindex='-1' class=\"bt-fdt bt-fdt-question\" href=javascript:Ayuda($tag)><i class=\"fas fa-question\"></i></a>";
-										} else {
-											if ($t[7] != "I") echo "<a tabindex='-1' class=\"bt-fdt bt-fdt-question\" href='javascript:msgh=window.open(\"$help_url\",\"help\",\"width=600,height=400\");msgh.focus()'><i class=\"fas fa-question\"></i></a>";
 										}
 									} else {
 										if ($t[7] != "I") echo "";
 									}
-									echo "</td>\n";
 								}
-								$nsc = strlen(rtrim($t[5]));
-								$ixicampo = $ixicampo + 1;
-								if ($tipo != "T" and $tipo != "M" and $tipo != "AI") $tipo_e = $entryType;
-								//if ($tipo=="AI") $tipo_e="AI";
-								if ($tipo == "T") $tipo_e = "E";
-								if ($tipo == "M") $tipo_e = "FF";
-								if ($tipo == "LDR") $tipo_e = "LDR";
-								if ($tipo == "M5") $tipo_e = "M5";
-								if ($entryType == "TB") $tipo_e = "TB";
-								//if ($entryType=="ISO") $tipo_e="ISO";
-								//if ($entryType=="RO")  $tipo_e="RO";
-								//echo "<input type=hidden name=idtag value=$tag>";
-								if (trim($tipo_e) == "") $tipo_e = "X";
-								if (isset($t[15]))
-									if (!$ver and $valortag[$tag] == "") $valortag[$tag] = $t[15];
-								switch ($tipo_e) { // Switch on mix of field type/field type
-									case "M5":    // Date(MARC 005) DATE OF LAST UPDATE (FIELD 005 MARC)
-										$is_marc = "S";
-										if (!isset($default_values) or $default_values != "S") {    //CHECK IF EDITING DEFAULT VALUES
-											$campo = $valortag[$tag];
-											echo "\n<td class='table-fdt-three'>";
-											echo trim($titulo) . "</td>\n";
-											echo "\n<td class='table-fdt-four input-fdt'>\n";
-											if (!$ver) {
-												$campo = date("YmdHi.s");
-												echo "<input type=hidden name=tag$tag id=tag$tag  value=\"" . $campo . "\" >\n";
-											}
-											echo "<small>" . nl2br($campo) . "</small>";
-											echo "</td><tr>\n";
-										}
-										break;
-									case "OC":    // Operator (created)
-										if (!isset($default_values) or $default_values != "S") {    //CHECK IF EDITING DEFAULT VALUES
-											$campo = $valortag[$tag];
-											echo "\n<td class='table-fdt-three'>";
-											echo trim($titulo) . "</td>\n";
-											echo "\n<td class='table-fdt-four input-fdt'>\n";
-											if (!$ver) {
-												if (trim($campo) == "")
-													if ($arrHttp["Mfn"] == 'New') $campo = $_SESSION["login"];
-												echo "<input tabindex='0' type=text name=tag$tag id=tag$tag value=\"" . $campo . "\" size=20 onfocus=blur()>\n";
-											}
-											echo "</td><tr>\n";
-										}
-										break;
-									case "DC":    // Date (created)
-										if (!isset($default_values) or $default_values != "S") {    //CHECK IF EDITING DEFAULT VALUES
-											$campo = $valortag[$tag];
-											echo "\n<td class='table-fdt-three'>";
-											echo trim($titulo) . "</td>\n";
-											echo "\n<td class='table-fdt-four input-fdt'>\n";
-											if (!$ver) {
-												if ($campo == "")
-													if ($arrHttp["Mfn"] == 'New') $campo = date("Ymd h:i:s");
-												echo "<input tabindex='0' type=text name=tag$tag id=tag$tag  value=\"" . $campo . "\" size=20 onfocus=blur()>\n";
-											}
-											echo "</td></td><tr>\n";
-										}
-										break;
-									case "OD":    // Operator and Date
-										if ($arrHttp["Opcion"] != "valdef") {    //CHECK IF EDITING DEFAULT VALUES
-											$campo = $valortag[$tag];
-											$campo_out = "";
-											echo "\n<td class='table-fdt-three'>";
-											if (trim($t[5]) == "") $t[5] = "do";
-											echo trim($titulo) . "</td>\n";
-											echo "\n<td class='table-fdt-four input-fdt'>\n";
-											//Keep only the number of occurrences specified in the column row of the fdt
-											$ix = 0;
-											$ccc = explode("\n", $campo);
-											if ($t[8] == 0 || $t[8] == "") $t[8] = 10;
-											// Reduce less in case of "ver"(==standard display) or "actualizar". Not in case of "editar".
-											if ($OpcionDeEntrada == "ver" || $OpcionDeEntrada == "actualizar") $t[8]++;
-											if (count($ccc) >= $t[8]) {
-												$campo = "";
-												$ix = (int)(count($ccc)) - (int)$t[8] + 1;
-												for ($yx = $ix; $yx < count($ccc); $yx++) {
-													if ($campo == "")
-														$campo = $ccc[$yx];
-													else
-														$campo .= "\n" . $ccc[$yx];
-												}
-											}
-											if ($arrHttp["Opcion"] == "crear") $campo = "";
-											if (!$ver) {
-												if ($reintentar != "S") {
-													if ($campo != "") {
-														$campo .= "\n";
-													}
-													// 24 hour format
-													$campo .= "^" . substr($t[5], 0, 1) . date("Ymd H:i:s") . "^" . substr($t[5], 1, 1) . $_SESSION["login"];
-												}
-												echo "<input type=hidden name=tag$tag id=tag$tag value=\"" . $campo . "\" >\n";
-											}
-											echo "<table>";
-											echo "<tr><td style='width:150px;'>" . $msgstr["it_d"] . "</td><td>" . $msgstr["dboper"] . "</td></tr>\n";
-											$campo_out = explode("\n", $campo);
-											foreach ($campo_out as $var => $value) {
-												if ($value != "") {
-													$val = explode('^', $value);
-													echo "<tr><td>";
-													if (isset($val[1]))  echo substr($val[1], 1);
-													echo "</td><td>";
-													if (isset($val[2]))  echo substr($val[2], 1);
-													echo "</td></tr>";
-												}
-											}
-											echo "</table>\n";
-											echo "</td></tr>\n";
-										}
-										break;
-									case "LDR": // MARC-Leader
-										$is_marc = "S";
-										$filas = array();
-										$linea01 = $vars[$ivars];
-										$ksc = 0;
-										$ldr_tit = array();
-										echo "<td>$titulo</td><td><table class='table-fdt' cellpadding=0 cellspacing=0>";
-										for ($ixsc = 1; $ixsc <= 100; $ixsc++) {
-											$ivars = $ivars + 1;
-											$linea = $vars[$ivars];
-											if (substr($linea, 0, 1) != "S") {    //para detectar el fin de la descripción del leader
-												$ivars = $ivars - 1;
-												$ixsc = 999;
+								if ($tipo == "T"  and $tipo_e != "TB") {
+									if (!isset($arrHttp["wks_a"]))
+										$wks_a = "";
+									else
+										$wks_a = $arrHttp["wks_a"];
+									if ($t[7] != "I") echo "<a  class=\"bt-fdt\" href='javascript:Campos(document.forma1.tag$tag,$ixicampo,\"$fe\",\"$Repetible\",\"$help_url\",\"" . $wks_a . "\")'><i class=\"fas fa-plus\"></i></a>";
+								} else {
+									if ($tipo == "M") {
+										$fe = "";
+										if (isset($arrHttp["wks_a"])) {
+											$xxwk = explode('|', $arrHttp["wks_a"]);
+											if (isset($xxwk[4])) {
+												$fe = $xxwk[4];
 											} else {
-												$ksc = $ksc + 1;
-												$filas[] = rtrim($linea);
-												$ld = explode('|', $linea);
-												$ldr_tit[$ksc] =  "<tr><td>" . $ld[2] . " (" . $ld[1] . ")</td>";
-												//echo "<td align=center>".$ld[2]." (".$ld[1].")</td>";
+												if (isset($arrHttp["wks"]))
+													$fe = $arrHttp["wks"];
+												else
+													$fe = "";
 											}
 										}
-										$ksc = 0;
-										foreach ($filas as $linea) {
-											$ksc = $ksc + 1;
-											echo $ldr_tit[$ksc];
-											$ld = explode("|", $linea);
-											echo "<td>";
-											$ttmsel = "";
-											if ($ld[1] == 3006) {
-												if (isset($arrHttp["wk_tipom_1"])) {
-													$ttmsel = $arrHttp["wk_tipom_1"];
-												}
-												if ($ttmsel == "") if (isset($valortag[$ld[1]])) $ttmsel = $valortag[$ld[1]];
-											} else {
-												if (isset($valortag[$ld[1]])) $ttmsel = $valortag[$ld[1]];
-											}
-											$ldr_tag[$ksc] = $ld[1];
-											echo "<select name=tag" . $ld[1] . " id=tag" . $ld[1] . ">\n";
-											echo "<option value=\"\"></option>\n";
-											$fpleader = array();
-											if (file_exists($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . $ld[11]))
-												$fpleader = file($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . $ld[11]);
-											else
-												$fpleader = file($db_path . $arrHttp["base"] . "/def/" . $lang_db . "/" . $ld[11]);
-											foreach ($fpleader as $value) {
-												$value = trim($value);
-												if ($value != "") {
-													$v = explode("|", $value . "|||");
-													$selected = "";
-													if (trim($v[0]) == trim($ttmsel)) $selected = " selected";
-													echo "<option value=" . $v[0] . "|" . $v[2] . " $selected>" . trim($v[1]) . "(" . $v[0] . ")</option>\n";
-												}
-											}
-											echo  "</select>";
-											if (isset($_SESSION["permiso"])) {
-												if (
-													isset($_SESSION["permiso"]["db_ALL"]) or isset($_SESSION["permiso"]["CENTRAL_ALL"]) or
-													isset($_SESSION["permiso"][$base . "_CENTRAL_ALL"])  or
-													isset($_SESSION["permiso"][$base . "_CENTRAL_ACTPICKLIST"])
-												) {
-													echo " <a class=\"bt-fdt\" href=\"javascript:AgregarPicklist('" . $ld[11] . "','tag" . $ld[1] . "','')\"><i class=\"fas fa-edit\" title='" . $msgstr["mod_picklist"] . "'></i></a>";
-												}
-												echo " <a class=\"bt-fdt\" href=\"javascript:RefrescarPicklist('" . $ld[11] . "','tag" . $ld[1] . "','')\"><i class=\"fas fa-redo\" title='" . $msgstr["reload_picklist"] . "' ></i></a> &nbsp; ";
-											}
-											echo "\n<input type=hidden name=eti$tag value=\"$linea01\">\n";
-											echo "</td>\n";
+										if ($t[7] != "I") {
+											echo "<a class=\"bt-fdt\" href='javascript:CampoFijo(document.forma1.tag$tag,$ixicampo,\"$fe\",\"$base\",\"\",\"$help_url\",\"$tag_tipol\",\"$tag_nivelr\")'><i class=\"fas fa-plus\"></i></a>";
 										}
-										echo "</table><br></td></tr>";
-										break;
-									case "B":    // External HTML
-										if ($arrHttp["Mfn"] == "New") {
-											echo "<td><h3><font color=red>you must load the full document as soon as this record is created, using the load icon in the record toolbar</font></h3>";
-										} else {
-											echo "\n<td width=150><a href=internal_html.php?base=" . $arrHttp["base"] . "&Mfn=" . $arrHttp["Mfn"] . "&tag=$tag target=_blank>$titulo</a>\n";
-										}
-										//echo "<!-- &nbsp; &nbsp;<a href=javascript:CopiarHtml(".$tag.",'B','".$arrHttp["Mfn"]."')>upload file</a>-->";
-										echo "</td><td>";
-										echo "</td></tr>";
-										break;
-									case "A":    //HTML area
-										echo "<td class=\"table-fdt-three\">";
-										echo "$titulo";
-										echo "</td>\n";
-										if (!$ver) {
-											DibujarHtmlArea($tag, $vars[$ivars], $t[8], $tipo_e);
-											$a = str_replace("'", "\"", $valortag[$tag]);
-										} else {
-											echo "<br><font class=td>" . $valortag[$tag];
-										}
-										echo "</tr>\n";
-										break;
-									case "D":    // Date
-										$campo = $valortag[$tag];
-										echo "\n<td class=\"table-fdt-three\">";
-										echo trim($titulo) . "</td>\n";
-										echo "\n<td>\n";
-										if (!$ver) {
-											$nextfieldexists = false;
-											if (isset($vars[$ivars + 1])) {
-												//there is another line in the fdt
-												$nextfieldexists = true;
-												$next_field = explode('|', $vars[$ivars + 1]);  //IF THE NEXT FIELD IS AN ISO FIELD CALL THE CONVERSION PROCEDURE
-											}
-											if ($nextfieldexists && trim($next_field[7]) == "ISO") {
-												$date_tag = "tag$tag"; //NAME OF THE ACTUAL FIELD FOR GENERATING THE ISO DATE
-												$iso_tag = "tag" . $next_field[1]; //NAME OF THE ISO FIELD
-											} else {
-												$curr_field = explode('|', $vars[$ivars]);
-												if (trim($curr_field[0]) == "ISO") {
-													$date_tag = "tag$tag"; //NAME OF THE ACTUAL FIELD FOR GENERATING THE ISO DATE
-													$iso_tag = "tag" . $curr_field[1]; //NAME OF THE ISO FIELD
-												} else {
-													$date_tag = "";
-													$iso_tag = "";
-												}
-											}
-											//calendar attaches to existing form element
-	?>
-					<input tabindex="0" type="text" name="tag<?php echo $tag; ?>"
-					    id="tag<?php echo $tag; ?>_c"
-					    value="<?php echo $campo ?>"
-					<?php if ($iso_tag != "") { ?>
-					    onChange='Javascript:DateToIso(this.value,document.forma1.<?php echo $iso_tag ?>)'
-					<?php }; ?>
-					>
-					<a class="bt-fdt" id="f_tag<?php echo $tag; ?>">
-					    <i class="far fa-calendar-alt"  title="Date selector"></i></a>
-					<script>
-					Calendar.setup({
-					    inputField     :    "tag<?php echo $tag ?>_c",     // id of the input field
-					    ifFormat       :    "<?php $format = ConvertDateSpec($config_date_format);
-												echo $format ?>",
-					    button	 :    "f_tag<?php echo $tag ?>",  // trigger for the calendar (button ID)
-					    align	  :    '',	   // alignment (defaults to \"Bl\")
-					    singleClick    :    true
-					});
-					</script>
-					<?php
-										} else {
-											echo $campo;
-										}
-										echo "</td></tr>\n";
-										break;
-									case "ISO":    // ISO date
-										$campo = $valortag[$tag];
-										echo "\n<td class=\"table-fdt-three\">";
-										echo trim($titulo) . "</td>\n";
-										if ($t[4] == 1) {    //SI ES REPETIBLE
-											$field_t = $vars[$ivars];
-											DibujarTextRepetible($tag, $fondocelda, $field_t);
-											break;
-										}
-										echo "\n<td>\n";
-										if (!$ver) {
-											//calendar attaches to existing form element
-					?>
-					<input tabindex="0" type="text" name="tag<?php echo $tag; ?>"
-					    id="tag<?php echo $tag ?>_c"
-					    value="<?php echo $campo ?>"
-					    onChange='Javascript:DateToIso(this.value,document.forma1.tag<?php echo $tag ?>)'>
-					<a class="bt-fdt" id="f_tag<?php echo $tag ?>">
-					    <i class="far fa-calendar-alt"  title="Date selector"></i></a>
-					<script>
-					Calendar.setup({
-					    inputField     :    "tag<?php echo $tag; ?>_c",     // id of the input field
-					    ifFormat       :    "<?php $format = ConvertDateSpec($config_date_format);
-												echo $format ?>",
-					    button	 :    "f_tag<?php echo $tag ?>",  // trigger for the calendar (button ID)
-					    align	  :    '',	   // alignment (defaults to \"Bl\")
-					    singleClick    :    true
-					});
-					</script>
-					<?php
-										} else {
-											echo $campo;
-										}
-										if ($Repetible == "R") {
-											echo "<td>\n</table>";
-											echo "<a href=javascript:addRow('" . $tag . "','')>" . $msgstr["add"] . "</a><br><br></td>";
-										}
-										echo "</td></tr>\n";
-										break;
-									case "FF":    //MARC Campo fijo Marc Fixed field
-										$is_marc = "S";
-										$filas = array();
-										$linea01 = rtrim($vars[$ivars]);
-										$ksc = 0;
-										for ($ixsc = 1; $ixsc <= 100; $ixsc++) {
-											$ivars = $ivars + 1;
-											$linea = $vars[$ivars];
-											if (substr($linea, 0, 1) != "S") {
-												$ivars = $ivars - 1;
-												$ixsc = 999;
-											} else {
-												$ksc = $ksc + 1;
-												$filas[] = rtrim($linea);
-											}
-										}
-										if (substr($valortag[$tag], 0, 6) == "aammdd" and isset($arrHttp["Mfn"]) and $arrHttp["Mfn"] == "New") {
-											$valortag[$tag] = date("ymd") . substr($valortag[$tag], 6);
-										}
-										TextBox($linea01, $fondocelda, $titulo, $ver, $len, $tag, $ksc, $tipo, $delrep, "");
-										// The text box opens a table. Following input statements require an table cell
-										echo "\n<tr style='display:none'><td colspan=4>";
-										echo "<input type=hidden name=eti$tag  value=\"" . trim($linea01) . "\">\n";
-										foreach ($filas as $lin) {
-											$lin = trim($lin);
-											echo "<input type=hidden name=eti$tag value=\"$lin\">\n";
-										}
-										echo "\n</td></tr>\n";
-										break;
-									case "E": // Group??
-										$filas = array();
-										$linea01 = $vars[$ivars];
-										$sfld = $vars[$ivars + 1];
-										$sf = explode('|', $sfld);
-										if ($sf[0] != "S") {
-											for ($nx = 0; $nx < count($base_fdt); $nx++) {
-												$ll = $base_fdt[$nx];
-												$ll_a = explode('|', $ll);
-												if ($ll_a[1] == $tag) {
-													$nsc = strlen(trim($ll_a[5]));
-													for ($ixsc = 1; $ixsc <= $nsc; $ixsc++) {
-														$nx = $nx + 1;
-														$linea = $base_fdt[$nx];
-														$filas[] = rtrim($linea);
-													}
-													$nx = 9999;
-												}
-											}
-										} else {
-											for ($ixsc = 1; $ixsc <= $nsc; $ixsc++) {
-												$ivars = $ivars + 1;
-												$linea = $vars[$ivars];
-												$filas[] = rtrim($linea);
-											}
-										}
-										TextBox($linea01, $fondocelda, $titulo, $ver, $len, $tag, $ksc, $tipo, $delrep, "");
-										// The text box opens a table. Following input statements require an table cell
-										echo "\n<tr style='display:none'><td colspan=4>";
-										$linea01C = str_replace("\"", "&quot;", $linea01);
-										echo "<input type=hidden name=eti$tag value=\"$linea01C\">\n";
-										foreach ($filas as $lin) {
-											echo "<input type=hidden name=eti$tag value=\"$lin\">\n";
-										}
-										echo "\n</td></tr>\n";
-										break;
-									//case "M": DibujarCampoFijo($tag,$field_t);
-									//    break;
-									case "T":
-									case "TB":    // Table
-										$filas = array();
-										$field_t = $vars[$ivars];
-										if ($nsc == 0) {
-											echo "\n<td class=\"table-fdt-three\">$titulo</td>\n";
-											DibujarTextRepetible($tag, $fondocelda, $field_t);
-										} else {
-											for ($ixsc = 1; $ixsc <= $nsc; $ixsc++) {
-												$ivars = $ivars + 1;
-												$linea = $vars[$ivars];
-												$filas[] = rtrim($linea);
-											}
-											DibujarTabla($filas, $tag, $fondocelda, $field_t);
-										}
-										echo "\n";
-										break;
-									case "R":    //Radio button
-										$tope = $t[9];
-										echo "\n<td class=\"table-fdt-three\">$titulo</td>\n";
-										$opciones = trim($t[11]);
-										$lt = array();
-										$lin = "";
-										$filas = array();
-										DibujarCheck($filas, $fondocelda, $valortag[$tag], $tag, $opciones, $tope, $tipo_e, $t[5]);
-										break;
-									case "C":    // Check box
-										$tope = $t[9];
-										echo "\n<td class=\"table-fdt-three\">$titulo</td>\n";
-										$opciones = trim($t[11]);
-										$lt = array();
-										DibujarCheck($linea, $fondocelda, $valortag[$tag], $tag, $opciones, $tope, $tipo_e, $t[5]);
-										break;
-									case "S":    // Select simple
-									case "SRO":  // Select simple read only
-									case "M":    // Select multiple
-									case "MRO":  // Select multiple read only
-										if ($t[10] == "D") {
-											TextBox($vars[$ivars], $fondocelda, $titulo, $ver, $len, $tag, $ksc, $rep, $delrep, $ayuda);
-											break;
-										}
-										echo "\n<td class=\"table-fdt-three\">$titulo</td>\n";
-										$opciones = trim($t[11]);
-										DibujarSelect($linea, $fondocelda, $valortag[$tag], $tag, $ksc, $opciones, $rep, $t[5]);
-										break;
-									case "RP":    // Protect record
-										$tope = 1;
-										$filas = array();
-										echo "\n<td class=\"table-fdt-three\">$titulo</td>\n";
-										$opciones = 1;
-										DibujarCheck($filas, $fondocelda, $valortag[$tag], $tag, $opciones, $tope, $tipo_e, $t[5]);
-										break;
-									case "COMBO":    // Combo box
-									case "COMBORO":  // Combo box read only
-										echo "\n<td class=\"table-fdt-three\">$titulo</td>\n";
-										$width = $t[9];
-										if ($width == 0 || $width == "") $width = 50;
-										$width = $width * 5.5;
-										echo "<td>";
-										if ($t[11] == "")
-											$p_combo = $arrHttp["base"];
+									}
+									if ($tipo == "LDR") {
+										if (isset($arrHttp["wks"]))
+											$fe = $arrHttp["wks"];
 										else
-											$p_combo = $t[11];
-										ComboBox($tipo_e, $tag, $width, $rep, $t[10], $p_combo, $t[13], $t[12], $db_path, $arrHttp["base"], $valortag[$tag]);
-										break;
-									case "AI":    // Auto increment 
-										if (
-											$arrHttp["Mfn"] == "New" and !isset($valortag[$tag]) or $OpcionDeEntrada == "presentar_captura"  or
-											$OpcionDeEntrada == "captura_bd"  or $OpcionDeEntrada == "capturar"
-										)
-											$valortag[$tag] = "";
-									case "X":    // Text/Textarea
-									case "U":    // Upload file
-									default:
-										if (!isset($ayuda)) $ayuda = "";
-										$t = explode('|', $vars[$ivars]);
-										if ($t[9] == 0 || $t[9] == "") $t[9] = 100;
-										$len = explode('/', $t[9]);
-										if (count($len) == 1) {
-											TextBox($vars[$ivars], $fondocelda, $titulo, $ver, $len, $tag, $ksc, $rep, $delrep, $ayuda);
-										} else {
-											if ($Repetible == "R") {
-												DibujarTextRepetible($tag, $fondocelda, $vars[$ivars]);
-											} else {
-												TextBox($vars[$ivars], $fondocelda, $titulo, $ver, $len, $tag, $ksc, $rep, $delrep, $ayuda);
+											$fe = "";
+									}
+								}
+								$help = "";
+								if (isset($t[16])) $help = $t[16];
+								if (isset($hlp_tip[$tag]))
+									echo "<a class=\"tooltip\"><i class=\"far fa-life-ring\"></i><span> " . $hlp_tip[$tag] . "</span></a>";
+								if ($help == 1 or $help_url != "") {
+									if ($help_url == "") {
+										if ($t[7] != "I") echo "<a tabindex='-1' class=\"bt-fdt bt-fdt-question\" href=javascript:Ayuda($tag)><i class=\"fas fa-question\"></i></a>";
+									} else {
+										if ($t[7] != "I") echo "<a tabindex='-1' class=\"bt-fdt bt-fdt-question\" href='javascript:msgh=window.open(\"$help_url\",\"help\",\"width=600,height=400\");msgh.focus()'><i class=\"fas fa-question\"></i></a>";
+									}
+								} else {
+									if ($t[7] != "I") echo "";
+								}
+								echo "</td>\n";
+							}
+							$nsc = strlen(rtrim($t[5]));
+							$ixicampo = $ixicampo + 1;
+							if ($tipo != "T" and $tipo != "M" and $tipo != "AI") $tipo_e = $entryType;
+							//if ($tipo=="AI") $tipo_e="AI";
+							if ($tipo == "T") $tipo_e = "E";
+							if ($tipo == "M") $tipo_e = "FF";
+							if ($tipo == "LDR") $tipo_e = "LDR";
+							if ($tipo == "M5") $tipo_e = "M5";
+							if ($entryType == "TB") $tipo_e = "TB";
+							//if ($entryType=="ISO") $tipo_e="ISO";
+							//if ($entryType=="RO")  $tipo_e="RO";
+							//echo "<input type=hidden name=idtag value=$tag>";
+							if (trim($tipo_e) == "") $tipo_e = "X";
+							if (isset($t[15]))
+								if (!$ver and $valortag[$tag] == "") $valortag[$tag] = $t[15];
+							switch ($tipo_e) { // Switch on mix of field type/field type
+								case "M5":    // Date(MARC 005) DATE OF LAST UPDATE (FIELD 005 MARC)
+									$is_marc = "S";
+									if (!isset($default_values) or $default_values != "S") {    //CHECK IF EDITING DEFAULT VALUES
+										$campo = $valortag[$tag];
+										echo "\n<td class='table-fdt-three'>";
+										echo trim($titulo) . "</td>\n";
+										echo "\n<td class='table-fdt-four input-fdt'>\n";
+										if (!$ver) {
+											$campo = date("YmdHi.s");
+											echo "<input type=hidden name=tag$tag id=tag$tag  value=\"" . $campo . "\" >\n";
+										}
+										echo "<small>" . nl2br($campo) . "</small>";
+										echo "</td><tr>\n";
+									}
+									break;
+								case "OC":    // Operator (created)
+									if (!isset($default_values) or $default_values != "S") {    //CHECK IF EDITING DEFAULT VALUES
+										$campo = $valortag[$tag];
+										echo "\n<td class='table-fdt-three'>";
+										echo trim($titulo) . "</td>\n";
+										echo "\n<td class='table-fdt-four input-fdt'>\n";
+										if (!$ver) {
+											if (trim($campo) == "")
+												if ($arrHttp["Mfn"] == 'New') $campo = $_SESSION["login"];
+											echo "<input tabindex='0' type=text name=tag$tag id=tag$tag value=\"" . $campo . "\" size=20 onfocus=blur()>\n";
+										}
+										echo "</td><tr>\n";
+									}
+									break;
+								case "DC":    // Date (created)
+									if (!isset($default_values) or $default_values != "S") {    //CHECK IF EDITING DEFAULT VALUES
+										$campo = $valortag[$tag];
+										echo "\n<td class='table-fdt-three'>";
+										echo trim($titulo) . "</td>\n";
+										echo "\n<td class='table-fdt-four input-fdt'>\n";
+										if (!$ver) {
+											if ($campo == "")
+												if ($arrHttp["Mfn"] == 'New') $campo = date("Ymd h:i:s");
+											echo "<input tabindex='0' type=text name=tag$tag id=tag$tag  value=\"" . $campo . "\" size=20 onfocus=blur()>\n";
+										}
+										echo "</td></td><tr>\n";
+									}
+									break;
+								case "OD":    // Operator and Date
+									if ($arrHttp["Opcion"] != "valdef") {    //CHECK IF EDITING DEFAULT VALUES
+										$campo = $valortag[$tag];
+										$campo_out = "";
+										echo "\n<td class='table-fdt-three'>";
+										if (trim($t[5]) == "") $t[5] = "do";
+										echo trim($titulo) . "</td>\n";
+										echo "\n<td class='table-fdt-four input-fdt'>\n";
+										//Keep only the number of occurrences specified in the column row of the fdt
+										$ix = 0;
+										$ccc = explode("\n", $campo);
+										if ($t[8] == 0 || $t[8] == "") $t[8] = 10;
+										// Reduce less in case of "ver"(==standard display) or "actualizar". Not in case of "editar".
+										if ($OpcionDeEntrada == "ver" || $OpcionDeEntrada == "actualizar") $t[8]++;
+										if (count($ccc) >= $t[8]) {
+											$campo = "";
+											$ix = (int)(count($ccc)) - (int)$t[8] + 1;
+											for ($yx = $ix; $yx < count($ccc); $yx++) {
+												if ($campo == "")
+													$campo = $ccc[$yx];
+												else
+													$campo .= "\n" . $ccc[$yx];
 											}
 										}
+										if ($arrHttp["Opcion"] == "crear") $campo = "";
+										if (!$ver) {
+											if ($reintentar != "S") {
+												if ($campo != "") {
+													$campo .= "\n";
+												}
+												// 24 hour format
+												$campo .= "^" . substr($t[5], 0, 1) . date("Ymd H:i:s") . "^" . substr($t[5], 1, 1) . $_SESSION["login"];
+											}
+											echo "<input type=hidden name=tag$tag id=tag$tag value=\"" . $campo . "\" >\n";
+										}
+										echo "<table>";
+										echo "<tr><td style='width:150px;'>" . $msgstr["it_d"] . "</td><td>" . $msgstr["dboper"] . "</td></tr>\n";
+										$campo_out = explode("\n", $campo);
+										foreach ($campo_out as $var => $value) {
+											if ($value != "") {
+												$val = explode('^', $value);
+												echo "<tr><td>";
+												if (isset($val[1]))  echo substr($val[1], 1);
+												echo "</td><td>";
+												if (isset($val[2]))  echo substr($val[2], 1);
+												echo "</td></tr>";
+											}
+										}
+										echo "</table>\n";
+										echo "</td></tr>\n";
+									}
+									break;
+								case "LDR": // MARC-Leader
+									$is_marc = "S";
+									$filas = array();
+									$linea01 = $vars[$ivars];
+									$ksc = 0;
+									$ldr_tit = array();
+
+									echo "<td style=\"max-width: 80px;\" class=\"table-fdt-three\">$titulo</td><td class=\"table-fdt-four input-fdt\"><table cellpadding=0 cellspacing=0 style='border:none; width:100%; margin:0; table-layout: auto;'>";
+
+									for ($ixsc = 1; $ixsc <= 100; $ixsc++) {
+										$ivars = $ivars + 1;
+										$linea = $vars[$ivars];
+										if (substr($linea, 0, 1) != "S") {	//para detectar el fin de la descripción del leader
+											$ivars = $ivars - 1;
+											$ixsc = 999;
+										} else {
+											$ksc = $ksc + 1;
+											$filas[] = rtrim($linea);
+											$ld = explode('|', $linea);
+											$ldr_tit[$ksc] =  "<tr><td style='border:none; text-align:right; padding:4px 15px 4px 0; color:#555; width:260px;'>" . $ld[2] . " (" . $ld[1] . ")</td>";
+										}
+									}
+									$ksc = 0;
+									foreach ($filas as $linea) {
+										$ksc = $ksc + 1;
+										echo $ldr_tit[$ksc];
+										$ld = explode("|", $linea);
+										// CORREÇÃO: Célula de input interna ajustada para não quebrar botões
+										echo "<td style='border:none; padding:4px 0; text-align:left;'>";
+										$ttmsel = "";
+										if ($ld[1] == 3006) {
+											if (isset($arrHttp["wk_tipom_1"])) {
+												$ttmsel = $arrHttp["wk_tipom_1"];
+											}
+											if ($ttmsel == "") if (isset($valortag[$ld[1]])) $ttmsel = $valortag[$ld[1]];
+										} else {
+											if (isset($valortag[$ld[1]])) $ttmsel = $valortag[$ld[1]];
+										}
+										$ldr_tag[$ksc] = $ld[1];
+										echo "<select name=tag" . $ld[1] . " id=tag" . $ld[1] . ">\n";
+										echo "<option value=\"\"></option>\n";
+										$fpleader = array();
+										if (file_exists($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . $ld[11]))
+											$fpleader = file($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . $ld[11]);
+										else
+											$fpleader = file($db_path . $arrHttp["base"] . "/def/" . $lang_db . "/" . $ld[11]);
+										foreach ($fpleader as $value) {
+											$value = trim($value);
+											if ($value != "") {
+												$v = explode("|", $value . "|||");
+												$selected = "";
+												if (trim($v[0]) == trim($ttmsel)) $selected = " selected";
+												echo "<option value=" . $v[0] . "|" . $v[2] . " $selected>" . trim($v[1]) . "(" . $v[0] . ")</option>\n";
+											}
+										}
+										echo  "</select>";
+										if (isset($_SESSION["permiso"])) {
+											if (
+												isset($_SESSION["permiso"]["db_ALL"]) or isset($_SESSION["permiso"]["CENTRAL_ALL"]) or
+												isset($_SESSION["permiso"][$base . "_CENTRAL_ALL"])  or
+												isset($_SESSION["permiso"][$base . "_CENTRAL_ACTPICKLIST"])
+											) {
+												echo " <a class=\"bt-fdt\" href=\"javascript:AgregarPicklist('" . $ld[11] . "','tag" . $ld[1] . "','')\"><i class=\"fas fa-edit\" title='" . $msgstr["mod_picklist"] . "'></i></a>";
+											}
+											echo " <a class=\"bt-fdt\" href=\"javascript:RefrescarPicklist('" . $ld[11] . "','tag" . $ld[1] . "','')\"><i class=\"fas fa-redo\" title='" . $msgstr["reload_picklist"] . "' ></i></a> &nbsp; ";
+										}
+										echo "\n<input type=hidden name=eti$tag value=\"$linea01\">\n";
+										echo "</td>\n";
+									}
+									echo "</table><br></td></tr>";
+									break;
+								case "B":    // External HTML
+									if ($arrHttp["Mfn"] == "New") {
+										echo "<td><h3><font color=red>you must load the full document as soon as this record is created, using the load icon in the record toolbar</font></h3>";
+									} else {
+										echo "\n<td width=150><a href=internal_html.php?base=" . $arrHttp["base"] . "&Mfn=" . $arrHttp["Mfn"] . "&tag=$tag target=_blank>$titulo</a>\n";
+									}
+									//echo "<!-- &nbsp; &nbsp;<a href=javascript:CopiarHtml(".$tag.",'B','".$arrHttp["Mfn"]."')>upload file</a>-->";
+									echo "</td><td>";
+									echo "</td></tr>";
+									break;
+								case "A":    //HTML area
+									echo "<td class=\"table-fdt-three\">";
+									echo "$titulo";
+									echo "</td>\n";
+									if (!$ver) {
+										DibujarHtmlArea($tag, $vars[$ivars], $t[8], $tipo_e);
+										$a = str_replace("'", "\"", $valortag[$tag]);
+									} else {
+										echo "<br><font class=td>" . $valortag[$tag];
+									}
+									echo "</tr>\n";
+									break;
+								case "D":    // Date
+									$campo = $valortag[$tag];
+									echo "\n<td class=\"table-fdt-three\">";
+									echo trim($titulo) . "</td>\n";
+									echo "\n<td>\n";
+									if (!$ver) {
+										$nextfieldexists = false;
+										if (isset($vars[$ivars + 1])) {
+											//there is another line in the fdt
+											$nextfieldexists = true;
+											$next_field = explode('|', $vars[$ivars + 1]);  //IF THE NEXT FIELD IS AN ISO FIELD CALL THE CONVERSION PROCEDURE
+										}
+										if ($nextfieldexists && trim($next_field[7]) == "ISO") {
+											$date_tag = "tag$tag"; //NAME OF THE ACTUAL FIELD FOR GENERATING THE ISO DATE
+											$iso_tag = "tag" . $next_field[1]; //NAME OF THE ISO FIELD
+										} else {
+											$curr_field = explode('|', $vars[$ivars]);
+											if (trim($curr_field[0]) == "ISO") {
+												$date_tag = "tag$tag"; //NAME OF THE ACTUAL FIELD FOR GENERATING THE ISO DATE
+												$iso_tag = "tag" . $curr_field[1]; //NAME OF THE ISO FIELD
+											} else {
+												$date_tag = "";
+												$iso_tag = "";
+											}
+										}
+										//calendar attaches to existing form element
+?>
+										<input tabindex="0" type="text" name="tag<?php echo $tag; ?>"
+											id="tag<?php echo $tag; ?>_c"
+											value="<?php echo $campo ?>"
+											<?php if ($iso_tag != "") { ?>
+											onChange='Javascript:DateToIso(this.value,document.forma1.<?php echo $iso_tag ?>)'
+											<?php }; ?>>
+										<a class="bt-fdt" id="f_tag<?php echo $tag; ?>">
+											<i class="far fa-calendar-alt" title="Date selector"></i></a>
+										<script>
+											Calendar.setup({
+												inputField: "tag<?php echo $tag ?>_c", // id of the input field
+												ifFormat: "<?php $format = ConvertDateSpec($config_date_format);
+															echo $format ?>",
+												button: "f_tag<?php echo $tag ?>", // trigger for the calendar (button ID)
+												align: '', // alignment (defaults to \"Bl\")
+												singleClick: true
+											});
+										</script>
+									<?php
+									} else {
+										echo $campo;
+									}
+									echo "</td></tr>\n";
+									break;
+								case "ISO":    // ISO date
+									$campo = $valortag[$tag];
+									echo "\n<td class=\"table-fdt-three\">";
+									echo trim($titulo) . "</td>\n";
+									if ($t[4] == 1) {    //SI ES REPETIBLE
+										$field_t = $vars[$ivars];
+										DibujarTextRepetible($tag, $fondocelda, $field_t);
 										break;
-								} //end switch tipo_e
-							}
+									}
+									echo "\n<td>\n";
+									if (!$ver) {
+										//calendar attaches to existing form element
+									?>
+										<input tabindex="0" type="text" name="tag<?php echo $tag; ?>"
+											id="tag<?php echo $tag ?>_c"
+											value="<?php echo $campo ?>"
+											onChange='Javascript:DateToIso(this.value,document.forma1.tag<?php echo $tag ?>)'>
+										<a class="bt-fdt" id="f_tag<?php echo $tag ?>">
+											<i class="far fa-calendar-alt" title="Date selector"></i></a>
+										<script>
+											Calendar.setup({
+												inputField: "tag<?php echo $tag; ?>_c", // id of the input field
+												ifFormat: "<?php $format = ConvertDateSpec($config_date_format);
+															echo $format ?>",
+												button: "f_tag<?php echo $tag ?>", // trigger for the calendar (button ID)
+												align: '', // alignment (defaults to \"Bl\")
+												singleClick: true
+											});
+										</script>
+<?php
+									} else {
+										echo $campo;
+									}
+									if ($Repetible == "R") {
+										echo "<td>\n</table>";
+										echo "<a href=javascript:addRow('" . $tag . "','')>" . $msgstr["add"] . "</a><br><br></td>";
+									}
+									echo "</td></tr>\n";
+									break;
+								case "FF":    //MARC Campo fijo Marc Fixed field
+									$is_marc = "S";
+									$filas = array();
+									$linea01 = rtrim($vars[$ivars]);
+									$ksc = 0;
+									for ($ixsc = 1; $ixsc <= 100; $ixsc++) {
+										$ivars = $ivars + 1;
+										$linea = $vars[$ivars];
+										if (substr($linea, 0, 1) != "S") {
+											$ivars = $ivars - 1;
+											$ixsc = 999;
+										} else {
+											$ksc = $ksc + 1;
+											$filas[] = rtrim($linea);
+										}
+									}
+									if (substr($valortag[$tag], 0, 6) == "aammdd" and isset($arrHttp["Mfn"]) and $arrHttp["Mfn"] == "New") {
+										$valortag[$tag] = date("ymd") . substr($valortag[$tag], 6);
+									}
+									TextBox($linea01, $fondocelda, $titulo, $ver, $len, $tag, $ksc, $tipo, $delrep, "");
+									// The text box opens a table. Following input statements require an table cell
+									echo "\n<tr style='display:none'><td colspan=4>";
+									echo "<input type=hidden name=eti$tag  value=\"" . trim($linea01) . "\">\n";
+									foreach ($filas as $lin) {
+										$lin = trim($lin);
+										echo "<input type=hidden name=eti$tag value=\"$lin\">\n";
+									}
+									echo "\n</td></tr>\n";
+									break;
+								case "E": // Group??
+									GroupRenderer::render($vars[$ivars], $fondocelda, $titulo, $ver, $len, $tag, $ksc, $tipo, $delrep, $ayuda, $vars, $ivars, $nsc);
+									break;
+								case "T":
+								case "TB":    // Table
+									$filas = array();
+									$field_t = $vars[$ivars];
+									if ($nsc == 0) {
+										echo "\n<td class=\"table-fdt-three\">$titulo</td>\n";
+										DibujarTextRepetible($tag, $fondocelda, $field_t);
+									} else {
+										for ($ixsc = 1; $ixsc <= $nsc; $ixsc++) {
+											$ivars = $ivars + 1;
+											$linea = $vars[$ivars];
+											$filas[] = rtrim($linea);
+										}
+										DibujarTabla($filas, $tag, $fondocelda, $field_t);
+									}
+									echo "\n";
+									break;
+								case "R":    //Radio button
+									$tope = $t[9];
+									echo "\n<td class=\"table-fdt-three\">$titulo</td>\n";
+									$opciones = trim($t[11]);
+									$lt = array();
+									$lin = "";
+									$filas = array();
+									DibujarCheck($filas, $fondocelda, $valortag[$tag], $tag, $opciones, $tope, $tipo_e, $t[5]);
+									break;
+								case "C":    // Check box
+									$tope = $t[9];
+									echo "\n<td class=\"table-fdt-three\">$titulo</td>\n";
+									$opciones = trim($t[11]);
+									$lt = array();
+									DibujarCheck($linea, $fondocelda, $valortag[$tag], $tag, $opciones, $tope, $tipo_e, $t[5]);
+									break;
+								case "S":    // Select simple
+								case "SRO":  // Select simple read only
+								case "M":    // Select multiple
+								case "MRO":  // Select multiple read only
+									if ($t[10] == "D") {
+										TextBox($vars[$ivars], $fondocelda, $titulo, $ver, $len, $tag, $ksc, $rep, $delrep, $ayuda);
+										break;
+									}
+									echo "\n<td class=\"table-fdt-three\">$titulo</td>\n";
+									$opciones = trim($t[11]);
+									DibujarSelect($linea, $fondocelda, $valortag[$tag], $tag, $ksc, $opciones, $rep, $t[5]);
+									break;
+								case "RP":    // Protect record
+									$tope = 1;
+									$filas = array();
+									echo "\n<td class=\"table-fdt-three\">$titulo</td>\n";
+									$opciones = 1;
+									DibujarCheck($filas, $fondocelda, $valortag[$tag], $tag, $opciones, $tope, $tipo_e, $t[5]);
+									break;
+								case "COMBO":    // Combo box
+								case "COMBORO":  // Combo box read only
+									echo "\n<td class=\"table-fdt-three\">$titulo</td>\n";
+									$width = $t[9];
+									if ($width == 0 || $width == "") $width = 50;
+									$width = $width * 5.5;
+									echo "<td>";
+									if ($t[11] == "")
+										$p_combo = $arrHttp["base"];
+									else
+										$p_combo = $t[11];
+									ComboBox($tipo_e, $tag, $width, $rep, $t[10], $p_combo, $t[13], $t[12], $db_path, $arrHttp["base"], $valortag[$tag]);
+									break;
+								case "AI":    // Auto increment 
+									if (
+										$arrHttp["Mfn"] == "New" and !isset($valortag[$tag]) or $OpcionDeEntrada == "presentar_captura"  or
+										$OpcionDeEntrada == "captura_bd"  or $OpcionDeEntrada == "capturar"
+									)
+										$valortag[$tag] = "";
+								case "X":    // Text/Textarea
+								case "U":    // Upload file
+								default:
+									if (!isset($ayuda)) $ayuda = "";
+									$t = explode('|', $vars[$ivars]);
+									if ($t[9] == 0 || $t[9] == "") $t[9] = 100;
+									$len = explode('/', $t[9]);
+									if (count($len) == 1) {
+										TextBox($vars[$ivars], $fondocelda, $titulo, $ver, $len, $tag, $ksc, $rep, $delrep, $ayuda);
+									} else {
+										if ($Repetible == "R") {
+											DibujarTextRepetible($tag, $fondocelda, $vars[$ivars]);
+										} else {
+											TextBox($vars[$ivars], $fondocelda, $titulo, $ver, $len, $tag, $ksc, $rep, $delrep, $ayuda);
+										}
+									}
+									break;
+							} //end switch tipo_e
 						}
 					}
 				}
-				echo "\n</table>\n";
-				//if ($t[0]=="H" or $t[0]=="L"  ) echo "</div>";
-				if ($t[0] == "XL") echo "</div>xl";
 			}
-		} //end for loop $ivars
-		if ($cargar_texto == "S") {
-			echo "Cargar texto";
+			echo "\n</table>\n";
+			//if ($t[0]=="H" or $t[0]=="L"  ) echo "</div>";
+			if ($t[0] == "XL") echo "</div>xl";
 		}
-		if (isset($titulo_ant) and $titulo_ant != "*" and $numero_secciones > 1) {
-			echo "\n<a  tabindex='-1' href=\"javascript:switchMenu('myvar_$ixant');\" style=\"text-decoration:none \">";
-			if (substr($titulo_ant, 0, 1) != "<") {
-				echo "<i class=\"far fa-minus-square\" style=\"vertical-align:middle\"></i> <b>" . $msgstr["cerrar"] . "</b> $titulo_ant</a> ";
-			} else {
-				echo $msgstr["cerrar"];
-			}
+	} //end for loop $ivars
+	if ($cargar_texto == "S") {
+		echo "Cargar texto";
+	}
+	if (isset($titulo_ant) and $titulo_ant != "*" and $numero_secciones > 1) {
+		echo "\n<a  tabindex='-1' href=\"javascript:switchMenu('myvar_$ixant');\" style=\"text-decoration:none \">";
+		if (substr($titulo_ant, 0, 1) != "<") {
+			echo "<i class=\"far fa-minus-square\" style=\"vertical-align:middle\"></i> <b>" . $msgstr["cerrar"] . "</b> $titulo_ant</a> ";
+		} else {
+			echo $msgstr["cerrar"];
 		}
-		if ($wrapperopen == true) echo "</div></div>"; // closes the wrapper and div myvar
-		echo "</td></tr></table></form>\n"; // Closing open elements
+	}
+	if ($wrapperopen == true) echo "</div></div>"; // closes the wrapper and div myvar
+	if (isset($tabopen) && $tabopen == true) echo "</div>"; // FECHA A ÚLTIMA ABA
+	echo "</td></tr></table></form>\n"; // Closing open elements
 
 
-		echo "<br>\n";
-		if (file_exists($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . "tesaurus.rel")) {
-			include("../tesaurus/dataentry.php");
-			$tesaurus = "S";
-		}
-		if ($obligatorio == "S")
-			echo "<span style='color:red;'>" . $msgstr["mandatory_field"] . "</span>";
-		echo "\n<script>
+	echo "<br>\n";
+	if (file_exists($db_path . $arrHttp["base"] . "/def/" . $_SESSION["lang"] . "/" . "tesaurus.rel")) {
+		include("../tesaurus/dataentry.php");
+		$tesaurus = "S";
+	}
+	if ($obligatorio == "S")
+		echo "<span style='color:red;'>" . $msgstr["mandatory_field"] . "</span>";
+	echo "\n<script>
     function OpenAll(){
 	secciones=new Array()
 	ixs=-1\n";
-		foreach ($secciones as $value) {
-			echo "
+	foreach ($secciones as $value) {
+		echo "
 	ixs=ixs+1
 	secciones[ixs]='$value'\n";
-		}
-		echo "
+	}
+	echo "
 	for (isecc=0;isecc<secciones.length;isecc++){
 	    nx=secciones[isecc]
 	    switchMenu(nx,isecc)
 	}
     ";
-		echo "}
+	echo "}
     </script>\n";
-		echo "<script>
+	echo "<script>
     tesaurus=\"$tesaurus\"\n
     </script>\n";
 
-		require_once("../dataentry/javascript_validation.php");
+	require_once("../dataentry/javascript_validation.php");
+}
+
+?>
+<style>
+	/* Navigation bar */
+	.abcd-tabs-nav {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 5px;
+		margin: 10px 0 20px 0;
+		border-bottom: 1px solid #b9d8d9;
+		padding-left: 5px;
 	}
-					?>
+
+	.abcd-tab-btn {
+		padding: 10px;
+		background: #e8e8e8;
+		border: 1px solid #ccc;
+		border-bottom: none;
+		cursor: pointer;
+		font-weight: bold;
+		color: #555;
+		border-radius: 4px 4px 0 0;
+		margin-bottom: -1px;
+		font-size: 12px;
+	}
+
+	.abcd-tab-btn:hover {
+		background: #f0f0f0;
+	}
+
+	.abcd-tab-btn.active {
+		background: #fff;
+		color: #005aa9;
+		border-top: 3px solid #005aa9;
+		border-left: 1px solid #b9d8d9;
+		border-right: 1px solid #b9d8d9;
+		border-bottom: 1px solid #fff;
+	}
+
+	/* ---  CLEARING LEGACY ELEMENTS IN TAB MODE --- */
+	/* 1. Hide the '+' button (Fields) in the Actions column */
+	<?php if (ConfigHelper::isInlineSubfieldsEnabled()): ?>.has-tabs .table-fdt-two a[href^="javascript:Campos"] {
+		display: none !important;
+	}
+
+	<?php endif; ?>
+	/* 2. Hide the "Cerrar" link and the bold text of the original accordion */
+	.has-tabs a[href^="javascript:switchMenu"]:not(.header-fdt),
+
+	.has-tabs a[href^="javascript:switchMenu"] i {
+		display: none !important;
+	}
+
+	/* 3. Removes the H header (converts it to a simple H6 heading) */
+	.has-tabs .header-fdt {
+		pointer-events: none !important;
+		background: transparent !important;
+		color: #333 !important;
+		border: none !important;
+		border-bottom: 2px solid #eee !important;
+		margin: 30px 0 15px 8px !important;
+		padding: 0 0 8px 0 !important;
+		font-size: 14px !important;
+		font-weight: bold !important;
+		display: block !important;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+	}
+
+	/* Forces the display of all sections within the tab */
+	.has-tabs .abcd-tab-pane .group-fields {
+		display: block !important;
+		border: none !important;
+		padding: 0 !important;
+	}
+</style>
+
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    var seletores = 'input[type="text"][name^="field"], input[type="text"][name^="tag"], textarea[name^="field"], textarea[name^="tag"]';
-    var campos = document.querySelectorAll(seletores);
+	document.addEventListener("DOMContentLoaded", function() {
+		const panes = document.querySelectorAll('.abcd-tab-pane');
+		if (panes.length > 0) {
+			const form = document.querySelector('form[name="forma1"]');
+			if (form) form.classList.add('has-tabs');
 
-    campos.forEach(function(campo) {
-        if (campo.readOnly || campo.disabled || campo.type === 'hidden' || campo.style.display === 'none') {
-            return;
-        }
+			// Hide the Expand/Collapse button (search by ID or Class, just to be sure)
+			const expandBtn = document.getElementById('expand_colapse_btn') || document.querySelector('.expand_colapse_btn');
+			if (expandBtn) expandBtn.style.display = 'none';
 
-        var btnLimpar = document.createElement('a');
-        btnLimpar.href = 'javascript:void(0);';
-        btnLimpar.title = 'Clear field';
-        btnLimpar.className = 'btn-limpar-abcd'; 
-        btnLimpar.innerHTML = '<i class="fas fa-eraser"></i>'; 
-        
-        campo.parentNode.insertBefore(btnLimpar, campo.nextSibling);
+			const nav = document.createElement('div');
+			nav.className = 'abcd-tabs-nav';
 
-        btnLimpar.addEventListener('click', function(e) {
-            e.preventDefault(); 
-            campo.value = '';
-            campo.focus();
-        });
-    });
-});
+			panes.forEach((pane, idx) => {
+				const btn = document.createElement('div');
+				btn.className = 'abcd-tab-btn';
+				btn.textContent = pane.getAttribute('data-tab-title');
+
+				if (idx === 0) {
+					btn.classList.add('active');
+					pane.style.display = 'block';
+				}
+
+				btn.onclick = () => {
+					document.querySelectorAll('.abcd-tab-btn').forEach(b => b.classList.remove('active'));
+					document.querySelectorAll('.abcd-tab-pane').forEach(p => p.style.display = 'none');
+					btn.classList.add('active');
+					pane.style.display = 'block';
+				};
+				nav.appendChild(btn);
+			});
+
+			const firstPane = panes[0];
+			if (firstPane && firstPane.parentNode) {
+				firstPane.parentNode.insertBefore(nav, firstPane);
+			}
+		}
+	});
 </script>
+<script src="editor/js/clear_field.js"></script>

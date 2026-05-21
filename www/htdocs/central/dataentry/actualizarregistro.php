@@ -263,7 +263,7 @@ function ActualizarRegistro($debugparameter=null){
                     if (strlen($key)==1) $key="000".$key;
                     if (strlen($key)==2) $key="00".$key;
                     if (strlen($key)==3) $key="0".$key;
-                    $parte2=stripslashes($parte2);
+                    //$parte2=stripslashes($parte2);
                     //	$parte2=str_replace("'","&acute;",$parte2);
                     unset($p2);
                     $p2=explode("_",$parte2);
@@ -292,7 +292,7 @@ function ActualizarRegistro($debugparameter=null){
                 if (strlen($key)==1) $key="000".$key;
                 if (strlen($key)==2) $key="00".$key;
                 if (strlen($key)==3) $key="0".$key;
-                $lin=stripslashes($lin);
+                //$lin=stripslashes($lin);
                 //		$lin=str_replace("'","&acute;",$lin);
                 $campo=array();
                 // remove possible trailing \n before explode into array
