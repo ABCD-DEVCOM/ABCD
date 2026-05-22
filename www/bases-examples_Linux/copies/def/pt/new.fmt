@@ -1,6 +1,7 @@
+TAB||Dados da cópia|0|0||||||||||||0||0|0|||
 F|1|Id do Objeto|0|0|||RO|||||||||0||0|0|||
 F|10|Base de dados|0|0|||RO||20|P|%path_database%acquisitions.dat|||||0||0|0|||
-F|30|Número de inventário|0|1|||X||20|||||||0||
+F|30|Número de inventário|0|1|||X||20|||||||0||0|0|||
 F|200|Status|0|0|ab||R||2|P|status_copy.tab|||||0||0|0|||
 F|35|Biblioteca Central|0|0|||S|||P|libraries.tab|||||0||0|0|||
 F|40|Biblioteca Setorial|0|0|||X|||||||||0||0|0|||
@@ -11,12 +12,12 @@ F|68|Tipo de aquisição|0|0|ab||R||1|P|acquiredby.tab|||||0||0|0|||
 F|70|Fornecedor/Doador/Instituição|0|0|||X|||D|providers|NA_|v10|v10||0||0|0|||
 F|80|Data de chegada|0|0|||D|||||||||0||0|0|||
 F|85|Data de chegada ISO|0|0|||ISO||10|||||||0||0|0|||
-L||COMPRA:|0|0||||||||||||0||0|0|||
+TAB||Compra|0|0||||||||||||0||0|0|||
 F|90|Preço|0|0|||X||10|||||||0||0|0|||
 F|95|Fornecedor|0|0|||X|||||||||0||0|0|||
 F|100|Ordem de compra|0|0|||X||20|||||||0||0|0|||
 F|110|Número da sugestão|0|0|||X||20|||||||0||0|0|||
-L||DOAçÃO:|0|0||||||||||||0||0|0|||
+TAB||Doação ou permuta|0|0||||||||||||0||0|0|||
 F|300|Condições|0|1|||X|||||||||0||0|0|||
 L||PERMUTA|0|0||||||||||||0||0|0|||
 F|400|Em troca de|0|1|||X|||||||||0||0|0|||
