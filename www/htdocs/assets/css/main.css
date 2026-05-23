@@ -3684,3 +3684,339 @@ div.ABCD_menu:hover {
         break-inside: avoid !important;
     }
 }
+
+
+/* =======================================================
+   ESTILOS PARA O EDITOR DE PERFIS (profile_edit.php)
+   ======================================================= */
+.profile-header-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #b9d8d9;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.profile-header-info .form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 250px;
+}
+
+.profile-header-info .form-group label {
+    font-weight: 600;
+    color: #005aa9;
+    margin-bottom: 5px;
+}
+
+.profile-header-info .form-group input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Sistema de Abas do Perfil */
+.abcd-tabs-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 10px 0 20px 0;
+    border-bottom: 2px solid #b9d8d9;
+    padding-left: 5px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #f8f8f8;
+    padding-top: 10px;
+}
+
+.abcd-tab-btn {
+    padding: 10px 20px;
+    background: #e2e8f0;
+    color: #495057;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s, color 0.2s;
+    border: 1px solid transparent;
+    border-bottom: none;
+}
+
+.abcd-tab-btn:hover {
+    background: #cbd3da;
+}
+
+.abcd-tab-btn.active {
+    background: #005aa9;
+    color: #fff;
+    border-color: #005aa9;
+}
+
+.abcd-tab-pane {
+    display: none;
+}
+
+/* Cards de Banco de Dados e Permissões */
+.abcd-card {
+    background: #fff;
+    border: 1px solid #e0e6ed;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+    overflow: hidden;
+}
+
+.abcd-card-header {
+    background: #f0f4f8;
+    padding: 12px 20px;
+    border-bottom: 1px solid #e0e6ed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.abcd-card-header h4 {
+    margin: 0;
+    color: #003366;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.abcd-card-body {
+    padding: 20px;
+}
+
+/* Grid de Checkboxes */
+.abcd-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.abcd-checkbox-group {
+    background: #fafcfc;
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.abcd-checkbox-group h5 {
+    margin: 0 0 10px 0;
+    color: #555;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.abcd-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.abcd-checkbox-item input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    accent-color: #005aa9;
+}
+
+/* =======================================================
+   ESTILOS PARA O EDITOR DE PERFIS (Sanfona e Badges)
+   ======================================================= */
+.profile-header-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #b9d8d9;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.profile-header-info .form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 250px;
+}
+
+.profile-header-info .form-group label {
+    font-weight: 600;
+    color: #005aa9;
+    margin-bottom: 5px;
+}
+
+.profile-header-info .form-group input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Sistema de Abas do Perfil */
+.abcd-tabs-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 10px 0 20px 0;
+    border-bottom: 2px solid #b9d8d9;
+    padding-left: 5px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #f8f8f8;
+    padding-top: 10px;
+}
+
+.abcd-tab-btn {
+    padding: 10px 20px;
+    background: #e2e8f0;
+    color: #495057;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s, color 0.2s;
+    border: 1px solid transparent;
+    border-bottom: none;
+}
+
+.abcd-tab-btn:hover {
+    background: #cbd3da;
+}
+
+.abcd-tab-btn.active {
+    background: #005aa9;
+    color: #fff;
+    border-color: #005aa9;
+}
+
+.abcd-tab-pane {
+    display: none;
+}
+
+/* Estrutura de Sanfona (Accordion) para as Bases de Dados */
+.abcd-accordion-item {
+    background: #fff;
+    border: 1px solid #e0e6ed;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+
+.abcd-accordion-header {
+    background: #f0f4f8;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+}
+
+.abcd-accordion-header:hover {
+    background: #e4ecf4;
+}
+
+.abcd-accordion-header h4 {
+    margin: 0;
+    color: #003366;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.abcd-accordion-header h4 i.fa-chevron-down {
+    transition: transform 0.2s;
+    font-size: 12px;
+    color: #888;
+}
+
+.abcd-accordion-item.open .abcd-accordion-header h4 i.fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+.abcd-accordion-content {
+    display: none;
+    padding: 20px;
+    border-top: 1px solid #e0e6ed;
+    background: #fff;
+}
+
+.abcd-accordion-item.open .abcd-accordion-content {
+    display: block;
+}
+
+/* Recurso Visual: Alerta de itens marcados com a sanfona encolhida */
+.abcd-badge-count {
+    background-color: #005aa9;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: none;
+}
+
+.abcd-accordion-item.has-checked {
+    border-left: 4px solid #005aa9;
+}
+
+.abcd-accordion-item.has-checked .abcd-badge-count {
+    display: inline-block;
+}
+
+/* Grid de Checkboxes Internos */
+.abcd-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.abcd-checkbox-group {
+    background: #fafcfc;
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.abcd-checkbox-group h5 {
+    margin: 0 0 10px 0;
+    color: #555;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.abcd-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.abcd-checkbox-item input[type="checkbox"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    accent-color: #005aa9;
+}
