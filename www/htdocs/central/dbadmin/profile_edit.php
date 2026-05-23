@@ -3,214 +3,146 @@
 20220123 fho4abcd buttons+div-helper
 20220715 fho4abcd Use $actparfolder as location for .par files, note only acces databases
 20240519 fho4abcd Correct $loc_actparfolder while deleting a profile
+20260523 rogercgui Interface Refactoring - Dynamic Accordions, Administration Scope Correction, and UX
 */
-/**
- * @program:   ABCD - ABCD-Central - http://reddes.bvsaude.org/projects/abcd
- * @copyright:  Copyright (C) 2009 BIREME/PAHO/WHO - VLIR/UOS
- * @file:      profile_edit.php
- * @desc:
- * @author:    Guilda Ascencio
- * @since:     20091203
- * @version:   1.0
- *
- * == BEGIN LICENSE ==
- *
- *    This program is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU Lesser General Public License as
- *    published by the Free Software Foundation, either version 3 of the
- *    License, or (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * == END LICENSE ==
-*/
+
 global $arrHttp;
 session_start();
-if (!isset($_SESSION["permiso"])){
-	header("Location: ../common/error_page.php") ;
+if (!isset($_SESSION["permiso"])) {
+	header("Location: ../common/error_page.php");
 }
 
 include("../common/get_post.php");
 include("../config.php");
 include("../common/header.php");
-$lang=$_SESSION["lang"];
+$lang = $_SESSION["lang"];
 include("../lang/admin.php");
 include("../lang/dbadmin.php");
 include("../lang/profile.php");
-//foreach ($arrHttp as $var => $value) echo "$var = $value<br>";
+
 echo "<body>\n";
-if (isset($arrHttp["encabezado"])){
+if (isset($arrHttp["encabezado"])) {
 	include("../common/institutional_info.php");
-	$encabezado="&encabezado=s";
-}else{
-	$encabezado="";
+	$encabezado = "&encabezado=s";
+} else {
+	$encabezado = "";
 }
 ?>
 <script language="JavaScript" type="text/javascript" src=../dataentry/js/lr_trim.js></script>
 <script>
-//VERIFICA SI ESTA MARCADO ALL PARA TODAS LAS BASES DE DATOS PARA TAMBIEN MARCAR LA CASILLA DE NIVEL SUPERIOR
-function CheckAll(){
-	ixnum_db=0;
-	ixchk_db=0;
-	ixALL=0;
-	for (db in datab){
-	   ixnum_db=ixnum_db+1
-		ctrl=eval("document.profile.db_"+db)
-		if (ctrl.checked)
-			ixchk_db=ixchk_db+1
-		ctrl=eval("document.profile."+db+"_CENTRAL_ALL")
-		if (ctrl.checked)
-			ixALL=ixALL+1
-
+	// Main Tabs Switcher
+	function switchProfileTab(tabId, btnElement) {
+		document.querySelectorAll('.abcd-tab-btn').forEach(b => b.classList.remove('active'));
+		document.querySelectorAll('.abcd-tab-pane').forEach(p => p.style.display = 'none');
+		btnElement.classList.add('active');
+		document.getElementById(tabId).style.display = 'block';
 	}
-	if (ixALL==ixnum_db && ixchk_db==ixnum_db){
-		document.profile.db_ALL.checked=true
+
+	// Accordion Alternator for Databases
+	function toggleAccordion(id) {
+		const item = document.getElementById(id);
+		if (item) {
+			item.classList.toggle('open');
+		}
 	}
-}
 
-function returnObjById( id ){
-    if (document.getElementById)
-        var returnVar = document.getElementById(id);
-    else if (document.all)
-        var returnVar = document.all[id];
-    else if (document.layers)
-        var returnVar = document.layers[id];
-    return returnVar;
-}
-
-function getElement(psID) {
-	if(!document.all) {
-		return document.getElementById(psID);
-
-	} else {
-		return document.all[psID];
+	// Select all permissions for a specific database and update the badge
+	function toggleDbAll(dbName, isChecked) {
+		const checkboxes = document.querySelectorAll(`input[data-db="${dbName}"]`);
+		checkboxes.forEach(cb => {
+			cb.checked = isChecked;
+		});
+		if (isChecked) {
+			const dbMaster = document.querySelector(`input[name="db_${dbName}"]`);
+			if (dbMaster) dbMaster.checked = true;
+		}
+		updateAccordionBadges();
 	}
-}
 
-function DeleteProfile(Profile){
-	if (confirm("<?PHP echo $msgstr["DELETE"]?> "+Profile))
-		self.location.href="profile_edit.php?profile="+Profile+"&Opcion=delete&encabezado=<?php echo $encabezado?>"
+	// Select all options within a subgroup (e.g., All Formats of a database)
+	function toggleGroup(groupClass, isChecked) {
+		const checkboxes = document.querySelectorAll(`.${groupClass}`);
+		checkboxes.forEach(cb => cb.checked = isChecked);
+		updateAccordionBadges();
+	}
 
-}
+	// Select all databases in the system
+	function toggleGlobalAllBases(isChecked) {
+		const checkboxes = document.querySelectorAll('.chk-is-db');
+		checkboxes.forEach(cb => cb.checked = isChecked);
+		updateAccordionBadges();
+	}
 
-function AllDatabases(){
-	ixdb=document.profile.elements.length
-	for (id=0;id<ixdb;id++){
-		ctrl=document.profile.elements[id].name
-		if (ctrl.substr(0,3)=="db_") {
-			if (document.profile.db_ALL.checked){
-				document.profile.elements[id].checked=true
-			}else{
-				document.profile.elements[id].checked=false
+	function toggleGlobalModule(modulePrefix, isChecked) {
+		const checkboxes = document.querySelectorAll(`input[data-module="${modulePrefix}"]`);
+		checkboxes.forEach(cb => cb.checked = isChecked);
+	}
+
+	// Calculate in real-time how many items are checked and update the collapsed accordion
+	function updateAccordionBadges() {
+		document.querySelectorAll('.abcd-accordion-item').forEach(item => {
+			const content = item.querySelector('.abcd-accordion-content');
+			const checkedCount = content.querySelectorAll('input[type="checkbox"]:checked').length;
+			const badge = item.querySelector('.abcd-badge-count');
+
+			if (checkedCount > 0) {
+				item.classList.add('has-checked');
+				if (badge) badge.textContent = checkedCount;
+			} else {
+				item.classList.remove('has-checked');
 			}
-		}
-		c=ctrl.split("_")
-		if (c[1]=="pft" || c[1]=="fmt" || c[2]=="ALL"){
-			if (c[2]=="ALL"){
-				if (document.profile.db_ALL.checked){
-					document.profile.elements[id].checked=true
-				}else{
-					document.profile.elements[id].checked=false
-				}
-			}
-		}
+		});
 	}
-}
 
-function AllPermissions(){
-	ixdb=document.profile.elements.length
-	for (id=0;id<ixdb;id++){
-		ctrl=document.profile.elements[id].name
-
-		if (ctrl.substr(0,7)=="CENTRAL") {
-			if (document.profile.CENTRAL_ALL.checked)
-				document.profile.elements[id].checked=true
-			else
-				document.profile.elements[id].checked=false
+	// Initializing scopes and listening for events
+	document.addEventListener('DOMContentLoaded', function() {
+		updateAccordionBadges();
+		const tabDb = document.getElementById('tab-db');
+		if (tabDb) {
+			tabDb.addEventListener('change', updateAccordionBadges);
 		}
+	});
+
+	function ValidateName(Name) {
+		return /^[a-z][\w]+$/i.test(Name);
 	}
-}
 
-function AllPermissionsCirculation(){
-	ixdb=document.profile.elements.length
-	for (id=0;id<ixdb;id++){
-		ctrl=document.profile.elements[id].name
+	function SendForm() {
+		let Name = Trim(document.profile.profilename.value);
+		Name = Name.replace(/  /gi, ' ').replace(/ /gi, '_');
+		document.profile.profilename.value = Name;
 
-		if (ctrl.substr(0,4)=="CIRC") {
-			if (document.profile.CIRC_CIRCALL.checked)
-				document.profile.elements[id].checked=true
-			else
-				document.profile.elements[id].checked=false
+		if (Name == "") {
+			alert("<?php echo $msgstr["MISSPROFNAME"] ?>");
+			return;
 		}
+		if (!ValidateName(Name)) {
+			alert("<?php echo $msgstr["INVPROFNAME"] ?>");
+			return;
+		}
+		if (Trim(document.profile.profiledesc.value) == "") {
+			alert("<?php echo $msgstr["MISSPROFDESC"] ?>");
+			return;
+		}
+		document.profile.submit();
 	}
-}
 
-function AllPermissionsAcquisitions(){
-	ixdb=document.profile.elements.length
-	for (id=0;id<ixdb;id++){
-		ctrl=document.profile.elements[id].name
-
-		if (ctrl.substr(0,3)=="ACQ") {
-			if (document.profile.ACQ_ACQALL.checked)
-				document.profile.elements[id].checked=true
-			else
-				document.profile.elements[id].checked=false
+	function DeleteProfile(Profile) {
+		if (confirm("<?PHP echo $msgstr["DELETE"] ?> " + Profile)) {
+			self.location.href = "profile_edit.php?profile=" + Profile + "&Opcion=delete&encabezado=<?php echo $encabezado ?>";
 		}
 	}
-}
-function ValidateName(Name){
-	bool=  /^[a-z][\w]+$/i.test(Name)
- 	if (bool){
-        return true
-   	}else {
-      	return false
-   	}
-}
-
-function SendForm(){
-	Name=Trim(document.profile.profilename.value)
-	re=/  /gi
-	Name=Name.replace(re,' ')
-	re=/ /gi
-	Name=Name.replace(re,'_')
-	document.profile.profilename.value=Name
-	if (Name==""){
-		alert("<?php echo $msgstr["MISSPROFNAME"]?>")
-		return
-	}
-	if (!ValidateName(Name)){
-		alert("<?php echo $msgstr["INVPROFNAME"]?>")
-		return
-	}
-	if (Trim(document.profile.profiledesc.value)==""){
-		alert("<?php echo $msgstr["MISSPROFDESC"]?>")
-		return
-	}
-    document.profile.submit()
-}
 </script>
 
 <?php
-//CHECK ACTION FOR RETURN
-if (!isset($arrHttp["Opcion"])){
-	$ret="../dataentry/browse.php?showdeleted=yes&encabezado=s&base=acces&cipar=acces.par".$encabezado;
-}else{
-
-	switch ($arrHttp["Opcion"]){
+if (!isset($arrHttp["Opcion"])) {
+	$ret = "../dataentry/browse.php?showdeleted=yes&encabezado=s&base=acces&cipar=acces.par" . $encabezado;
+} else {
+	switch ($arrHttp["Opcion"]) {
 		case "edit":
-			$ret="profile_edit.php?xx=s".$encabezado;
-			break;
 		case "new":
-			$ret="profile_edit.php?xx=s".$encabezado;
-			break;
 		case "delete":
-			$ret="profile_edit.php?xx=s".$encabezado;
+			$ret = "profile_edit.php?xx=s" . $encabezado;
 			break;
 	}
 }
@@ -218,381 +150,332 @@ if (!isset($arrHttp["Opcion"])){
 
 <div class="sectionInfo">
 	<div class="breadcrumb">
-<?php echo $msgstr["PROFILES"]?>
+		<?php echo $msgstr["PROFILES"] ?>
 	</div>
 	<div class="actions">
-    <?php
-    if (isset($arrHttp["Opcion"])and $arrHttp["Opcion"]!="delete"){
-        $savescript="javascript:SendForm()";
-        include "../common/inc_save.php";
-    }
-    $backtoscript=$ret;
-    include "../common/inc_back.php";
-    include "../common/inc_home.php";
-    ?>
+		<?php
+		if (isset($arrHttp["Opcion"]) and $arrHttp["Opcion"] != "delete") {
+			$savescript = "javascript:SendForm()";
+			include "../common/inc_save.php";
+		}
+		$backtoscript = $ret;
+		include "../common/inc_back.php";
+		include "../common/inc_home.php";
+		?>
 	</div>
 	<div class="spacer">&#160;</div>
 </div>
 <?php
-$ayuda="profiles.html";
+$ayuda = "profiles.html";
 include "../common/inc_div-helper.php";
 ?>
 <div class="middle form">
 	<div class="formContent">
-<form name=profile action=profile_save.php onsubmit="javascript:return false" method=post>
-<?php
-if (isset($arrHttp["encabezado"]))
-	echo "<input type=hidden name=encabezado value=S>\n";
-if (!isset($arrHttp["Opcion"])){
-	DisplayProfiles();
-}else{
+		<form name="profile" action="profile_save.php" onsubmit="javascript:return false" method="post">
+			<?php
+			if (isset($arrHttp["encabezado"]))
+				echo "<input type=hidden name=encabezado value=S>\n";
 
-	switch ($arrHttp["Opcion"]){
-		case "edit":
-			EditProfile();
-			break;
-		case "new":
-			NewProfile("");
-			break;
-		case "delete":
-			DeleteProfile();
-			break;
-	}
-}
-?>
-
-	</form>
+			if (!isset($arrHttp["Opcion"])) {
+				DisplayProfiles();
+			} else {
+				switch ($arrHttp["Opcion"]) {
+					case "edit":
+						EditProfile();
+						break;
+					case "new":
+						NewProfile("");
+						break;
+					case "delete":
+						DeleteProfile();
+						break;
+				}
+			}
+			?>
+		</form>
 	</div>
 </div>
-</center>
 
 <?php
 include("../common/footer.php");
-?>
 
-
-<?php
-function DisplayProfiles(){
-global $db_path,$msgstr,$encabezado;
+function DisplayProfiles()
+{
+	global $db_path, $msgstr, $encabezado;
 	echo "<table>";
-	$fp=file($db_path."par/profiles/profiles.lst");
-	foreach ($fp as $val){
-		$val=trim($val);
-		if ($val!=""){
-			$p=explode('|',$val);
-            if ($p[0]!="adm"){
-            	?>
-
-
+	$fp = file($db_path . "par/profiles/profiles.lst");
+	foreach ($fp as $val) {
+		$val = trim($val);
+		if ($val != "") {
+			$p = explode('|', $val);
+			if ($p[0] != "adm") {
+?>
 				<tr>
+					<td><?php echo $p[1] . " (" . $p[0] . ")"; ?></td>
 					<td>
-						<?php echo $p[1]." (".$p[0].")";?>
+						<a class="bt bt-blue show" href="profile_edit.php?profile=<?php echo $p[0] . $encabezado; ?>&Opcion=edit">
+							<i class="far fa-edit"></i> <?php echo $msgstr["EDIT"]; ?></a>
+						<a class="bt bt-red delete" href="javascript:DeleteProfile('<?php echo $p[0]; ?>')">
+							<i class="far fa-trash-alt"></i> <?php echo $msgstr["delete"]; ?></a>
 					</td>
-					<td>
-						<a class="bt bt-blue show" href="profile_edit.php?profile=<?php echo $p[0].$encabezado;?>&Opcion=edit">
-							<i class="far fa-edit"></i> <?php echo $msgstr["EDIT"];?>
-						<a class="bt bt-red delete" href="javascript:DeleteProfile('<?php echo $p[0];?>')">
-							<i class="far fa-trash-alt"></i> <?php echo $msgstr["delete"];?>
-						</a>
-					</td>
-<?php 
-			}
-		}
-	}
-?>
-		</table>
-		<br>
-		<a class="bt bt-blue edit" href="profile_edit.php?Opcion=new&encabezado=s">
-			<i class="fas fa-plus"></i> <?php echo $msgstr["new"];?>
-		</a>
-
-<?php
-}
-
-function DeleteProfile(){
-global $actparfolder, $db_path,$msgstr,$lang_db,$arrHttp,$xWxis,$wxisUrl,$Wxis;
-// READ ACCES DATABASE AND FIND IF THE PROFILE IS IN USE
-	$loc_actparfolder=$actparfolder;
-    if ($actparfolder!="par/") {
-        // recompute $actparfolder for the current base
-        $loc_actparfolder="acces/";
-    }
-	$IsisScript=$xWxis."leer_mfnrange.xis";
-	$query = "&base=acces&cipar=$db_path".$loc_actparfolder."acces.par"."&Pft=v40^a/";
-	include("../common/wxis_llamar.php");
-	 foreach ($contenido as $linea){
-	 	if (trim($linea)==$arrHttp["profile"]){
-	 		echo "<h2>".$msgstr["INUSE"]."<h2>";
-	 		return;
-	 	}
-	}
-    $fp=file($db_path."par/profiles/profiles.lst");
-    $new=fopen($db_path."par/profiles/profiles.lst","w");
-    foreach ($fp as $prof){
-    	$p=explode('|',$prof);
-    	if ($p[0]!=trim($arrHttp["profile"]))
-    		$res=fwrite($new,$prof);
-    }
-    fclose($new);
-    $res=unlink($db_path."par/profiles/".$arrHttp["profile"]);
-	if ($res==0){
-		echo $arrHttp["profile"].": The file could not be deleted";
-	}else{
-		?>
-		<h2>
-			<?php echo $arrHttp["profile"]." ".$msgstr["deleted"];?>
-		</h2>
-		<a class="button_browse show" href="profile_edit.php?base=&encabezado=s">
-			<?php echo $msgstr["back"];?>
-		</a>
+				</tr>
 	<?php
+			}
+		}
+	}
+	echo "</table><br>";
+	echo "<a class='bt bt-blue edit' href='profile_edit.php?Opcion=new&encabezado=s'><i class='fas fa-plus'></i> " . $msgstr["new"] . "</a>";
+}
+
+function DeleteProfile()
+{
+	global $actparfolder, $db_path, $msgstr, $lang_db, $arrHttp, $xWxis, $wxisUrl, $Wxis;
+	$loc_actparfolder = $actparfolder;
+	if ($actparfolder != "par/") {
+		$loc_actparfolder = "acces/";
+	}
+	$IsisScript = $xWxis . "leer_mfnrange.xis";
+	$query = "&base=acces&cipar=$db_path" . $loc_actparfolder . "acces.par" . "&Pft=v40^a/";
+	include("../common/wxis_llamar.php");
+	foreach ($contenido as $linea) {
+		if (trim($linea) == $arrHttp["profile"]) {
+			echo "<h2>" . $msgstr["INUSE"] . "<h2>";
+			return;
+		}
+	}
+	$fp = file($db_path . "par/profiles/profiles.lst");
+	$new = fopen($db_path . "par/profiles/profiles.lst", "w");
+	foreach ($fp as $prof) {
+		$p = explode('|', $prof);
+		if ($p[0] != trim($arrHttp["profile"]))
+			fwrite($new, $prof);
+	}
+	fclose($new);
+	$res = unlink($db_path . "par/profiles/" . $arrHttp["profile"]);
+	if ($res == 0) {
+		echo $arrHttp["profile"] . ": The file could not be deleted";
+	} else {
+		echo "<h2>" . $arrHttp["profile"] . " " . $msgstr["deleted"] . "</h2>";
+		echo "<a class='button_browse show' href='profile_edit.php?base=&encabezado=s'>" . $msgstr["back"] . "</a>";
 	}
 }
 
-function EditProfile(){
-global $db_path,$msgstr,$lang_db,$arrHttp;
-
-    $fp=file($db_path."par/profiles/".$arrHttp["profile"]);
-    NewProfile($arrHttp["profile"]);
+function EditProfile()
+{
+	global $db_path, $msgstr, $lang_db, $arrHttp;
+	NewProfile($arrHttp["profile"]);
 }
 
-function NewProfile($profile){
-global $db_path,$msgstr,$lang_db,$profiles_path;
-	$fprofile=file("profiles.tab");
-	$module="CENTRAL";
-	foreach ($fprofile as $p){
-		$p=trim($p);
-		if ($p=="[CIRCULATION]"){
-			$module="CIRC";
-		}else{
-			if ($p=="[ACQUISITIONS]"){
-				$module="ACQ";
-			}else{
-				if ($p=="[ADMINISTRATION]"){
-					$module="ADM";
-				}else{
-					$p=trim($p);
-					if ($p!=""){
-						$p_el=explode("=",$p);
-						$profile_usr[$module."_".$p_el[0]]="";
-						$profile_general[$module][$p_el[0]]=$p;
-					}
+function NewProfile($profile)
+{
+	global $db_path, $msgstr, $lang_db, $profiles_path, $_SESSION;
+
+	$profile_usr = array();
+	$profile_general = array();
+
+	$fprofile = file("profiles.tab");
+	$module = "CENTRAL"; // Padrão raiz mapeado para a aba ADMINISTRATION
+	foreach ($fprofile as $p) {
+		$p = trim($p);
+		if ($p == "[CIRCULATION]") {
+			$module = "CIRC";
+		} elseif ($p == "[ACQUISITIONS]") {
+			$module = "ACQ";
+		} elseif ($p == "[ADMINISTRATION]") {
+			$module = "ADM";
+		} elseif ($p != "") {
+			$p_el = explode("=", $p);
+			$profile_usr[$module . "_" . $p_el[0]] = "";
+			$profile_general[$module][$p_el[0]] = $p;
+		}
+	}
+
+	if ($profile != "") {
+		if (file_exists($db_path . "par/profiles/" . $profile)) {
+			$fprofile = file($db_path . "par/profiles/" . $profile);
+			foreach ($fprofile as $p) {
+				$p = trim($p);
+				if ($p != "") {
+					$p_el = explode("=", $p);
+					$profile_usr[$p_el[0]] = $p_el[1];
 				}
 			}
 		}
 	}
-//	echo "<pre>".print_r($profile_usr)."</pre>";die;
-	if ($profile!=""){
-		$fprofile=file($db_path."par/profiles/".$profile);
-		foreach ($fprofile as $p){
-			$p=trim($p);
-			if ($p!=""){
-				$p_el=explode("=",$p);
-				$profile_usr[$p_el[0]]=$p_el[1];
-			}
+	?>
+	<div class="profile-header-info">
+		<div class="form-group">
+			<label><?php echo $msgstr["PROFILENAME"]; ?></label>
+			<input type="text" name="profilename" value="<?php echo isset($profile_usr["profilename"]) ? $profile_usr["profilename"] : ''; ?>">
+		</div>
+		<div class="form-group" style="flex: 3;">
+			<label><?php echo $msgstr["PROFILEDESC"]; ?></label>
+			<input type="text" name="profiledesc" value="<?php echo isset($profile_usr["profiledesc"]) ? $profile_usr["profiledesc"] : ''; ?>">
+		</div>
+	</div>
+
+	<div class="abcd-tabs-nav">
+		<div class="abcd-tab-btn active" onclick="switchProfileTab('tab-db', this)"><i class="fas fa-database"></i> <?php echo $msgstr["bd"] ?? "Databases"; ?></div>
+		<div class="abcd-tab-btn" onclick="switchProfileTab('tab-sys', this)"><i class="fas fa-cogs"></i> <?php echo $msgstr["administracion"] ?? "Administration"; ?></div>
+		<div class="abcd-tab-btn" onclick="switchProfileTab('tab-circ', this)"><i class="fas fa-sync"></i> <?php echo $msgstr["circulation"] ?? "Circulation"; ?></div>
+		<div class="abcd-tab-btn" onclick="switchProfileTab('tab-acq', this)"><i class="fas fa-shopping-cart"></i> <?php echo $msgstr["acquisitions"] ?? "Acquisitions"; ?></div>
+	</div>
+
+	<div id="tab-db" class="abcd-tab-pane" style="display: block;">
+		<div style="margin-bottom: 15px; background: #fff; padding: 12px 20px; border-radius: 6px; border: 1px solid #b9d8d9;">
+			<label class="abcd-checkbox-item" style="font-weight: bold; margin: 0;">
+				<input type="checkbox" name="db_ALL" value="ALL" onclick="toggleGlobalAllBases(this.checked)">
+				<span style="color: darkred;"><?php echo $msgstr["ALL"]; ?> (Select all databases)</span>
+			</label>
+		</div>
+
+		<?php
+		$fp = file($db_path . "bases.dat");
+		foreach ($fp as $dbs) {
+			$dbs = trim($dbs);
+			if ($dbs == "") continue;
+			$dd = explode('|', $dbs);
+			$dbn = $dd[0];
+
+			if ($dbn == "acces") continue;
+			$isChecked = isset($profile_usr["db_" . $dbn]) ? "checked" : "";
+		?>
+			<div class="abcd-accordion-item" id="acc-db-<?php echo $dbn; ?>">
+				<div class="abcd-accordion-header" onclick="toggleAccordion('acc-db-<?php echo $dbn; ?>')">
+					<h4>
+						<i class="fas fa-chevron-down"></i>
+						<input type="checkbox" class="chk-is-db" name="db_<?php echo $dbn; ?>" value="<?php echo $dbn; ?>" data-db="<?php echo $dbn; ?>" <?php echo $isChecked; ?> onclick="event.stopPropagation(); if(!this.checked) toggleDbAll('<?php echo $dbn; ?>', false)">
+						<?php echo $dd[1] . " (" . $dbn . ")"; ?>
+					</h4>
+					<div style="display: flex; align-items: center; gap: 15px;" onclick="event.stopPropagation();">
+						<span class="abcd-badge-count">0</span>
+						<label class="abcd-checkbox-item" style="margin:0; font-size: 12px; color: #555; font-weight: 600;">
+							<input type="checkbox" onclick="toggleDbAll('<?php echo $dbn; ?>', this.checked)"> <?php echo $msgstr["ALL"]; ?>
+						</label>
+					</div>
+				</div>
+
+				<div class="abcd-accordion-content">
+					<div class="abcd-grid-3">
+
+						<div class="abcd-checkbox-group">
+							<h5><?php echo $msgstr["DATAENTRY"]; ?></h5>
+							<?php
+							$chk_all_cen = isset($profile_usr[$dbn . "_CENTRAL_ALL"]) ? "checked" : "";
+							echo "<label class='abcd-checkbox-item'><input type='checkbox' name='{$dbn}_CENTRAL_ALL' data-db='{$dbn}' class='chk-cen-{$dbn}' onclick=\"toggleGroup('chk-cen-{$dbn}', this.checked)\" {$chk_all_cen}> <strong>" . $msgstr["ALL"] . "</strong></label>";
+
+							foreach ($profile_usr as $key => $value) {
+								if (substr($key, 0, 7) == "CENTRAL") {
+									$k = explode("_", $key);
+									if (in_array($k[1], ["CRDB", "TRANSLATE", "USRADM", "EDHLPSYS"])) continue;
+
+									$chk = isset($profile_usr[$dbn . "_" . $key]) ? "checked" : "";
+									echo "<label class='abcd-checkbox-item'><input type='checkbox' name='{$dbn}_{$key}' value='Y' data-db='{$dbn}' class='chk-cen-{$dbn}' {$chk}> " . $msgstr[$k[1]] . "</label>";
+								}
+							}
+							?>
+						</div>
+
+						<div class="abcd-checkbox-group">
+							<h5><?php echo $msgstr["DISPLAYFORMAT"]; ?></h5>
+							<?php
+							$file = $db_path . $dbn . "/pfts/" . $_SESSION["lang"] . "/formatos.dat";
+							if (!file_exists($file)) $file = $db_path . $dbn . "/pfts/" . $lang_db . "/formatos.dat";
+
+							$chk_all_pft = isset($profile_usr[$dbn . "_pft_ALL"]) ? "checked" : "";
+							echo "<label class='abcd-checkbox-item'><input type='checkbox' name='{$dbn}_pft_ALL' data-db='{$dbn}' class='chk-pft-{$dbn}' onclick=\"toggleGroup('chk-pft-{$dbn}', this.checked)\" {$chk_all_pft}> <strong>" . $msgstr["ALL"] . "</strong></label>";
+
+							if (file_exists($file)) {
+								$pft = file($file);
+								foreach ($pft as $val) {
+									$val = trim($val);
+									if ($val != "") {
+										$p = explode('|', $val);
+										$chk = isset($profile_usr[$dbn . "_pft_" . $p[0]]) ? "checked" : "";
+										echo "<label class='abcd-checkbox-item'><input type='checkbox' name='{$dbn}_pft_{$p[0]}' value='{$p[0]}' data-db='{$dbn}' class='chk-pft-{$dbn}' {$chk}> {$p[1]} ({$p[0]})</label>";
+									}
+								}
+							}
+							?>
+						</div>
+
+						<div class="abcd-checkbox-group">
+							<h5><?php echo $msgstr["WORKSHEET"]; ?></h5>
+							<?php
+							$file = $db_path . $dd[0] . "/def/" . $_SESSION["lang"] . "/formatos.wks";
+							if (!file_exists($file)) $file = $db_path . $dd[0] . "/def/" . $lang_db . "/formatos.wks";
+
+							$chk_all_fmt = isset($profile_usr[$dbn . "_fmt_ALL"]) ? "checked" : "";
+							echo "<label class='abcd-checkbox-item'><input type='checkbox' name='{$dbn}_fmt_ALL' data-db='{$dbn}' class='chk-fmt-{$dbn}' onclick=\"toggleGroup('chk-fmt-{$dbn}', this.checked)\" {$chk_all_fmt}> <strong>" . $msgstr["ALL"] . "</strong></label>";
+
+							if (file_exists($file)) {
+								$pft = file($file);
+								foreach ($pft as $val) {
+									$val = trim($val);
+									if ($val != "") {
+										$p = explode('|', $val);
+										$chk = isset($profile_usr[$dbn . "_fmt_" . $p[0]]) ? "checked" : "";
+										echo "<label class='abcd-checkbox-item'><input type='checkbox' name='{$dbn}_fmt_{$p[0]}' value='{$p[0]}' data-db='{$dbn}' class='chk-fmt-{$dbn}' {$chk}> {$p[1]} ({$p[0]})</label>";
+									}
+								}
+							}
+							?>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		<?php
 		}
-	}
-//	echo "<xmp>";
-//	print_r($profile_usr);
-//	echo "</xmp>";//die;
-	echo "<table>";
-	echo "<tr><td>".$msgstr["PROFILENAME"]."</td><td><input type=text name=profilename size=15 value=\"";
-	if (isset($profile_usr["profilename"])) echo $profile_usr["profilename"];
-	echo "\"></td>";
-	echo "<tr><td>".$msgstr["PROFILEDESC"]."</td><td><input type=text name=profiledesc size=80 value=\"";
-	if (isset($profile_usr["profiledesc"])) echo $profile_usr["profiledesc"];
-	echo "\"></td>";
-	echo "</table>";
-	$fp=file($db_path."bases.dat");
-//	echo "<div style=\"position:relative;overflow:auto;height:300px;border-style:double;\">";
- 	$inicio="S";
- 	$bases_dat=array();
- 	$select_db= "<select name=select_db
- 	onchange=\"javascript:window.location.hash=this.options[this.selectedIndex].value\">\n<option></option>\n";
- 	foreach($fp as $dbs){
- 		$dbs=trim($dbs);
-		if ($dbs!=""){
-			$dd=explode('|',$dbs);
-			$dbn=$dd[0];
-			$select_db.= "<option value=".$dbn.">".$dd[1]." ($dbn)</option>\n";
-		}
- 	}
- 	$select_db.= "</select>\n";
-	foreach ($fp as $dbs){
-		$dbs=trim($dbs);
-		if ($dbs!=""){
-			$dd=explode('|',$dbs);
-			$dbn=$dd[0];
-			if ($dd[0]!="acces" ){
-				echo "<a name=$dbn><table bgcolor=#cccccc class=listTable>";
-				echo "<th width=33%>".$msgstr["DATABASES"]." ".$select_db."</th><th width=33%>".$msgstr["DISPLAYFORMAT"]."</th><th width=33%>".$msgstr["WORKSHEET"]."</TH>";
-				if ($inicio=="S"){
-					$inicio="N";
+		?>
+	</div>
 
-					echo "<tr><td bgcolor=white colspan=3><input type=checkbox name=db_ALL value=ALL onclick=AllDatabases()><strong> <font color=darkred size=+1><label>".$msgstr["ALL"]."</label></font></strong></td>";
-				}
-                $bases_dat[$dbn]=$dbn;
-				echo "<tr><td valign=top bgcolor=white><input type=checkbox name=db_".$dbn." value=".$dbn;
-				if (isset($profile_usr["db_".$dbn])) echo " checked";
-				echo "> <strong><font color=darkred><label>".$dd[1]." (".$dbn.")</label></font></strong></td>\n";
-				echo "<td bgcolor=white valign=top>";
-				$file=$db_path.$dbn."/pfts/".$_SESSION["lang"]."/formatos.dat";
-				if (!file_exists($file)){
-					$file=$db_path.$dbn."/pfts/".$lang_db."/formatos.dat";
-				}
-				$checked="";
-				if (isset($profile_usr[$dbn."_pft_ALL"])) $checked=" checked";
-				echo "<input type=checkbox name=".$dbn."_pft_ALL $checked><label> ".$msgstr["ALL"]."</label><br>\n";
-				if (file_exists($file)){
-					$pft=file($file);
-					foreach($pft as $val){
-						$val=trim($val);
-						if ($val!=""){
-							$p=explode('|',$val);
-							$checked="";
-							if (isset($profile_usr[$dbn."_pft_".$p[0]])) $checked=" checked";
-							echo "<input type=checkbox name=".$dbn."_pft_".$p[0]." value=".$p[0]." $checked";
-							echo " onclick=document.profile.".$dbn."_pft_ALL.checked=false";
-							echo "><label> ".$p[1]." (".$p[0].")</label><br>\n";
-						}
-					}
-				}else{
-					echo "&nbsp;";
-				}
-				echo "</td>";
-				echo "<td bgcolor=white valign=top>";
-				$file=$db_path.$dd[0]."/def/".$_SESSION["lang"]."/formatos.wks";
-				if (!file_exists($file)){
-					$file=$db_path.$dd[0]."/def/".$lang_db."/formatos.wks";
-				}
-				$checked="";
-				if (isset($profile_usr[$dbn."_fmt_ALL"])) $checked=" checked";
-				echo "<input type=checkbox name=".$dbn."_fmt_ALL $checked";
-				echo "><label> ".$msgstr["ALL"]."</label><br>\n";
-				if (file_exists($file)){
-					$pft=file($file);
-					foreach($pft as $val){
-						$val=trim($val);
-						if ($val!=""){
-							$p=explode('|',$val);
-							$checked="";
-							if (isset($profile_usr[$dbn."_fmt_".$p[0]])) $checked=" checked";
-							echo "<input type=checkbox name=".$dbn."_fmt_".$p[0]." value=".$p[0]." $checked";
-							echo " onclick=document.profile.".$dbn."_fmt_ALL.checked=false";
-							echo "><label> ".$p[1]." (".$p[0].")</label><br>\n";
-						}
-					}
-				}else{
-					echo   "&nbsp";
-				}
-				echo "</td>";
-				echo "</table>";
-				echo "<table width=100%><td valign=top colspan=3 align=left>\n";
-				echo "<strong>".$msgstr["PERMISSIONS"].": ".$msgstr["DATAENTRY"]." ($dbn)</strong>\n";
-		        $i=3;
-		        $j=0;
-				foreach ($profile_usr as $key=>$value){
-					$value=trim($value);
-					if (substr($key,0,7)=="CENTRAL"){
-						$k=explode("_",$key);
-						//SE FILTRAN LOS PERMISOS QUE ANTES ESTABAN LIGADOS A LA BASE DE DATOS Y QUE AHORA PERTENECEN A ADMINISTRACION
-						if ($k[1]=="CRDB" or $k[1]=="TRANSLATE"  or $k[1]=="USRADM" or $k[1]=="EDHLPSYS" ){
-							continue;
-						}
-						if ($i>2){
-							echo "<tr>";
-							$i=0;
-						}
-
-						$perm=$k[1];
-						$i++;
-						echo "<td width=33%>";
-						echo "<input type=checkbox name=$dbn"."_".$key." value=Y";
-						if (isset($profile_usr[$dbn."_".$key])) echo " checked";
-						if ($j!=0){
-							echo " onclick=document.profile.$dbn"."_CENTRAL_ALL.checked=false";
-						}else{
-
-						}
-						$j=1;
-						echo "><label> ".$msgstr[$k[1]]."</label></td>\n";
-					}
-				}
-				echo "</table>";
-				echo "<br><br>";
-			}
-		}
-	}
-
-//	echo "</div>";
-	$general=array("ADMINISTRATION","ADM","CIRCULATION","ACQUISITIONS");
-	foreach ($general as $key){
-
-		$bgcolor="";
-		if (isset($msgstr[$key])) {
-			$bgcolor=" bgcolor=darkred";
-			echo "<br><br>";
-			echo "<table width=100%><tr height=5><th valign=top colspan=3 $bgcolor >\n";
-			echo "<font color=white size=3>".$msgstr["PERMISSIONS"].": ".$msgstr[$key];
-		}else{
-			echo "<table width=100%>";
-		}
-		$modulo="ADM";
-		switch($key){
+	<?php
+	// Modular function for rendering the cards in the global system tabs
+	function renderGlobalTab($tabId, $moduleKey, $moduleData, $profile_usr, $msgstr)
+	{
+		$moduloPrefix = "ADM";
+		switch ($moduleKey) {
 			case "ADMINISTRATION":
-				$modulo="CENTRAL";
+				$moduloPrefix = "CENTRAL";
 				break;
 			case "CIRCULATION":
-				$modulo="CIRC";
+				$moduloPrefix = "CIRC";
 				break;
 			case "ACQUISITIONS":
-				$modulo="ACQ";
+				$moduloPrefix = "ACQ";
 				break;
 		}
-		$i=0;
-		$j=0;
-		$onclick="";
-		$field="";
-		$adm="";
-		if (isset($profile_general[$modulo])){
-			foreach ($profile_general[$modulo] as $usr_p=>$val){
-	            $mod=$modulo;
-				if ($mod=="ADM" and $usr_p=="ALL") {
-					$adm="Y";
-					$field="ALL";
-					$j=1;
+
+		echo "<div id='{$tabId}' class='abcd-tab-pane'>";
+		echo "<div class='abcd-card'>";
+		echo "<div class='abcd-card-header'>";
+		echo "<h4><i class='fas fa-shield-alt'></i> " . ($msgstr[$moduleKey] ?? $moduleKey) . "</h4>";
+		echo "<label class='abcd-checkbox-item'><input type='checkbox' onclick=\"toggleGlobalModule('{$moduloPrefix}', this.checked)\"> Select All</label>";
+		echo "</div>";
+		echo "<div class='abcd-card-body'><div class='abcd-grid-3'>";
+
+		if (isset($moduleData)) {
+			foreach ($moduleData as $usr_p => $val) {
+				if ($moduloPrefix == "CENTRAL" && $usr_p == "ALL") {
+					$chk = (isset($profile_usr["CENTRAL_ALL"]) && $profile_usr["CENTRAL_ALL"] == "Y") ? "checked" : "";
+					echo "<label class='abcd-checkbox-item' style='grid-column: 1 / -1; font-weight:bold; border-bottom:1px solid #eee; padding-bottom:10px;'><input type='checkbox' name='CENTRAL_ALL' value='Y' data-module='CENTRAL' onclick=\"toggleGlobalModule('CENTRAL', this.checked)\" {$chk}> " . $msgstr["ALL"] . "</label>";
 					continue;
-				}else{
-					$adm="";
 				}
-				if ($modulo=="ADM" )$mod="CENTRAL";
-				$i=$i+1;
-				if ($i==1){
-					echo "<tr>";
-				}
-				if ($j==0) $field=$usr_p;
-				if ($j==1 ) {
-					$onclick= "onclick=document.profile.$mod"."_".$field.".checked=false";
-				}
-				$j=1;
-				$checked="";
-				if (isset($profile_usr[$mod."_".$usr_p]) and $profile_usr[$mod."_".$usr_p]=="Y") $checked=" checked";
-				echo "<td width=33%><input type=checkbox name=$mod"."_".$usr_p." $checked $onclick value=Y><label> ".$msgstr[$usr_p]."</label></td>\n";
-				$onclick="";
-				if ($i>2){
-					$i=0;
-					echo "</tr>";
-				}
+				$chk = (isset($profile_usr[$moduloPrefix . "_" . $usr_p]) && $profile_usr[$moduloPrefix . "_" . $usr_p] == "Y") ? "checked" : "";
+				echo "<label class='abcd-checkbox-item'><input type='checkbox' name='{$moduloPrefix}_{$usr_p}' value='Y' data-module='{$moduloPrefix}' {$chk}> " . (isset($msgstr[$usr_p]) ? $msgstr[$usr_p] : $usr_p) . "</label>";
 			}
 		}
-		echo "</table>";
+		echo "</div></div></div></div>";
 	}
-	echo "</td></table>";
-	echo "\n<script>\n";
-	echo "datab= new Array()\n";
-	foreach ($bases_dat as $value)
-		echo "datab['$value']='$value'\n";
-	echo "CheckAll()\n";
-	echo "</script>\n";
+	?>
+
+	<?php renderGlobalTab("tab-sys", "ADMINISTRATION", $profile_general["CENTRAL"] ?? null, $profile_usr, $msgstr); ?>
+
+	<?php renderGlobalTab("tab-circ", "CIRCULATION", $profile_general["CIRC"] ?? null, $profile_usr, $msgstr); ?>
+
+	<?php renderGlobalTab("tab-acq", "ACQUISITIONS", $profile_general["ACQ"] ?? null, $profile_usr, $msgstr); ?>
+
+<?php
 }
 ?>
