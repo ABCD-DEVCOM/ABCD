@@ -262,11 +262,16 @@ class GroupRenderer
                     UploadRenderer::injectAssets();
                 }
             } else {
-                echo "<input type='text' class='inline-sub-input td' data-subcode='{$code}' {$data_is_ind} value='{$val}' size='{$def['size']}' {$def['maxlength']} style='padding: 4px 6px; border: 1px solid #ccc; font-family: monospace; border-radius: 2px; flex-grow: 1;' onkeyup='ABCD_updateHiddenTag(\"{$tag}\")' onchange='ABCD_updateHiddenTag(\"{$tag}\")'>";
-            }
-
-            if ($def['index'] == 'D' || $def['index'] == 'T') {
-                echo "&nbsp;<a href='javascript:void(0)' class='bt-fdt' onclick='ABCD_abrirIndice(this, \"{$tag}\", \"{$code}\", \"{$def['prefix']}\", \"{$def['base_alfa']}\", \"{$def['format']}\")' title='Índice'><i class='fas fa-search'></i></a>";
+                // Restores the original behavior: Type 'X' is Textarea, Type 'XF' is Input Text
+                if (strtoupper($def['type']) === 'X') {
+                    $rows = 1;
+                    if ($def['maxlength'] !== '') {
+                        $rows = $def['size'];
+                    }
+                    echo "<textarea class='inline-sub-input td' data-subcode='{$code}' {$data_is_ind} rows='{$rows}' style='padding: 4px 6px; border: 1px solid #ccc; font-family: monospace; border-radius: 2px; flex-grow: 1; resize: vertical; min-height: 28px; line-height: 1.4;' onkeyup='ABCD_updateHiddenTag(\"{$tag}\")' onchange='ABCD_updateHiddenTag(\"{$tag}\")'>{$val}</textarea>";
+                } else {
+                    echo "<input type='text' class='inline-sub-input td' data-subcode='{$code}' {$data_is_ind} value='{$val}' size='{$def['size']}' {$def['maxlength']} style='padding: 4px 6px; border: 1px solid #ccc; font-family: monospace; border-radius: 2px; flex-grow: 1;' onkeyup='ABCD_updateHiddenTag(\"{$tag}\")' onchange='ABCD_updateHiddenTag(\"{$tag}\")'>";
+                }
             }
 
             echo "</div>";
