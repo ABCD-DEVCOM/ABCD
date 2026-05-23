@@ -1,23 +1,24 @@
-F|1|Numéro de contrôle|0|0|||RO|||||||||0||
-F|10|Database|0|0|||S||20|P|%path_database%acquisitions.dat|||||0||
-F|20|Numéro d'appel|0|0|||X|||||||||0||
-F|30|Numéro d'inventaire|0|1|||X||20|||||||0||
-F|200|Status|0|0|ab||R||2|P|status_copy.tab|||||0||
-F|35|Bibliothèque principale|0|0|||S|||P|libraries.tab|||||0||
-F|40|Bibliothèque de branche|0|0|||X|||||||||0||
-F|50|Tome|0|0|||X||20|||||||0||
-F|60|Volume/Part|0|0|||X||20|||||||0||
-F|63|Numéro de copie|0|0|||X|||||||||0||
-F|68|Type d'acquisition|0|0|ab||R||1|P|acquiredby.tab|||||0||
-F|70|Prestataire / Donneur / Institution|0|0|||X|||D|providers|NA_|v10|v10||0||
-F|80|Date d'arrachage|0|0|||D|||||||||0||
-F|85|ISO Date d'arrachage|0|0|||ISO||10|||||||0||
-L||ACHAT:|0|0||||||||||||0||
-F|90|Prix|0|0|||X||10|||||||0||
-F|95|Provider|0|0|||X|||||||||0||
-F|100|Commande|0|0|||X||20|||||||0||
-F|110|Suggestion numéro|0|0|||X||20|||||||0||
-L||DONATION:|0|0||||||||||||0||
-F|300|Conditions|0|1|||X|||||||||0||
-L||EXCHANGE|0|0||||||||||||0||
-F|400|En échange de of|0|1|||X|||||||||0||
+TAB||Copies|0|0||||||||||||0||0|0|||
+F|1|Numéro de contrôle|0|0|||RO|||||||||0||0|0|||
+F|10|Database|0|0|||S||20|P|%path_database%acquisitions.dat|||||0||0|0|||
+F|20|Numéro d'appel|0|0|||X|||||||||0||0|0|||
+F|30|Numéro d'inventaire|0|1|||X||20|||||||0||0|0|||
+F|200|Status|0|0|ab||R||2|P|status_copy.tab|||||0||0|0|||
+F|35|Bibliothèque principale|0|0|||S|||P|libraries.tab|||||0||0|0|||
+F|40|Bibliothèque de branche|0|0|||X|||||||||0||0|0|||
+F|50|Tome|0|0|||X||20|||||||0||0|0|||
+F|60|Volume/Part|0|0|||X||20|||||||0||0|0|||
+F|63|Numéro de copie|0|0|||X|||||||||0||0|0|||
+F|68|Type d'acquisition|0|0|ab||R||1|P|acquiredby.tab|||||0||0|0|||
+F|70|Prestataire / Donneur / Institution|0|0|||X|||D|providers|NA_|v10|v10||0||0|0|||
+F|80|Date d'arrachage|0|0|||D|||||||||0||0|0|||
+F|85|ISO Date d'arrachage|0|0|||ISO||10|||||||0||0|0|||
+TAB||Achat|0|0||||||||||||0||0|0|||
+F|90|Prix|0|0|||X||10|||||||0||0|0|||
+F|95|Provider|0|0|||X|||||||||0||0|0|||
+F|100|Commande|0|0|||X||20|||||||0||0|0|||
+F|110|Suggestion numéro|0|0|||X||20|||||||0||0|0|||
+TAB||Donation|0|0||||||||||||0||0|0|||
+F|300|Conditions|0|1|||X|||||||||0||0|0|||
+TAB||Exchange|0|0||||||||||||0||0|0|||
+F|400|En échange de of|0|1|||X|||||||||0||0|0|||

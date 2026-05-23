@@ -573,10 +573,21 @@ function CancelarActualizacion(){
 		msgwin.focus();
 	}
 
-	function SelectArchivo(Tag, Targetform) {
-		var img_dir = (typeof top.img_dir !== 'undefined') ? top.img_dir : '';
-		var url = "dirs_explorer.php?base=<?php echo $arrHttp["base"] ?>&tag=" + Tag + "&Opcion=seleccionar&targetForm=" + Targetform + "&storein=" + img_dir;
-		msgwin = window.open(url, "Select", "status=yes,resizable=yes,toolbar=no,menu=no,scrollbars=yes,width=600,height=750,top=300,left=5");
+	function SelectArchivo(Ctrl, Forma) {
+		// Busca a base e o cipar prioritariamente da memória global (top)
+		var baseVal = (typeof top.base !== 'undefined' && top.base !== "") ? top.base : (document.forma1 && document.forma1.base ? document.forma1.base.value : "");
+		var ciparVal = (typeof top.cipar !== 'undefined' && top.cipar !== "") ? top.cipar : (document.forma1 && document.forma1.cipar ? document.forma1.cipar.value : "");
+
+		// Monta a URL completa via GET
+		var url = "dirs_explorer.php?Opcion=seleccionar" +
+			"&base=" + encodeURIComponent(baseVal) +
+			"&cipar=" + encodeURIComponent(ciparVal) +
+			"&tag=" + encodeURIComponent(Ctrl) +
+			"&targetForm=" + encodeURIComponent(Forma) +
+			"&desde=dataentry";
+
+		// Abre a janela já engatilhada com a URL certa
+		var msgwin = window.open(url, "explorador", "width=800,height=600,scrollbars,resizable");
 		msgwin.focus();
 	}
 
@@ -976,13 +987,6 @@ if (isset($arrHttp["encabezado"])) {
 	<input type="hidden" name="storein">
 </form>
 
-<form name="selectarchivo" action="dirs_explorer.php" method="post" target="Select">
-	<input type="hidden" name="base" value="<?php echo $arrHttp["base"] ?>">
-	<input type="hidden" name="tag">
-	<input type="hidden" name="storein">
-	<input type="hidden" name="Opcion">
-	<input type="hidden" name="targetForm">
-</form>
 
 <form name=agregarpicklist action="../dbadmin/picklist_edit.php" method="post" target="Picklist">
 	<input type="hidden" name="base" value=<?php echo $arrHttp["base"] ?>>

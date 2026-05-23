@@ -173,7 +173,7 @@ global $arrHttp,$img_path,$msgstr,$targetForm;
 	      }
 	  }
 	  if (isset($arrHttp["root"])) $path=$arrHttp["root"];
-  	php_dirs_explorer::set("root_dir",$this->root_dir.$path);
+  	$this->Set("root_dir",$this->root_dir.$path);
 	  if (is_dir($this->root_dir))
 	     {
 	       if ($dh = opendir($this->root_dir))
@@ -195,6 +195,13 @@ global $arrHttp,$img_path,$msgstr,$targetForm;
 			     {$i=2;
 			     Encabezamiento();
 			   }
+				// CORREÇÃO: Avisa visualmente quando o diretório estiver vazio
+				if (count($turinys["tipas"]) <= 2 && $root) {
+					echo "<div style='text-align:center; padding: 40px; color:#999;'>";
+					echo "<i class='far fa-folder-open fa-3x'></i><br><br>";
+					echo "O diretório selecionado está vazio.<br><small>Faça o upload de arquivos primeiro.</small></div>";
+				}
+
 	           for ($i;$i<count($turinys["tipas"]);$i++)
 			     {
 			       if ($turinys["tipas"][$i]=="dir")
@@ -220,7 +227,7 @@ global $arrHttp,$img_path,$msgstr,$targetForm;
 					 }
 				   else
 				     {
-					   $file_type=php_dirs_explorer::get_file_type($turinys["pavadinimas"][$i]);
+						$file_type = $this->get_file_type($turinys["pavadinimas"][$i]);
 
 					   $icon=$file_type[0];
 					   $cont_type=$file_type[1];
