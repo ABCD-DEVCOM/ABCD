@@ -147,7 +147,7 @@ function PrepararFormato()
 		if ($t[0] == "S" || $t[0] == "IND") {
 			continue;
 		}
-		
+
 		if (isset($t[9])) $len = $t[9];
 		if (isset($t[4])) $rep = $t[4];
 		if (isset($t[1])) $tag = $t[1];
@@ -904,6 +904,11 @@ function PrepararFormato()
 		margin: 10px 0 20px 0;
 		border-bottom: 1px solid #b9d8d9;
 		padding-left: 5px;
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		background-color: #ffffff;
+		padding-top: 10px;
 	}
 
 	.abcd-tab-btn {
