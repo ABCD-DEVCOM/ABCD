@@ -1,163 +1,173 @@
-LDR||Leader|0|0||||||||||||1||
-AI|1|N√∫mero de controle|0|0|||X||20|||||||1||
-M5|5|Data da √∫ltima modifica√ß√£o|0|0|||X||20|||||||1||
-M|8|Campo Fixo (08)|0|0|||X||||||||yymmdds        wau--- #     #0     eng d|1||
-H||DADOS GERAIS|0|0||||||||||||0||
+TAB||Leader|0|0||||||||||||0||0|0|||
+LDR||Leader|0|0||||||||||||1|http://www.loc.gov/marc/bibliographic/bdleader.html|0|0|||
+TAB||0XX|0|0||||||||||||0||0|0|||
+AI|1|Control number|0|0|||X||20|||||||1||
+M5|5|Date and Time of Latest Transaction|0|0|||X||20|||||||1||
+M|8|Fixed-Length Data Elements|0|0|||X||||||||yymmdds        wau#   #r#   #001 0#eng d|1||
+H||General Info|0|0||||||||||||0||
 T|22|ISSN|0|1|12al||X||100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
 S||ISSN|0|0|a||X|||||||||0||
-S||ISSN de v√°rias vers√µes juntas|0|0|l||X|||||||||0||
-T|82|Classifica√ß√£o CDD|0|1|12ab2||X||100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|082-ind1.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|082-ind2.tab|||||0||
-S||N√∫mero de classifica√ß√£o|0|0|a||X|||||||||0||
-S||Nota√ß√£o de Autor|0|0|b||X|||||||||0||
-S||N√∫mero da Edi√ß√£o|0|0|2||X|||||||||0||
-T|90|N√∫mero de chamada local|0|0|12abcd||X||100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
-S||Classifica√ß√£o|0|0|a||X|||||||||0||
-S||C√≥digo de Cutter|0|0|b||X|||||||||0||
-S||Edi√ß√£o/Ano|0|0|c||X|||||||||0||
-S||Informa√ß√µes adicionais|0|0|d||X|||||||||0||
+S||ISSN de v·rias versıes juntas|0|0|l||X|||||||||0||
+T|82|Dewey Decimal call number|0|1|12ab2||X||100|||||||1||
+S||Indicator 1|0|0|1||X||1|P|082-ind1.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|082-ind2.tab|||||0||
+S||N˙mero de classificaÁ„o|0|0|a||X|||||||||0||
+S||NotaÁ„o de Autor|0|0|b||X|||||||||0||
+S||N˙mero da EdiÁ„o|0|0|2||X|||||||||0||
+T|90|N˙mero de chamada local|0|0|12abcd||X||100|||||||1||
+S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||ClassificaÁ„o|0|0|a||X|||||||||0||
+S||CÛdigo de Cutter|0|0|b||X|||||||||0||
+S||EdiÁ„o/Ano|0|0|c||X|||||||||0||
+S||InformaÁıes adicionais|0|0|d||X|||||||||0||
+TAB||1XX|0|0||||||||||||0||0|0|||
 H||ENTRADA PRINCIPAL|0|0||||||||||||0||
 T|100|Autor Pessoal|0|0|12abcdq||X||100|D||AU_|@autoridades.pft|||1||
-S||Indicador 1|0|0|1||X||1|P|100-ind1.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||Indicator 1|0|0|1||X||1|P|100-ind1.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
 S||Sobrenome e nome|0|0|a||X|||||||||0||
-S||Numera√ß√£o|0|0|b||X|||||||||0||
-S||T√≠tulo/palavras associadas|0|0|c||X|||||||||0||
+S||NumeraÁ„o|0|0|b||X|||||||||0||
+S||TÌtulo/palavras associadas|0|0|c||X|||||||||0||
 S||Data de nac. e morte|0|0|d||X|||||||||0||
 S||Nome Completo|0|0|q||X|||||||||0||
 T|110|Autor Entidade Coletiva|0|0|12ab||X||100|D||AI_|@autoridades.pft|||1||
-S||Indicador 1|0|0|1||X||1|P|110-ind1.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||Indicator 1|0|0|1||X||1|P|110-ind1.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
 S||Nome da entidade|0|0|a||X|||||||||0||
 S||Unidade subordinada|0|1|b||X|||||||||0||
-H||T√çTULO(S), EDI√á√ÉO, PUBLICA√á√ÉO, ETC.|0|0||||||||||||0||
-T|245|T√≠tulo Principal|1|0|12abchknp||X||100|||TI_|v245^a,\" \"v245^b,`(` f(mfn,1,0),`)`|f(mfn,1,0)||1||
-S||Indicador 1|0|0|1||X||1|P|245-ind1.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|245-ind2.tab|||||0||
-S||T√≠tulo|0|0|a||X|||||||||0||
-S||Complemento do t√≠tulo|0|0|b||X|||||||||0||
+TAB||2XX|0|0||||||||||||0||0|0|||
+H||TÕTULO(S), EDI«√O, PUBLICA«√O, ETC.|0|0||||||||||||0||
+T|245|TÌtulo Principal|1|0|12abchknp||X||100|||TI_|v245^a,\" \"v245^b,`(` f(mfn,1,0),`)`|f(mfn,1,0)||1||
+S||Indicator 1|0|0|1||X||1|P|245-ind1.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|245-ind2.tab|||||0||
+S||TÌtulo|0|0|a||X|||||||||0||
+S||Complemento do tÌtulo|0|0|b||X|||||||||0||
 S||Inf. de responsabilidade|0|0|c||X|||||||||0||
 S||Meio|0|0|h||X|||||||||0||
-S||Subcabe√ßalho de Forma|0|0|k||X|||||||||0||
-S||No. Parte/Se√ß√£o/Evento|0|1|n||X|||||||||0||
-S||Nome da Parte/Se√ß√£o|0|1|p||X|||||||||0||
-T|246|Forma variante do t√≠tulo|0|0|12abcnp||X||100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|246-ind1.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
-S||Titulo/T√≠tulo abreviado|0|0|a||X|||||||||0||
-S||Complemento do T√≠tulo|0|0|b||X|||||||||0||
+S||SubcabeÁalho de Forma|0|0|k||X|||||||||0||
+S||No. Parte/SeÁ„o/Evento|0|1|n||X|||||||||0||
+S||Nome da Parte/SeÁ„o|0|1|p||X|||||||||0||
+T|246|Forma variante do tÌtulo|0|0|12abcnp||X||100|||||||1||
+S||Indicator 1|0|0|1||X||1|P|246-ind1.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||Titulo/TÌtulo abreviado|0|0|a||X|||||||||0||
+S||Complemento do TÌtulo|0|0|b||X|||||||||0||
 S||Inf. de responsabilidade|0|0|c||X|||||||||0||
-S||No. Parte/Se√ß√£o/Evento|0|1|n||X|||||||||0||
-S||Parte/Se√ß√£o da obra|0|1|p||X|||||||||0||
-T|250|Edi√ß√£o|0|0|12ab||X||100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
-S||Informa√ß√£o de edi√ß√£o|0|0|a||X|||||||||0||
+S||No. Parte/SeÁ„o/Evento|0|1|n||X|||||||||0||
+S||Parte/SeÁ„o da obra|0|1|p||X|||||||||0||
+T|250|EdiÁ„o|0|0|12ab||X||100|||||||1||
+S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||InformaÁ„o de ediÁ„o|0|0|a||X|||||||||0||
 S||Inf. adicionais|0|0|b||X|||||||||0||
-T|257|Pa√≠s da entidade produtora|0|1|12a||X||100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
-S||Nome do pa√≠s|0|0|a||X|||||||||0||
-T|300|Descri√ß√£o f√≠sica|0|1|12abce||X||100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
-S||Extens√£o|0|1|a||X|||||||||0||
-S||Outras desc.. f√≠sicas|0|0|b||X|||||||||0||
-S||Dimens√µes|0|1|c||X|||||||||0||
+T|257|PaÌs da entidade produtora|0|1|12a||X||100|||||||1||
+S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||Nome do paÌs|0|0|a||X|||||||||0||
+TAB||3XX|0|0||||||||||||0||0|0|||
+T|300|DescriÁ„o fÌsica|0|1|12abce||X||100|||||||1||
+S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||Extens„o|0|1|a||X|||||||||0||
+S||Outras desc.. fÌsicas|0|0|b||X|||||||||0||
+S||Dimensıes|0|1|c||X|||||||||0||
 S||Material complementar|0|0|e||X|||||||||0||
-T|340|Meio f√≠sico|0|1|12abei||X||100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
-S||Base do material e cofigura√ß√£o|0|0|a||X|||||||||0||
-S||Dimens√µes|0|0|b||X|||||||||0||
+T|340|Meio fÌsico|0|1|12abei||X||100|||||||1||
+S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||Base do material e cofiguraÁ„o|0|0|a||X|||||||||0||
+S||Dimensıes|0|0|b||X|||||||||0||
 S||Suporte|0|0|e||X|||||||||0||
-S||Especifica√ß√µes t√©cnicas|0|0|i||X|||||||||0||
+S||EspecificaÁıes tÈcnicas|0|0|i||X|||||||||0||
+TAB||5XX|0|0||||||||||||0||0|0|||
 H||NOTAS|0|0||||||||||||0||
 T|500|Nota Geral|0|1|12a||X|2|100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
 S||Nota|0|0|a||X|||||||||0||
-T|505|Nota Conte√∫do|0|1|12a||X|2|100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|505-ind1.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|505-ind2.tab|||||0||
-S||Nota de conte√∫do|0|0|a||X|||||||||0||
+T|505|Nota Conte˙do|0|1|12a||X|2|100|||||||1||
+S||Indicator 1|0|0|1||X||1|P|505-ind1.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|505-ind2.tab|||||0||
+S||Nota de conte˙do|0|0|a||X|||||||||0||
 T|511|Nota de participantes ou executor|0|1|12a||X|2|100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|511-ind1.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||Indicator 1|0|0|1||X||1|P|511-ind1.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
 S||Nota|0|0|a||X|||||||||0||
-T|521|P√∫blico-alvo|0|1|12a||X|2|100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|521-ind1.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
-S||P√∫blico-alvo|0|0|a||X|||||||||0||
-T|533|Nota de Reprodu√ß√£o|0|1|12abcd||X|2|100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
-S||Tipo de Reprodu√ß√£o|0|0|a||X|||||||||0||
-S||Local da Reprodu√ß√£o|0|1|b||X|||||||||0||
-S||Institui√ß√£o Respons√°vel pela Reprodu√ß√£o|0|1|c||X|||||||||0||
-S||Data da Reprodu√ß√£o|0|0|d||X|||||||||0||
+T|521|P˙blico-alvo|0|1|12a||X|2|100|||||||1||
+S||Indicator 1|0|0|1||X||1|P|521-ind1.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||P˙blico-alvo|0|0|a||X|||||||||0||
+T|533|Nota de ReproduÁ„o|0|1|12abcd||X|2|100|||||||1||
+S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||Tipo de ReproduÁ„o|0|0|a||X|||||||||0||
+S||Local da ReproduÁ„o|0|1|b||X|||||||||0||
+S||InstituiÁ„o Respons·vel pela ReproduÁ„o|0|1|c||X|||||||||0||
+S||Data da ReproduÁ„o|0|0|d||X|||||||||0||
 T|538|Nota de Detalhes do Sistema|0|1|12aiu3||X|2|100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
 S||Detalhes do Sistema|0|0|a||X|||||||||0||
 S||Texto a ser exibido|0|0|i||X|||||||||0||
 S||URI|0|0|u||X|||||||||0||
 S||Materiais especificados|0|0|3||X|||||||||0||
 T|546|Nota de idioma|0|1|12a||X|2|100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
 S||Nota|0|0|a||X|||||||||0||
-T|585|Nota de exibi√ß√µes/apresenta√ß√µes|0|1|12a||X|2|100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
+T|585|Nota de exibiÁıes/apresentaÁıes|0|1|12a||X|2|100|||||||1||
+S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||
 S||Nota|0|0|a||X|||||||||0||
-H||ENTRADAS SECUND√ÅRIAS|0|0||||||||||||0||
-T|650|Assunto - Termo T√≥pico|0|1|12avxyz||X|2|100|D||MA_|@autoridades.pft|||1||
-S||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|650.ind2.tab|||||0||
-S||Termo t√≥pico|0|0|a||X|||||||||0||
-S||Subdivis√£o de Forma|0|1|v||X|||||||||0||
-S||Subdivis√£o geral|0|1|x||X|||||||||0||
-S||Subdivis√£o cronol√≥gica|0|1|y||X|||||||||0||
-S||Subdivis√£o geogr√°fica|0|1|z||X|||||||||0||
-T|700|Ent. secund√°ria - Autor pessoal|0|1|12abcdq||X|2|100|D||AU_|@autoridades.pft|||1||
-S||Indicador 1|0|0|1||X||1|P|700-ind1.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|700-ind2.tab|||||0||
+TAB||6XX|0|0||||||||||||0||0|0|||
+H||ENTRADAS SECUND¡RIAS|0|0||||||||||||0||
+T|650|Assunto - Termo TÛpico|0|1|12avxyz||X|2|100|D||MA_|@autoridades.pft|||1||
+S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|650.ind2.tab|||||0||
+S||Termo tÛpico|0|0|a||X|||||||||0||
+S||Subdivis„o de Forma|0|1|v||X|||||||||0||
+S||Subdivis„o geral|0|1|x||X|||||||||0||
+S||Subdivis„o cronolÛgica|0|1|y||X|||||||||0||
+S||Subdivis„o geogr·fica|0|1|z||X|||||||||0||
+T|700|Ent. secund·ria - Autor pessoal|0|1|12abcdq||X|2|100|D||AU_|@autoridades.pft|||1||
+S||Indicator 1|0|0|1||X||1|P|700-ind1.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|700-ind2.tab|||||0||
 S||Nome pessoal|0|0|a||X|||||||||0||
-S||Numera√ß√£o|0|0|b||X|||||||||0||
-S||T√≠tulo e outras palavras associadas|0|0|c||X|||||||||0||
+S||NumeraÁ„o|0|0|b||X|||||||||0||
+S||TÌtulo e outras palavras associadas|0|0|c||X|||||||||0||
 S||Data nac. e morte|0|0|d||X|||||||||0||
 S||Forma completa do nome|0|0|q||X|||||||||0||
-T|710|Ent. secund√°ria - Autor corporatico|0|1|12ab||X|2|100|D||AI_|@autoridades.pft|||1||
-S||Indicador 1|0|0|1||X||1|P|710-in1.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|710-ind2.tab|||||0||
+TAB||7XX|0|0||||||||||||0||0|0|||
+T|710|Ent. secund·ria - Autor corporatico|0|1|12ab||X|2|100|D||AI_|@autoridades.pft|||1||
+S||Indicator 1|0|0|1||X||1|P|710-in1.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|710-ind2.tab|||||0||
 S||Nome corporativo|0|0|a||X|||||||||0||
 S||Unidades subordinadas|0|0|b||X|||||||||0||
-H||END. ELETR√îNICO e N¬∫ DE REGISTRO|0|0|||X|||||||||0||
-T|856|Endere√ßo eletr√¥nico|0|1|12auyzq||X|2|100|||||||1||
-S||Indicador 1|0|0|1||X||1|P|865-ind1.tab|||||0||
-S||Indicador 2|0|0|2||X||1|P|856-ind2.tab|||||0||
+TAB||8XX|0|0||||||||||||0||0|0|||
+H||END. ELETR‘NICO e N∫ DE REGISTRO|0|0|||X|||||||||0||
+T|856|EndereÁo eletrÙnico|0|1|12auyzq||X|2|100|||||||1||
+S||Indicator 1|0|0|1||X||1|P|865-ind1.tab|||||0||
+S||Indicator 2|0|0|2||X||1|P|856-ind2.tab|||||0||
 S||Nome do servidor|0|0|a||X|||||||||0||
 S||Identificador Uniforme - URI|0|0|u||X|||||||||0||
-S||Descri√ß√£o do link|0|0|y||X|||||||||0||
-S||Nota/observa√ß√£o|0|0|z||X|||||||||0||
-S||Tipo de meio eletr√¥nico|0|0|2||X|||||||||0||
+S||DescriÁ„o do link|0|0|y||X|||||||||0||
+S||Nota/observaÁ„o|0|0|z||X|||||||||0||
+S||Tipo de meio eletrÙnico|0|0|2||X|||||||||0||
+TAB||9XX|0|0||||||||||||0||0|0|||
 T|900|Itens (Exemplares)|0|1|nmlofprqykwz||X|5|100|||||||1||
 S||No. de registro|0|0|n||X||5|||||||0||
 S||Volume|0|0|m||X||5|||||||0||
 S||Exemplar|0|0|l||X||5|||||||0||
-S||Localiza√ß√£o f√≠sica|0|0|o||X||10|||||||0||
-S||Forma de aquisi√ß√£o|0|0|f||X||10|||||||0||
-S||Data de aquisi√ß√£o|0|0|p||X||10|||||||0||
+S||LocalizaÁ„o fÌsica|0|0|o||X||10|||||||0||
+S||Forma de aquisiÁ„o|0|0|f||X||10|||||||0||
+S||Data de aquisiÁ„o|0|0|p||X||10|||||||0||
 S||Fornecedor|0|0|r||X||20|||||||0||
 S||Moeda nacional|0|0|q||X||10|||||||0||
 S||moeda estrangeira|0|0|y||X||10|||||||0||
 S||Notas|0|0|k||X|||||||||0||
 S||Data de entrada|0|0|w||X||5|||||||0||
 S||Documentalista|0|0|z||X||5|||||||0||
-OD|980|Data de modifica√ß√£o e Usu√°rio|0|1||||||||||||1||
+OD|980|Data de modificaÁ„o e Usu·rio|0|1||||||||||||1||

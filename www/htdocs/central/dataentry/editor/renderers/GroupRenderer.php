@@ -146,7 +146,10 @@ class GroupRenderer
                     $options = self::loadPicklist($picklistFile);
                 }
 
-                $subfield_defs[$code] = [
+                // Create a composite key (e.g., IND_1, S_1, S_a) to prevent overwriting when there are multiple subfields or indicators in the same tag
+                $chave_composta = $tipo_linha . "_" . $code;
+
+                $subfield_defs[$chave_composta] = [
                     'is_ind'    => ($tipo_linha == 'IND'), // Special mark to indicate whether it is an indicator
                     'title'     => self::sanitize(isset($parts[2]) ? $parts[2] : ''),
                     'type'      => trim(isset($parts[7]) ? $parts[7] : 'X'),
@@ -201,10 +204,10 @@ class GroupRenderer
         echo "<td style='padding: 10px 15px; border-bottom: 2px solid #b9d8d9;'>";
         echo "<div style='display: grid; grid-template-columns: minmax(120px, auto) 1fr; gap: 8px 15px; align-items: center;'>";
 
-        // Vamos garantir que capturamos os 2 primeiros caracteres caso existam indicadores no banco
+        // Ensure that we capture the first two characters if there are indicators in the database, but only if it's not a template row (which should start empty)
         $ind_string = "";
         if (!$isTemplate && strlen($occ_val) > 0) {
-            // O padrão MARC diz que, se houver indicadores, eles são os 2 primeiros caracteres.
+            // The MARC standard specifies that, if there are indicators, they consist of the first two characters.
             if (substr($occ_val, 0, 1) !== '^') {
                 $pos_delimitador = strpos($occ_val, '^');
                 if ($pos_delimitador !== false && $pos_delimitador <= 2) {
@@ -215,13 +218,16 @@ class GroupRenderer
             }
         }
 
-        foreach ($subfield_defs as $code => $def) {
+        foreach ($subfield_defs as $chave_composta => $def) {
+            // It strips the actual code from the subfield (e.g., "IND_1" becomes "1" again, 'S_a' becomes "a" again)
+            $parts = explode('_', $chave_composta, 2);
+            $code = isset($parts[1]) ? $parts[1] : $chave_composta;
+
             $val = "";
             $label_sufixo = "";
 
             if ($def['is_ind']) {
                 $label_sufixo = " <b>(IND{$code})</b>";
-                // Is it indicator 1 (code ‘1’) or 2 (code ‘2’)?
                 if (!$isTemplate) {
                     if ($code == '1' && strlen($ind_string) >= 1) $val = substr($ind_string, 0, 1);
                     if ($code == '2' && strlen($ind_string) >= 2) $val = substr($ind_string, 1, 1);
@@ -262,11 +268,16 @@ class GroupRenderer
                     UploadRenderer::injectAssets();
                 }
             } else {
-                echo "<input type='text' class='inline-sub-input td' data-subcode='{$code}' {$data_is_ind} value='{$val}' size='{$def['size']}' {$def['maxlength']} style='padding: 4px 6px; border: 1px solid #ccc; font-family: monospace; border-radius: 2px; flex-grow: 1;' onkeyup='ABCD_updateHiddenTag(\"{$tag}\")' onchange='ABCD_updateHiddenTag(\"{$tag}\")'>";
-            }
-
-            if ($def['index'] == 'D' || $def['index'] == 'T') {
-                echo "&nbsp;<a href='javascript:void(0)' class='bt-fdt' onclick='ABCD_abrirIndice(this, \"{$tag}\", \"{$code}\", \"{$def['prefix']}\", \"{$def['base_alfa']}\", \"{$def['format']}\")' title='Índice'><i class='fas fa-search'></i></a>";
+                // Restores the original behavior: Type 'X' is Textarea, Type 'XF' is Input Text
+                if (strtoupper($def['type']) === 'X') {
+                    $rows = 1;
+                    if ($def['maxlength'] !== '') {
+                        $rows = $def['size'];
+                    }
+                    echo "<textarea class='inline-sub-input td' data-subcode='{$code}' {$data_is_ind} rows='{$rows}' style='padding: 4px 6px; border: 1px solid #ccc; font-family: monospace; border-radius: 2px; flex-grow: 1; resize: vertical; min-height: 28px; line-height: 1.4;' onkeyup='ABCD_updateHiddenTag(\"{$tag}\")' onchange='ABCD_updateHiddenTag(\"{$tag}\")'>{$val}</textarea>";
+                } else {
+                    echo "<input type='text' class='inline-sub-input td' data-subcode='{$code}' {$data_is_ind} value='{$val}' size='{$def['size']}' {$def['maxlength']} style='padding: 4px 6px; border: 1px solid #ccc; font-family: monospace; border-radius: 2px; flex-grow: 1;' onkeyup='ABCD_updateHiddenTag(\"{$tag}\")' onchange='ABCD_updateHiddenTag(\"{$tag}\")'>";
+                }
             }
 
             echo "</div>";

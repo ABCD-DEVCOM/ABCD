@@ -1,4 +1,5 @@
 UNICODE=0
+SUBFIELDS_INLINE=Y
 ROOT=/ABCD/www/bases/marc/dr/
 barcode=Y
 inventory_numeric=N

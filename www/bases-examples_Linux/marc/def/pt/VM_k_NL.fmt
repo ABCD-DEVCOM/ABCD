@@ -1,16 +1,29 @@
+TAB||Líder|0|0||||||||||||0||0|0|||
 LDR||Líder|0|1||||||||||||1||
+TAB||0XX|0|0||||||||||||0||0|0|||
 H||0XX: Controle|0|0||||||||||||0||
-AI|1|Número de controle|1|0|||X||20|||CN_|v1|v1||1||
-F|3|Identificador de número de controle|0|0|||X||20|||||||1||
-M5|5|Data da última modificação|0|0|||X||20|||||||1||
-M|8|Campos fixos|0|0|||X||45|||||||1||
-F|9|Capa|0|0|||U||103|||||||1||
+AI|1|Número de controle|1|0|||X||20|||CN_|v1|v1||1||1
+F|3|Identificador de número de controle|0|0|||X||20|||||||1||1
+M5|5|Data da última modificação|0|0|||X||20|||||||1||1
+M|8|Campos fixos|0|0|||X||45|||||||1||1
 H||01X-09X: Números e códigos|0|1||||||||||||0||
-T|10|Número de controle da Library of Congress|0|0|12a||X||100|||||||1||
+T|10|Número de controle da Library of Congress|0|0|12a||X||100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Número de controle da Library of Congress|0|0|a||X|1||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Número de controle da Library of Congress|0|0|a||X|1||||||||0||
-T|13|Controle de informação de patente|0|1|12abcdef6||X|1|100|||||||1||
+T|13|Controle de informação de patente|0|1|12abcdef6||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Número|0|0|a||X|||||||||0|
+S||País|0|0|b||X|||||||||0|
+S||Tipo de número|0|0|c||X|||||||||0|
+S||Data|0|1|d||X|||||||||0|
+S||Status|0|1|e||X|||||||||0|
+S||Participa do documento|0|1|f||X|||||||||0|
+S||Ligação|0|0|6||X|1||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Número|0|0|a||X|||||||||0||
@@ -20,14 +33,27 @@ S||Data|0|1|d||X|||||||||0||
 S||Status|0|1|e||X|||||||||0||
 S||Participa do documento|0|1|f||X|||||||||0||
 S||Ligação|0|0|6||X|1||||||||0||
-T|20|ISBN|0|1|12acz6||X|1|100|||||||1||
+T|20|ISBN|0|1|12acz6||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||ISBN|0|0|a||X|1||||||||0|
+S||Termos de avaliação|0|0|c||X|||||||||0|
+S||ISBN cancelado|0|1|z||X|1||||||||0|
+S||Ligação|0|0|6||X|1||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||ISBN|0|0|a||X|1||||||||0||
 S||Termos de avaliação|0|0|c||X|||||||||0||
 S||ISBN cancelado|0|1|z||X|1||||||||0||
 S||Ligação|0|0|6||X|1||||||||0||
-T|22|ISSN|0|1|12ayz26||X||100|||||||1||
+T|22|ISSN|0|1|12ayz26||X||100|||||||1||1
+S||Indicador 1|0|0|1||X|1|1|P|022-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X|1|1|||||||0|
+S||ISSN|0|0|a||X|1||||||||0|
+S||ISSN incorreto|0|1|y||X|1||||||||0|
+S||ISSN cancelado|0|1|z||X|1||||||||0|
+S||Fonte|0|0|2||X|1||||||||0|
+S||Ligação|0|0|6||X|1||||||||0|
 S||Indicador 1|0|0|1||X|1|1|P|022-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X|1|1|||||||0||
 S||ISSN|0|0|a||X|1||||||||0||
@@ -35,7 +61,15 @@ S||ISSN incorreto|0|1|y||X|1||||||||0||
 S||ISSN cancelado|0|1|z||X|1||||||||0||
 S||Fonte|0|0|2||X|1||||||||0||
 S||Ligação|0|0|6||X|1||||||||0||
-T|24|Outros números ou códigos padrão|0|1|12acdz26||X||100|||||||1||
+T|24|Outros números ou códigos padrão|0|1|12acdz26||X||100|||||||1||1
+S||Indicador 1|0|0|1||X|1|1|P|024-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X|1|1|P|024-ind2.tab|||||0|
+S||Número|0|0|a||X|1||||||||0|
+S||Disponibilidade|0|0|c||X|1||||||||0|
+S||Códigos adicionais|0|0|d||X|1||||||||0|
+S||Número cancelado/inválido|0|1|z||X|1||||||||0|
+S||Fonte|0|0|2||X|1||||||||0|
+S||Ligação|0|0|6||X|1||||||||0|
 S||Indicador 1|0|0|1||X|1|1|P|024-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X|1|1|P|024-ind2.tab|||||0||
 S||Número|0|0|a||X|1||||||||0||
@@ -44,13 +78,42 @@ S||Códigos adicionais|0|0|d||X|1||||||||0||
 S||Número cancelado/inválido|0|1|z||X|1||||||||0||
 S||Fonte|0|0|2||X|1||||||||0||
 S||Ligação|0|0|6||X|1||||||||0||
-T|28|Número do editor|0|1|12ab6||X|1|100|||||||1||
+T|28|Número do editor|0|1|12ab6||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|028-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|028-ind2.tab|||||0|
+S||Número do editor|0|0|a||X|||||||||0|
+S||Fonte|0|0|b||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|028-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|028-ind2.tab|||||0||
 S||Número do editor|0|0|a||X|||||||||0||
 S||Fonte|0|0|b||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|34|Dado cartográfico matemático codificado|0|1|12abcdefghjkmnprstxyz236||X|1|100|||||||1||
+T|34|Dado cartográfico matemático codificado|0|1|12abcdefghjkmnprstxyz236||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|034-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|034-ind2.tab|||||0|
+S||Categoria da escala|0|0|a||X|||P|034-suba.tab|||||0|
+S||Constante da escala horizontal linear|0|1|b||X|||||||||0|
+S||Categoria da escala vertical linear|0|1|c||X|||||||||0|
+S||Coordenadas - longitude oeste|0|0|d||X|||||||||0|
+S||Coordenadas - longitude leste|0|0|e||X|||||||||0|
+S||Coordenadas - latitude norte|0|0|f||X|||||||||0|
+S||Coordenadas - latitude sul|0|0|g||X|||||||||0|
+S||Escala angular|0|1|h||X|||||||||0|
+S||Declinação - limite norte|0|0|j||X|||||||||0|
+S||Declinação - limite sul|0|0|k||X|||||||||0|
+S||Ascensão reta - limite leste|0|0|m||X|||||||||0|
+S||Ascensão reta - limite oeste|0|0|n||X|||||||||0|
+S||Equinócio|0|0|p||X|||||||||0|
+S||Distância da Terra|0|0|r||X|||||||||0|
+S||G-ring latitude|0|1|s||X|||||||||0|
+S||G-ring longitude|0|1|t||X|||||||||0|
+S||Data inicial|0|0|x||X|||||||||0|
+S||Data final|0|0|y||X|||||||||0|
+S||Nome do corpo extraterrestre|0|0|z||X|||||||||0|
+S||Fonte|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|034-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|034-ind2.tab|||||0||
 S||Categoria da escala|0|0|a||X|||P|034-suba.tab|||||0||
@@ -75,13 +138,27 @@ S||Nome do corpo extraterrestre|0|0|z||X|||||||||0||
 S||Fonte|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|35|Número de controle do sistema|0|1|12az6||X||100|||||||1||
+T|35|Número de controle do sistema|0|1|12az6||X||100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Número de controle|0|0|a||X|||||||||0|
+S||Número cancelado/inválido|0|1|z||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Número de controle|0|0|a||X|||||||||0||
 S||Número cancelado/inválido|0|1|z||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|37|Fonte de aquisição|0|1|12abcfgn6||X||100|||||||1||
+T|37|Fonte de aquisição|0|1|12abcfgn6||X||100|||||||1||1
+S||Indicador 1|0|0|1||X|||||||||0|
+S||Indicador 2|0|0|2||X|||||||||0|
+S||Código de estoque do fornecedor|0|0|a||X|||||||||0|
+S||Fonte código de estoque/aquisição|0|0|b||X|||||||||0|
+S||Termos de avaliação|0|1|c||X|||||||||0|
+S||Forma da edição|0|1|f||X|||||||||0|
+S||Características adicionais do exemplar|0|1|g||X|||||||||0|
+S||Nota|0|1|n||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X|||||||||0||
 S||Indicador 2|0|0|2||X|||||||||0||
 S||Código de estoque do fornecedor|0|0|a||X|||||||||0||
@@ -91,7 +168,15 @@ S||Forma da edição|0|1|f||X|||||||||0||
 S||Características adicionais do exemplar|0|1|g||X|||||||||0||
 S||Nota|0|1|n||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|40|Fonte da catalogação|0|0|12abcde6||X|1|103|||||||1||
+T|40|Fonte da catalogação|0|0|12abcde6||X|1|103|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Instituição da catalogação original|0|0|a||X|1|10|||||||0|
+S||Idioma da catalogação|0|0|b||X|1|10|P|languages.tab|||||0|
+S||Instituição que transcreveu o registro|0|0|c||X|1|10|||||||0|
+S||Instituição que modificou o registo|0|1|d||X|1|10|||||||0|
+S||Convenções da descrição|0|1|e||X|1|10|||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Instituição da catalogação original|0|0|a||X|1|10|||||||0||
@@ -100,7 +185,19 @@ S||Instituição que transcreveu o registro|0|0|c||X|1|10|||||||0||
 S||Instituição que modificou o registo|0|1|d||X|1|10|||||||0||
 S||Convenções da descrição|0|1|e||X|1|10|||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|41|Idioma|0|1|12abdefghj26||X||100|||||||1||
+T|41|Idioma|0|1|12abdefghj26||X||100|||||||1||1
+S||Indicador 1|0|0|1||X|1|1|P|041-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X|1|1|P|041-ind2.tab|||||0|
+S||Código do idioma do texto/trilha sonora ou título separado|0|1|a||X|1|3|P|languages.tab|||||0|
+S||Código do idioma do resumo|0|1|b||X|1|3|P|languages.tab|||||0|
+S||Código do idioma do texto falado ou cantado|0|1|d||X|1|3|P|languages.tab|||||0|
+S||Código do idioma do libreto|0|1|e||X|1|3|P|languages.tab|||||0|
+S||Código do idioma da tabela de conteúdo|0|1|f||X|1|3|P|languages.tab|||||0|
+S||Código do idioma do material complementar que não libreto|0|1|g||X|1|3|P|languages.tab|||||0|
+S||Código do idioma do original e/ou traduções intermediárias do texto|0|1|h||X|1|3|P|languages.tab|||||0|
+S||Código do idioma da legenda|0|1|j||X|1|3|P|languages.tab|||||0|
+S||Fonte|0|0|2||X|||||||||0|
+S||Ligação|0|0|6||X|1||||||||0|
 S||Indicador 1|0|0|1||X|1|1|P|041-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X|1|1|P|041-ind2.tab|||||0||
 S||Código do idioma do texto/trilha sonora ou título separado|0|1|a||X|1|3|P|languages.tab|||||0||
@@ -113,7 +210,14 @@ S||Código do idioma do original e/ou traduções intermediárias do texto|0|1|h||X|
 S||Código do idioma da legenda|0|1|j||X|1|3|P|languages.tab|||||0||
 S||Fonte|0|0|2||X|||||||||0||
 S||Ligação|0|0|6||X|1||||||||0||
-T|43|Código de área geográfica|0|0|12abc26||X|1|103|||||||1||
+T|43|Código de área geográfica|0|0|12abc26||X|1|103|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Código de área geográfica|0|1|a||X|||P|geoareas.tab|||||0|
+S||Código de área geográfica local|0|1|b||X|||||||||0|
+S||Código ISO|0|1|c||X|||||||||0|
+S||Fonte|0|1|2||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Código de área geográfica|0|1|a||X|||P|geoareas.tab|||||0||
@@ -121,7 +225,14 @@ S||Código de área geográfica local|0|1|b||X|||||||||0||
 S||Código ISO|0|1|c||X|||||||||0||
 S||Fonte|0|1|2||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|44|Código do país instituição publicadora|0|0|12abc26||X||103|||||||1||
+T|44|Código do país instituição publicadora|0|0|12abc26||X||103|||||||1||1
+S||Indicador 1|0|0|1||X|||||||||0|
+S||Indicador 2|0|0|2||X|||||||||0|
+S||Código MARC - País|0|1|a||X|||P|countries.tab|||||0|
+S||Código do local da sub-entidade|0|1|b||X|||P|countries.tab|||||0|
+S||Código ISO - País|0|1|c||X|||||||||0|
+S||Fonte do código do local da sub-entidade|0|1|2||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X|||||||||0||
 S||Indicador 2|0|0|2||X|||||||||0||
 S||Código MARC - País|0|1|a||X|||P|countries.tab|||||0||
@@ -129,21 +240,40 @@ S||Código do local da sub-entidade|0|1|b||X|||P|countries.tab|||||0||
 S||Código ISO - País|0|1|c||X|||||||||0||
 S||Fonte do código do local da sub-entidade|0|1|2||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|45|Código de período cronológico|0|0|12abc6||X||103|||||||1||
+T|45|Código de período cronológico|0|0|12abc6||X||103|||||||1||1
+S||Indicador 1|0|0|1||X|||P|045-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X|||||||||0|
+S||Código do período de tempo|0|1|a||X|||||||||0|
+S||Formatada abrangendo de 9999 D.C. em diante|0|1|b||X|||||||||0|
+S||Formatada pré-9999 A.C.|0|1|c||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X|||P|045-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X|||||||||0||
 S||Código do período de tempo|0|1|a||X|||||||||0||
 S||Formatada abrangendo de 9999 D.C. em diante|0|1|b||X|||||||||0||
 S||Formatada pré-9999 A.C.|0|1|c||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|50|Número de chamada da Library of Congress|0|1|12abd3||X|1|100|||||||1||
+T|50|Número de chamada da Library of Congress|0|1|12abd3||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|050-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|050-ind2.tab|||||0|
+S||Número de classificação|0|1|a||X|||||||||0|
+S||Número do item|0|0|b||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|050-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|050-ind2.tab|||||0||
 S||Número de classificação|0|1|a||X|||||||||0||
 S||Número do item|0|0|b||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|80|Classificação CDU|0|1|12abx26||X|1|100|||||||1||
+T|80|Classificação CDU|0|1|12abx26||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|080-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Número de CDU|0|0|a||X|||||||||0|
+S||Número do item|0|0|b||X|||||||||0|
+S||Subdivisão auxiliar comum|0|1|x||X|||||||||0|
+S||Identificador da edição|0|0|2||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|080-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Número de CDU|0|0|a||X|||||||||0||
@@ -151,7 +281,15 @@ S||Número do item|0|0|b||X|||||||||0||
 S||Subdivisão auxiliar comum|0|1|x||X|||||||||0||
 S||Identificador da edição|0|0|2||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|82|Classificação CDD|0|1|12abmq26||X|1|100|||||||1||
+T|82|Classificação CDD|0|1|12abmq26||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|082-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|082-ind2.tab|||||0|
+S||Número de CDD|0|1|a||X|||||||||0|
+S||Número do item|0|0|b||X|||||||||0|
+S||Designação padrão ou opcional|0|0|m||X|||||||||0|
+S||Agência que atribuiu o número de classificação|0|0|q||X|||||||||0|
+S||Número da edição|0|0|2||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|082-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|082-ind2.tab|||||0||
 S||Número de CDD|0|1|a||X|||||||||0||
@@ -160,21 +298,42 @@ S||Designação padrão ou opcional|0|0|m||X|||||||||0||
 S||Agência que atribuiu o número de classificação|0|0|q||X|||||||||0||
 S||Número da edição|0|0|2||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|84|Outro número de classificação|0|1|12ab26||X|1|100|||||||1||
+T|84|Outro número de classificação|0|1|12ab26||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Número de classificação|0|1|a||X|||||||||0|
+S||Número do item|0|0|b||X|||||||||0|
+S||Fonte|0|0|2||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Número de classificação|0|1|a||X|||||||||0||
 S||Número do item|0|0|b||X|||||||||0||
 S||Fonte|0|0|2||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|86|Número de classificação de documento governamental|0|1|12az26||X|1|100|||||||1||
+T|86|Número de classificação de documento governamental|0|1|12az26||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|086-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Número de classificação|0|0|a||X|||||||||0|
+S||Número de classificação cancelado/inválido|0|1|z||X|||||||||0|
+S||Fonte do número|0|0|2||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|086-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Número de classificação|0|0|a||X|||||||||0||
 S||Número de classificação cancelado/inválido|0|1|z||X|||||||||0||
 S||Fonte do número|0|0|2||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|90|Número de chamada|0|1|12abcgdef||X|1|100|||||||1||
+T|90|Número de chamada|0|1|12abcgdef||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Número de classificação|0|1|a||X|||||||||0|
+S||Notação de autor|0|1|b||X|||||||||0|
+S||Edição|0|1|c||X|||||||||0|
+S||Ano|0|1|g||X|||||||||0|
+S||Informação de coleção|0|1|d||X|||||||||0|
+S||Documento da empresa|0|1|e||X|||||||||0|
+S||Qualificador de localização codificada|0|1|f||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Número de classificação|0|1|a||X|||||||||0||
@@ -184,7 +343,14 @@ S||Ano|0|1|g||X|||||||||0||
 S||Informação de coleção|0|1|d||X|||||||||0||
 S||Documento da empresa|0|1|e||X|||||||||0||
 S||Qualificador de localização codificada|0|1|f||X|||||||||0||
-T|92|Norma|0|1|12abcde||X|1|100|||||||1||
+T|92|Norma|0|1|12abcde||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 1|0|0|2||X||1|||||||0|
+S||Número da norma|0|0|a||X|||||||||0|
+S||Sigla do órgão normativo|0|0|b||X|||||||||0|
+S||Data de aprovação ou publicação da norma|0|0|c||X|||||||||0|
+S||Data de validade|0|0|d||X|||||||||0|
+S||Data de cancelamento ou substituição|0|0|e||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 1|0|0|2||X||1|||||||0||
 S||Número da norma|0|0|a||X|||||||||0||
@@ -192,8 +358,29 @@ S||Sigla do órgão normativo|0|0|b||X|||||||||0||
 S||Data de aprovação ou publicação da norma|0|0|c||X|||||||||0||
 S||Data de validade|0|0|d||X|||||||||0||
 S||Data de cancelamento ou substituição|0|0|e||X|||||||||0||
+TAB||1XX|0|0||||||||||||0||0|0|||
 H||1XX: Entradas principais|0|1||||||||||||0||
-T|100|Entrada principal - Nome pessoal|0|0|12abcdefgjklnpqtu246||X|2|103|D|marc|AU_|@autoridades.pft|||1||
+T|100|Entrada principal - Nome pessoal|0|0|12abcdefgjklnpqtu246||X|2|103|D|marc|AU_|@autoridades.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|100-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Nome pessoal|0|0|a||X|||D|marc|AU_|@autoridades.pft|||0|
+S||Numeração|0|0|b||X|||||||||0|
+S||Títulos e outras palavras associadas ao nome|0|1|c||X|||||||||0|
+S||Datas associadas ao nome|0|0|d||X|||||||||0|
+S||Termo relacionador|0|1|e||X|||||||||0|
+S||Data da obra|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Atributo qualificador|0|1|j||X|||||||||0|
+S||Subcabeçalho de forma|0|1|k||X|||||||||0|
+S||Idioma da obra|0|0|l||X|||||||||0|
+S||Número da parte/seção da obra|0|1|n||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Forma completa do nome|0|0|q||X|||||||||0|
+S||Título da obra|0|0|t||X|||||||||0|
+S||Afiliação|0|0|u||X|||||||||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|100-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Nome pessoal|0|0|a||X|||D|marc|AU_|@autoridades.pft|||0||
@@ -214,7 +401,25 @@ S||Afiliação|0|0|u||X|||||||||0||
 S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|110|Entrada principal - Entidade|0|0|12abcdefgklnptu246||X|2|103|D|marc|AU_|@autoridades.pft|||1||
+T|110|Entrada principal - Entidade|0|0|12abcdefgklnptu246||X|2|103|D|marc|AU_|@autoridades.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|110-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Nome da entidade ou da jurisdição|0|0|a||X|||D|marc|AU_|@autoridades.pft|||0|
+S||Unidade subordinada|0|1|b||X|||||||||0|
+S||Local do encontro|0|0|c||X|||||||||0|
+S||Data do encontro ou assinatura do tratado|0|1|d||X|||||||||0|
+S||Termo relacionador|0|1|e||X|||||||||0|
+S||Data da obra|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Subcabeçalho de forma|0|1|k||X|||||||||0|
+S||Idioma da obra|0|0|l||X|||||||||0|
+S||Número da parte/seção/evento|0|1|n||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Título da obra|0|0|t||X|||||||||0|
+S||Afiliação|0|0|u||X|||||||||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|110-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Nome da entidade ou da jurisdição|0|0|a||X|||D|marc|AU_|@autoridades.pft|||0||
@@ -233,7 +438,26 @@ S||Afiliação|0|0|u||X|||||||||0||
 S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|111|Entrada principal - Evento|0|0|12acdefgjklnpqtu246||X|2|103|D|autoridades|CV_|@author.pft|||1||
+T|111|Entrada principal - Evento|0|0|12acdefgjklnpqtu246||X|2|103|D|autoridades|CV_|@author.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|111-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Nome do evento ou da jurisdição|0|0|a||X|||D|autoridades|CV_|@author.pft|||0|
+S||Local do evento|0|0|c||X|||||||||0|
+S||Data do evento|0|0|d||X|||||||||0|
+S||Unidade subordinada|0|1|e||X|||||||||0|
+S||Data da obra|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Termo relacionador|0|1|j||X|||||||||0|
+S||Subcabeçalho de forma|0|1|k||X|||||||||0|
+S||Idioma da obra|0|0|l||X|||||||||0|
+S||Número da parte/seção/evento|0|1|n||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Nome do evento que segue nome da jurisdição na entrada|0|0|q||X|||||||||0|
+S||Título da obra|0|0|t||X|||||||||0|
+S||Afiliação|0|0|u||X|||||||||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Código relacionador|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|111-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Nome do evento ou da jurisdição|0|0|a||X|||D|autoridades|CV_|@author.pft|||0||
@@ -253,7 +477,25 @@ S||Afiliação|0|0|u||X|||||||||0||
 S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Código relacionador|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|130|Entrada principal - Título uniforme|0|0|12adfghklmnoprst26||X|2|103|D|autoridades|CT_|@author.pft|||1||
+T|130|Entrada principal - Título uniforme|0|0|12adfghklmnoprst26||X|2|103|D|autoridades|CT_|@author.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|130-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Título uniforme|0|0|a||X|||D|autoridades|CT_|@author.pft|||0|
+S||Data de assinatura do tratado|0|1|d||X|||||||||0|
+S||Data da obra|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Subcabeçalho de forma|0|1|k||X|||||||||0|
+S||Idioma da obra|0|0|l||X|||||||||0|
+S||Meio de apresentação da música|0|1|m||X|||||||||0|
+S||Número da parte/seção da obra|0|1|n||X|||||||||0|
+S||Informação de arranjo para música|0|0|o||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Chave para música|0|0|r||X|||||||||0|
+S||Versão|0|0|s||X|||||||||0|
+S||Título da obra|0|0|t||X|||||||||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|130-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Título uniforme|0|0|a||X|||D|autoridades|CT_|@author.pft|||0||
@@ -272,8 +514,26 @@ S||Versão|0|0|s||X|||||||||0||
 S||Título da obra|0|0|t||X|||||||||0||
 S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
+TAB||2XX|0|0||||||||||||0||0|0|||
 H||20X-24X: Títulos|0|1||||||||||||0||
-T|240|Título uniforme|0|0|12adfghklmnoprs26||X|1|103|||||||1||
+T|240|Título uniforme|0|0|12adfghklmnoprs26||X|1|103|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|240-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|240-ind2.tab|||||0|
+S||Título uniforme|0|0|a||X|||D|autoridades|CT_|@author.pft|||0|
+S||Data de assinatura do tratado|0|1|d||X|||||||||0|
+S||Data da obra|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Subcabeçalho de forma|0|1|k||X|||||||||0|
+S||Idioma da obra|0|0|l||X|||||||||0|
+S||Meio de apresentação da música|0|1|m||X|||||||||0|
+S||Número da parte/seção da obra|0|1|n||X|||||||||0|
+S||Informação de arranjo para música|0|0|o||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Chave para música|0|0|r||X|||||||||0|
+S||Versão|0|0|s||X|||||||||0|
+S||Fonte de cabeçalho|0|0|2||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|240-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|240-ind2.tab|||||0||
 S||Título uniforme|0|0|a||X|||D|autoridades|CT_|@author.pft|||0||
@@ -291,7 +551,20 @@ S||Chave para música|0|0|r||X|||||||||0||
 S||Versão|0|0|s||X|||||||||0||
 S||Fonte de cabeçalho|0|0|2||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|245|Título principal|0|0|12abcfgkhnps6||X|3|103|||||||1||
+T|245|Título principal|0|0|12abcfgkhnps6||X|3|103|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|245-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|245-ind2.tab|||||0|
+S||Título|0|0|a||X|||||||||0|
+S||Complemento do título|0|0|b||X|||||||||0|
+S||Indicação de responsabilidade|0|0|c||X|||||||||0|
+S||Datas de abrangência|0|0|f||X|||||||||0|
+S||Conjunto de datas|0|0|g||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Forma|0|1|k||X|||||||||0|
+S||Número da parte/seção da obra|0|1|n||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Versão|0|0|s||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|245-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|245-ind2.tab|||||0||
 S||Título|0|0|a||X|||||||||0||
@@ -305,7 +578,20 @@ S||Número da parte/seção da obra|0|1|n||X|||||||||0||
 S||Nome da parte/seção da obra|0|1|p||X|||||||||0||
 S||Versão|0|0|s||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|246|Forma variante do título|0|1|12abcfghnip56||X|1|100|||||||1||
+T|246|Forma variante do título|0|1|12abcfghnip56||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|246-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|246-ind2.tab|||||0|
+S||Título/Título abreviado|0|0|a||X|||||||||0|
+S||Complemento do título|0|0|b||X|||||||||0|
+S||Indicação de responsabilidade|0|0|c||X|||||||||0|
+S||Designação do volume e número do fascículo e/ou data da publicação|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Texto para exibição|0|0|i||X|||||||||0|
+S||Número da parte/seção da obra|0|1|n||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|246-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|246-ind2.tab|||||0||
 S||Título/Título abreviado|0|0|a||X|||||||||0||
@@ -319,7 +605,18 @@ S||Número da parte/seção da obra|0|1|n||X|||||||||0||
 S||Nome da parte/seção da obra|0|1|p||X|||||||||0||
 S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|247|Título anterior ou variações do título|0|1|12abfghnpx6||X|1|100|||||||1||
+T|247|Título anterior ou variações do título|0|1|12abfghnpx6||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|247-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|247-ind2.tab|||||0|
+S||Título|0|0|a||X|||||||||0|
+S||Complemento do título|0|0|b||X|||||||||0|
+S||Designação do volume e número do fascículo e/ou data da publicação|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Número da parte/seção da obra|0|1|n||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||ISSN|0|0|x||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|247-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|247-ind2.tab|||||0||
 S||Título|0|0|a||X|||||||||0||
@@ -332,13 +629,27 @@ S||Nome da parte/seção da obra|0|1|p||X|||||||||0||
 S||ISSN|0|0|x||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 H||25X-28X: Edição, impressão, etc.|0|0||||||||||||0||
-T|250|Edição|0|0|12ab6||X|1|103|||||||1||
+T|250|Edição|0|0|12ab6||X|1|103|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Edição|0|0|a||X|||||||||0|
+S||Complemento da informação de edição|0|0|b||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Edição|0|0|a||X|||||||||0||
 S||Complemento da informação de edição|0|0|b||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|255|Dado cartográfico matemático|0|1|12abcdfg6||X||100|||||||1||
+T|255|Dado cartográfico matemático|0|1|12abcdfg6||X||100|||||||1||1
+S||Indicador 1|0|0|1||X|||||||||0|
+S||Indicador 2|0|0|2||X|||||||||0|
+S||Informação de escala|0|0|a||X|||||||||0|
+S||Informação de projeção|0|0|b||X|||||||||0|
+S||Informação de zona|0|0|c||X|||||||||0|
+S||Informação de equinócio|0|0|d||X|||||||||0|
+S||Outros pares de coordenadas G-ring|0|0|f||X|||||||||0|
+S||Exclusão de coordenadas G-ring|0|0|g||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X|||||||||0||
 S||Indicador 2|0|0|2||X|||||||||0||
 S||Informação de escala|0|0|a||X|||||||||0||
@@ -348,7 +659,17 @@ S||Informação de equinócio|0|0|d||X|||||||||0||
 S||Outros pares de coordenadas G-ring|0|0|f||X|||||||||0||
 S||Exclusão de coordenadas G-ring|0|0|g||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|260|Área de publicação|0|1|12abcefg36||X|1|100|||||v260||1||
+T|260|Área de publicação|0|1|12abcefg36||X|1|100|||||v260||1||1
+S||Indicador 1|0|0|1||X||1|P|260-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Lugar de publicação, distribuição, etc.|0|1|a||X|||D||CI_|v260^a|v260^a||0|
+S||Nome do editor, distribuidor, etc.|0|1|b||X|||D||ED_|v260^b|v260^b||0|
+S||Data de publicação, distribuição, etc.|0|1|c||X|||||||||0|
+S||Lugar de manufatura|0|1|e||X|||||||||0|
+S||Manufatureiro|0|1|f||X|||||||||0|
+S||Data de manufatura|0|1|g||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|260-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Lugar de publicação, distribuição, etc.|0|1|a||X|||D||CI_|v260^a|v260^a||0||
@@ -359,8 +680,19 @@ S||Manufatureiro|0|1|f||X|||||||||0||
 S||Data de manufatura|0|1|g||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
+TAB||3XX|0|0||||||||||||0||0|0|||
 H||3XX: Descrição física, etc.|0|0||||||||||||0||
-T|300|Descrição física|0|1|12abcefg36||X|1|100|||||||1||
+T|300|Descrição física|0|1|12abcefg36||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Extensão|0|1|a||X|||||||||0|
+S||Outros detalhes físicos|0|0|b||X|||||||||0|
+S||Dimensões|0|1|c||X|||||||||0|
+S||Material complementar|0|0|e||X|||||||||0|
+S||Tipo de unidade|0|1|f||X|||||||||0|
+S||Tamanho da unidade|0|1|g||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Extensão|0|1|a||X|||||||||0||
@@ -371,8 +703,16 @@ S||Tipo de unidade|0|1|f||X|||||||||0||
 S||Tamanho da unidade|0|1|g||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
+TAB||4XX|0|0||||||||||||0||0|0|||
 H||4XX: Informação de séries|0|0||||||||||||0||
-T|490|Informação de série|0|1|12avx36||X|1|100|D|autoridades|CT_|@author.pft|||1||
+T|490|Informação de série|0|1|12avx36||X|1|100|D|autoridades|CT_|@author.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|490-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Informação de série|0|1|a||X|||D|autoridades|CT_|@author.pft|||0|
+S||Número do volume ou designação sequencial da série|0|1|v||X|||||||||0|
+S||ISSN|0|1|x||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|490-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Informação de série|0|1|a||X|||D|autoridades|CT_|@author.pft|||0||
@@ -380,27 +720,52 @@ S||Número do volume ou designação sequencial da série|0|1|v||X|||||||||0||
 S||ISSN|0|1|x||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
+TAB||5XX|0|0||||||||||||0||0|0|||
 H||5XX: Notas|0|0||||||||||||0||
-T|500|Nota geral|0|1|12a356||X|2|100|||||||1||
+T|500|Nota geral|0|1|12a356||X|2|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Nota geral|0|0|a||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Nota geral|0|0|a||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|501|Nota iniciada por <i>com</i>|0|1|12a56||X|1|100|||||||1||
+T|501|Nota iniciada por <i>com</i>|0|1|12a56||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Nota iniciada por <i>com</i>|0|0|a||X|||||||||0|
+S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Nota iniciada por <i>com</i>|0|0|a||X|||||||||0||
 S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|504|Nota de bibliografia, etc.|0|1|12ab6||X|1|100|||||||1||
+T|504|Nota de bibliografia, etc.|0|1|12ab6||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 1|0|0|2||X||1|||||||0|
+S||Nota de bibliografia, etc.|0|0|a||X|||||||||0|
+S||Número de referências|0|0|b||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 1|0|0|2||X||1|||||||0||
 S||Nota de bibliografia, etc.|0|0|a||X|||||||||0||
 S||Número de referências|0|0|b||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|505|Nota de conteúdo|0|1|12agrtu6||X|2|100|||||||1||
+T|505|Nota de conteúdo|0|1|12agrtu6||X|2|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|505-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|505-ind2.tab|||||0|
+S||Nota de conteúdo|0|0|a||X|||||||||0|
+S||Informações adicionais|0|1|g||X|||||||||0|
+S||Indicação de responsabilidade|0|1|r||X|||||||||0|
+S||Título|0|1|t||X|||||||||0|
+S||Endereço eletrônico|0|1|u||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|505-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|505-ind2.tab|||||0||
 S||Nota de conteúdo|0|0|a||X|||||||||0||
@@ -409,7 +774,20 @@ S||Indicação de responsabilidade|0|1|r||X|||||||||0||
 S||Título|0|1|t||X|||||||||0||
 S||Endereço eletrônico|0|1|u||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|506|Nota de acesso restrito|0|1|12abcdefu2356||X|1|100|||||||1||
+T|506|Nota de acesso restrito|0|1|12abcdefu2356||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|506-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Termos definindo o acesso|0|0|a||X|||||||||0|
+S||Jurisdição|0|1|b||X|||||||||0|
+S||Condições para o acesso físico|0|1|c||X|||||||||0|
+S||Usuários autorizados|0|1|d||X|||||||||0|
+S||Autorização|0|1|e||X|||||||||0|
+S||Termo padronizado indicando o tipo de restrição|0|1|f||X|||||||||0|
+S||Endereço eletrônico|0|1|u||X|||||||||0|
+S||Fonte do item|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|506-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Termos definindo o acesso|0|0|a||X|||||||||0||
@@ -423,7 +801,16 @@ S||Fonte do item|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|510|Nota de citação/referência|0|1|12abcux36||X|1|100|||||||1||
+T|510|Nota de citação/referência|0|1|12abcux36||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|510-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Nome da fonte|0|0|a||X|||||||||0|
+S||Cobertura da fonte|0|0|b||X|||||||||0|
+S||Localização na fonte|0|0|c||X|||||||||0|
+S||Endereço eletrônico|0|1|u||X|||||||||0|
+S||ISSN|0|0|x||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|510-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Nome da fonte|0|0|a||X|||||||||0||
@@ -433,12 +820,25 @@ S||Endereço eletrônico|0|1|u||X|||||||||0||
 S||ISSN|0|0|x||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|516|Nota de tipo de arquivo ou dado de computador|0|1|12a6||X|1|100|||||||1||
+T|516|Nota de tipo de arquivo ou dado de computador|0|1|12a6||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|516-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Tipo de arquivo ou dado de computador|0|0|a||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|516-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Tipo de arquivo ou dado de computador|0|0|a||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|518|Nota de data, hora e local de um evento|0|1|12adop236||X|1|100|||||||1||
+T|518|Nota de data, hora e local de um evento|0|1|12adop236||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Nota de data, hora e local de um evento|0|0|a||X|||||||||0|
+S||Data do evento|0|1|d||X|||||||||0|
+S||Outras informações do evento|0|1|o||X|||||||||0|
+S||Local do evento|0|1|p||X|||||||||0|
+S||Fonte do termo|0|1|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Nota de data, hora e local de um evento|0|0|a||X|||||||||0||
@@ -448,7 +848,16 @@ S||Local do evento|0|1|p||X|||||||||0||
 S||Fonte do termo|0|1|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|520|Nota de resumo, etc.|0|1|12abcu236||X|5|100|||||||1||
+T|520|Nota de resumo, etc.|0|1|12abcu236||X|5|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|520-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Resumo, etc.|0|0|a||X|||||||||0|
+S||Expansão da nota de resumo|0|0|b||X|||||||||0|
+S||Agência depositária|0|0|c||X|||||||||0|
+S||Endereço eletrônico|0|1|u||X|||||||||0|
+S||Fonte|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|520-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Resumo, etc.|0|0|a||X|||||||||0||
@@ -458,19 +867,38 @@ S||Endereço eletrônico|0|1|u||X|||||||||0||
 S||Fonte|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|521|Nota de público-alvo|0|1|12ab36||X|1|100|||||||1||
+T|521|Nota de público-alvo|0|1|12ab36||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|521-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Nota de público-alvo|0|1|a||X|||||||||0|
+S||Fonte|0|0|b||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|521-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Nota de público-alvo|0|1|a||X|||||||||0||
 S||Fonte|0|0|b||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|525|Nota de suplemento|0|1|12a6||X|1|100|||||||1||
+T|525|Nota de suplemento|0|1|12a6||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X|1|1|||||||0|
+S||Indicador 2|0|0|2||X|1|1|||||||0|
+S||Nota de suplemento|0|0|a||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X|1|1|||||||0||
 S||Indicador 2|0|0|2||X|1|1|||||||0||
 S||Nota de suplemento|0|0|a||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|530|Nota de disponibilidade de forma física adicional|0|1|12abcdu36||X|1|100|||||||1||
+T|530|Nota de disponibilidade de forma física adicional|0|1|12abcdu36||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Nota de disponibilidade de forma física adicional|0|0|a||X|||||||||0|
+S||Fonte de aquisição|0|0|b||X|||||||||0|
+S||Condições de aquisição|0|0|c||X|||||||||0|
+S||Número de ordem|0|0|d||X|||||||||0|
+S||Endereço eletrônico|0|1|u||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Nota de disponibilidade de forma física adicional|0|0|a||X|||||||||0||
@@ -480,7 +908,21 @@ S||Número de ordem|0|0|d||X|||||||||0||
 S||Endereço eletrônico|0|1|u||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|533|Nota de reprodução|0|1|12abcedefn3567||X|1|100|||||||1||
+T|533|Nota de reprodução|0|1|12abcedefn3567||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Tipo de reprodução|0|0|a||X|||||||||0|
+S||Local da reprodução|0|1|b||X|||||||||0|
+S||Instituição responsável pela reprodução|0|1|c||X|||||||||0|
+S||Data da reprodução|0|0|d||X|||||||||0|
+S||Descrição física da reprodução|0|0|e||X|||||||||0|
+S||Informação de série da reprodução|0|1|f||X|||||||||0|
+S||Data e/ou designação sequencial dos números reproduzidos|0|1|m||X|||||||||0|
+S||Nota sobre a reprodução|0|1|n||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
+S||Campos de dados fixos para reprodução|0|0|7||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Tipo de reprodução|0|0|a||X|||||||||0||
@@ -495,7 +937,25 @@ S||Material especificado|0|0|3||X|||||||||0||
 S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 S||Campos de dados fixos para reprodução|0|0|7||X|||||||||0||
-T|534|Nota de versão original|0|1|12abcefklmnoptxz36||X|1|100|||||||1||
+T|534|Nota de versão original|0|1|12abcefklmnoptxz36||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Entrada principal do original|0|0|a||X|||||||||0|
+S||Edição do original|0|0|b||X|||||||||0|
+S||Publicação, distribuição, etc. do original|0|0|c||X|||||||||0|
+S||Descrição física do original|0|0|e||X|||||||||0|
+S||Informação de série do original|0|1|f||X|||||||||0|
+S||Título-chave do original|0|1|k||X|||||||||0|
+S||Local do original|0|0|l||X|||||||||0|
+S||Detalhes específicos do material|0|0|m||X|||||||||0|
+S||Nota sobre original|0|1|n||X|||||||||0|
+S||Outro identificador do recurso|0|1|o||X|||||||||0|
+S||Frase introdutória|0|0|p||X|||||||||0|
+S||Título original|0|0|t||X|||||||||0|
+S||ISSN|0|1|x||X|||||||||0|
+S||ISBN|0|1|z||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Entrada principal do original|0|0|a||X|||||||||0||
@@ -514,7 +974,18 @@ S||ISSN|0|1|x||X|||||||||0||
 S||ISBN|0|1|z||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|536|Nota de informação sobre financiamento|0|1|12abcdefgh6||X|1|100|||||||1||
+T|536|Nota de informação sobre financiamento|0|1|12abcdefgh6||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Texto da nota|0|0|a||X|||||||||0|
+S||Número do contrato|0|1|b||X|||||||||0|
+S||Número da doação|0|1|c||X|||||||||0|
+S||Número indiferenciado|0|1|d||X|||||||||0|
+S||Número do elemento de progama|0|1|e||X|||||||||0|
+S||Número do projeto|0|1|f||X|||||||||0|
+S||Número da tarefa|0|1|g||X|||||||||0|
+S||Número da unidade de trabalho|0|1|h||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Texto da nota|0|0|a||X|||||||||0||
@@ -526,7 +997,15 @@ S||Número do projeto|0|1|f||X|||||||||0||
 S||Número da tarefa|0|1|g||X|||||||||0||
 S||Número da unidade de trabalho|0|1|h||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|538|Nota de detalhes do sistema|0|1|12aiu356||X|1|100|||||||1||
+T|538|Nota de detalhes do sistema|0|1|12aiu356||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Nota de detalhes do sistema|0|0|a||X|||||||||0|
+S||Texto para exibição|0|0|i||X|||||||||0|
+S||Endereço eletrônico|0|1|u||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Instituição à qual o campo se aplica|0|1|5||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Nota de detalhes do sistema|0|0|a||X|||||||||0||
@@ -535,26 +1014,49 @@ S||Endereço eletrônico|0|1|u||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Instituição à qual o campo se aplica|0|1|5||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|545|Nota biográfica ou histórica|0|1|12abu6||X|1|100|||||||1||
+T|545|Nota biográfica ou histórica|0|1|12abu6||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X|1|1|P|545-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X|1|1|||||||0|
+S||Nota biográfica ou histórica|0|0|a||X|||||||||0|
+S||Expansão|0|0|b||X|||||||||0|
+S||Endereço eletrônico|0|1|u||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X|1|1|P|545-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X|1|1|||||||0||
 S||Nota biográfica ou histórica|0|0|a||X|||||||||0||
 S||Expansão|0|0|b||X|||||||||0||
 S||Endereço eletrônico|0|1|u||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|546|Nota de idioma|0|1|12ab36||X|1|100|||||||1||
+T|546|Nota de idioma|0|1|12ab36||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Nota de idioma|0|0|a||X|||||||||0|
+S||Informação de código ou alfabeto|0|1|b||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Nota de idioma|0|0|a||X|||||||||0||
 S||Informação de código ou alfabeto|0|1|b||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|550|Nota de informação sobre a edição|0|1|12a6||X|1|100|||||||1||
+T|550|Nota de informação sobre a edição|0|1|12a6||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Nota de informação sobre a edição|0|0|a||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Nota de informação sobre a edição|0|0|a||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|561|Nota de histórico de procedência|0|1|12au356||X|1|100|||||||1||
+T|561|Nota de histórico de procedência|0|1|12au356||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|561-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Histórico|0|0|a||X|||||||||0|
+S||Endereço eletrônico|0|1|u||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|561-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Histórico|0|0|a||X|||||||||0||
@@ -562,7 +1064,17 @@ S||Endereço eletrônico|0|1|u||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|562|Nota de identificação de cópia e versão|0|1|12abcde356||X|1|100|||||||1||
+T|562|Nota de identificação de cópia e versão|0|1|12abcde356||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Marca identificadora|0|1|a||X|||||||||0|
+S||Identificação de cópia|0|1|b||X|||||||||0|
+S||Identificação de versão|0|1|c||X|||||||||0|
+S||Formato de apresentação|0|1|d||X|||||||||0|
+S||Número de cópias|0|1|e||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Marca identificadora|0|1|a||X|||||||||0||
@@ -573,17 +1085,35 @@ S||Número de cópias|0|1|e||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|580|Nota de ligação complexa de entrada|0|1|12a6||X|1|100|||||||1||
+T|580|Nota de ligação complexa de entrada|0|1|12a6||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X|1|1|||||||0|
+S||Indicador 2|0|0|2||X|1|1|||||||0|
+S||Nota de ligação complexa de entrada|0|0|a||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X|1|1|||||||0||
 S||Indicador 2|0|0|2||X|1|1|||||||0||
 S||Nota de ligação complexa de entrada|0|0|a||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|590|Notal local|0|1|12a6||X|1|100|||||||1||
+T|590|Notal local|0|1|12a6||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X|1|1|||||||0|
+S||Indicador 2|0|0|2||X|1|1|||||||0|
+S||Nota local|0|0|a||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X|1|1|||||||0||
 S||Indicador 2|0|0|2||X|1|1|||||||0||
 S||Nota local|0|0|a||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|592|Dados da coleção para seriado|0|1|12abcdefyz|||1|100|||||||1||
+T|592|Dados da coleção para seriado|0|1|12abcdefyz|||1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Descrição da coleção - Texto impresso|0|0|a||X|||||||||0|
+S||Descrição da coleção - Microficha|0|0|b||X|||||||||0|
+S||Descrição da coleção - CD-ROM|0|0|c||X|||||||||0|
+S||Descrição da coleção - Multimeios (Disquete)|0|0|d||X|||||||||0|
+S||Descrição da coleção - Microfilme|0|0|e||X|||||||||0|
+S||Descrição da coleção - Braille|0|0|f||X|||||||||0|
+S||SIPS/IBICT Código do título de periódico no CCN|0|0|y||X|||||||||0|
+S||Código da biblioteca participante no CCN|0|0|z||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Descrição da coleção - Texto impresso|0|0|a||X|||||||||0||
@@ -594,15 +1124,52 @@ S||Descrição da coleção - Microfilme|0|0|e||X|||||||||0||
 S||Descrição da coleção - Braille|0|0|f||X|||||||||0||
 S||SIPS/IBICT Código do título de periódico no CCN|0|0|y||X|||||||||0||
 S||Código da biblioteca participante no CCN|0|0|z||X|||||||||0||
-T|595|Nota para inclusão em bibliografias, catálogos coletivos e bases bibliográficas|0|1|12abcd||X|1|100|||||||1||
+T|595|Nota para inclusão em bibliografias, catálogos coletivos e bases bibliográficas|0|1|12abcd||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Bibliografia|0|0|a||X|||||||||0|
+S||Catálogo coletivo|0|0|b||X|||||||||0|
+S||Base bibliográfica|0|0|c||X|||||||||0|
+S||Período de abrangência (Ano/mês)|0|0|d||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Bibliografia|0|0|a||X|||||||||0||
 S||Catálogo coletivo|0|0|b||X|||||||||0||
 S||Base bibliográfica|0|0|c||X|||||||||0||
 S||Período de abrangência (Ano/mês)|0|0|d||X|||||||||0||
+TAB||6XX|0|0||||||||||||0||0|0|||
 H||6XX: Assuntos|0|0||||||||||||0||
-T|600|Assunto - Nome pessoal|0|1|12abcdefghjklmnopqrstuvxyz2346||X|2|100|D|marc|AU_|@autoridades.pft|||1||
+T|600|Assunto - Nome pessoal|0|1|12abcdefghjklmnopqrstuvxyz2346||X|2|100|D|marc|AU_|@autoridades.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|600-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|600-ind2.tab|||||0|
+S||Nome pessoal|0|0|a||X|||D|marc|AU_|@autoridades.pft|||0|
+S||Numeração|0|0|b||X|||||||||0|
+S||Títulos e outras palavras associadas ao nome|0|1|c||X|||||||||0|
+S||Data associadas ao nome|0|0|d||X|||||||||0|
+S||Termo relacionador|0|1|e||X|||||||||0|
+S||Data da obra|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Atributo qualificador|0|1|j||X|||||||||0|
+S||Subcabeçalho de forma|0|1|k||X|||||||||0|
+S||Idioma da obra|0|0|l||X|||||||||0|
+S||Meio de execução para música|0|1|m||X|||||||||0|
+S||Número da parte/seção da obra|0|1|n||X|||||||||0|
+S||Informação de arranjo para música|0|0|o||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Forma completa do nome|0|0|q||X|||||||||0|
+S||Chave para música|0|0|r||X|||||||||0|
+S||Versão|0|0|s||X|||||||||0|
+S||Título da obra|0|0|t||X|||||||||0|
+S||Afiliação|0|0|u||X|||||||||0|
+S||Subdivisão de forma|0|1|v||X|||D|autoridades|SF_|@author.pft|||0|
+S||Subdivisão geral|0|1|x||X|||D|autoridades|ST_|@author.pft|||0|
+S||Subdivisão cronológica|0|1|y||X|||D|autoridades|SC_|@author.pft|||0|
+S||Subdivisão geográfica|0|1|z||X|||D|autoridades|SG_|@author.pft|||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|600-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|600-ind2.tab|||||0||
 S||Nome pessoal|0|0|a||X|||D|marc|AU_|@autoridades.pft|||0||
@@ -633,7 +1200,34 @@ S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|610|Assunto - Entidade|0|1|12abcdefghklmnoprstvxyz2346||X|2|100|D|marc|AU_|@autoridades.pft|||1||
+T|610|Assunto - Entidade|0|1|12abcdefghklmnoprstvxyz2346||X|2|100|D|marc|AU_|@autoridades.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|610-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|610-ind2.tab|||||0|
+S||Nome da entidade ou da jurisdição|0|0|a||X|||D|marc|AU_|@autoridades.pft|||0|
+S||Unidade subordinada|0|1|b||X|||||||||0|
+S||Local do encontro|0|0|c||X|||||||||0|
+S||Data do encontro ou assinatura do tratado|0|1|d||X|||||||||0|
+S||Termo relacionador|0|1|e||X|||||||||0|
+S||Data da obra|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Subcabeçalho de forma|0|1|k||X|||||||||0|
+S||Idioma da obra|0|0|l||X|||||||||0|
+S||Meio de execução para música|0|1|m||X|||||||||0|
+S||Número da parte/seção da obra|0|1|n||X|||||||||0|
+S||Informação de arranjo para música|0|0|o||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Chave para música|0|0|r||X|||||||||0|
+S||Versão|0|0|s||X|||||||||0|
+S||Título da obra|0|0|t||X|||||||||0|
+S||Subdivisão de forma|0|1|v||X|||D|autoridades|SF_|@author.pft|||0|
+S||Subdivisão geral|0|1|x||X|||D|autoridades|ST_|@author.pft|||0|
+S||Subdivisão cronológica|0|1|y||X|||D|autoridades|SC_|@author.pft|||0|
+S||Subdivisão geográfica|0|1|z||X|||D|autoridades|SG_|@author.pft|||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|610-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|610-ind2.tab|||||0||
 S||Nome da entidade ou da jurisdição|0|0|a||X|||D|marc|AU_|@autoridades.pft|||0||
@@ -661,7 +1255,33 @@ S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|611|Assunto - Evento|0|1|12acdefghjklnpqstuvxyz2346||X|2|100|D|autoridades|CV_|@author.pft|||1||
+T|611|Assunto - Evento|0|1|12acdefghjklnpqstuvxyz2346||X|2|100|D|autoridades|CV_|@author.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|611-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|611-ind2.tab|||||0|
+S||Nome do evento ou da jurisdição|0|0|a||X|||D|autoridades|CV_|@author.pft|||0|
+S||Local do evento|0|0|c||X|||||||||0|
+S||Data do evento|0|0|d||X|||||||||0|
+S||Unidade subordinada|0|1|e||X|||||||||0|
+S||Data da obra|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Termo relacionador|0|1|j||X|||||||||0|
+S||Subcabeçalho de forma|0|1|k||X|||||||||0|
+S||Idioma da obra|0|0|l||X|||||||||0|
+S||Número da parte/seção|0|1|n||X|||||||||0|
+S||Nome da parte/seção do evento|0|1|p||X|||||||||0|
+S||Nome que segue o nome de jurisdição|0|0|q||X|||||||||0|
+S||Versão|0|0|s||X|||||||||0|
+S||Título da obra|0|0|t||X|||||||||0|
+S||Afiliação|0|0|u||X|||||||||0|
+S||Subdivisão de forma|0|1|v||X|||D|autoridades|SF_|@author.pft|||0|
+S||Subdivisão geral|0|1|x||X|||D|autoridades|ST_|@author.pft|||0|
+S||Subdivisão cronológica|0|1|y||X|||D|autoridades|SC_|@author.pft|||0|
+S||Subdivisão geográfica|0|1|z||X|||D|autoridades|SG_|@author.pft|||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|611-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|611-ind2.tab|||||0||
 S||Nome do evento ou da jurisdição|0|0|a||X|||D|autoridades|CV_|@author.pft|||0||
@@ -688,7 +1308,32 @@ S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|630|Assunto - Título uniforme|0|1|12adefghklmnoprstvxyz2346||X|2|100|D|autoridades|CT_|@author.pft|||1||
+T|630|Assunto - Título uniforme|0|1|12adefghklmnoprstvxyz2346||X|2|100|D|autoridades|CT_|@author.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|630-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|630-ind2.tab|||||0|
+S||Título uniforme|0|0|a||X|||D|autoridades|CT_|@author.pft|||0|
+S||Data de assinatura do tratado|0|1|d||X|||||||||0|
+S||Termo relacionador|0|1|e||X|||||||||0|
+S||Data da obra|0|1|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Subcabeçalho de forma|0|1|k||X|||||||||0|
+S||Idioma da obra|0|0|l||X|||||||||0|
+S||Meio de execução para música|0|1|m||X|||||||||0|
+S||Número da parte/seção da obra|0|1|n||X|||||||||0|
+S||Informação de arranjo para música|0|0|o||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Chave para música|0|0|r||X|||||||||0|
+S||Versão|0|0|s||X|||||||||0|
+S||Título da obra|0|0|t||X|||||||||0|
+S||Subdivisão de forma|0|1|v||X|||D|autoridades|SF_|@author.pft|||0|
+S||Subdivisão geral|0|1|x||X|||D|autoridades|ST_|@author.pft|||0|
+S||Subdivisão cronológica|0|1|y||X|||D|autoridades|SC_|@author.pft|||0|
+S||Subdivisão geográfica|0|1|z||X|||D|autoridades|SG_|@author.pft|||0|
+S||Fonte do cabeçalho|0|1|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|630-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|630-ind2.tab|||||0||
 S||Título uniforme|0|0|a||X|||D|autoridades|CT_|@author.pft|||0||
@@ -714,7 +1359,17 @@ S||Fonte do cabeçalho|0|1|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|648|Assunto - Período cronológico|0|1|12avxyz236||X|2|100|D|autoridades|CR_|@author.pft|||1||
+T|648|Assunto - Período cronológico|0|1|12avxyz236||X|2|100|D|autoridades|CR_|@author.pft|||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|P|648-ind2.tab|||||0|
+S||Termo tópico ou nome geográfico|0|0|a||X|||D|autoridades|CR_|@author.pft|||0|
+S||Subdivisão de forma|0|1|v||X|||D|autoridades|SF_|@author.pft|||0|
+S||Subdivisão geral|0|1|x||X|||D|autoridades|ST_|@author.pft|||0|
+S||Subdivisão cronológica|0|1|y||X|||D|autoridades|SC_|@author.pft|||0|
+S||Subdivisão geográfica|0|1|z||X|||D|autoridades|SG_|@author.pft|||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|P|648-ind2.tab|||||0||
 S||Termo tópico ou nome geográfico|0|0|a||X|||D|autoridades|CR_|@author.pft|||0||
@@ -725,7 +1380,22 @@ S||Subdivisão geográfica|0|1|z||X|||D|autoridades|SG_|@author.pft|||0||
 S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|650|Assunto - Termo tópico|0|1|12abcdevxyz2346||X|2|100|D|autoridades|CM_|@author.pft|||1||
+T|650|Assunto - Termo tópico|0|1|12abcdevxyz2346||X|2|100|D|autoridades|CM_|@author.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|650-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|650-ind2.tab|||||0|
+S||Termo tópico ou nome geográfico|0|0|a||X|||D|autoridades|CM_|@author.pft|||0|
+S||Termo tópico seguindo nome geográfico|0|0|b||X|||||||||0|
+S||Local do evento|0|0|c||X|||||||||0|
+S||Datas de realização do evento|0|0|d||X|||||||||0|
+S||Termo relacionador|0|1|e||X|||||||||0|
+S||Subdivisão de forma|0|1|v||X|||D|autoridades|SF_|@author.pft|||0|
+S||Subdivisão geral|0|1|x||X|||D|autoridades|ST_|@author.pft|||0|
+S||Subdivisão cronológica|0|1|y||X|||D|autoridades|SC_|@author.pft|||0|
+S||Subdivisão geográfica|0|1|z||X|||D|autoridades|SG_|@author.pft|||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|650-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|650-ind2.tab|||||0||
 S||Termo tópico ou nome geográfico|0|0|a||X|||D|autoridades|CM_|@author.pft|||0||
@@ -741,7 +1411,19 @@ S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|651|Assunto - Nome geográfico|0|1|12aevxyz2346||X|2|100|D|autoridades|CG_|@author.pft|||1||
+T|651|Assunto - Nome geográfico|0|1|12aevxyz2346||X|2|100|D|autoridades|CG_|@author.pft|||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|P|651-ind2.tab|||||0|
+S||Nome geográfico|0|0|a||X|||D|autoridades|CG_|@author.pft|||0|
+S||Termo relacionador|0|1|e||X|||||||||0|
+S||Subdivisão de forma|0|1|v||X|||D|autoridades|SF_|@author.pft|||0|
+S||Subdivisão geral|0|1|x||X|||D|autoridades|ST_|@author.pft|||0|
+S||Subdivisão cronológica|0|1|y||X|||D|autoridades|SC_|@author.pft|||0|
+S||Subdivisão geográfica|0|1|z||X|||D|autoridades|SG_|@author.pft|||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|P|651-ind2.tab|||||0||
 S||Nome geográfico|0|0|a||X|||D|autoridades|CG_|@author.pft|||0||
@@ -754,12 +1436,28 @@ S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|653|Assunto - Termo livre|0|1|12a6||X|2|100|D||MD_|@author.pft|||1||
+T|653|Assunto - Termo livre|0|1|12a6||X|2|100|D||MD_|@author.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|653-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|653-ind2.tab|||||0|
+S||Termo livre|0|1|a||X|||D||MD_|@author.pft|||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|653-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|653-ind2.tab|||||0||
 S||Termo livre|0|1|a||X|||D||MD_|@author.pft|||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|655|Assunto - Gênero/Forma/Características físicas|0|1|12abcvxyz236||X|2|100|D|autoridades|GF_|@author.pft|||1||
+T|655|Assunto - Gênero/Forma/Características físicas|0|1|12abcvxyz236||X|2|100|D|autoridades|GF_|@author.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|655-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|655-ind2.tab|||||0|
+S||Termo gênero/forma/características físicas|0|0|a||X|||D|autoridades|GF_|@author.pft|||0|
+S||Termo não focado|0|1|b||X|||||||||0|
+S||Faceta/designação de hierarquia|0|1|c||X|||||||||0|
+S||Subdivisão de forma|0|1|v||X|||D|autoridades|SF_|@author.pft|||0|
+S||Subdivisão geral|0|1|x||X|||D|autoridades|ST_|@author.pft|||0|
+S||Subdivisão cronológica|0|1|y||X|||D|autoridades|SC_|@author.pft|||0|
+S||Subdivisão geográfica|0|1|z||X|||D|autoridades|SG_|@author.pft|||0|
+S||Fonte do termo|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|655-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|655-ind2.tab|||||0||
 S||Termo gênero/forma/características físicas|0|0|a||X|||D|autoridades|GF_|@author.pft|||0||
@@ -772,8 +1470,36 @@ S||Subdivisão geográfica|0|1|z||X|||D|autoridades|SG_|@author.pft|||0||
 S||Fonte do termo|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
+TAB||7XX|0|0||||||||||||0||0|0|||
 H||70X-75X: Entradas secundárias|0|0||||||||||||0||
-T|700|Entrada secundária - Nome pessoal|0|1|12abcdefghijklmnopqrstu2456||X|2|100|D|marc|AU_|@autoridades.pft|||1||
+T|700|Entrada secundária - Nome pessoal|0|1|12abcdefghijklmnopqrstu2456||X|2|100|D|marc|AU_|@autoridades.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|700-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|700-ind2.tab|||||0|
+S||Nome pessoal|0|0|a||X|||D|marc|AU_|@autoridades.pft|||0|
+S||Numeração|0|0|b||X|||||||||0|
+S||Títulos e outras palavras associadas ao nome|0|1|c||X|||||||||0|
+S||Datas associadas ao nome|0|0|d||X|||||||||0|
+S||Termo relacionador|0|1|e||X|||||||||0|
+S||Data da obra|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Informações sobre relações|0|1|i||X|||||||||0|
+S||Atributo qualificador|0|1|j||X|||||||||0|
+S||Subcabeçalho de forma|0|1|k||X|||||||||0|
+S||Idioma da obra|0|0|l||X|||||||||0|
+S||Meio de apresentação da música|0|1|m||X|||||||||0|
+S||Número da parte/seção da obra|0|1|n||X|||||||||0|
+S||Informação de arranjo para música|0|0|o||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Forma completa do nome|0|0|q||X|||||||||0|
+S||Chave para música|0|0|r||X|||||||||0|
+S||Versão|0|0|s||X|||||||||0|
+S||Título da obra|0|0|t||X|||||||||0|
+S||Afiliação|0|0|u||X|||||||||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Código relacionador|0|1|4||X|||||||||0|
+S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|700-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|700-ind2.tab|||||0||
 S||Nome pessoal|0|0|a||X|||D|marc|AU_|@autoridades.pft|||0||
@@ -801,7 +1527,33 @@ S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Código relacionador|0|1|4||X|||||||||0||
 S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|710|Entrada secundária - Entidade|0|1|12abcdefghiklmnopqrst23456||X|2|100|D|marc|AU_|@autoridades.pft|||1||
+T|710|Entrada secundária - Entidade|0|1|12abcdefghiklmnopqrst23456||X|2|100|D|marc|AU_|@autoridades.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|710-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|710-ind2.tab|||||0|
+S||Nome da entidade ou da jurisdição|0|0|a||X|||D|marc|AU_|@autoridades.pft|||0|
+S||Unidade subordinada|0|1|b||X|||||||||0|
+S||Local do encontro|0|0|c||X|||||||||0|
+S||Data do encontro ou assinatura do tratado|0|1|d||X|||||||||0|
+S||Termo relacionador|0|1|e||X|||||||||0|
+S||Data da obra|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Informações sobre relações|0|1|i||X|||||||||0|
+S||Subcabeçalho de forma|0|1|k||X|||||||||0|
+S||Idioma da obra|0|0|l||X|||||||||0|
+S||Meio de apresentação da música|0|1|m||X|||||||||0|
+S||Número da parte/seção/evento|0|1|n||X|||||||||0|
+S||Informação de arranjo para música|0|0|o||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Forma completa do nome|0|0|q||X|||||||||0|
+S||Chave para música|0|0|r||X|||||||||0|
+S||Versão|0|0|s||X|||||||||0|
+S||Título da obra|0|0|t||X|||||||||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|710-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|710-ind2.tab|||||0||
 S||Nome da entidade ou da jurisdição|0|0|a||X|||D|marc|AU_|@autoridades.pft|||0||
@@ -828,7 +1580,31 @@ S||Material especificado|0|0|3||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|711|Entrada secundária - Evento|0|1|12acdefghijklnpqstu23456||X|2|100|D|autoridades|CV_|@author.pft|||1||
+T|711|Entrada secundária - Evento|0|1|12acdefghijklnpqstu23456||X|2|100|D|autoridades|CV_|@author.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|711-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|711-ind2.tab|||||0|
+S||Nome do evento ou da jurisdição|0|0|a||X|||D|autoridades|CV_|@author.pft|||0|
+S||Lugar do evento|0|0|c||X|||||||||0|
+S||Data do evento|0|0|d||X|||||||||0|
+S||Unidade subordinada|0|1|e||X|||||||||0|
+S||Data da obra|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Informações sobre relações|0|1|i||X|||||||||0|
+S||Atributo qualificador|0|1|j||X|||||||||0|
+S||Subcabeçalho de forma|0|1|k||X|||||||||0|
+S||Idioma da obra|0|0|l||X|||||||||0|
+S||Número da parte/seção/evento|0|1|n||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Nome do evento que segue nome da jurisdição na entrada|0|0|q||X|||||||||0|
+S||Versão|0|0|s||X|||||||||0|
+S||Título do trabalho|0|0|t||X|||||||||0|
+S||Afiliação|0|0|u||X|||||||||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|711-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|711-ind2.tab|||||0||
 S||Nome do evento ou da jurisdição|0|0|a||X|||D|autoridades|CV_|@author.pft|||0||
@@ -853,14 +1629,42 @@ S||Material especificado|0|0|3||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|720|Entrada secundária - Nome não controlado|0|1|12ae46||X|2|100|||||||1||
+T|720|Entrada secundária - Nome não controlado|0|1|12ae46||X|2|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|720-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Nome|0|0|a||X|||||||||0|
+S||Termo relacionador|0|1|e||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|720-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Nome|0|0|a||X|||||||||0||
 S||Termo relacionador|0|1|e||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|730|Entrada secundária - Título uniforme|0|1|12adfghiklmnoprstx2356||X|2|100|D|autoridades|CT_|@author.pft|||1||
+T|730|Entrada secundária - Título uniforme|0|1|12adfghiklmnoprstx2356||X|2|100|D|autoridades|CT_|@author.pft|||1||1
+S||Indicador 1|0|0|1||X||1|P|730-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|730-ind2.tab|||||0|
+S||Título uniforme|0|0|a||X|||D|autoridades|CT_|@author.pft|||0|
+S||Data da assinatura do tratado|0|1|d||X|||||||||0|
+S||Data da obra|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Informações sobre relações|0|1|i||X|||||||||0|
+S||Subcabeçalho de forma|0|1|k||X|||||||||0|
+S||Idioma da obra|0|0|l||X|||||||||0|
+S||Meio de apresentação da música|0|1|m||X|||||||||0|
+S||Número da parte/seção da obra|0|1|n||X|||||||||0|
+S||Informação de arranjo para música|0|0|o||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Chave para música|0|0|r||X|||||||||0|
+S||Versão|0|0|s||X|||||||||0|
+S||Título da obra|0|0|t||X|||||||||0|
+S||ISSN|0|0|x||X|||||||||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|730-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|730-ind2.tab|||||0||
 S||Título uniforme|0|0|a||X|||D|autoridades|CT_|@author.pft|||0||
@@ -883,7 +1687,16 @@ S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|740|Entrada secundária - Título relacionado/Analítico não controlado|0|1|12ahnp256||X|2|100|||||||1||
+T|740|Entrada secundária - Título relacionado/Analítico não controlado|0|1|12ahnp256||X|2|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|740-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|740-ind2.tab|||||0|
+S||Título relacionado/analítico não controlado|0|0|a||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Número da parte/seção da obra|0|1|n||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|740-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|740-ind2.tab|||||0||
 S||Título relacionado/analítico não controlado|0|0|a||X|||||||||0||
@@ -893,7 +1706,18 @@ S||Nome da parte/seção da obra|0|1|p||X|||||||||0||
 S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Instituição à qual o campo se aplica|0|0|5||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|752|Entrada secundária - Forma hierárquica do nome geográfico|0|1|12abcdfgh26||X|2|100|||||||1||
+T|752|Entrada secundária - Forma hierárquica do nome geográfico|0|1|12abcdfgh26||X|2|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||País ou entidade maior|0|1|a||X|||||||||0|
+S||Primeira ordem da jurisdição política|0|0|b||X|||||||||0|
+S||Jurisdição política intermediária|0|1|c||X|||||||||0|
+S||Cidade|0|0|d||X|||||||||0|
+S||Subseção de cidade|0|1|f||X|||||||||0|
+S||Outra região geográfica e característica não jurisdicional|0|1|g||X|||||||||0|
+S||Área extraterrestre|0|1|h||X|||||||||0|
+S||Fonte do cabeçalho|0|0|2||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||País ou entidade maior|0|1|a||X|||||||||0||
@@ -906,7 +1730,27 @@ S||Área extraterrestre|0|1|h||X|||||||||0||
 S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 H||76X-78X: Entradas de ligação|0|0||||||||||||0||
-T|760|Entrada de série principal|0|1|12abcdghimnostwxy467||X|1|100|||||||1||
+T|760|Entrada de série principal|0|1|12abcdghimnostwxy467||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|760-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|760-ind2.tab|||||0|
+S||Título da entrada principal|0|0|a||X|||||||||0|
+S||Edição|0|0|b||X|||||||||0|
+S||Informação qualificadora|0|0|c||X|||||||||0|
+S||Local, editor e data de publicação|0|0|d||X|||||||||0|
+S||Partes relacionadas|0|1|g||X|||||||||0|
+S||Descrição física|0|0|h||X|||||||||0|
+S||Informações sobre relações|0|1|i||X|||||||||0|
+S||Detalhes específicos do material|0|0|m||X|||||||||0|
+S||Nota|0|1|n||X|||||||||0|
+S||Outro identificador do item|0|1|o||X|||||||||0|
+S||Título uniforme|0|0|s||X|||||||||0|
+S||Título|0|0|t||X|||||||||0|
+S||Número de controle do registro|0|1|w||X|||||||||0|
+S||ISSN|0|0|x||X|||||||||0|
+S||Designação CODEN|0|0|y||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
+S||Subcampo de controle|0|0|7||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|760-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|760-ind2.tab|||||0||
 S||Título da entrada principal|0|0|a||X|||||||||0||
@@ -927,7 +1771,27 @@ S||Designação CODEN|0|0|y||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 S||Subcampo de controle|0|0|7||X|||||||||0||
-T|762|Entrada de subsérie|0|1|12abcdghimnostwxy467||X|1|100|||||||1||
+T|762|Entrada de subsérie|0|1|12abcdghimnostwxy467||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|762-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|762-ind2.tab|||||0|
+S||Título da entrada principal|0|0|a||X|||||||||0|
+S||Edição|0|0|b||X|||||||||0|
+S||Informação qualificadora|0|0|c||X|||||||||0|
+S||Local, editor e data de publicação|0|0|d||X|||||||||0|
+S||Partes relacionadas|0|1|g||X|||||||||0|
+S||Descrição física|0|0|h||X|||||||||0|
+S||Informações sobre relações|0|1|i||X|||||||||0|
+S||Detalhes específicos do material|0|0|m||X|||||||||0|
+S||Nota|0|1|n||X|||||||||0|
+S||Outro identificador do item|0|1|o||X|||||||||0|
+S||Título uniforme|0|0|s||X|||||||||0|
+S||Título|0|0|t||X|||||||||0|
+S||Número de controle do registro|0|1|w||X|||||||||0|
+S||ISSN|0|0|x||X|||||||||0|
+S||Designação CODEN|0|0|y||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
+S||Subcampo de controle|0|0|7||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|762-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|762-ind2.tab|||||0||
 S||Título da entrada principal|0|0|a||X|||||||||0||
@@ -948,7 +1812,30 @@ S||Designação CODEN|0|0|y||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 S||Subcampo de controle|0|0|7||X|||||||||0||
-T|765|Entrada de idioma original|0|1|12abcdghikmnorstwxyz467||X|1|100|||||||1||
+T|765|Entrada de idioma original|0|1|12abcdghikmnorstwxyz467||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|765-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|765-ind2.tab|||||0|
+S||Título da entrada principal|0|0|a||X|||||||||0|
+S||Edição|0|0|b||X|||||||||0|
+S||Informação qualificadora|0|0|c||X|||||||||0|
+S||Local, editor e data de publicação|0|0|d||X|||||||||0|
+S||Partes relacionadas|0|1|g||X|||||||||0|
+S||Descrição física|0|0|h||X|||||||||0|
+S||Informações sobre relações|0|1|i||X|||||||||0|
+S||Dado de série para item relacionado|0|1|k||X|||||||||0|
+S||Detalhes específicos do material|0|0|m||X|||||||||0|
+S||Nota|0|1|n||X|||||||||0|
+S||Outro identificador do item|0|1|o||X|||||||||0|
+S||Número de relatório|0|1|r||X|||||||||0|
+S||Título uniforme|0|0|s||X|||||||||0|
+S||Título|0|0|t||X|||||||||0|
+S||Número de controle do registro|0|1|w||X|||||||||0|
+S||ISSN|0|0|x||X|||||||||0|
+S||Designação CODEN|0|0|y||X|||||||||0|
+S||ISBN|0|1|z||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
+S||Subcampo de controle|0|0|7||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|765-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|765-ind2.tab|||||0||
 S||Título da entrada principal|0|0|a||X|||||||||0||
@@ -972,7 +1859,30 @@ S||ISBN|0|1|z||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 S||Subcampo de controle|0|0|7||X|||||||||0||
-T|767|Entrada de tradução|0|1|12abcdghikmnorstwxyz467||X|1|100|||||||1||
+T|767|Entrada de tradução|0|1|12abcdghikmnorstwxyz467||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|767-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|767-ind2.tab|||||0|
+S||Título da entrada principal|0|0|a||X|||||||||0|
+S||Edição|0|0|b||X|||||||||0|
+S||Informação qualificadora|0|0|c||X|||||||||0|
+S||Local, editor e data de publicação|0|0|d||X|||||||||0|
+S||Partes relacionadas|0|1|g||X|||||||||0|
+S||Descrição física|0|0|h||X|||||||||0|
+S||Informações sobre relações|0|1|i||X|||||||||0|
+S||Dado de série para item relacionado|0|1|k||X|||||||||0|
+S||Detalhes específicos do material|0|0|m||X|||||||||0|
+S||Nota|0|1|n||X|||||||||0|
+S||Outro identificador do item|0|1|o||X|||||||||0|
+S||Número de relatório|0|1|r||X|||||||||0|
+S||Título uniforme|0|0|s||X|||||||||0|
+S||Título|0|0|t||X|||||||||0|
+S||Número de controle do registro|0|1|w||X|||||||||0|
+S||ISSN|0|0|x||X|||||||||0|
+S||Designação CODEN|0|0|y||X|||||||||0|
+S||ISBN|0|1|z||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
+S||Subcampo de controle|0|0|7||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|767-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|767-ind2.tab|||||0||
 S||Título da entrada principal|0|0|a||X|||||||||0||
@@ -996,7 +1906,30 @@ S||ISBN|0|1|z||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 S||Subcampo de controle|0|0|7||X|||||||||0||
-T|772|Entrada de registro principal|0|1|12abcdghikmnorstwxyz467||X|1|100|||||||1||
+T|772|Entrada de registro principal|0|1|12abcdghikmnorstwxyz467||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|772-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|772-ind2.tab|||||0|
+S||Título da entrada principal|0|0|a||X|||||||||0|
+S||Edição|0|0|b||X|||||||||0|
+S||Informação qualificadora|0|0|c||X|||||||||0|
+S||Local, editor e data de publicação|0|0|d||X|||||||||0|
+S||Partes relacionadas|0|1|g||X|||||||||0|
+S||Descrição física|0|0|h||X|||||||||0|
+S||Informações sobre relações|0|1|i||X|||||||||0|
+S||Dado de série para item relacionado|0|1|k||X|||||||||0|
+S||Detalhes específicos do material|0|0|m||X|||||||||0|
+S||Nota|0|1|n||X|||||||||0|
+S||Outro identificador do item|0|1|o||X|||||||||0|
+S||Número de relatório|0|1|r||X|||||||||0|
+S||Título uniforme|0|0|s||X|||||||||0|
+S||Título|0|0|t||X|||||||||0|
+S||Número de controle do registro|0|1|w||X|||||||||0|
+S||ISSN|0|0|x||X|||||||||0|
+S||Designação CODEN|0|0|y||X|||||||||0|
+S||ISBN|0|1|z||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
+S||Subcampo de controle|0|0|7||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|772-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|772-ind2.tab|||||0||
 S||Título da entrada principal|0|0|a||X|||||||||0||
@@ -1020,7 +1953,30 @@ S||ISBN|0|1|z||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 S||Subcampo de controle|0|0|7||X|||||||||0||
-T|774|Entrada de unidade constituinte|0|1|12abcdghikmnorstwxyz467||X|1|100|||||||1||
+T|774|Entrada de unidade constituinte|0|1|12abcdghikmnorstwxyz467||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|774-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|774-ind2.tab|||||0|
+S||Título da entrada principal|0|0|a||X|||||||||0|
+S||Edição|0|0|b||X|||||||||0|
+S||Informação qualificadora|0|0|c||X|||||||||0|
+S||Local, editor e data de publicação|0|0|d||X|||||||||0|
+S||Partes relacionadas|0|1|g||X|||||||||0|
+S||Descrição física|0|0|h||X|||||||||0|
+S||Informações sobre relações|0|1|i||X|||||||||0|
+S||Dado de série para item relacionado|0|1|k||X|||||||||0|
+S||Detalhes específicos do material|0|0|m||X|||||||||0|
+S||Nota|0|1|n||X|||||||||0|
+S||Outro identificador do item|0|1|o||X|||||||||0|
+S||Número de relatório|0|1|r||X|||||||||0|
+S||Título uniforme|0|0|s||X|||||||||0|
+S||Título|0|0|t||X|||||||||0|
+S||Número de controle do registro|0|1|w||X|||||||||0|
+S||ISSN|0|0|x||X|||||||||0|
+S||Designação CODEN|0|0|y||X|||||||||0|
+S||ISBN|0|1|z||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
+S||Subcampo de controle|0|0|7||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|774-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|774-ind2.tab|||||0||
 S||Título da entrada principal|0|0|a||X|||||||||0||
@@ -1044,7 +2000,32 @@ S||ISBN|0|1|z||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 S||Subcampo de controle|0|0|7||X|||||||||0||
-T|775|Entrada de outra edição|0|1|12abcdefghikmnorstwxyz467||X|1|100|||||||1||
+T|775|Entrada de outra edição|0|1|12abcdefghikmnorstwxyz467||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|775-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|775-ind2.tab|||||0|
+S||Título da entrada principal|0|0|a||X|||||||||0|
+S||Edição|0|0|b||X|||||||||0|
+S||Informação qualificadora|0|0|c||X|||||||||0|
+S||Local, editor e data de publicação|0|0|d||X|||||||||0|
+S||Código de idioma|0|0|e||X||3|P|languages.tab|||||0|
+S||Código de país|0|0|f||X||3|P|countries.tab|||||0|
+S||Partes relacionadas|0|1|g||X|||||||||0|
+S||Descrição física|0|0|h||X|||||||||0|
+S||Informações sobre relações|0|1|i||X|||||||||0|
+S||Dado de série para item relacionado|0|1|k||X|||||||||0|
+S||Detalhes específicos do material|0|0|m||X|||||||||0|
+S||Nota|0|1|n||X|||||||||0|
+S||Outro identificador do item|0|1|o||X|||||||||0|
+S||Número de relatório|0|1|r||X|||||||||0|
+S||Título uniforme|0|0|s||X|||||||||0|
+S||Título|0|0|t||X|||||||||0|
+S||Número de controle do registro|0|1|w||X|||||||||0|
+S||ISSN|0|0|x||X|||||||||0|
+S||Designação CODEN|0|0|y||X|||||||||0|
+S||ISBN|0|1|z||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
+S||Subcampo de controle|0|0|7||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|775-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|775-ind2.tab|||||0||
 S||Título da entrada principal|0|0|a||X|||||||||0||
@@ -1070,7 +2051,30 @@ S||ISBN|0|1|z||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 S||Subcampo de controle|0|0|7||X|||||||||0||
-T|776|Entrada de formato físico adicional|0|1|12abcdghikmnorstwxyz467||X|1|100|||||||1||
+T|776|Entrada de formato físico adicional|0|1|12abcdghikmnorstwxyz467||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|776-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|776-ind2.tab|||||0|
+S||Título da entrada principal|0|0|a||X|||||||||0|
+S||Edição|0|0|b||X|||||||||0|
+S||Informação qualificadora|0|0|c||X|||||||||0|
+S||Local, editor e data de publicação|0|0|d||X|||||||||0|
+S||Partes relacionadas|0|1|g||X|||||||||0|
+S||Descrição física|0|0|h||X|||||||||0|
+S||Informações sobre relações|0|1|i||X|||||||||0|
+S||Dado de série para item relacionado|0|1|k||X|||||||||0|
+S||Detalhes específicos do material|0|0|m||X|||||||||0|
+S||Nota|0|1|n||X|||||||||0|
+S||Outro identificador do item|0|1|o||X|||||||||0|
+S||Número de relatório|0|1|r||X|||||||||0|
+S||Título uniforme|0|0|s||X|||||||||0|
+S||Título|0|0|t||X|||||||||0|
+S||Número de controle do registro|0|1|w||X|||||||||0|
+S||ISSN|0|0|x||X|||||||||0|
+S||Designação CODEN|0|0|y||X|||||||||0|
+S||ISBN|0|1|z||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
+S||Subcampo de controle|0|0|7||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|776-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|776-ind2.tab|||||0||
 S||Título da entrada principal|0|0|a||X|||||||||0||
@@ -1094,7 +2098,28 @@ S||ISBN|0|1|z||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 S||Subcampo de controle|0|0|7||X|||||||||0||
-T|777|Entrada de <i>publicado com</i>|0|1|12abcdghikmnostwxy467||X|1|100|||||||1||
+T|777|Entrada de <i>publicado com</i>|0|1|12abcdghikmnostwxy467||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|777-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|777-ind2.tab|||||0|
+S||Título da entrada principal|0|0|a||X|||||||||0|
+S||Edição|0|0|b||X|||||||||0|
+S||Informação qualificadora|0|0|c||X|||||||||0|
+S||Local, editor e data de publicação|0|0|d||X|||||||||0|
+S||Partes relacionadas|0|1|g||X|||||||||0|
+S||Descrição física|0|0|h||X|||||||||0|
+S||Informações sobre relações|0|1|i||X|||||||||0|
+S||Dado de série para item relacionado|0|1|k||X|||||||||0|
+S||Detalhes específicos do material|0|0|m||X|||||||||0|
+S||Nota|0|1|n||X|||||||||0|
+S||Outro identificador do item|0|1|o||X|||||||||0|
+S||Título uniforme|0|0|s||X|||||||||0|
+S||Título|0|0|t||X|||||||||0|
+S||Número de controle do registro|0|1|w||X|||||||||0|
+S||ISSN|0|0|x||X|||||||||0|
+S||Designação CODEN|0|0|y||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
+S||Subcampo de controle|0|0|7||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|777-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|777-ind2.tab|||||0||
 S||Título da entrada principal|0|0|a||X|||||||||0||
@@ -1116,7 +2141,30 @@ S||Designação CODEN|0|0|y||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 S||Subcampo de controle|0|0|7||X|||||||||0||
-T|787|Outras entradas de relações|0|1|12abcdghikmnorstwxyz467||X|1|100|||||||1||
+T|787|Outras entradas de relações|0|1|12abcdghikmnorstwxyz467||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|787-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|787-ind2.tab|||||0|
+S||Título da entrada principal|0|0|a||X|||||||||0|
+S||Edição|0|0|b||X|||||||||0|
+S||Informação qualificadora|0|0|c||X|||||||||0|
+S||Local, editor e data de publicação|0|0|d||X|||||||||0|
+S||Partes relacionadas|0|1|g||X|||||||||0|
+S||Descrição física|0|0|h||X|||||||||0|
+S||Informações sobre relações|0|1|i||X|||||||||0|
+S||Dado de série para item relacionado|0|1|k||X|||||||||0|
+S||Detalhes específicos do material|0|0|m||X|||||||||0|
+S||Nota|0|1|n||X|||||||||0|
+S||Outro identificador do item|0|1|o||X|||||||||0|
+S||Número de relatório|0|1|r||X|||||||||0|
+S||Título uniforme|0|0|s||X|||||||||0|
+S||Título|0|0|t||X|||||||||0|
+S||Número de controle do registro|0|1|w||X|||||||||0|
+S||ISSN|0|0|x||X|||||||||0|
+S||Designação CODEN|0|0|y||X|||||||||0|
+S||ISBN|0|1|z||X|||||||||0|
+S||Código de relação|0|1|4||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
+S||Subcampo de controle|0|0|7||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|787-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|787-ind2.tab|||||0||
 S||Título da entrada principal|0|0|a||X|||||||||0||
@@ -1140,8 +2188,31 @@ S||ISBN|0|1|z||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 S||Subcampo de controle|0|0|7||X|||||||||0||
+TAB||8XX|0|0||||||||||||0||0|0|||
 H||80X-83X: Entradas secundárias - Séries|0|0||||||||||||0||
-T|830|Entrada secundária de série - Título uniforme|0|1|12adfghklmnoprstvwx356||X|1|100|D|autoridades|CT_|@author.pft|||1||
+T|830|Entrada secundária de série - Título uniforme|0|1|12adfghklmnoprstvwx356||X|1|100|D|autoridades|CT_|@author.pft|||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|P|830-ind2.tab|||||0|
+S||Título uniforme|0|0|a||X|||D|autoridades|CT_|@author.pft|||0|
+S||Data de assinatura do tratado|0|1|d||X|||||||||0|
+S||Data da obra|0|0|f||X|||||||||0|
+S||Informações adicionais|0|0|g||X|||||||||0|
+S||Meio físico|0|0|h||X|||||||||0|
+S||Subcabeçalho de forma|0|1|k||X|||||||||0|
+S||Idioma da obra|0|0|l||X|||||||||0|
+S||Meio de apresentação da música|0|1|m||X|||||||||0|
+S||Número da parte/seção da obra|0|1|n||X|||||||||0|
+S||Informação de arranjo para música|0|0|o||X|||||||||0|
+S||Nome da parte/seção da obra|0|1|p||X|||||||||0|
+S||Chave para música|0|0|r||X|||||||||0|
+S||Versão|0|0|s||X|||||||||0|
+S||Título da obra|0|0|t||X|||||||||0|
+S||Volume/designação sequencial|0|0|v||X|||||||||0|
+S||Número de controle do registro bibliográfico|0|1|w||X|||||||||0|
+S||ISSN|0|0|x||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Instituição à qual o campo se aplica|0|1|5||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|P|830-ind2.tab|||||0||
 S||Título uniforme|0|0|a||X|||D|autoridades|CT_|@author.pft|||0||
@@ -1165,11 +2236,40 @@ S||Material especificado|0|0|3||X|||||||||0||
 S||Instituição à qual o campo se aplica|0|1|5||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 H||841-88X: Coleções, localização, etc.|0|0||||||||||||0||
-T|850|Instituição depositária|0|1|12a||X|1|100|||||||1||
+T|850|Instituição depositária|0|1|12a||X|1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Instituição depositária|0|1|a||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Instituição depositária|0|1|a||X|||||||||0||
-T|852|Localização|0|1|12abcdefghijklmnpqstuxz236|||1|100|||||||1||
+T|852|Localização|0|1|12abcdefghijklmnpqstuxz236|||1|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|852-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|852-ind2.tab|||||0|
+S||Localização|0|0|a||X|||||||||0|
+S||Sub-localização ou coleção|0|1|b||X|||||||||0|
+S||Localização na estante|0|1|c||X|||||||||0|
+S||Localização na estante anterior|0|1|d||X|||||||||0|
+S||Endereço|0|1|e||X|||||||||0|
+S||Qualificador de localização codificado|0|1|f||X|||||||||0|
+S||Qualificador de localização não codificado|0|1|g||X|||||||||0|
+S||Parte da classificação|0|0|h||X|||||||||0|
+S||Parte do item|0|1|i||X|||||||||0|
+S||Número de controle na estante|0|0|j||X|||||||||0|
+S||Prefixo do número de chamada|0|1|k||X|||||||||0|
+S||Forma do título na estante|0|0|l||X|||||||||0|
+S||Sufixo do número de chamada|0|1|m||X|||||||||0|
+S||Código do país|0|0|n||X|||||||||0|
+S||Designação da parte|0|0|p||X|||||||||0|
+S||Condição física da parte|0|0|q||X|||||||||0|
+S||Código da taxa de copyright|0|1|s||X|||||||||0|
+S||Número da cópia|0|0|t||X|||||||||0|
+S||Endereço eletrônico|0|1|u||X|||||||||0|
+S||Nota interna|0|1|x||X|||||||||0|
+S||Nota pública|0|1|z||X|||||||||0|
+S||Fonte da classificação ou do esquema de arquivamento|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|852-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|852-ind2.tab|||||0||
 S||Localização|0|0|a||X|||||||||0||
@@ -1196,7 +2296,36 @@ S||Nota pública|0|1|z||X|||||||||0||
 S||Fonte da classificação ou do esquema de arquivamento|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
-T|856|Endereço eletrônico|0|1|12abcdfhijklmnopqrstuvwxyz236||X|3|100|||||||1||
+T|856|Endereço eletrônico|0|1|12abcdfhijklmnopqrstuvwxyz236||X|3|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|P|856-ind1.tab|||||0|
+S||Indicador 2|0|0|2||X||1|P|856-ind2.tab|||||0|
+S||Nome do servidor|0|1|a||X|||||||||0|
+S||Número de acesso|0|1|b||X|||||||||0|
+S||Informação sobre compactação|0|1|c||X|||||||||0|
+S||Caminho|0|1|d||X|||||||||0|
+S||Nome eletrônico|0|1|f||X|||||||||0|
+S||Processador do pedido|0|0|h||X|||||||||0|
+S||Instrução|0|1|i||X|||||||||0|
+S||Bits por segundo|0|0|j||X|||||||||0|
+S||Senha|0|0|k||X|||||||||0|
+S||Logon/login|0|0|l||X|||||||||0|
+S||Contato para obter ajuda|0|1|m||X|||||||||0|
+S||Nome da localização do servidor|0|0|n||X|||||||||0|
+S||Sistema operacional|0|0|o||X|||||||||0|
+S||Porta|0|0|p||X|||||||||0|
+S||Tipo de formato eletrônico|0|0|q||X|||||||||0|
+S||Configurações|0|0|r||X|||||||||0|
+S||Tamanho do arquivo|0|1|s||X|||||||||0|
+S||Emulação de terminal|0|1|t||X|||||||||0|
+S||Endereço eletrônico|0|1|u||X|||||||||0|
+S||Horário de acesso|0|1|v||X|||||||||0|
+S||Número de controle do registro|0|0|w||X|||||||||0|
+S||Nota interna|0|1|x||X|||||||||0|
+S||Texto do link|0|1|y||X|||||||||0|
+S||Nota pública|0|1|z||X|||||||||0|
+S||Método de acesso|0|0|2||X|||||||||0|
+S||Material especificado|0|0|3||X|||||||||0|
+S||Ligação|0|0|6||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|P|856-ind1.tab|||||0||
 S||Indicador 2|0|0|2||X||1|P|856-ind2.tab|||||0||
 S||Nome do servidor|0|1|a||X|||||||||0||
@@ -1226,8 +2355,27 @@ S||Nota pública|0|1|z||X|||||||||0||
 S||Método de acesso|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
+TAB||9XX|0|0||||||||||||0||0|0|||
 H||9XX: Informações locais|0|0||||||||||||0||
-T|949|Dados de registro|0|1|12aevybcfdnpqktxwz||X|3|100|||||||1||
+T|949|Dados de registro|0|1|12aevybcfdnpqktxwz||X|3|100|||||||1||1
+S||Indicador 1|0|0|1||X||1|||||||0|
+S||Indicador 2|0|0|2||X||1|||||||0|
+S||Número sequencial atribuído à obra|0|0|a||X|||||||||0|
+S||Exemplar|0|1|e||X|||||||||0|
+S||Número do volume|0|1|v||X|||||||||0|
+S||Ano/mês/dia em que a obra foi registrada|0|0|y||X|||||||||0|
+S||Biblioteca depositária|0|0|b||X|||||||||0|
+S||Tipo de aquisição|0|0|c||X|||P|949-subc.tab|||||0|
+S||Fatura/empenho/nota fiscal|0|0|f||X|||||||||0|
+S||Fornecedor|0|0|d||X||||||||||
+S||Número de patrimônio|0|0|n||X|||||||||0|
+S||Preço|0|0|p||X|||||||||0|
+S||Origem/fonte da verba|0|0|q||X|||||||||0|
+S||Motivo da baixa|0|0|k||X|||P|949-subk.tab|||||0|
+S||Tomo|0|0|t||X|||||||||0|
+S||Tipo de documento|0|0|x||X||||||||||
+S||Observações|0|1|w||X|||||||||0|
+S||Ano/mês/dia da baixa|0|0|z||X|||||||||0|
 S||Indicador 1|0|0|1||X||1|||||||0||
 S||Indicador 2|0|0|2||X||1|||||||0||
 S||Número sequencial atribuído à obra|0|0|a||X|||||||||0||
@@ -1246,4 +2394,4 @@ S||Tomo|0|0|t||X|||||||||0||
 S||Tipo de documento|0|0|x||X|||||||||||
 S||Observações|0|1|w||X|||||||||0||
 S||Ano/mês/dia da baixa|0|0|z||X|||||||||0||
-OD|980|Data de modificação e usuário|0|1|||X|||||||||1||
+OD|980|Data de modificação e usuário|0|1|||X|||||||||1||1

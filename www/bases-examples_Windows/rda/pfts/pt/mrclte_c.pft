@@ -1,10 +1,22 @@
 '<style>'/
 '.rda-container { font-family: "Noto Sans", Arial, sans-serif; color: #333; line-height: 1.6; padding: 15px; max-width: 950px; }'/
-'.rda-title { font-size: 22px; font-weight: bold; color: #005a8c; margin-bottom: 5px; line-height: 1.2; }'/
-'.rda-author { font-size: 15px; color: #555; margin-bottom: 25px; border-bottom: 1px solid #eaeaea; padding-bottom: 15px; }'/
+
+/* GRID PRINCIPAL: CAPA + CABEÇALHO */
+'.rda-header-grid { display: flex; gap: 20px; margin-bottom: 25px; border-bottom: 1px solid #eaeaea; padding-bottom: 20px; }'/
+'.rda-cover-area { flex-shrink: 0; width: 180px; text-align: center; }'/
+'.rda-cover-area img { max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }'/
+'.rda-info-area { flex-grow: 1; }'/
+
+/* ESTILOS DE TEXTO */
+'.rda-title { font-size: 24px; font-weight: bold; color: #005a8c; margin-bottom: 8px; line-height: 1.2; }'/
+'.rda-author { font-size: 16px; color: #555; }'/
+
+/* TABELA DE METADADOS */
 '.rda-table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }'/
 '.rda-table th { text-align: right; vertical-align: top; font-weight: 600; color: #444; padding: 8px 15px 8px 0; width: 220px; border-bottom: 1px solid #f9f9f9; font-size: 13px; }'/
 '.rda-table td { padding: 8px 0; color: #222; border-bottom: 1px solid #f9f9f9; font-size: 13px; }'/
+
+/* TABELA DE EXEMPLARES */
 '.rda-copies { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }'/
 '.rda-copies th { background: #f4f8fb; padding: 10px; text-align: left; border-bottom: 2px solid #005a8c; color: #333; font-weight: bold; }'/
 '.rda-copies td { padding: 10px; border-bottom: 1px solid #eaeaea; }'/
@@ -12,19 +24,47 @@
 
 '<div class="rda-container">'/
 
-/* TÍTULO EM DESTAQUE (245) */
-if p(v245) then '<div class="rda-title">'v245^a, if p(v245^b) then v245^b fi, if p(v245^c) then v245^c fi, '</div>' fi/
+/* ==========================================
+   CABEÇALHO: CAPA (ESQUERDA) + TÍTULO/AUTOR (DIREITA)
+   ========================================== */
+'<div class="rda-header-grid">'/
 
-/* AUTOR(ES) PRINCIPAL EM DESTAQUE (1XX) */
-if p(v100) or p(v110) or p(v111) then
-  '<div class="rda-author">Por: '
-  if p(v100) then (v100^a, if p(v100^d) then ', 'v100^d fi, if iocc<>nocc(v100) then '; ' fi) fi,
-  if p(v110) then (v110^a, if p(v110^b) then '. 'v110^b fi, if iocc<>nocc(v110) then '; ' fi) fi,
-  if p(v111) then (v111^a, if p(v111^c) then ' 'v111^c fi, if iocc<>nocc(v111) then '; ' fi) fi,
-  '</div>'
-fi/
+  /* 1. ÁREA DA CAPA (Procura no 856 por "cover" ou "image") */
+  if p(v856) then
+    (
+      if p(v856^u) then
+        if v856^3 : 'cover' or v856^3 : 'backcover' or v856^3 : 'image' or v856^q : 'image' then
+          '<div class="rda-cover-area">'
+            '<a href="../common/show_image.php?image='v856^u'&base='v5001'" target="_blank">'
+              '<img src="../common/show_image.php?image='v856^u'&base='v5001'" alt="Capa do material">'
+            '</a>'
+          '</div>'
+        fi
+      fi
+    )
+  fi,
 
-/* TABELA DE METADADOS LIMPA */
+  /* 2. ÁREA DE INFORMAÇÕES (Título e Autor) */
+  '<div class="rda-info-area">'/
+    /* TÍTULO EM DESTAQUE (245) */
+    if p(v245) then '<div class="rda-title">'v245^a, if p(v245^b) then ' : 'v245^b fi, if p(v245^c) then ' / 'v245^c fi, '</div>' fi/
+
+    /* AUTOR(ES) PRINCIPAL EM DESTAQUE (1XX) */
+    if p(v100) or p(v110) or p(v111) then
+      '<div class="rda-author">Por: '
+      if p(v100) then (v100^a, if p(v100^d) then ', 'v100^d fi, if iocc<>nocc(v100) then '; ' fi) fi,
+      if p(v110) then (v110^a, if p(v110^b) then '. 'v110^b fi, if iocc<>nocc(v110) then '; ' fi) fi,
+      if p(v111) then (v111^a, if p(v111^c) then ' 'v111^c fi, if iocc<>nocc(v111) then '; ' fi) fi,
+      '</div>'
+    fi/
+  '</div>'/
+
+'</div>'/ /* Fim do rda-header-grid */
+
+
+/* ==========================================
+   TABELA DE METADADOS
+   ========================================== */
 '<table class="rda-table">'/
 
 /* NÚMEROS E CÓDIGOS PRINCIPAIS */
@@ -59,28 +99,44 @@ if p(v655) then '<tr><th>Gênero/Forma</th><td>'(| |v655^a||,| -- |v655^x||, if i
 /* OUTROS ACESSOS E LINKS */
 if p(v700) then '<tr><th>Coautor(es)</th><td>'(| |v700^a||,| |v700^d||, if iocc<>nocc(v700) and p(v700) then '<br>' fi),'</td></tr>' fi/
 if p(v710) then '<tr><th>Coautor(es) Corporativo(s)</th><td>'(| |v710^a||,| |v710^b||, if iocc<>nocc(v710) and p(v710) then '<br>' fi),'</td></tr>' fi/
-if p(v856) then '<tr><th>Acesso Eletrônico</th><td>'(|<a href="|v856^u|" target="_blank" style="color:#005a8c; text-decoration:none;">|v856^u|</a>| ,| |v856^z||, if iocc<>nocc(v856) and p(v856) then '<br>' fi),'</td></tr>' fi/
+
+/* 856: APENAS LINKS PARA DOCUMENTOS (Imagens foram para o cabeçalho) */
+if p(v856) then 
+  '<tr><th>Acesso / Arquivos</th><td>',
+  (
+    if p(v856^u) then
+      /* Ignora cover/image (já exibidos no topo) e ignora video (futuro player) */
+      if (not v856^3 : 'cover') and (not v856^3 : 'backcover') and (not v856^3 : 'image') and (not v856^q : 'image') and (not v856^3 : 'video') and (not v856^q : 'video') then
+        '<a href="../common/show_image.php?image='v856^u'&base=rda" target="_blank" style="display:inline-block; padding:6px 14px; background-color:#005a8c; color:#fff; text-decoration:none; border-radius:4px; font-size:12px; font-weight:bold; margin-bottom:8px;">'
+          if p(v856^3) then 'Baixar 'v856^3 else ' Acessar Documento' fi,
+        '</a>',
+        if p(v856^z) then ' <span style="font-size:11px; color:#666;">('v856^z')</span>' fi,
+        '<br>'
+      fi
+    fi
+  ),
+  '</td></tr>' 
+fi/
 
 '</table>'/
 
 /* TABELA DE EXEMPLARES (COPIES) */
 if npost(['copies'],'CN_'v5001'_'v1)>0 then
-  '<p><dd><dd><dd>
-  <table>
+  '<table class="rda-copies">
     <tr>
-      <td colspan=6 bgcolor=#ffffff><b>Total de exemplares</b>:'                
-          f(npost(['copies'],'CN_'v5001'_'v1),1,0)
-     '</td>
+      <td colspan=5 style="text-align:right; font-size:12px; border:none; padding-bottom:5px; background:none;">
+        <b>Total de exemplares disponíveis:</b> ' f(npost(['copies'],'CN_'v5001'_'v1),1,0) '
+      </td>
     </tr>
     <tr>
-        <th>Controle</th>
-        <th>Tombo</th>
-        <th>Situação</th>
-        <th>No. cópias</th>
-        <th>Disponibilidade</th>'/   
-       /'$$REF:copies,inven,CN_'v5001'_'v1/
-     '</tr>
-  </table>'
+      <th>Controle</th>
+      <th>Tombo</th>
+      <th>Situação</th>
+      <th>No. cópias</th>
+      <th>Disponibilidade</th>
+    </tr>'/
+    /'$$REF:copies,inven,CN_'v5001'_'v1/
+  '</table>'
 fi,
 
 '</div>'

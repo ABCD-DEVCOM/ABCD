@@ -1,5 +1,7 @@
 UNICODE=0
-ROOT=/var/opt/ABCD/bases/marc/dr/
+CISIS_VERSION=16-60
+SUBFIELDS_INLINE=Y
+ROOT=%path_database%rda/collection/
 barcode=Y
 tesaurus=agrovoc
 prefix_search_tesaurus=MA_

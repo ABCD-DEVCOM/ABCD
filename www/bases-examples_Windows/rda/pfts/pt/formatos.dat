@@ -7,4 +7,5 @@ P6282-LO|Lombada
 p6281lo|Lombada P6281-LO|CT||0|0
 adrda_c|Formato completo||||
 prda|prda||||
-opac|Opac - Formato público|T|VBAR|0|0
+opac|Opac - Formato publico|T|VBAR|0|0
+opac_boot|Opac - Formato publico Bootstrap|T|VBAR|0|0

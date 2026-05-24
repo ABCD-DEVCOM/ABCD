@@ -1,7 +1,8 @@
 UNICODE=0
-CISIS_VERSION=16-60
-ROOT=/var/opt/ABCD/bases/marc/dr/
+SUBFIELDS_INLINE=Y
+ROOT=/ABCD/www/bases/marc/dr/
+barcode=Y
+inventory_numeric=N
 tesaurus=agrovoc
 prefix_search_tesaurus=MA_
-DIRTREE=Y
 DIRTREE_EXT=*.def,*.iso,*.png,*.gif,*.jpg,*.pdf,*.xrf,*.mst,*.n01,*.n02,*.l01,*.l02,*.cnt,*.ifp,*.fmt,*.fdt,*.pft,*.fst,*.tab,*.txt,*.par,*.html,*.zip,

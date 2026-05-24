@@ -20,14 +20,19 @@ function checkCover(imgElement) {
       /* COLUNA DA ESQUERDA: Capa e Localização (Destaque) */
       '<div class="col-md-3 text-center mb-3">',
         
-        /* Capa via Google Books (com fallback) */
-        if p(v20^a) then 
-           '<img src="https://books.google.com/books/content?vid=isbn:',replace(v20^a,'-',''),'&printsec=frontcover&img=1&zoom=1" class="img-fluid rounded shadow-sm mb-3" alt="Capa do livro" style="max-height: 300px;" onload="checkCover(this)" onerror="checkCover(this)">',
-           /* Placeholder oculto que só aparece se o JS acima ocultar a imagem */
-           '<div class="bg-light align-items-center justify-content-center rounded mb-3" style="height: 200px; color: #ccc; display: none;"><i class="fas fa-book fa-4x"></i></div>'
-        else 
-           '<div class="bg-light d-flex align-items-center justify-content-center rounded mb-3" style="height: 200px; color: #ccc;"><i class="fas fa-book fa-4x"></i></div>'
-        fi,
+
+        if v856^3='cover' then '<img src="viewer/show_image.php?image='v856^u'&base='v5001'" class="img-fluid rounded shadow-sm mb-3" alt="Capa do livro" style="max-height: 300px;" onload="checkCover(this)" onerror="checkCover(this)">' 
+
+        else
+
+            /* Capa via Google Books (com fallback) */
+            if p(v20^a) then '<img src="https://books.google.com/books/content?vid=isbn:',replace(v20^a,'-',''),'&printsec=frontcover&img=1&zoom=1" class="img-fluid rounded shadow-sm mb-3" alt="Capa do livro" style="max-height: 300px;" onload="checkCover(this)" onerror="checkCover(this)">',
+               /* Placeholder oculto que só aparece se o JS acima ocultar a imagem */
+               '<div class="bg-light align-items-center justify-content-center rounded mb-3" style="height: 200px; color: #ccc; display: none;"><i class="fas fa-book fa-4x"></i></div>'
+            else 
+               '<div class="bg-light d-flex align-items-center justify-content-center rounded mb-3" style="height: 200px; color: #ccc;"><i class="fas fa-book fa-4x"></i></div>'
+            fi,
+        fi
 
         /* DESTAQUE DO CAMPO 90 (LOCALIZAÇÃO) */
         if p(v90) then 
@@ -91,20 +96,21 @@ function checkCover(imgElement) {
             if p(v490) then '<tr><th class="text-secondary">Série:</th><td>'v490^a," "v490^v'</td></tr>' fi,
 
             /* Notas (Agrupadas para economizar espaço visual) */
-            if p(v500) or p(v502) or p(v504) or p(v505) or p(v520) then
+            if p(v500) or p(v502) or p(v504) or p(v505) or p(v520) or p(v590) then
                 '<tr><th class="text-secondary">Notas:</th><td>',
                     if p(v500) then '<div class="mb-1">'v500^a'</div>' fi,
                     if p(v502) then '<div class="mb-1"><strong>Tese:</strong> 'v502^a'</div>' fi,
                     if p(v504) then '<div class="mb-1"><strong>Bibl.:</strong> 'v504^a'</div>' fi,
                     if p(v505) then '<div class="mb-1 text-muted small"><strong>Conteúdo:</strong> 'v505^a'</div>' fi,
                     if p(v520) then '<div class="alert alert-light border mt-2"><strong>Resumo:</strong> 'v520^a'</div>' fi,
+                    if p(v590) then '<div class="alert alert-light border mt-2"><strong>Notas Locais:</strong> 'v590^a'</div>' fi,
                 '</td></tr>'
             fi,
 
             /* Assuntos (Formatados como etiquetas/badges) */
             if p(v650) or p(v653) or p(v600) then
                 '<tr><th class="text-secondary">Assuntos:</th><td>',
-                    (if p(v650) then '<span class="badge badge-info mr-1" style="font-size: 0.9em; margin-right:5px;">'v650^a'</span> ' fi),
+                    (if p(v650) then '<span class="badge text-bg-light mr-1" style="font-size: 0.9em; margin-right:5px;">'v650^a'</span> ' fi),
                     (if p(v653) then '<span class="badge badge-secondary mr-1" style="font-size: 0.9em; margin-right:5px;">'v653^a'</span> ' fi),
                     (if p(v600) then '<span class="badge badge-dark mr-1" style="font-size: 0.9em; margin-right:5px;">'v600^a'</span> ' fi),
                 '</td></tr>'
@@ -125,3 +131,22 @@ function checkCover(imgElement) {
 
   '</div>', /* Fim Card Body */
 '</div>' /* Fim Card Principal */
+
+
+if npost(['copies'],'CN_rda_'v1)>0 then
+  '<table width="100%" class="table table-stripped">
+    <tr>
+      <td colspan=6><b>Total de exemplares</b>:'                
+          f(npost(['copies'],'CN_rda_'v1),1,0)
+     '</td>
+    </tr>
+    <tr>
+        <th>Controle</th>
+        <th>Tombo</th>
+        <th>Situação</th>
+        <th>Exemplares</th>
+        <th>Disponibilidade</th>'/   
+       /'$$REF:copies,inven,CN_rda_'v1/
+     '</tr>
+  </table>'
+fi,

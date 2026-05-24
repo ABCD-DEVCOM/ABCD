@@ -1,4 +1,6 @@
+TAB||Leader|0|0||||||||||||0||0|0|||
 LDR||Leader|0|0||||||||||||1|http://www.loc.gov/marc/bibliographic/bdleader.html|0|0|||
+TAB||0XX|0|0||||||||||||0||0|0|||
 H||General Info|0|0||||||||||||0||0|0|||
 F|1|Control number|0|0|||AI||20|||||||1|http://www.loc.gov/marc/bibliographic/bd001.html|0|0|||
 F|3|Control number identifier|0|0|||X||20|||||||1|http://www.loc.gov/marc/bibliographic/bd003.html|0|0|||
@@ -6,79 +8,79 @@ M5|5|Date and Time of Latest Transaction|0|0|||X||20|||||||1||0|0|||
 F|6|Fixed-Length Data Elements-Additional Material Characteristics|0|1|||X||18|||||||1|http://www.loc.gov/marc/bibliographic/bd006.html|0|0|||
 F|7|Physical Description Fixed Field-General Information|0|1|||X||22|||||||1|http://www.loc.gov/marc/bibliographic/bd007.html|0|0|||
 M|8|Fixed-Length (08)|0|0||||||||||||1|http://www.loc.gov/marc/bibliographic/bd008.html|0|0|||
-T|10|LC control number|0|0|12abz|||||||||||1|http://www.loc.gov/marc/bibliographic/bd010.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab||||#|0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab||||#|0||0|0|||
+T|10|LC control number|0|0|abz|||||||||||1|http://www.loc.gov/marc/bibliographic/bd010.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab||||#|0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab||||#|0||0|0|||
 S||LC control number|0|0|a||X|||||||||0||0|0|||
 S||NUCMC control number|0|0|b||X|||||||||0||0|0|||
 S||Canceled/invalid LC control number|0|0|z||X|||||||||0||0|0|||
-T|13|Patent Control Information|0|1|12abcdef|||||||||||1|http://www.loc.gov/marc/bibliographic/bd013.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|13|Patent Control Information|0|1|abcdef|||||||||||1|http://www.loc.gov/marc/bibliographic/bd013.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Number|0|0|a||X|||||||||0||0|0|||
 S||Country|0|0|b||X|||P|countries.tab|||||0||0|0|||
 S||Type of number|0|0|c||X|||||||||0||0|0|||
 S||Date|0|0|d||X|||||||||0||0|0|||
 S||Status|0|0|e||X|||||||||0||0|0|||
 S||Party to document|0|0|f||X|||||||||0||0|0|||
-T|15|National Bibliography Number|0|1|12aqz2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd015.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|15|National Bibliography Number|0|1|aqz2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd015.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||National bibliography number|0|0|a||X|||||||||0||0|0|||
 S||Qualifying information|0|0|q||X|||||||||0||0|0|||
 S||Canceled/invalid national bibliography number|0|0|z||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
-T|16|National Bibliographic Agency Control Number|0|1|12az2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd016.html|0|0|||
-S||Indicator 1 (National bibliographic agency)|0|0|1||X||1|P|016-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|16|National Bibliographic Agency Control Number|0|1|az2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd016.html|0|0|||
+IND||Indicator 1 (National bibliographic agency)|0|0|1||X||1|P|016-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Record control number|0|0|a||X|||||||||0||0|0|||
 S||Canceled/invalid control number|0|0|z||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
-T|17|Copyr. or dep. number|0|1|12abdiz2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd017.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indiactor 2 (Display constant controller)|0|0|2||X||1|P|017-ind2.tab|||||0||0|0|||
+T|17|Copyr. or dep. number|0|1|abdiz2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd017.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|017-ind2.tab|||||0||0|0|||
 S||Cop. or dep. number|0|1|a||X|||||||||0||0|0|||
 S||Agency|0|0|b||X|||||||||0||0|0|||
 S||Date|0|0|d||X|||||||||0||0|0|||
 S||Display text|0|0|i||X|||||||||0||0|0|||
 S||Canceled/invalid copyright or legal deposit number|0|0|z||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
-T|18|Copyright Article-Fee Code|0|0|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd018.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|18|Copyright Article-Fee Code|0|0|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd018.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Copyright article-fee code|0|0|a||X|||||||||0||0|0|||
-T|20|ISBN|0|1|12acqz|||||||||||1|http://www.loc.gov/marc/bibliographic/bd020.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|20|ISBN|0|1|acqz|||||||||||1|http://www.loc.gov/marc/bibliographic/bd020.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||International Standard Book Number|0|0|a||X|||||||||0||0|0|||
 S||Terms of availability|0|0|c||X|||||||||0||0|0|||
 S||Qualifying information|0|0|q||X|||||||||0||0|0|||
 S||Canceled/invalid ISBN|0|0|z||X|||||||||0||0|0|||
-T|22|ISSN|0|1|12almyz2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd022.html|0|0|||
-S||Indicator 1 (Level of international interest)|0|0|1||X||1|P|022-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|22|ISSN|0|1|almyz2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd022.html|0|0|||
+IND||Indicator 1 (Level of international interest)|0|0|1||X||1|P|022-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||International Standard Serial Number|0|0|a||X|||||||||0||0|0|||
 S||ISSN-L|0|0|l||X|||||||||0||0|0|||
 S||Canceled ISSN-L|0|0|m||X|||||||||0||0|0|||
 S||Incorrect ISSN|0|0|y||X|||||||||0||0|0|||
 S||Canceled ISSN|0|0|z||X|||||||||0||0|0|||
 S||Source|0|0|2||XF|||||||||0||0|0|||
-T|24|Other standard identifier|0|1|12acdqz2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd024.html|0|0|||
-S||Indicator 1 (Type of standard number or code)|0|0|1||X||1|P|024-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Difference indicator)|0|0|2||X||1|P|024-ind2.tab|||||0||0|0|||
+T|24|Other standard identifier|0|1|acdqz2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd024.html|0|0|||
+IND||Indicator 1 (Type of standard number or code)|0|0|1||X||1|P|024-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Difference indicator)|0|0|2||X||1|P|024-ind2.tab|||||0||0|0|||
 S||Standard number or code|0|0|a||X|||||||||0||0|0|||
 S||Terms of availability|0|0|c||X|||||||||0||0|0|||
 S||Additional codes|0|0|d||X|||||||||0||0|0|||
 S||Qualifying information|0|0|q||X|||||||||0||0|0|||
 S||Canceled/invalid standard number or code|0|0|z||X|||||||||0||0|0|||
 S||Source of number or code|0|0|2||X|||||||||0||0|0|||
-T|25|Overseas Acquisition Number|0|1|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd025.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|25|Overseas Acquisition Number|0|1|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd025.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Overseas acquisition number|0|0|a||X|||||||||0||0|0|||
-T|26|Fingerprint Identifier|0|1|12abcde25|||||||||||1|http://www.loc.gov/marc/bibliographic/bd026.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|26|Fingerprint Identifier|0|1|abcde25|||||||||||1|http://www.loc.gov/marc/bibliographic/bd026.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||First and second groups of characters|0|0|a||X|||||||||0||0|0|||
 S||Third and fourth groups of characters|0|0|b||X|||||||||0||0|0|||
 S||Date|0|0|c||X|||||||||0||0|0|||
@@ -86,26 +88,26 @@ S||Number of volume or part|0|0|d||X|||||||||0||0|0|||
 S||Unparsed fingerprint|0|0|e||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|27|Standard Technical Report Number|0|1|12aqz|||||||||||1|http://www.loc.gov/marc/bibliographic/bd027.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|27|Standard Technical Report Number|0|1|aqz|||||||||||1|http://www.loc.gov/marc/bibliographic/bd027.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Standard technical report number|0|0|a||X|||||||||0||0|0|||
 S||Qualifying information|0|0|q||X|||||||||0||0|0|||
 S||Canceled/invalid number|0|0|z||X|||||||||0||0|0|||
-T|28|Publisher or distributor number|0|1|12abq|||||||||||1|http://www.loc.gov/marc/bibliographic/bd028.html|0|0|||
-S||Indicator 1 (Type of publisher number)|0|0|1||X||1|P|028-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Note/added entry controller)|0|0|2||X||1|P|028-ind2.tab|||||0||0|0|||
+T|28|Publisher or distributor number|0|1|abq|||||||||||1|http://www.loc.gov/marc/bibliographic/bd028.html|0|0|||
+IND||Indicator 1 (Type of publisher number)|0|0|1||X||1|P|028-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Note/added entry controller)|0|0|2||X||1|P|028-ind2.tab|||||0||0|0|||
 S||Publisher or distributor number|0|0|a||X|||||||||0||0|0|||
 S||Source|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|0|q||X|||||||||0||0|0|||
-T|30|CODEN Designation|0|1|12az|||||||||||1|http://www.loc.gov/marc/bibliographic/bd030.html|0|0|||
-S||Indicator 1|0|0|||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|||X||1|P|Ind-b.tab|||||0||0|0|||
+T|30|CODEN Designation|0|1|az|||||||||||1|http://www.loc.gov/marc/bibliographic/bd030.html|0|0|||
+IND||Indicator 1|0|0|||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|||X||1|P|Ind-b.tab|||||0||0|0|||
 S||CODEN|0|0|||X|||||||||0||0|0|||
 S||Canceled/invalid CODEN|0|0|||X|||||||||0||0|0|||
-T|31|Musical Incipits Information|0|1|12abcdegmnopqrstuyz2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd031.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|31|Musical Incipits Information|0|1|abcdegmnopqrstuyz2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd031.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Number of work|0|0|a||X|||||||||0||0|0|||
 S||Number of movement|0|0|b||X|||||||||0||0|0|||
 S||Number of excerpt|0|0|c||X|||||||||0||0|0|||
@@ -124,14 +126,14 @@ S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||Link text|0|0|y||X|||||||||0||0|0|||
 S||Public note|0|0|z||X|||||||||0||0|0|||
 S||System code|0|0|2||X|||||||||0||0|0|||
-T|32|Postal Registration Number|0|1|12ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd032.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|32|Postal Registration Number|0|1|ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd032.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Postal registration number|0|0|a||X|||||||||0||0|0|||
 S||Source agency assigning number|0|0|b||X|||||||||0||0|0|||
-T|33|Date/Time and Place of an Event|0|1|12abcp023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd033.html|0|0|||
-S||Indicator 1 (Type of date in subfield $a)|0|0|1||X||1|P|033-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Type of event)|0|0|2||X||1|P|033-ind2.tab|||||0||0|0|||
+T|33|Date/Time and Place of an Event|0|1|abcp023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd033.html|0|0|||
+IND||Indicator 1 (Type of date in subfield $a)|0|0|1||X||1|P|033-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Type of event)|0|0|2||X||1|P|033-ind2.tab|||||0||0|0|||
 S||Formatted date/time|0|0|a||X|||||||||0||0|0|||
 S||Geographic classification area code|0|0|b||X|||||||||0||0|0|||
 S||Geographic classification subarea code|0|0|c||X|||||||||0||0|0|||
@@ -139,9 +141,9 @@ S||Place of event|0|0|p||X|||||||||0||0|0|||
 S||Authority record control number|0|0|0||X|||||||||0||0|0|||
 S||Source of term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|34|Coded Cartographic Mathematical Data|0|1|12abcdefghjkmnprstxyz023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd034.html|0|0|||
-S||Indicator 1 (Type of scale)|0|0|1||X||1|P|034-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Type of ring)|0|0|2||X||1|P|034-ind2.tab|||||0||0|0|||
+T|34|Coded Cartographic Mathematical Data|0|1|abcdefghjkmnprstxyz023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd034.html|0|0|||
+IND||Indicator 1 (Type of scale)|0|0|1||X||1|P|034-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Type of ring)|0|0|2||X||1|P|034-ind2.tab|||||0||0|0|||
 S||Category of scale|0|0|a||X|||||||||0||0|0|||
 S||Constant ratio linear horizontal scale|0|0|b||X|||||||||0||0|0|||
 S||Constant ratio linear vertical scale|0|0|c||X|||||||||0||0|0|||
@@ -164,19 +166,19 @@ S||Name of extraterrestrial body|0|0|z||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|35|System control number|0|1|12az|||||||||||1|http://www.loc.gov/marc/bibliographic/bd035.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|35|System control number|0|1|az|||||||||||1|http://www.loc.gov/marc/bibliographic/bd035.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||System control number|0|0|a||X|||||||||0||0|0|||
 S||Canceled/invalid control number|0|0|z||X|||||||||0||0|0|||
-T|36|Original Study Number for Computer Data Files|0|0|12ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd036.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1||Ind-b.tab|||||0||0|0|||
+T|36|Original Study Number for Computer Data Files|0|0|ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd036.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1||Ind-b.tab|||||0||0|0|||
 S||Original study number|0|0|a||X|||||||||0||0|0|||
 S||Source agency assigning number|0|0|b||X|||||||||0||0|0|||
-T|37|Source of acquisition|0|1|12abcfgn35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd037.html|0|0|||
-S||Indicator 1 (Source of acquisition sequence)|0|0|1||X||1|P|037-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|37|Source of acquisition|0|1|abcfgn35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd037.html|0|0|||
+IND||Indicator 1 (Source of acquisition sequence)|0|0|1||X||1|P|037-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Stock number|0|0|a||X|||||||||0||0|0|||
 S||Source of stock number/acquisition|0|0|b||X|||||||||0||0|0|||
 S||Terms of availability|0|0|c||X|||||||||0||0|0|||
@@ -185,21 +187,21 @@ S||Additional format characteristics|0|0|g||X|||||||||0||0|0|||
 S||Note|0|0|n||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|38|Record Content Licensor|0|0|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd038.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|38|Record Content Licensor|0|0|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd038.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Record content licensor|0|0|a||X|||||||||0||0|0|||
-T|40|Cataloguing source|0|0|12abcde||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd040.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|40|Cataloguing source|0|0|abcde||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd040.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Original cataloging agency|0|0|a||X|||||||||0||0|0|||
 S||Language of cataloging|0|0|b||X|||||||||0||0|0|||
 S||Transcribing agency|0|0|c||X|||||||||0||0|0|||
 S||Modifying agency|0|0|d||X|||||||||0||0|0|||
 S||Description conventions|0|0|e||X|||||||||0||0|0|||
-T|41|Language code|0|1|12abdefghjkmn|||||||||||1|http://www.loc.gov/marc/bibliographic/bd041.html|0|0|||
-S||Indicator 1 (Translation indication)|0|0|1||X||1|P|041-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Source of code)|0|0|2||X||1|P|041-ind2.tab|||||0||0|0|||
+T|41|Language code|0|1|abdefghjkmn|||||||||||1|http://www.loc.gov/marc/bibliographic/bd041.html|0|0|||
+IND||Indicator 1 (Translation indication)|0|0|1||X||1|P|041-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Source of code)|0|0|2||X||1|P|041-ind2.tab|||||0||0|0|||
 S||Language code of text|0|0|a||X|||||||||0||0|0|||
 S||Language code of summary|0|0|b||X|||||||||0||0|0|||
 S||Language code of sung of spoken text|0|0|d||X|||||||||0||0|0|||
@@ -211,34 +213,34 @@ S||Language code of subtitles or captions|0|0|j||X|||||||||0||0|0|||
 S||Language code of intermediate translations|0|0|k||X|||||||||0||0|0|||
 S||Language code of original accompanying materials other than librettos|0|0|m||X|||||||||0||0|0|||
 S||Language code of original libretto|0|0|n||X|||||||||0||0|0|||
-T|42|Authentication Code|0|0|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd042.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|42|Authentication Code|0|0|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd042.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Authentication code|0|0|a||X|||||||||0||0|0|||
-T|43|Geographical area code|0|0|12abc02|||||||||||1|http://www.loc.gov/marc/bibliographic/bd43.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|43|Geographical area code|0|0|abc02|||||||||||1|http://www.loc.gov/marc/bibliographic/bd43.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Geographic area code|0|0|a||X|||||||||0||0|0|||
 S||Local GAC code|0|0|b||X|||||||||0||0|0|||
 S||ISO code|0|0|c||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source of local code|0|0|2||X|||||||||0||0|0|||
-T|44|Country of Publishing/Producing Entity Code|0|0|12abc2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd044.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|44|Country of Publishing/Producing Entity Code|0|0|abc2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd044.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||MARC country code|0|0|a||X|||||||||0||0|0|||
 S||Local subentity code|0|0|b||X|||||||||0||0|0|||
 S||ISO country code|0|0|c||X|||||||||0||0|0|||
 S||Source of local subentity code|0|0|2||X|||||||||0||0|0|||
-T|45|Time Period of Content|0|0|12abc|||||||||||1|http://www.loc.gov/marc/bibliographic/bd045.html|0|0|||
-S||Indicator 1 (Type of time period in subfield $b or $c)|0|0|1||X||1|P|045-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|45|Time Period of Content|0|0|abc|||||||||||1|http://www.loc.gov/marc/bibliographic/bd045.html|0|0|||
+IND||Indicator 1 (Type of time period in subfield $b or $c)|0|0|1||X||1|P|045-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Time period code|0|0|a||X|||||||||0||0|0|||
 S||Formatted 9999 B.C. through C.E. time period|0|0|b||X|||||||||0||0|0|||
 S||Formatted pre-9999 B.C. time period|0|0|c||X|||||||||0||0|0|||
-T|46|Special Coded Dates|0|1|12abcdejklmnop2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd46.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|46|Special Coded Dates|0|1|abcdejklmnop2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd46.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Type of date code|0|0|a||X|||||||||0||0|0|||
 S||Date 1, B.C.E. date|0|0|b||X|||||||||0||0|0|||
 S||Date 1, C.E. date|0|0|c||X|||||||||0||0|0|||
@@ -252,100 +254,100 @@ S||End of date valid|0|0|n||X|||||||||0||0|0|||
 S||Single or starting date for aggregated content|0|0|o||X|||||||||0||0|0|||
 S||Ending date for aggregated content|0|0|p||X|||||||||0||0|0|||
 S||Source of date|0|0|2||X|||||||||0||0|0|||
-T|47|Form of Musical Composition Code|0|1|12a2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd047.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2 (Source of code)|0|0|2||X||1|P|047-ind2.tab|||||0||0|0|||
+T|47|Form of Musical Composition Code|0|1|a2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd047.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2 (Source of code)|0|0|2||X||1|P|047-ind2.tab|||||0||0|0|||
 S||Form of musical composition code|0|0|a||X|||||||||0||0|0|||
 S||Source of code|0|0|2||X|||||||||0||0|0|||
-T|48|Number of Musical Instruments or Voices Code|0|1|12ab2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd48.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2 (Source of code)|0|0|2||X||1|P|048-ind2.tab|||||0||0|0|||
+T|48|Number of Musical Instruments or Voices Code|0|1|ab2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd48.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2 (Source of code)|0|0|2||X||1|P|048-ind2.tab|||||0||0|0|||
 S||Performer or ensemble|0|0|a||X|||||||||0||0|0|||
 S||Soloist|0|0|b||X|||||||||0||0|0|||
 S||Source of code|0|0|2||X|||||||||0||0|0|||
-T|50|LC Call No.|0|1|12ab3||X|1||D||ST_|@autoridades.pft11|||1|http://www.loc.gov/marc/bibliographic/bd050.html|0|0|||
-S||Indicator 1 (Existence in LC collection)|0|0|1||X||1|P|050-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Source of call number)|0|0|2||X||1|P|050-ind2.tab|||||0||0|0|||
+T|50|LC Call No.|0|1|ab3||X|1||D||ST_|@autoridades.pft11|||1|http://www.loc.gov/marc/bibliographic/bd050.html|0|0|||
+IND||Indicator 1 (Existence in LC collection)|0|0|1||X||1|P|050-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Source of call number)|0|0|2||X||1|P|050-ind2.tab|||||0||0|0|||
 S||Classification no.|0|0|a||X|||||||||0||0|0|||
 S||Item no.|0|0|b||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|51|Library of Congress Copy, Issue, Offprint Statement|0|1|12abc|||||||||||1|http://www.loc.gov/marc/bibliographic/bd051.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|51|Library of Congress Copy, Issue, Offprint Statement|0|1|abc|||||||||||1|http://www.loc.gov/marc/bibliographic/bd051.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Classification number|0|0|a||X|||||||||0||0|0|||
 S||Item number|0|0|b||X|||||||||0||0|0|||
 S||Copy information|0|0|c||X|||||||||0||0|0|||
-T|52|Geographic Classification|0|1|12abd2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd052.html|0|0|||
-S||Indicator 1 (Code source)|0|0|1||X||1|P|052-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|52|Geographic Classification|0|1|abd2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd052.html|0|0|||
+IND||Indicator 1 (Code source)|0|0|1||X||1|P|052-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Geographic classification area code|0|0|a||X|||||||||0||0|0|||
 S||Geographic classification subarea code|0|0|b||X|||||||||0||0|0|||
 S||Populated place name|0|0|d||X|||||||||0||0|0|||
 S||Code source|0|0|2||X|||||||||0||0|0|||
-T|55|Classification Numbers Assigned in Canada|0|1|12ab2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd055.html|0|0|||
-S||Indicator 1 (Existence in LAC collection)|0|0|1||X||1|P|055-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Type, completeness, source of class/call number)|0|0|2||X||1|P|055-ind2.tab|||||0||0|0|||
+T|55|Classification Numbers Assigned in Canada|0|1|ab2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd055.html|0|0|||
+IND||Indicator 1 (Existence in LAC collection)|0|0|1||X||1|P|055-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Type, completeness, source of class/call number)|0|0|2||X||1|P|055-ind2.tab|||||0||0|0|||
 S||Classification number|0|0|a||X|||||||||0||0|0|||
 S||Item number|0|0|b||X|||||||||0||0|0|||
 S||Source of call/class number|0|0|2||X|||||||||0||0|0|||
-T|60|National Library of Medicine call number|0|1|12ab8|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd060.html|0|0|||
-S||Indicator 1 (Existence in NLM collection)|0|0|1||X||1|P|060-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Source of call number)|0|0|2||X||1|P|060-ind2.tab|||||0||0|0|||
+T|60|National Library of Medicine call number|0|1|ab8|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd060.html|0|0|||
+IND||Indicator 1 (Existence in NLM collection)|0|0|1||X||1|P|060-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Source of call number)|0|0|2||X||1|P|060-ind2.tab|||||0||0|0|||
 S||Classification number|0|1|a||X|||||||||0||0|0|||
 S||Item number|0|0|b||X|||||||||0||0|0|||
 S||Field link and sequence number|0|1|8||X|||||||||0||0|0|||
-T|61|National Library of Medicine Copy Statement|0|1|12abc|||||||||||1|http://www.loc.gov/marc/bibliographic/bd061.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|61|National Library of Medicine Copy Statement|0|1|abc|||||||||||1|http://www.loc.gov/marc/bibliographic/bd061.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Classification number|0|0|a||X|||||||||0||0|0|||
 S||Item number|0|0|b||X|||||||||0||0|0|||
 S||Copy information|0|0|c||X|||||||||0||0|0|||
-T|66|Character set present|0|0|12abc||X|1||||||||1|http://www.loc.gov/marc/bibliographic/bd066.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|66|Character set present|0|0|abc||X|1||||||||1|http://www.loc.gov/marc/bibliographic/bd066.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Primary G0 character set|0|0|a||X|||||||||0||0|0|||
 S||Primary G1 charcater set|0|0|b||X|||||||||0||0|0|||
 S||Alternate G0 or G1 character set|0|1|c||X|||||||||0||0|0|||
-T|70|National Agricultural Library Call Number|0|1|12ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd070.html|0|0|||
-S||Indicator 1 (Existence in NAL collection)|0|0|1||X||1|P|070-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|70|National Agricultural Library Call Number|0|1|ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd070.html|0|0|||
+IND||Indicator 1 (Existence in NAL collection)|0|0|1||X||1|P|070-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Classification number|0|0|a||X|||||||||0||0|0|||
 S||Item number|0|0|b||X|||||||||0||0|0|||
-T|71|National Agricultural Library Copy Statement|0|1|12abc|||||||||||1|http://www.loc.gov/marc/bibliographic/bd071.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|71|National Agricultural Library Copy Statement|0|1|abc|||||||||||1|http://www.loc.gov/marc/bibliographic/bd071.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Classification number|0|0|a||X|||||||||0||0|0|||
 S||Item number|0|0|b||X|||||||||0||0|0|||
 S||Copy information|0|0|c||X|||||||||0||0|0|||
-T|72|Subject category code|0|1|12ax2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd072.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2 (Code source)|0|0|2||X||1|P|072-ind2.tab|||||0||0|0|||
+T|72|Subject category code|0|1|ax2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd072.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2 (Code source)|0|0|2||X||1|P|072-ind2.tab|||||0||0|0|||
 S||Subject category code|0|0|a||X|||||||||0||0|0|||
 S||Subject category code subdivision|0|0|x||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
-T|74|GPO Item Number|0|1|12az|||||||||||1|http://www.loc.gov/marc/bibliographic/bd74.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|74|GPO Item Number|0|1|az|||||||||||1|http://www.loc.gov/marc/bibliographic/bd74.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||GPO item number|0|0|a||X|||||||||0||0|0|||
 S||Canceled/invalid GPO item number|0|0|z||X|||||||||0||0|0|||
-T|80|Universal Decimal Classification number|0|1|12abx2||X|1||D||CU_|@cdu.pft|||1|http://www.loc.gov/marc/bibliographic/bd080.html|0|0|||
-S||Indicator 1 (Type of edition)|0|0|1||X||1|P|080-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|80|Universal Decimal Classification number|0|1|abx2||X|1||D||CU_|@cdu.pft|||1|http://www.loc.gov/marc/bibliographic/bd080.html|0|0|||
+IND||Indicator 1 (Type of edition)|0|0|1||X||1|P|080-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Universal Decimal Classification number|0|0|a||X|||D||CU_|@cdu.pft|||0||0|0|||
 S||Item number|0|0|b||X|||||||||0||0|0|||
 S||Common auxiliary subdivision|0|0|x||X|||||||||0||0|0|||
 S||Edition identifier|0|0|2||X|||||||||0||0|0|||
-T|82|Dewey Decimal call number|0|1|12abmq2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd082.html|0|0|||
-S||Indicator 1 (Type of edition)|0|0|1||X||1|P|082-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Source of classification number)|0|0|2||X||1|P|082-ind2.tab|||||0||0|0|||
+T|82|Dewey Decimal call number|0|1|abmq2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd082.html|0|0|||
+IND||Indicator 1 (Type of edition)|0|0|1||X||1|P|082-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Source of classification number)|0|0|2||X||1|P|082-ind2.tab|||||0||0|0|||
 S||Classification number|0|0|a||X|||D||CD_|@cdd.pft|||0||0|0|||
 S||Item number|0|0|b||X|||||||||0||0|0|||
 S||Standard or optional designation|0|0|m||X|||||||||0||0|0|||
 S||Assigning agency|0|0|q||X|||||||||0||0|0|||
 S||Edition number|0|0|2||X|||||||||0||0|0|||
-T|83|Additional Dewey Decimal Classification Number|0|1|12acmqyz2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd083.html|0|0|||
-S||Indicator 1 (Type of edition)|0|0|1||X||1|P|082-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|83|Additional Dewey Decimal Classification Number|0|1|acmqyz2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd083.html|0|0|||
+IND||Indicator 1 (Type of edition)|0|0|1||X||1|P|082-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Classification number|0|0|a||X|||||||||0||0|0|||
 S||Classification number--Ending number of span|0|0|c||X|||||||||0||0|0|||
 S||Standard or optional designation|0|0|m||X|||||||||0||0|0|||
@@ -353,16 +355,16 @@ S||Assigning agency|0|0|q||X|||||||||0||0|0|||
 S||Table sequence number for internal subarrangement or add table|0|0|y||X|||||||||0||0|0|||
 S||Table identification|0|0|z||X|||||||||0||0|0|||
 S||Edition number|0|0|2||X|||||||||0||0|0|||
-T|84|Other call number|0|1|12abq2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd084.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|84|Other call number|0|1|abq2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd084.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Classification number|0|0|a||X|||||||||0||0|0|||
 S||Item number|0|0|b||X|||||||||0||0|0|||
 S||Assigning agency|0|0|q||X|||||||||0||0|0|||
 S||Source of number|0|0|2||X|||||||||0||0|0|||
-T|85|Synthesized Classification Number Components|0|1|12abcfrstuvwyz|||||||||||0||0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||1|http://www.loc.gov/marc/bibliographic/bd085.html|0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|85|Synthesized Classification Number Components|0|1|abcfrstuvwyz|||||||||||0||0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||1|http://www.loc.gov/marc/bibliographic/bd085.html|0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Number where instructions are found-single number or beginning number of span|0|0|a||X|||||||||0||0|0|||
 S||Base number|0|0|b||X|||||||||0||0|0|||
 S||Classification number-ending number of span|0|0|c||X|||||||||0||0|0|||
@@ -375,21 +377,22 @@ S||Number in internal subarrangement or add table where instructions are found|0
 S||Table identification-Internal subarrangement or add table|0|0|w||X|||||||||0||0|0|||
 S||Table sequence number for internal subarrangement or add table|0|0|y||X|||||||||0||0|0|||
 S||Table identification|0|0|z||X|||||||||0||0|0|||
-T|86|Goverment document call number|0|1|12az2||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd086.html|0|0|||
-S||Indicator 1 (Number source)|0|0|1||X||1|P|086-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|86|Goverment document call number|0|1|az2||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd086.html|0|0|||
+IND||Indicator 1 (Number source)|0|0|1||X||1|P|086-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Classificaion number|0|0|a||X|||||||||0||0|0|||
 S||Canceled or invalid classfication number|0|0|z||X|||||||||0||0|0|||
 S||Number source|0|0|2||X|||||||||0||0|0|||
 H||Main entry|0|0||||||||||||0||0|0|||
-T|88|Report Number|0|1|12az|||||||||||1|http://www.loc.gov/marc/bibliographic/bd88.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|88|Report Number|0|1|az|||||||||||1|http://www.loc.gov/marc/bibliographic/bd88.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Report number|0|0|a||X|||||||||0||0|0|||
 S||Canceled/invalid report number|0|0|z||X|||||||||0||0|0|||
-T|100|Personal Name|0|0|12abcdefgjklnpqtu04||X|1||D||AU_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd100.html|0|0|||
-S||Indicator 1 (Type of personal name entry element)|0|0|1||X||1|P|100-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+TAB||1XX|0|0||||||||||||0||0|0|||
+T|100|Personal Name|0|0|abcdefgjklnpqtu04||X|1||D||AU_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd100.html|0|0|||
+IND||Indicator 1 (Type of personal name entry element)|0|0|1||X||1|P|100-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Personal name|0|0|a||X|||D||AU_|@autoridades.pft|||0||0|0|||
 S||Numeration|0|0|b||X|||||||||0||0|0|||
 S||Titles assoc. with name|0|0|c||X|||||||||0||0|0|||
@@ -407,9 +410,9 @@ S||Title of a work|0|0|t||X|||||||||0||0|0|||
 S||Affiliation|0|0|u||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
-T|110|Corporate names|0|0|12abcdefgklnptu04||X|||D||AI_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd110.html|0|0|||
-S||Indicator 1 (Type of corporate name entry element)|0|0|1||X||1|P|110-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|110|Corporate names|0|0|abcdefgklnptu04||X|||D||AI_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd110.html|0|0|||
+IND||Indicator 1 (Type of corporate name entry element)|0|0|1||X||1|P|110-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Corporate name|0|0|a||X|||D||AI_|@autoridades.pft|||0||0|0|||
 S||Subordinate unit|0|0|b||X|||||||||0||0|0|||
 S||Location of meeting|0|0|c||X|||||||||0||0|0|||
@@ -425,9 +428,9 @@ S||Title of a work|0|0|t||X|||||||||0||0|0|||
 S||Affiliation|0|0|u||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
-T|111|Meeting Name|0|0|12acdefgjklnpqtu04||X|||D||CF_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd111.html|0|0|||
-S||Indicator 1 (Type of meeting name entry element)|0|0|1||X||1|P|111-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|111|Meeting Name|0|0|acdefgjklnpqtu04||X|||D||CF_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd111.html|0|0|||
+IND||Indicator 1 (Type of meeting name entry element)|0|0|1||X||1|P|111-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Meeting name|0|0|a||X|2||D||CF_|@autoridades.pft|||0||0|0|||
 S||Location|0|0|c||X|||||||||0||0|0|||
 S||Date|0|0|d||X|||||||||0||0|0|||
@@ -444,9 +447,9 @@ S||Title of a work|0|0|t||X|||||||||0||0|0|||
 S||Affiliation|0|0|u||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
-T|130|Uniform title|0|0|12adfghklmnoprst0|||||||||||1|http://www.loc.gov/marc/bibliographic/bd130.html|0|0|||
-S||Indicator 1 (number of non-filing characters, 0-9)|0|0|1||X||1|P|130-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|130|Uniform title|0|0|adfghklmnoprst0|||||||||||1|http://www.loc.gov/marc/bibliographic/bd130.html|0|0|||
+IND||Indicator 1 (number of non-filing characters, 0-9)|0|0|1||X||1|P|130-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Title|0|0|a||X|||||||||0||0|0|||
 S||Date of treaty signing|0|0|d||X|||||||||0||0|0|||
 S||Date of a work|0|0|f||X|||||||||0||0|0|||
@@ -462,21 +465,22 @@ S||Key for music|0|0|r||X|||||||||0||0|0|||
 S||Version|0|0|s||X|||||||||0||0|0|||
 S||Title of a work|0|0|t||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
+TAB||2XX|0|0||||||||||||0||0|0|||
 H||Title and title-related fields|0|0||||||||||||0||0|0|||
-T|210|Abbreviated title|0|1|12ab2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd210.html|0|0|||
-S||Indicator 1 (Title added entry)|0|0|1||X||1|P|210-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Type)|0|0|2||X||1|P|210-ind2.tab|||||0||0|0|||
+T|210|Abbreviated title|0|1|ab2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd210.html|0|0|||
+IND||Indicator 1 (Title added entry)|0|0|1||X||1|P|210-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Type)|0|0|2||X||1|P|210-ind2.tab|||||0||0|0|||
 S||Abbreviated title|0|0|a||X|||||||||0||0|0|||
 S||Qualifying information|0|0|b||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
-T|222|Key title|0|1|12ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd222.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2 (number of non-filing characters, 0-9)|0|0|2||X||1|P|130-ind1.tab|||||0||0|0|||
+T|222|Key title|0|1|ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd222.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2 (number of non-filing characters, 0-9)|0|0|2||X||1|P|130-ind1.tab|||||0||0|0|||
 S||Key title|0|0|a||X|||||||||0||0|0|||
 S||Qualifying information|0|0|b||X|||||||||0||0|0|||
-T|240|Uniform title|0|0|12adfghklmnoprs0|||||||||||1|http://www.loc.gov/marc/bibliographic/bd240.html|0|0|||
-S||Indicator 1|0|0|1||X||2|P|240-ind1.tab|||||0||0|0|||
-S||Indicator 2 (number of non-filing characters, 0-9)|0|0|2||X||2|P|130-ind1.tab|||||0||0|0|||
+T|240|Uniform title|0|0|adfghklmnoprs0|||||||||||1|http://www.loc.gov/marc/bibliographic/bd240.html|0|0|||
+IND||Indicator 1|0|0|1||X||2|P|240-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (number of non-filing characters, 0-9)|0|0|2||X||2|P|130-ind1.tab|||||0||0|0|||
 S||Title|0|0|a||X|||||||||0||0|0|||
 S||Date of treaty signing|0|0|d||X|||||||||0||0|0|||
 S||Date of a work|0|0|f||X|||||||||0||0|0|||
@@ -491,9 +495,9 @@ S||Name of part/section of a work|0|0|p||X|||||||||0||0|0|||
 S||Key for music|0|0|r||X|||||||||0||0|0|||
 S||Version|0|0|s||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
-T|242|Translated title|0|1|12abchnpy|||||||||||1|http://www.loc.gov/marc/bibliographic/bd242.html|0|0|||
-S||Indicator 1 (Title added entry)|0|0|1||X||2|P|210-ind1.tab|||||0||0|0|||
-S||Indicator 2 (number of non-filing characters, 0-9)|0|0|2||X||2|P|130-ind1.tab|||||0||0|0|||
+T|242|Translated title|0|1|abchnpy|||||||||||1|http://www.loc.gov/marc/bibliographic/bd242.html|0|0|||
+IND||Indicator 1 (Title added entry)|0|0|1||X||2|P|210-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (number of non-filing characters, 0-9)|0|0|2||X||2|P|130-ind1.tab|||||0||0|0|||
 S||Title|0|0|a||X|||||||||0||0|0|||
 S||Remainder of title|0|0|b||X|||||||||0||0|0|||
 S||Statement of responsibility, etc.|0|0|c||X|||||||||0||0|0|||
@@ -501,9 +505,9 @@ S||Medium|0|0|h||X|||||||||0||0|0|||
 S||Number of part/section of a work|0|0|n||X|||||||||0||0|0|||
 S||Name of part/section of a work|0|0|p||X|||||||||0||0|0|||
 S||Language code|0|0|y||X|||||||||0||0|0|||
-T|243|Collective Uniform Title|0|0|12adfghklmnoprs|||||||||||1|http://www.loc.gov/marc/bibliographic/bd243.html|0|0|||
-S||Indicator 1 (Uniform title printed or displayed)|0|0|1||X||1|P|243-ind1.tab|||||0||0|0|||
-S||Indicator 2 (number of non-filing characters, 0-9)|0|0|2||X||1|P|130-ind1.tab|||||0||0|0|||
+T|243|Collective Uniform Title|0|0|adfghklmnoprs|||||||||||1|http://www.loc.gov/marc/bibliographic/bd243.html|0|0|||
+IND||Indicator 1 (Uniform title printed or displayed)|0|0|1||X||1|P|243-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (number of non-filing characters, 0-9)|0|0|2||X||1|P|130-ind1.tab|||||0||0|0|||
 S||Uniform title|0|0|a||X|||||||||0||0|0|||
 S||Date of treaty signing|0|0|d||X|||||||||0||0|0|||
 S||Date of a work|0|0|f||X|||||||||0||0|0|||
@@ -517,9 +521,9 @@ S||Arranged statement for music|0|0|o||X|||||||||0||0|0|||
 S||Name of part/section of a work|0|0|p||X|||||||||0||0|0|||
 S||Key for music|0|0|r||X|||||||||0||0|0|||
 S||Version|0|0|s||X|||||||||0||0|0|||
-T|245|Title statement|1|0|12abcfghknps|||1||||TI_|v245^a," "v245^b,`(` f(mfn,1,0),`)`|f(mfn,1,0)||1|http://www.loc.gov/marc/bibliographic/bd245.html|0|0|||
-S||Indicator 1 (Title added entry)|0|0|1||X||2|P|210-ind1.tab|||||0||0|0|||
-S||Indicator 2 (number of non-filing characters, 0-9)|0|0|2||X||2|P|130-ind1.tab|||||0||0|0|||
+T|245|Title statement|1|0|abcfghknps|||1||||TI_|v245^a," "v245^b,`(` f(mfn,1,0),`)`|f(mfn,1,0)||1|http://www.loc.gov/marc/bibliographic/bd245.html|0|0|||
+IND||Indicator 1 (Title added entry)|0|0|1||X||2|P|210-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (number of non-filing characters, 0-9)|0|0|2||X||2|P|130-ind1.tab|||||0||0|0|||
 S||Title|0|0|a||X|||||||||0||0|0|||
 S||Remainder of title|0|0|b||X|||||||||0||0|0|||
 S||Statement of responsibility|0|0|c||X|||||||||0||0|0|||
@@ -530,9 +534,9 @@ S||Form|0|0|k||X|||||||||0||0|0|||
 S||Number of part/section of a work|0|0|n||X|||||||||0||0|0|||
 S||Name of part/section|0|0|p||X|||||||||0||0|0|||
 S||Version|0|0|s||X|||||||||0||0|0|||
-T|246|Varying form of title|0|1|12abfghinp5|||||||||||1|http://www.loc.gov/marc/bibliographic/bd246.html|0|0|||
-S||Indicator 1 (Note/added entry controller)|0|0|1||X||2|P|028-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Type of title)|0|0|2||X||2|P|246-ind2.tab|||||0||0|0|||
+T|246|Varying form of title|0|1|abfghinp5|||||||||||1|http://www.loc.gov/marc/bibliographic/bd246.html|0|0|||
+IND||Indicator 1 (Note/added entry controller)|0|0|1||X||2|P|028-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Type of title)|0|0|2||X||2|P|246-ind2.tab|||||0||0|0|||
 S||Title proper|0|0|a||X|||||||||0||0|0|||
 S||Remainder of title|0|0|b||X|||||||||0||0|0|||
 S||Date/sequential designation|0|0|f||X|||||||||0||0|0|||
@@ -542,9 +546,9 @@ S||Display text|0|0|i||X|||||||||0||0|0|||
 S||Number of part/section of a work|0|0|n||X|||||||||0||0|0|||
 S||Name of part/section|0|0|p||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|247|Former Title|0|1|12abfghnpx|||||||||||1|http://www.loc.gov/marc/bibliographic/bd247.html|0|0|||
-S||Indicator 1 (Title added entry)|0|0|1||X||1|P|210-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Note controller)|0|0|2||X||1|P|247-ind2.tab|||||0||0|0|||
+T|247|Former Title|0|1|abfghnpx|||||||||||1|http://www.loc.gov/marc/bibliographic/bd247.html|0|0|||
+IND||Indicator 1 (Title added entry)|0|0|1||X||1|P|210-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Note controller)|0|0|2||X||1|P|247-ind2.tab|||||0||0|0|||
 S||Title|0|0|a||X|||||||||0||0|0|||
 S||Remainder of title|0|0|b||X|||||||||0||0|0|||
 S||Date or sequential designation|0|0|f||X|||||||||0||0|0|||
@@ -554,19 +558,19 @@ S||Number of part/section of a work|0|0|n||X|||||||||0||0|0|||
 S||Name of part/section of a work|0|0|p||X|||||||||0||0|0|||
 S||International Standard Serial Number|0|0|x||X|||||||||0||0|0|||
 H||Edition, imprint, etc.|0|0||||||||||||0||0|0|||
-T|250|Edition|0|1|12ab3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd250.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|250|Edition|0|1|ab3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd250.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Edition statement|0|0|a||X|||||||||0||0|0|||
 S||Remainder ed. statement|0|0|b||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|254|Musical Presentation Statement|0|0|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd254.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|254|Musical Presentation Statement|0|0|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd254.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Musical presentation statement|0|0|a||X|||||||||0||0|0|||
-T|255|Cartographic Mathematical Data|0|1|12abcdefg|||||||||||1|http://www.loc.gov/marc/bibliographic/bd255.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|255|Cartographic Mathematical Data|0|1|abcdefg|||||||||||1|http://www.loc.gov/marc/bibliographic/bd255.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Statement of scale|0|0|a||X|||||||||0||0|0|||
 S||Statement of projection|0|0|b||X|||||||||0||0|0|||
 S||Statement of coordinates|0|0|c||X|||||||||0||0|0|||
@@ -574,24 +578,24 @@ S||Statement of zone|0|0|d||X|||||||||0||0|0|||
 S||Statement of equinox|0|0|e||X|||||||||0||0|0|||
 S||Outer G-ring coordinate pairs|0|0|f||X|||||||||0||0|0|||
 S||Exclusion G-ring coordinate pairs|0|0|g||X|||||||||0||0|0|||
-T|256|Computer File Characteristics|0|0|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd256.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|256|Computer File Characteristics|0|0|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd256.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Computer file characteristics|0|0|a||X|||||||||0||0|0|||
-T|257|Country of Producing Entity|0|1|12a02|||||||||||1|http://www.loc.gov/marc/bibliographic/bd257.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|257|Country of Producing Entity|0|1|a02|||||||||||1|http://www.loc.gov/marc/bibliographic/bd257.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Country of producing entity|0|0|a||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
-T|258|Philatelic Issue Data|0|1|12ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd258.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|258|Philatelic Issue Data|0|1|ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd258.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Issuing jurisdiction|0|0|a||X|||||||||0||0|0|||
 S||Denomination|0|0|b||X|||||||||0||0|0|||
-T|260|Imprint|0|1|12abcefg3|||1||||PA_|v260^a,if p(v260^b) then ` : `v260^b fi|v260||1|http://www.loc.gov/marc/bibliographic/bd260.html|0|0|||
-S||Indicator 1 (Sequence of publishing statements)|0|0|1||X||1|P|260-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|260|Imprint|0|1|abcefg3|||1||||PA_|v260^a,if p(v260^b) then ` : `v260^b fi|v260||1|http://www.loc.gov/marc/bibliographic/bd260.html|0|0|||
+IND||Indicator 1 (Sequence of publishing statements)|0|0|1||X||1|P|260-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Place of publication|0|0|a||X|||D||PA_|v260^a|v260^a||0||0|0|||
 S||Name of publisher|0|0|b||X|||D||ED_|v260^b|v260^b||0||0|0|||
 S||Date of publication|0|0|c||X|||||||||0||0|0|||
@@ -599,20 +603,20 @@ S||Place of manufacture|0|0|e||X|||||||||0||0|0|||
 S||Manufacturer|0|0|f||X|||||||||0||0|0|||
 S||Date of manufacture|0|0|g||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|263|Projected Publication Date|0|0|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd263.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|263|Projected Publication Date|0|0|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd263.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Projected publication date|0|0|a||X|||||||||0||0|0|||
-T|264|Production, Publication, Distribution, Manufacture, and Copyright Notice|0|1|12abc3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd264.html|0|0|||
-S||Indicator 1 (Sequence of statements)|0|0|1||X||2|P|264-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Function of entity)|0|0|2||X||2|P|264-ind2.tab|||||0||0|0|||
+T|264|Production, Publication, Distribution, Manufacture, and Copyright Notice|0|1|abc3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd264.html|0|0|||
+IND||Indicator 1 (Sequence of statements)|0|0|1||X||2|P|264-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Function of entity)|0|0|2||X||2|P|264-ind2.tab|||||0||0|0|||
 S||Place of production, publication, distribution, manufacture|0|0|a||X|||||||||0||0|0|||
 S||Name of producer, publisher, distributor, manufacturer|0|0|b||X|||||||||0||0|0|||
 S||Date of production, publication, distribution, manufacture, or copyright notice|0|0|c||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||XF|||||||||0||0|0|||
-T|270|Address|0|1|12abcdefghijklmnpqrz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd270.html|0|0|||
-S||Indicator 1 (Level)|0|0|1||X||1|P|270-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Type of address)|0|0|2||X||1|P|270-ind2.tab|||||0||0|0|||
+T|270|Address|0|1|abcdefghijklmnpqrz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd270.html|0|0|||
+IND||Indicator 1 (Level)|0|0|1||X||1|P|270-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Type of address)|0|0|2||X||1|P|270-ind2.tab|||||0||0|0|||
 S||Address|0|0|a||X|||||||||0||0|0|||
 S||City|0|0|b||X|||||||||0||0|0|||
 S||State or province|0|0|c||X|||||||||0||0|0|||
@@ -632,10 +636,11 @@ S||Title of contact person|0|0|q||X|||||||||0||0|0|||
 S||Hours|0|0|r||X|||||||||0||0|0|||
 S||Public note|0|0|z||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
+TAB||3XX|0|0||||||||||||0||0|0|||
 H||Physical description|0|0||||||||||||0||0|0|||
-T|300|Physical description|0|1|12abcefg3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd300.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|300|Physical description|0|1|abcefg3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd300.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Extent|0|0|a||X|||||||||0||0|0|||
 S||Other physical details|0|0|b||X|||||||||0||0|0|||
 S||Dimensions|0|0|c||X|||||||||0||0|0|||
@@ -643,52 +648,52 @@ S||Accompanying material|0|0|e||X|||||||||0||0|0|||
 S||Type of unit|0|0|f||X|||||||||0||0|0|||
 S||Size of unit|0|0|g||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|306|Playing Time|0|0|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd306.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|306|Playing Time|0|0|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd306.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Playing time|0|0|a||X|||||||||0||0|0|||
-T|307|Hours, Etc.|0|1|12ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd307.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|307-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|307|Hours, Etc.|0|1|ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd307.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|307-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Hours|0|0|a||X|||||||||0||0|0|||
 S||Additional information|0|0|b||X|||||||||0||0|0|||
-T|310|Frequency|0|0|12ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd310.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|310|Frequency|0|0|ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd310.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Current pub frequency|0|0|a||X|||||||||0||0|0|||
 S||Date|0|0|b||X|||||||||0||0|0|||
-T|321|Former Publication Frequency|0|1|12ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd321.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|321|Former Publication Frequency|0|1|ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd321.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Former publication frequency|0|0|a||X|||||||||0||0|0|||
 S||Dates of former publication frequency|0|0|b||X|||||||||0||0|0|||
-T|336|Content Type|0|1|12ab023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd336.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|336|Content Type|0|1|ab023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd336.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Content type term|0|0|a||X|||||||||0||0|0|||
 S||Content type code|0|0|b||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|337|Media Type|0|1|12ab023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd337.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|337|Media Type|0|1|ab023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd337.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Media type term|0|0|a||X|||||||||0||0|0|||
 S||Media type code|0|0|b||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|338|Carrier Type|0|1|12ab023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd338.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|338|Carrier Type|0|1|ab023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd338.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Carrier type term|0|0|a||X|||||||||0||0|0|||
 S||Carrier type code|0|0|b||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|340|Physical Medium|0|1|12abcdefhijkmno023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd340.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|340|Physical Medium|0|1|abcdefhijkmno023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd340.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Material base and configuration|0|0|a||X|||||||||0||0|0|||
 S||Dimensions|0|0|b||X|||||||||0||0|0|||
 S||Materials applied to surface|0|0|c||X|||||||||0||0|0|||
@@ -705,9 +710,9 @@ S||Polarity|0|0|o||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|342|Geospatial Reference Data|0|1|12abcdefghijklmnopqrstuvw2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd342.html|0|0|||
-S||Indicator 1 (Geospatial reference dimension)|0|0|1||X||1|P|342-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Geospatial reference method)|0|0|2||X||1|P|342-ind2.tab|||||0||0|0|||
+T|342|Geospatial Reference Data|0|1|abcdefghijklmnopqrstuvw2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd342.html|0|0|||
+IND||Indicator 1 (Geospatial reference dimension)|0|0|1||X||1|P|342-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Geospatial reference method)|0|0|2||X||1|P|342-ind2.tab|||||0||0|0|||
 S||Name|0|0|a||X|||||||||0||0|0|||
 S||Coordinate units or distance units|0|0|b||X|||||||||0||0|0|||
 S||Latitude resolution|0|0|c||X|||||||||0||0|0|||
@@ -732,9 +737,9 @@ S||Vertical encoding method|0|0|u||X|||||||||0||0|0|||
 S||Local planar, local, or other projection or grid description|0|0|v||X|||||||||0||0|0|||
 S||Local planar or local georeference information|0|0|w||X|||||||||0||0|0|||
 S||Reference method used|0|0|2||X|||||||||0||0|0|||
-T|343|Planar Coordinate Data|0|1|12abcdefghi|||||||||||1|http://www.loc.gov/marc/bibliographic/bd343.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|343|Planar Coordinate Data|0|1|abcdefghi|||||||||||1|http://www.loc.gov/marc/bibliographic/bd343.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Planar coordinate encoding method|0|0|a||X|||||||||0||0|0|||
 S||Planar distance units|0|0|b||X|||||||||0||0|0|||
 S||Abscissa resolution|0|0|c||X|||||||||0||0|0|||
@@ -744,9 +749,9 @@ S||Bearing resolution|0|0|f||X|||||||||0||0|0|||
 S||Bearing units|0|0|g||X|||||||||0||0|0|||
 S||Bearing reference direction|0|0|h||X|||||||||0||0|0|||
 S||Bearing reference meridian|0|0|i||X|||||||||0||0|0|||
-T|344|Sound Characteristics|0|1|12abcdefgh023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd344.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|344|Sound Characteristics|0|1|abcdefgh023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd344.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Type of recording|0|0|a||X|||||||||0||0|0|||
 S||Recording medium|0|0|b||X|||||||||0||0|0|||
 S||Playing speed|0|0|c||X|||||||||0||0|0|||
@@ -758,25 +763,25 @@ S||Special playback characteristics|0|0|h||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|345|Projection Characteristics of Moving Image|0|1|12ab023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd345.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|345|Projection Characteristics of Moving Image|0|1|ab023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd345.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Presentation format|0|0|a||X|||||||||0||0|0|||
 S||Projection speed|0|0|b||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|346|Video Characteristics|0|1|12ab023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd346.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|346|Video Characteristics|0|1|ab023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd346.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Video format|0|0|a||X|||||||||0||0|0|||
 S||Broadcast standard|0|0|b||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|347|Digital File Characteristics|0|1|12abcdef023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd347.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|347|Digital File Characteristics|0|1|abcdef023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd347.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||File type|0|0|a||X|||||||||0||0|0|||
 S||Encoding format|0|0|b||X|||||||||0||0|0|||
 S||File size|0|0|c||X|||||||||0||0|0|||
@@ -786,24 +791,24 @@ S||Encoded bitrate|0|0|f||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|348|Format of Notated Music|0|1|12ab023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd348.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|348|Format of Notated Music|0|1|ab023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd348.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Format of notated music term|0|0|a||X|||||||||0||0|0|||
 S||Format of notated music code|0|0|b||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source of term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|351|Organization and Arrangement of Materials|0|1|12abc3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd351.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|351|Organization and Arrangement of Materials|0|1|abc3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd351.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Organization|0|0|a||X|||||||||0||0|0|||
 S||Arrangement|0|0|b||X|||||||||0||0|0|||
 S||Hierarchical level|0|0|c||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|352|Digital Graphic Representation|0|1|12abcdefgiq|||||||||||1|http://www.loc.gov/marc/bibliographic/bd352.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|352|Digital Graphic Representation|0|1|abcdefgiq|||||||||||1|http://www.loc.gov/marc/bibliographic/bd352.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Direct reference method|0|0|a||X|||||||||0||0|0|||
 S||Object type|0|0|b||X|||||||||0||0|0|||
 S||Object count|0|0|c||X|||||||||0||0|0|||
@@ -813,9 +818,9 @@ S||Vertical count|0|0|f||X|||||||||0||0|0|||
 S||VPF topology level|0|0|g||X|||||||||0||0|0|||
 S||Indirect reference description|0|0|i||X|||||||||0||0|0|||
 S||Format of the digital image|0|0|q||X|||||||||0||0|0|||
-T|355|Security Classification Control|0|1|12abcdefghj|||||||||||1|http://www.loc.gov/marc/bibliographic/bd355.html|0|0|||
-S||Indicator 1(Controlled element)|0|0|1||X||1|P|355-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|355|Security Classification Control|0|1|abcdefghj|||||||||||1|http://www.loc.gov/marc/bibliographic/bd355.html|0|0|||
+IND||Indicator 1(Controlled element)|0|0|1||X||1|P|355-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Security classification|0|0|a||X|||||||||0||0|0|||
 S||Handling instructions|0|0|b||X|||||||||0||0|0|||
 S||External dissemination information|0|0|c||X|||||||||0||0|0|||
@@ -825,21 +830,21 @@ S||Country of origin code|0|0|f||X|||||||||0||0|0|||
 S||Downgrading date|0|0|g||X|||||||||0||0|0|||
 S||Declassification date|0|0|h||X|||||||||0||0|0|||
 S||Authorization|0|0|j||X|||||||||0||0|0|||
-T|357|Originator Dissemination Control|0|0|12abcg|||||||||||1|http://www.loc.gov/marc/bibliographic/bd357.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|357|Originator Dissemination Control|0|0|abcg|||||||||||1|http://www.loc.gov/marc/bibliographic/bd357.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Originator control term|0|0|a||X|||||||||0||0|0|||
 S||Originating agency|0|0|b||X|||||||||0||0|0|||
 S||Authorized recipients of material|0|0|c||X|||||||||0||0|0|||
 S||Other restrictions|0|0|g||X|||||||||0||0|0|||
-T|362|Dates of publication|0|1|12az|||||||||||1|http://www.loc.gov/marc/bibliographic/bd362.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|362-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|362|Dates of publication|0|1|az|||||||||||1|http://www.loc.gov/marc/bibliographic/bd362.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|362-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Dates of publication|0|0|a||X|||||||||0||0|0|||
 S||Source of information|0|0|z||X|||||||||0||0|0|||
-T|363|Normalized Date and Sequential Designation|0|1|12abcdefghijklmuvxz|||||||||||1|http://www.loc.gov/marc/bibliographic/bd363.html|0|0|||
-S||Indicator 1 (Start/End designator)|0|0|1||X||1|P|363-ind1.tab|||||0||0|0|||
-S||Indicator 2 (State of issuance)|0|0|2||X||1|P|363-ind2.tab|||||0||0|0|||
+T|363|Normalized Date and Sequential Designation|0|1|abcdefghijklmuvxz|||||||||||1|http://www.loc.gov/marc/bibliographic/bd363.html|0|0|||
+IND||Indicator 1 (Start/End designator)|0|0|1||X||1|P|363-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (State of issuance)|0|0|2||X||1|P|363-ind2.tab|||||0||0|0|||
 S||First level of enumeration|0|0|a||X|||||||||0||0|0|||
 S||Second level of enumeration|0|0|b||X|||||||||0||0|0|||
 S||Third level of enumeration|0|0|c||X|||||||||0||0|0|||
@@ -857,9 +862,9 @@ S||First level textual designation|0|0|u||X|||||||||0||0|0|||
 S||First level of chronology, issuance|0|0|v||X|||||||||0||0|0|||
 S||Nonpublic note|0|0|x||X|||||||||0||0|0|||
 S||Public note|0|0|z||X|||||||||0||0|0|||
-T|365|Trade Price|0|1|12abcdefghijkm2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd365.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|365|Trade Price|0|1|abcdefghijkm2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd365.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Price type code|0|0|a||X|||||||||0||0|0|||
 S||Price amount|0|0|b||X|||||||||0||0|0|||
 S||Currency code|0|0|c||X|||||||||0||0|0|||
@@ -873,9 +878,9 @@ S||ISO country code|0|0|j||X|||||||||0||0|0|||
 S||MARC country code|0|0|k||X|||||||||0||0|0|||
 S||Identification of pricing entity|0|0|m||X|||||||||0||0|0|||
 S||Source of price type code|0|0|2||X|||||||||0||0|0|||
-T|366|Trade Availability Information|0|1|12abcdefgjkm2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd366.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|366|Trade Availability Information|0|1|abcdefgjkm2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd366.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Publishers' compressed title identification|0|0|a||X|||||||||0||0|0|||
 S||Detailed date of publication|0|0|b||X|||||||||0||0|0|||
 S||Availability status code|0|0|c||X|||||||||0||0|0|||
@@ -887,9 +892,9 @@ S||ISO country code|0|0|j||X|||||||||0||0|0|||
 S||MARC country code|0|0|k||X|||||||||0||0|0|||
 S||Identification of agency|0|0|m||X|||||||||0||0|0|||
 S||Source of availability status code|0|0|2||X|||||||||0||0|0|||
-T|370|Associated Place|0|1|12cfgstuv02|||||||||||1|http://www.loc.gov/marc/bibliographic/bd370.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|370|Associated Place|0|1|cfgstuv02|||||||||||1|http://www.loc.gov/marc/bibliographic/bd370.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Associated country|0|0|c||X|||||||||0||0|0|||
 S||Other associated place|0|0|f||X|||||||||0||0|0|||
 S||Place of origin of work|0|0|g||X|||||||||0||0|0|||
@@ -899,30 +904,30 @@ S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||Source of information|0|0|v||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|1|0||X|||||||||0||0|0|||
 S||Source of term|0|0|2||X|||||||||0||0|0|||
-T|377|Associated Language|0|1|12a102|||||||||||1|http://www.loc.gov/marc/bibliographic/bd377.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2 (Source of code)|0|0|2||X||1|P|041-ind2.tab|||||0||0|0|||
+T|377|Associated Language|0|1|a102|||||||||||1|http://www.loc.gov/marc/bibliographic/bd377.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2 (Source of code)|0|0|2||X||1|P|041-ind2.tab|||||0||0|0|||
 S||Language code|0|0|a||X|||||||||0||0|0|||
 S||Language term|0|0|1||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
-T|380|Form of Work|0|1|12a02|||||||||||1|http://www.loc.gov/marc/bibliographic/bd380.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|380|Form of Work|0|1|a02|||||||||||1|http://www.loc.gov/marc/bibliographic/bd380.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Form of work|0|0|a||X|||||||||0||0|0|||
 S||Record control number|0|0|0||X|||||||||0||0|0|||
 S||Source of term|0|0|2||X|||||||||0||0|0|||
-T|381|Other Distinguishing Characteristics of Work or Expression|0|1|12auv02|||||||||||1|http://www.loc.gov/marc/bibliographic/bd381.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|381|Other Distinguishing Characteristics of Work or Expression|0|1|auv02|||||||||||1|http://www.loc.gov/marc/bibliographic/bd381.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Other distinguishing characteristic|0|0|a||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||Source of information|0|0|v||X|||||||||0||0|0|||
 S||Record control number|0|0|0||X|||||||||0||0|0|||
 S||Source of term|0|0|2||X|||||||||0||0|0|||
-T|382|Medium of Performance|0|1|12abdenprstv023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd382.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|382-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Access control)|0|0|2||X||1|P|382-ind2.tab|||||0||0|0|||
+T|382|Medium of Performance|0|1|abdenprstv023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd382.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|382-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Access control)|0|0|2||X||1|P|382-ind2.tab|||||0||0|0|||
 S||Medium of performance|0|0|a||X|||||||||0||0|0|||
 S||Soloist|0|0|b||X|||||||||0||0|0|||
 S||Doubling instrument|0|0|d||X|||||||||0||0|0|||
@@ -936,22 +941,22 @@ S||Note|0|0|v||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source of term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|383|Numeric Designation of Musical Work|0|1|12abcde2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd383.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|383|Numeric Designation of Musical Work|0|1|abcde2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd383.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Serial number|0|0|a||X|||||||||0||0|0|||
 S||Opus number|0|0|b||X|||||||||0||0|0|||
 S||Thematic index number|0|0|c||X|||||||||0||0|0|||
 S||Thematic index code|0|0|d||X|||||||||0||0|0|||
 S||Publisher associated with opus number|0|0|e||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
-T|384|Key|0|0|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd384.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|384-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|384|Key|0|0|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd384.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|384-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Key|0|0|a||X|||||||||0||0|0|||
-T|385|Audience Characteristics|0|1|12abmn023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd385.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|385|Audience Characteristics|0|1|abmn023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd385.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Audience term|0|0|a||X|||||||||0||0|0|||
 S||Audience code|0|0|b||X|||||||||0||0|0|||
 S||Demographic group term|0|0|m||X|||||||||0||0|0|||
@@ -959,9 +964,9 @@ S||Demographic group code|0|0|n||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|386|Creator/Contributor Characteristics|0|1|12abmn023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd386.html|0|0|||
-S||Indicator 1|0|0|1||X|||P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X|||P|Ind-b.tab|||||0||0|0|||
+T|386|Creator/Contributor Characteristics|0|1|abmn023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd386.html|0|0|||
+IND||Indicator 1|0|0|1||X|||P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X|||P|Ind-b.tab|||||0||0|0|||
 S||Creator/contributor term|0|0|a||X|||||||||0||0|0|||
 S||Creator/contributor code|0|0|b||X|||||||||0||0|0|||
 S||Demographic group term|0|0|m||X|||||||||0||0|0|||
@@ -969,17 +974,18 @@ S||Demographic group code|0|0|n||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|388|Time Period of Creation|0|1|12a023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd388.html|0|0|||
-S||Indicator 1 (Type of time period)|0|0|1||X||1|P|388-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||2|P|Ind-b.tab|||||0||0|0|||
+T|388|Time Period of Creation|0|1|a023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd388.html|0|0|||
+IND||Indicator 1 (Type of time period)|0|0|1||X||1|P|388-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||2|P|Ind-b.tab|||||0||0|0|||
 S||Time period of creation term|0|0|a||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source of term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
+TAB||4XX|0|0||||||||||||0||0|0|||
 H||Series statement|0|0||||||||||||0||0|0|||
-T|440|Series statement (old records)|0|1|12anpvwx068|||||||||||1|https://www.loc.gov/marc/bibliographic/bd440.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2 (number of non-filing characters, 0-9)|0|0|2||X||1|P|130-ind1.tab|||||0||0|0|||
+T|440|Series statement (old records)|0|1|anpvwx068|||||||||||1|https://www.loc.gov/marc/bibliographic/bd440.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2 (number of non-filing characters, 0-9)|0|0|2||X||1|P|130-ind1.tab|||||0||0|0|||
 S||Title|0|0|a||X|||||||||0||0|0|||
 S||Number of part/section of a work|0|0|n||X|||||||||0||0|0|||
 S||Name of part/section of a work|0|0|p||X|||||||||0||0|0|||
@@ -989,51 +995,52 @@ S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||Authority record control number|0|0|0||X|||||||||0||0|0|||
 S||Linkage|0|0|6||X|||||||||0||0|0|||
 S||Field link and sequence number|0|0|8||X|||||||||0||0|0|||
-T|490|Series statement|0|1|12alvx3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd490.html|0|0|||
-S||Indicator 1 (Series tracing policy)|0|0|1||X||1|P|490-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|490|Series statement|0|1|alvx3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd490.html|0|0|||
+IND||Indicator 1 (Series tracing policy)|0|0|1||X||1|P|490-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Series|0|0|a||X|||||||||0||0|0|||
 S||Library of Congress call number|0|0|l||X|||||||||0||0|0|||
 S||Volume|0|0|v||X|||||||||0||0|0|||
 S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 H||Notes|0|0||||||||||||0||0|0|||
-T|500|General note|0|1|12a35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd500.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+TAB||5XX|0|0||||||||||||0||0|0|||
+T|500|General note|0|1|a35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd500.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||General note|0|0|a||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|501|With Note|0|1|12a5|||||||||||1|http://www.loc.gov/marc/bibliographic/bd501.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|501|With Note|0|1|a5|||||||||||1|http://www.loc.gov/marc/bibliographic/bd501.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||With note|0|0|a||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|502|Dissertation note|0|1|12abcdgo|||||||||||1|http://www.loc.gov/marc/bibliographic/bd502.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|502|Dissertation note|0|1|abcdgo|||||||||||1|http://www.loc.gov/marc/bibliographic/bd502.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Dissertation note|0|0|a||X|||||||||0||0|0|||
 S||Degree type|0|0|b||X|||||||||0||0|0|||
 S||Name of granting institution|0|0|c||X|||||||||0||0|0|||
 S||Year degree granted|0|0|d||X|||||||||0||0|0|||
 S||Miscellaneous information|0|0|g||X|||||||||0||0|0|||
 S||Dissertation identifier|0|0|o||X|||||||||0||0|0|||
-T|504|Bibliography note|0|1|12ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd504.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2 (Level of content designation)|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|504|Bibliography note|0|1|ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd504.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2 (Level of content designation)|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Bibliography, etc. note|0|0|a||X|||||||||0||0|0|||
 S||Number of references|0|0|b||X|||||||||0||0|0|||
-T|505|Formatted contents note|0|1|12agrtu|||||||||||1|http://www.loc.gov/marc/bibliographic/bd505.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|505-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|505-ind2.tab|||||0||0|0|||
+T|505|Formatted contents note|0|1|agrtu|||||||||||1|http://www.loc.gov/marc/bibliographic/bd505.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|505-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|505-ind2.tab|||||0||0|0|||
 S||Formatted contents note|0|0|a||X|||||||||0||0|0|||
 S||Miscellaneous information|0|0|g||X|||||||||0||0|0|||
 S||Statement of responsibility|0|0|r||X|||||||||0||0|0|||
 S||Title|0|0|t||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
-T|506|Restrictions on Access Note|0|1|12abcdefu235|||||||||||1|http://www.loc.gov/marc/bibliographic/bd506.html|0|0|||
-S||Indicator 1 (Restriction)|0|0|1||X||1|P|506-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|506|Restrictions on Access Note|0|1|abcdefu235|||||||||||1|http://www.loc.gov/marc/bibliographic/bd506.html|0|0|||
+IND||Indicator 1 (Restriction)|0|0|1||X||1|P|506-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Terms governing access|0|0|a||X|||||||||0||0|0|||
 S||Jurisdiction|0|0|b||X|||||||||0||0|0|||
 S||Physical access provisions|0|0|c||X|||||||||0||0|0|||
@@ -1044,36 +1051,36 @@ S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||Source of term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|507|Scale Note for Graphic Material|0|0|12ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd507.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|507|Scale Note for Graphic Material|0|0|ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd507.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Representative fraction of scale note|0|0|a||X|||||||||0||0|0|||
 S||Remainder of scale note|0|0|b||X|||||||||0||0|0|||
-T|508|Creation/Production Credits Note|0|1|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd508.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|508|Creation/Production Credits Note|0|1|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd508.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Creation/production credits note|0|0|a||X|||||||||0||0|0|||
-T|510|Citation/References note|0|1|12abcux3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd510.html|0|0|||
-S||Indicator 1 (Coverage/location in source)|0|0|1||X||1|P|510-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|510|Citation/References note|0|1|abcux3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd510.html|0|0|||
+IND||Indicator 1 (Coverage/location in source)|0|0|1||X||1|P|510-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Name of source|0|0|a||X|||||||||0||0|0|||
 S||Coverage of source|0|0|b||X|||||||||0||0|0|||
 S||Location within source|0|0|c||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|511|Participant or Performer Note|0|1|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd511.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|511-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|511|Participant or Performer Note|0|1|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd511.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|511-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Participant or performer note|0|0|a||X|||||||||0||0|0|||
-T|513|Type of Report and Period Covered Note|0|1|12ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd513.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|513|Type of Report and Period Covered Note|0|1|ab|||||||||||1|http://www.loc.gov/marc/bibliographic/bd513.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Type of report|0|0|a||X|||||||||0||0|0|||
 S||Period covered|0|0|b||X|||||||||0||0|0|||
-T|514|Data Quality Note|0|0|12abcdefghijkmuz|||||||||||1|http://www.loc.gov/marc/bibliographic/bd514.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|514|Data Quality Note|0|0|abcdefghijkmuz|||||||||||1|http://www.loc.gov/marc/bibliographic/bd514.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Attribute accuracy report|0|0|a||X|||||||||0||0|0|||
 S||Attribute accuracy value|0|0|b||X|||||||||0||0|0|||
 S||Attribute accuracy explanation|0|0|c||X|||||||||0||0|0|||
@@ -1088,17 +1095,17 @@ S||Vertical positional accuracy explanation|0|0|k||X|||||||||0||0|0|||
 S||Cloud cover|0|0|m||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||Display note|0|0|z||X|||||||||0||0|0|||
-T|515|Numbering Peculiarities Note|0|1|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd515.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|515|Numbering Peculiarities Note|0|1|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd515.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Numbering peculiarities note|0|0|a||X|||||||||0||0|0|||
-T|516|Type of Computer File or Data Note|0|1|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd516.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|516-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|516|Type of Computer File or Data Note|0|1|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd516.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|516-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Type of computer file or data note|0|0|a||X|||||||||0||0|0|||
-T|518|Date/Time and Place of an Event Note|0|1|12adop023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd518.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|518|Date/Time and Place of an Event Note|0|1|adop023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd518.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Date/time and place of an event note|0|0|a||X|||||||||0||0|0|||
 S||Date of event|0|0|d||X|||||||||0||0|0|||
 S||Other event information|0|0|o||X|||||||||0||0|0|||
@@ -1106,38 +1113,38 @@ S||Place of event|0|0|p||X|||||||||0||0|0|||
 S||Record control number|0|0|0||X|||||||||0||0|0|||
 S||Source of term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|520|Summary|0|1|12abcu23|||||||||||1|http://www.loc.gov/marc/bibliographic/bd520.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|520-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|520|Summary|0|1|abcu23|||||||||||1|http://www.loc.gov/marc/bibliographic/bd520.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|520-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Summary|0|0|a||X|||||||||0||0|0|||
 S||Expansion of summary note|0|0|b||X|||||||||0||0|0|||
 S||Assigning source|0|0|c||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|521|Target audience note|0|1|12ab3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd521.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|521-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|521|Target audience note|0|1|ab3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd521.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|521-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Target audience note|0|1|a||X|||||||||0||0|0|||
 S||Source|0|0|b||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|522|Geographic Coverage Note|0|1|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd522.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|522-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|522|Geographic Coverage Note|0|1|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd522.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|522-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Geographic coverage note|0|0|a||X|||||||||0||0|0|||
-T|524|Preferred Citation of Described Materials Note|0|1|12a23|||||||||||1|http://www.loc.gov/marc/bibliographic/bd524.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|524-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|524|Preferred Citation of Described Materials Note|0|1|a23|||||||||||1|http://www.loc.gov/marc/bibliographic/bd524.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|524-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Preferred citation of described materials note|0|0|a||X|||||||||0||0|0|||
 S||Source of schema used|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|525|Supplement Note|0|1|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd525.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|525|Supplement Note|0|1|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd525.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Supplement note|0|0|a||X|||||||||0||0|0|||
-T|526|Study Program Information Note|0|1|12abcdixz5|||||||||||1|http://www.loc.gov/marc/bibliographic/bd526.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|526-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|526|Study Program Information Note|0|1|abcdixz5|||||||||||1|http://www.loc.gov/marc/bibliographic/bd526.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|526-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Program name|0|0|a||X|||||||||0||0|0|||
 S||Interest level|0|0|b||X|||||||||0||0|0|||
 S||Reading level|0|0|c||X|||||||||0||0|0|||
@@ -1146,18 +1153,18 @@ S||Display text|0|0|i||X|||||||||0||0|0|||
 S||Nonpublic note|0|0|x||X|||||||||0||0|0|||
 S||Public note|0|0|z||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|530|Additional Physical Form Available Note|0|1|12abcdu3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd530.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|530|Additional Physical Form Available Note|0|1|abcdu3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd530.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Additional physical form available note|0|0|a||X|||||||||0||0|0|||
 S||Availability source|0|0|b||X|||||||||0||0|0|||
 S||Availability conditions|0|0|c||X|||||||||0||0|0|||
 S||Order number|0|0|d||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|533|Reproduction note|0|1|12abcdefmn357|||||||||||1|http://www.loc.gov/marc/bibliographic/bd533.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|533|Reproduction note|0|1|abcdefmn357|||||||||||1|http://www.loc.gov/marc/bibliographic/bd533.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Type of reproduction|0|0|a||X|||||||||0||0|0|||
 S||Place of reproduction|0|1|b||X|||||||||0||0|0|||
 S||Agency responcsible for reproduction|0|1|c||X|||||||||0||0|0|||
@@ -1169,9 +1176,9 @@ S||Note about reproduction|0|1|n||X|||||||||0||0|0|||
 S||Materials specified|0|1|3||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
 S||Fixed-length data elements of reproduction|0|0|7||X|||||||||0||0|0|||
-T|534|Original version note|0|1|12abcefklmnoptxz3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd534.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|534|Original version note|0|1|abcefklmnoptxz3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd534.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Main entry of original|0|0|a||X|||||||||0||0|0|||
 S||Edition statement of original|0|0|b||X|||||||||0||0|0|||
 S||Publication, distribution, etc. of original|0|1|c||X|||||||||0||0|0|||
@@ -1187,18 +1194,18 @@ S||Title statement of original|0|0|t||X|||||||||0||0|0|||
 S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||International Standard Book Number|0|0|z||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|535|Location of Originals/Duplicates Note|0|1|12abcdg3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd535.html|0|0|||
-S||Indicator 1 (Custodial role)|0|0|1||X||1|P|535-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|535|Location of Originals/Duplicates Note|0|1|abcdg3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd535.html|0|0|||
+IND||Indicator 1 (Custodial role)|0|0|1||X||1|P|535-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Custodian|0|0|a||X|||||||||0||0|0|||
 S||Postal address|0|0|b||X|||||||||0||0|0|||
 S||Country|0|0|c||X|||||||||0||0|0|||
 S||Telecommunications address|0|0|d||X|||||||||0||0|0|||
 S||Repository location code|0|0|g||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|536|Funding Information Note|0|1|12abcdefgh|||||||||||1|http://www.loc.gov/marc/bibliographic/bd536.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|536|Funding Information Note|0|1|abcdefgh|||||||||||1|http://www.loc.gov/marc/bibliographic/bd536.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Text of note|0|0|a||X|||||||||0||0|0|||
 S||Contract number|0|0|b||X|||||||||0||0|0|||
 S||Grant number|0|0|c||X|||||||||0||0|0|||
@@ -1207,17 +1214,17 @@ S||Program element number|0|0|e||X|||||||||0||0|0|||
 S||Project number|0|0|f||X|||||||||0||0|0|||
 S||Task number|0|0|g||X|||||||||0||0|0|||
 S||Work unit number|0|0|h||X|||||||||0||0|0|||
-T|538|System details note|0|1|12aiu35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd538.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|538|System details note|0|1|aiu35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd538.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Sytem details note|0|0|a||X|||||||||0||0|0|||
 S||Display text|0|0|i||X|||||||||0||0|0|||
 S||Uniform resource identifier|0|1|u||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd540.html|0|0|||
-T|540|Terms Governing Use and Reproduction Note|0|1|12abcdu35|||||||||||0||0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|540|Terms Governing Use and Reproduction Note|0|1|abcdu35|||||||||||0||0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Terms governing use and reproduction|0|0|a||X|||||||||0||0|0|||
 S||Jurisdiction|0|0|b||X|||||||||0||0|0|||
 S||Authorization|0|0|c||X|||||||||0||0|0|||
@@ -1225,9 +1232,9 @@ S||Authorized users|0|0|d||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|541|Immediate Source of Acquisition Note|0|1|12abcdefhno35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd541.html|0|0|||
-S||Indicator 1 (Privacy)|0|0|1||X||1|P|541-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|541|Immediate Source of Acquisition Note|0|1|abcdefhno35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd541.html|0|0|||
+IND||Indicator 1 (Privacy)|0|0|1||X||1|P|541-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Source of acquisition|0|0|a||X|||||||||0||0|0|||
 S||Address|0|0|b||X|||||||||0||0|0|||
 S||Method of acquisition|0|0|c||X|||||||||0||0|0|||
@@ -1239,9 +1246,9 @@ S||Extent|0|0|n||X|||||||||0||0|0|||
 S||Type of unit|0|0|o||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|542|Information Relating to Copyright Status|0|1|12abcdefghijklmnopqrsu3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd542.html|0|0|||
-S||Indicator 1 (Privacy)|0|0|1||X||1|P|541-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|542|Information Relating to Copyright Status|0|1|abcdefghijklmnopqrsu3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd542.html|0|0|||
+IND||Indicator 1 (Privacy)|0|0|1||X||1|P|541-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Personal creator|0|0|a||X|||||||||0||0|0|||
 S||Personal creator death date|0|0|b||X|||||||||0||0|0|||
 S||Corporate creator|0|0|c||X|||||||||0||0|0|||
@@ -1263,9 +1270,9 @@ S||Jurisdiction of copyright assessment|0|0|r||X|||||||||0||0|0|||
 S||Source of information|0|0|s||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|544|Location of Other Archival Materials Note|0|1|12abcden3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd544.html|0|0|||
-S||Indicator 1 (Relationship)|0|0|1||X||1|P|544-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|544|Location of Other Archival Materials Note|0|1|abcden3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd544.html|0|0|||
+IND||Indicator 1 (Relationship)|0|0|1||X||1|P|544-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Custodian|0|0|a||X|||||||||0||0|0|||
 S||Address|0|0|b||X|||||||||0||0|0|||
 S||Country|0|0|c||X|||||||||0||0|0|||
@@ -1273,29 +1280,29 @@ S||Title|0|0|d||X|||||||||0||0|0|||
 S||Provenance|0|0|e||X|||||||||0||0|0|||
 S||Note|0|0|n||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|545|Biographical or Historical Data|0|1|12abu|||||||||||1|http://www.loc.gov/marc/bibliographic/bd545.html|0|0|||
-S||Indicator 1 (Type of data)|0|0|1||X||1|P|545-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|545|Biographical or Historical Data|0|1|abu|||||||||||1|http://www.loc.gov/marc/bibliographic/bd545.html|0|0|||
+IND||Indicator 1 (Type of data)|0|0|1||X||1|P|545-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Biographical or historical data|0|0|a||X|||||||||0||0|0|||
 S||Expansion|0|0|b||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
-T|546|Language note|0|1|12ab3|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd546.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|546|Language note|0|1|ab3|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd546.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Language note|0|0|a||X|||||||||0||0|0|||
 S||Information code or alphabet|0|1|b||X|||||||||0||0|0|||
 S||Materials specified|0|1|3||X|||||||||0||0|0|||
-T|547|Former Title Complexity Note|0|1|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd547.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|547|Former Title Complexity Note|0|1|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd547.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Former title complexity note|0|0|a||X|||||||||0||0|0|||
-T|550|Issuing Body Note|0|1|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd550.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|550|Issuing Body Note|0|1|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd550.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Issuing body note|0|0|a||X|||||||||0||0|0|||
-T|552|Entity and Attribute Information Note|0|1|12abcdefghijklmnopuz|||||||||||1|http://www.loc.gov/marc/bibliographic/bd552.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|552|Entity and Attribute Information Note|0|1|abcdefghijklmnopuz|||||||||||1|http://www.loc.gov/marc/bibliographic/bd552.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Entity type label|0|0|a||X|||||||||0||0|0|||
 S||Entity type definition and source|0|0|b||X|||||||||0||0|0|||
 S||Attribute label|0|0|c||X|||||||||0||0|0|||
@@ -1314,30 +1321,30 @@ S||Entity and attribute overview|0|0|o||X|||||||||0||0|0|||
 S||Entity and attribute detail citation|0|0|p||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||Display note|0|0|z||X|||||||||0||0|0|||
-T|555|Cumulative Index/Finding Aids Note|0|1|12abcdu3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd555.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|555-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|555|Cumulative Index/Finding Aids Note|0|1|abcdu3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd555.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|555-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Cumulative index/finding aids note|0|0|a||X|||||||||0||0|0|||
 S||Availability source|0|0|b||X|||||||||0||0|0|||
 S||Degree of control|0|0|c||X|||||||||0||0|0|||
 S||Bibliographic reference|0|0|d||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|556|Information About Documentation Note|0|1|12az|||||||||||1|http://www.loc.gov/marc/bibliographic/bd556.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|556-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|556|Information About Documentation Note|0|1|az|||||||||||1|http://www.loc.gov/marc/bibliographic/bd556.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|556-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Information about documentation note|0|0|a||X|||||||||0||0|0|||
 S||International Standard Book Number|0|0|z||X|||||||||0||0|0|||
-T|561|Ownership and Custodial History|0|1|12au35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd561.html|0|0|||
-S||Indicator 1 (Privacy)|0|0|1||X||1|P|541-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|561|Ownership and Custodial History|0|1|au35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd561.html|0|0|||
+IND||Indicator 1 (Privacy)|0|0|1||X||1|P|541-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||History|0|0|a||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|562|Copy and Version Identification Note|0|1|12abcde35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd562.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|562|Copy and Version Identification Note|0|1|abcde35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd562.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Identifying markings|0|0|a||X|||||||||0||0|0|||
 S||Copy identification|0|0|b||X|||||||||0||0|0|||
 S||Version identification|0|0|c||X|||||||||0||0|0|||
@@ -1345,39 +1352,39 @@ S||Presentation format|0|0|d||X|||||||||0||0|0|||
 S||Number of copies|0|0|e||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|563|Binding Information|0|1|12au35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd563.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|563|Binding Information|0|1|au35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd563.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Binding note|0|0|a||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|565|Case File Characteristics Note|0|1|12abcde3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd565.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|565-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|565|Case File Characteristics Note|0|1|abcde3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd565.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|565-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Number of cases/variables|0|0|a||X|||||||||0||0|0|||
 S||Name of variable|0|0|b||X|||||||||0||0|0|||
 S||Unit of analysis|0|0|c||X|||||||||0||0|0|||
 S||Universe of data|0|0|d||X|||||||||0||0|0|||
 S||Filing scheme or code|0|0|e||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|567|Methodology Note|0|1|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd567.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|567-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|567|Methodology Note|0|1|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd567.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|567-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Methodology note|0|0|a||X|||||||||0||0|0|||
-T|580|Linking Entry Complexity Note|0|1|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd580.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|580|Linking Entry Complexity Note|0|1|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd580.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Linking entry complexity note|0|0|a||X|||||||||0||0|0|||
-T|581|Publications About Described Materials Note|0|1|12az3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd581.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|581-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|581|Publications About Described Materials Note|0|1|az3|||||||||||1|http://www.loc.gov/marc/bibliographic/bd581.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|581-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Publications about described materials note|0|0|a||X|||||||||0||0|0|||
 S||International Standard Book Number|0|0|z||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|583|Action Note|0|1|12abcdefhijklnouxz235||||1|P|541-ind1.tab|||||1|http://www.loc.gov/marc/bibliographic/bd583.html|0|0|||
-S||Indicator 1 (Privacy)|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X|||||||||0||0|0|||
+T|583|Action Note|0|1|abcdefhijklnouxz235||||1|P|541-ind1.tab|||||1|http://www.loc.gov/marc/bibliographic/bd583.html|0|0|||
+IND||Indicator 1 (Privacy)|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X|||||||||0||0|0|||
 S||Action|0|0|a||X|||||||||0||0|0|||
 S||Action identification|0|0|b||X|||||||||0||0|0|||
 S||Time/date of action|0|0|c||X|||||||||0||0|0|||
@@ -1397,33 +1404,34 @@ S||Public note|0|0|z||X|||||||||0||0|0|||
 S||Source of term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|584|Accumulation and Frequency of Use Note|0|1|12ab35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd584.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|584|Accumulation and Frequency of Use Note|0|1|ab35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd584.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Accumulation|0|0|a||X|||||||||0||0|0|||
 S||Frequency of use|0|0|b||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|585|Exhibitions Note|0|1|12a35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd585.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|585|Exhibitions Note|0|1|a35|||||||||||1|http://www.loc.gov/marc/bibliographic/bd585.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Exhibitions note|0|0|a||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|586|Awards note|0|0|12a3|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd586.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|586|Awards note|0|0|a3|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd586.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Awards note|0|0|a||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|588|Source of Description Note|0|1|12a5|||||||||||1|http://www.loc.gov/marc/bibliographic/bd588.html|0|0|||
-S||Indicator 1 (Display constant controller)|0|0|1||X||1|P|588-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|588|Source of Description Note|0|1|a5|||||||||||1|http://www.loc.gov/marc/bibliographic/bd588.html|0|0|||
+IND||Indicator 1 (Display constant controller)|0|0|1||X||1|P|588-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Source of description note|0|0|a||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
+TAB||6XX|0|0||||||||||||0||0|0|||
 H||Subject access|0|0||0||||||||||0||0|0|||
-T|600|Personal name|0|1|12abcdefghjklmnopqrstuvxyz0234||X|1||D||AU_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd600.html|0|0|||
-S||Indicator 1 (Type of personal name entry element)|0|0|1||X||1|P|100-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Thesaurus)|0|0|2||X||1|P|600-ind2.tab|||||0||0|0|||
+T|600|Personal name|0|1|abcdefghjklmnopqrstuvxyz0234||X|1||D||AU_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd600.html|0|0|||
+IND||Indicator 1 (Type of personal name entry element)|0|0|1||X||1|P|100-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Thesaurus)|0|0|2||X||1|P|600-ind2.tab|||||0||0|0|||
 S||Personal name|0|0|a||X|||D||AU_|@autoridades.pft|||0||0|0|||
 S||Numeration|0|0|b||X|||||||||0||0|0|||
 S||Titles/words assoc. with name|0|0|c||X|||||||||0||0|0|||
@@ -1452,9 +1460,9 @@ S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source of heading or term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
-T|610|Corporate name|0|1|12abcdefghklmnoprstuvxyz0234||X|1||D||AI_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd610.html|0|0|||
-S||Indicator 1 (Type of corporate name entry element)|0|0|1||X||1|P|110-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Thesaurus)|0|0|2||X||1|P|600-ind2.tab|||||0||0|0|||
+T|610|Corporate name|0|1|abcdefghklmnoprstuvxyz0234||X|1||D||AI_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd610.html|0|0|||
+IND||Indicator 1 (Type of corporate name entry element)|0|0|1||X||1|P|110-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Thesaurus)|0|0|2||X||1|P|600-ind2.tab|||||0||0|0|||
 S||Corporate name|0|0|a||X|||D||AI_|@autoridades.pft|||0||0|0|||
 S||Subordinate unit|0|0|b||X|||||||||0||0|0|||
 S||Location of meeting|0|0|c||X|||||||||0||0|0|||
@@ -1481,9 +1489,9 @@ S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source of heading or term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
-T|611|Meeting name|0|1|12acdefghjklnpqstuvxyz0234||X|1||D||CF_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd611.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|110-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|600-ind2.tab|||||0||0|0|||
+T|611|Meeting name|0|1|acdefghjklnpqstuvxyz0234||X|1||D||CF_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd611.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|110-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|600-ind2.tab|||||0||0|0|||
 S||Meeting name|0|0|a||X|1||D||CF_|@autoridades.pft|||0||0|0|||
 S||Location of meeting|0|0|c||X|||||||||0||0|0|||
 S||Date of meeting|0|0|d||X|||||||||0||0|0|||
@@ -1508,9 +1516,9 @@ S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source of heading or term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
-T|630|Uniform title|0|1|12adefghklmnoprstvxyz0234||X|1||||||||1|http://www.loc.gov/marc/bibliographic/bd630.html|0|0|||
-S||Indicator 1 (Non-filing characters)|0|0|1||X||1|P|130-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Thesaurus)|0|0|2||X||1|P|600-ind2.tab|||||0||0|0|||
+T|630|Uniform title|0|1|adefghklmnoprstvxyz0234||X|1||||||||1|http://www.loc.gov/marc/bibliographic/bd630.html|0|0|||
+IND||Indicator 1 (Non-filing characters)|0|0|1||X||1|P|130-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Thesaurus)|0|0|2||X||1|P|600-ind2.tab|||||0||0|0|||
 S||Uniform title|0|0|a||X|||||||||0||0|0|||
 S||Date of treaty signing|0|0|d||X|||||||||0||0|0|||
 S||Relator term|0|0|e||X|||||||||0||0|0|||
@@ -1534,9 +1542,9 @@ S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source of heading or term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
-T|647|Subject Added Enrtry Named Event|0|1|12acdgvxyz023|||||||||||1|https://www.loc.gov/marc/bibliographic/bd647.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||2|P|600-ind2.tab|||||0||0|0|||
+T|647|Subject Added Enrtry Named Event|0|1|acdgvxyz023|||||||||||1|https://www.loc.gov/marc/bibliographic/bd647.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||2|P|600-ind2.tab|||||0||0|0|||
 S||Named event|0|0|a||X|||||||||0||0|0|||
 S||Location of named event|0|0|c||X|||||||||0||0|0|||
 S||Date of named event|0|0|d||X|||||||||0||0|0|||
@@ -1548,9 +1556,9 @@ S||Geographical subdivision|0|0|z||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source of heading or term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|648|Subject Added Entry-Chronological Term|0|1|12avxyz023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd648.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2 (Thesaurus)|0|0|2||X||1|P|600-ind2.tab|||||0||0|0|||
+T|648|Subject Added Entry-Chronological Term|0|1|avxyz023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd648.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2 (Thesaurus)|0|0|2||X||1|P|600-ind2.tab|||||0||0|0|||
 S||Chronological term|0|0|a||X|||||||||0||0|0|||
 S||Form subdivision|0|0|v||X|||||||||0||0|0|||
 S||General subdivision|0|0|x||X|||||||||0||0|0|||
@@ -1559,9 +1567,9 @@ S||Geographic subdivision|0|0|z||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source of heading or term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|650|Topical term|0|1|12abcdegvxyz0234||X|20||D||MA_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd650.html|0|0|||
-S||Indicator 1 (Level of subject)|0|0|1||X||1|P|650-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Thesaurus)|0|0|2||X||1|P|600-ind2.tab|||||0||0|0|||
+T|650|Topical term|0|1|abcdegvxyz0234||X|20||D||MA_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd650.html|0|0|||
+IND||Indicator 1 (Level of subject)|0|0|1||X||1|P|650-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Thesaurus)|0|0|2||X||1|P|600-ind2.tab|||||0||0|0|||
 S||Main term|0|0|a||X|||||||||0||0|0|||
 S||Topical term following geographic name entry element|0|0|b||X|||||||||0||0|0|||
 S||Location of event|0|0|c||X|||||||||0||0|0|||
@@ -1576,9 +1584,9 @@ S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source of heading or term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
-T|651|Geographic name|0|1|01234aegvxyz2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd651.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2 (Thesaurus)|0|0|2||X||1|P|651-ind2.tab|||||0||0|0|||
+T|651|Geographic name|0|1|aegvxyz0234|||||||||||1|http://www.loc.gov/marc/bibliographic/bd651.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2 (Thesaurus)|0|0|2||X||1|P|651-ind2.tab|||||0||0|0|||
 S||Geographic name|0|0|a||X|||||||||0||0|0|||
 S||Relator term|0|0|e||X|||||||||0||0|0|||
 S||Miscellaneous information|0|0|g||X|||||||||0||0|0|||
@@ -1590,13 +1598,13 @@ S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source of heading or term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
-T|653|Index term uncontrolled|0|1|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd653.html|0|0|||
-S||Indicator 1 (Level of index term)|0|0|1||X||1|P|650-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Type of term or name)|0|0|2||X||1|P|653-ind2.tab|||||0||0|0|||
+T|653|Index term uncontrolled|0|1|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd653.html|0|0|||
+IND||Indicator 1 (Level of index term)|0|0|1||X||1|P|650-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Type of term or name)|0|0|2||X||1|P|653-ind2.tab|||||0||0|0|||
 S||Genre/form data or focus term|0|0|a||X|||||||||0||0|0|||
-T|654|Subject Added Entry-Faceted Topical Terms|0|1|12abcevyz0234|||||||||||1|http://www.loc.gov/marc/bibliographic/bd654.html|0|0|||
-S||Indicator 1 (Level of subject)|0|0|1||X||1|P|650-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|654|Subject Added Entry-Faceted Topical Terms|0|1|abcevyz0234|||||||||||1|http://www.loc.gov/marc/bibliographic/bd654.html|0|0|||
+IND||Indicator 1 (Level of subject)|0|0|1||X||1|P|650-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Focus term|0|0|a||X|||||||||0||0|0|||
 S||Non-focus term|0|0|b||X|||||||||0||0|0|||
 S||Facet/hierarchy designation|0|0|c||X|||||||||0||0|0|||
@@ -1608,9 +1616,9 @@ S||Authority record control number|0|0|0||X|||||||||0||0|0|||
 S||Source of heading or term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
-T|655|Index term genre/form|0|1|12abcvxyz0235|||||||||||1|http://www.loc.gov/marc/bibliographic/bd655.html|0|0|||
-S||Indicator 1 (Type of heading)|0|0|1||X||1|P|655-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Thesaurus)|0|0|2||X||1|P|600-ind2.tab|||||0||0|0|||
+T|655|Index term genre/form|0|1|abcvxyz0235|||||||||||1|http://www.loc.gov/marc/bibliographic/bd655.html|0|0|||
+IND||Indicator 1 (Type of heading)|0|0|1||X||1|P|655-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Thesaurus)|0|0|2||X||1|P|600-ind2.tab|||||0||0|0|||
 S||Genre/form data or focus term|0|0|a||X|||||||||0||0|0|||
 S||Non-focus term|0|0|b||X|||||||||0||0|0|||
 S||Facet/hierarchy designation|0|0|c||X|||||||||0||0|0|||
@@ -1622,9 +1630,9 @@ S||Authority record control number|0|0|0||X|||||||||0||0|0|||
 S||Source of term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|656|Index Term-Occupation|0|1|12akvxyz023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd656.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2 (Source of term)|0|0|2||X||1|P|656-ind2.tab|||||0||0|0|||
+T|656|Index Term-Occupation|0|1|akvxyz023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd656.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2 (Source of term)|0|0|2||X||1|P|656-ind2.tab|||||0||0|0|||
 S||Occupation|0|0|a||X|||||||||0||0|0|||
 S||Form|0|0|k||X|||||||||0||0|0|||
 S||Form subdivision|0|0|v||X|||||||||0||0|0|||
@@ -1634,9 +1642,9 @@ S||Geographic subdivision|0|0|z||X|||||||||0||0|0|||
 S||Authority record control number|0|0|0||X|||||||||0||0|0|||
 S||Source of term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|657|Index Term-Function|0|1|12avxyz023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd657.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2 (Source of term)|0|0|2||X||1|P|657-ind2.tab|||||0||0|0|||
+T|657|Index Term-Function|0|1|avxyz023|||||||||||1|http://www.loc.gov/marc/bibliographic/bd657.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2 (Source of term)|0|0|2||X||1|P|657-ind2.tab|||||0||0|0|||
 S||Function|0|0|a||X|||||||||0||0|0|||
 S||Form subdivision|0|0|v||X|||||||||0||0|0|||
 S||General subdivision|0|0|x||X|||||||||0||0|0|||
@@ -1645,17 +1653,17 @@ S||Geographic subdivision|0|0|z||X|||||||||0||0|0|||
 S||Authority record control number|0|0|0||X|||||||||0||0|0|||
 S||Source of term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
-T|658|Index Term-Curriculum Objective|0|1|12abcd2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd658.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|658|Index Term-Curriculum Objective|0|1|abcd2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd658.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Main curriculum objective|0|0|a||X|||||||||0||0|0|||
 S||Subordinate curriculum objective|0|0|b||X|||||||||0||0|0|||
 S||Curriculum code|0|0|c||X|||||||||0||0|0|||
 S||Correlation factor|0|0|d||X|||||||||0||0|0|||
 S||Source of term or code|0|0|2||X|||||||||0||0|0|||
-T|662|Subject Added Entry-Hierarchical Place Name|0|1|12abcdefgh024|||||||||||1|http://www.loc.gov/marc/bibliographic/bd662.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|662|Subject Added Entry-Hierarchical Place Name|0|1|abcdefgh024|||||||||||1|http://www.loc.gov/marc/bibliographic/bd662.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Country or larger entity|0|0|a||X|||||||||0||0|0|||
 S||First-order political jurisdiction|0|0|b||X|||||||||0||0|0|||
 S||Intermediate political jurisdiction|0|0|c||X|||||||||0||0|0|||
@@ -1667,10 +1675,11 @@ S||Extraterrestrial area|0|0|h||X|||||||||0||0|0|||
 S||Authority record control number|0|0|0||X|||||||||0||0|0|||
 S||Source of heading or term|0|0|2||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
+TAB||7XX|0|0||||||||||||0||0|0|||
 H||Added entries|0|0||||||||||||0||0|0|||
-T|700|Personal name|0|1|12abcdefghijklmnopqrstux0345||X|1||D||AU_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd700.html|0|0|||
-S||Indicator 1 (Type of personal name entry element)|0|0|1||X||1|P|100-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Type of added entry)|0|0|2||X||1|P|700-ind2.tab|||||0||0|0|||
+T|700|Personal name|0|1|abcdefghijklmnopqrstux0345||X|1||D||AU_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd700.html|0|0|||
+IND||Indicator 1 (Type of personal name entry element)|0|0|1||X||1|P|100-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Type of added entry)|0|0|2||X||1|P|700-ind2.tab|||||0||0|0|||
 S||Personal name|0|0|a||X|||||||||0||0|0|||
 S||Numeration|0|0|b||X|||||||||0||0|0|||
 S||Title/words assoc with name|0|0|c||X|||||||||0||0|0|||
@@ -1697,9 +1706,9 @@ S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|710|Corporate name|0|1|12abcdefghiklmnoprstux0345||X|1||||AI_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd710.html|0|0|||
-S||Indicator 1 (Type of corporate name entry element)|0|0|1||X||1|P|110-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Type of added entry)|0|0|2||X||1|P|700-ind2.tab|||||0||0|0|||
+T|710|Corporate name|0|1|abcdefghiklmnoprstux0345||X|1||||AI_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd710.html|0|0|||
+IND||Indicator 1 (Type of corporate name entry element)|0|0|1||X||1|P|110-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Type of added entry)|0|0|2||X||1|P|700-ind2.tab|||||0||0|0|||
 S||Corporate name|0|0|a||X|||D||AI_|@autoridades.pft|||0||0|0|||
 S||Subordinate unit|0|0|b||X|||||||||0||0|0|||
 S||Location of meeting|0|0|c||X|||||||||0||0|0|||
@@ -1724,9 +1733,9 @@ S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|711|Meeting name|0|1|12acdefghijklnpqstux0345||X|1||||CF_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd711.html|0|0|||
-S||Indicator 1 (Type of meeting name entry element)|0|0|1||X||1|P|110-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Type of added entry)|0|0|2||X||1|P|700-ind2.tab|||||0||0|0|||
+T|711|Meeting name|0|1|acdefghijklnpqstux0345||X|1||||CF_|@autoridades.pft|||1|http://www.loc.gov/marc/bibliographic/bd711.html|0|0|||
+IND||Indicator 1 (Type of meeting name entry element)|0|0|1||X||1|P|110-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Type of added entry)|0|0|2||X||1|P|700-ind2.tab|||||0||0|0|||
 S||Meeting name|0|0|a||X|||D||CF_|@autoridades.pft|||0||0|0|||
 S||Location of meeting|0|0|c||X|||||||||0||0|0|||
 S||Date of meeting|0|0|d||X|||||||||0||0|0|||
@@ -1749,15 +1758,15 @@ S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|720|Uncontrolled name|0|1|12ae4|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd720.html|0|0|||
-S||Indicator 1 (Type of name)|0|0|1||X||1|P|720-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1||Ind-b.tab|||||0||0|0|||
+T|720|Uncontrolled name|0|1|ae4|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd720.html|0|0|||
+IND||Indicator 1 (Type of name)|0|0|1||X||1|P|720-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1||Ind-b.tab|||||0||0|0|||
 S||Name|0|0|a||X|||||||||0||0|0|||
 S||Relator term|0|1|e||X|||||||||0||0|0|||
 S||Relator code|0|1|4||X|||||||||0||0|0|||
-T|730|Uniform title|0|1|12adfghiklmnoprstx035|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd730.html|0|0|||
-S||Indicator 1 (Nonfiling characters)|0|0|1||X||1|P|130-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Type of added entry)|0|0|2||X||1|P|700-ind2.tab|||||0||0|0|||
+T|730|Uniform title|0|1|adfghiklmnoprstx035|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd730.html|0|0|||
+IND||Indicator 1 (Nonfiling characters)|0|0|1||X||1|P|130-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Type of added entry)|0|0|2||X||1|P|700-ind2.tab|||||0||0|0|||
 S||Uniform title|0|0|a||X|||||||||0||0|0|||
 S||Date of treaty signed|0|1|d||X|||||||||0||0|0|||
 S||Date of a work|0|0|f||X|||||||||0||0|0|||
@@ -1777,26 +1786,26 @@ S||International Standard Serial Number|0|0|x||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||ISSN|0|0|5||X|||||||||0||0|0|||
-T|740|Analytical title|0|1|12ahnp5|||||||||||1|http://www.loc.gov/marc/bibliographic/bd740.html|0|0|||
-S||Indicator 1 (Nonfiling characters)|0|0|1||X||1|P|740-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Type of added entry)|0|0|2||X||1|P|700-ind2.tab|||||0||0|0|||
+T|740|Analytical title|0|1|ahnp5|||||||||||1|http://www.loc.gov/marc/bibliographic/bd740.html|0|0|||
+IND||Indicator 1 (Nonfiling characters)|0|0|1||X||1|P|740-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Type of added entry)|0|0|2||X||1|P|700-ind2.tab|||||0||0|0|||
 S||Analytical title|0|0|a||X|||||||||0||0|0|||
 S||Medium|0|0|h||X|||||||||0||0|0|||
 S||Number of part/section of a work|0|0|n||X|||||||||0||0|0|||
 S||Name of part/section of a work|0|0|p||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|751|Added Entry-Geographic Name|0|1|12ae0234|||||||||||1|http://www.loc.gov/marc/bibliographic/bd751.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|751|Added Entry-Geographic Name|0|1|ae0234|||||||||||1|http://www.loc.gov/marc/bibliographic/bd751.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Geographic name|0|0|a||X|||||||||0||0|0|||
 S||Relator term|0|0|e||X|||||||||0||0|0|||
 S||Authority record control number|0|0|0||X|||||||||0||0|0|||
 S||Source of heading or term|0|0|2||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
-T|752|Added entry hierarchical place name|0|1|12abcdefgh024|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd752.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|752|Added entry hierarchical place name|0|1|abcdefgh024|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd752.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Country|0|0|a||X|||||||||0||0|0|||
 S||State, province, territory|0|0|b||X|||||||||0||0|0|||
 S||Country, region, islands area|0|0|c||X|||||||||0||0|0|||
@@ -1808,15 +1817,15 @@ S||Extraterrestrial area|0|0|h||X|||||||||0||0|0|||
 S||Authority record control number|0|0|0||X|||||||||0||0|0|||
 S||Source of heading or term|0|0|2||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
-T|753|System Details Access to Computer Files|0|1|12abc|||||||||||1|http://www.loc.gov/marc/bibliographic/bd753.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|753|System Details Access to Computer Files|0|1|abc|||||||||||1|http://www.loc.gov/marc/bibliographic/bd753.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Make and model of machine|0|0|a||X|||||||||0||0|0|||
 S||Programming language|0|0|b||X|||||||||0||0|0|||
 S||Operating system|0|0|c||X|||||||||0||0|0|||
-T|754|Added Entry-Taxonomic Identification|0|1|12acdxz02|||||||||||1|http://www.loc.gov/marc/bibliographic/bd754.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|754|Added Entry-Taxonomic Identification|0|1|acdxz02|||||||||||1|http://www.loc.gov/marc/bibliographic/bd754.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Taxonomic name|0|0|a||X|||||||||0||0|0|||
 S||Taxonomic category|0|0|c||X|||||||||0||0|0|||
 S||Common or alternative name|0|0|d||X|||||||||0||0|0|||
@@ -1825,9 +1834,9 @@ S||Public note|0|0|z||X|||||||||0||0|0|||
 S||Authority record control number|0|0|0||X|||||||||0||0|0|||
 S||Source of taxonomic identification|0|0|2||X|||||||||0||0|0|||
 H||Linking entries|0|0||0||||||||||0||0|0|||
-T|760|Main series entry|0|1|12abcdghimnostwxy4|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd760.html|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Display constant controller)|0|0|2||X||1|P|760-ind2.tab|||||0||0|0|||
+T|760|Main series entry|0|1|abcdghimnostwxy4|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd760.html|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Display constant controller)|0|0|2||X||1|P|760-ind2.tab|||||0||0|0|||
 S||Main series entry|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|1|c||X|||||||||0||0|0|||
@@ -1844,9 +1853,9 @@ S||Record control number|0|0|w||X|||||||||0||0|0|||
 S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
-T|762|Subsies entry|0|1|1234abcdghimnostwx|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd762.html|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Display constant controller)|0|0|2||X||1|P|762-ind2.tab|||||0||0|0|||
+T|762|Subsies entry|0|1|abcdghimnostwxy4|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd762.html|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Display constant controller)|0|0|2||X||1|P|762-ind2.tab|||||0||0|0|||
 S||Main entry heading|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|1|c||X|||||||||0||0|0|||
@@ -1863,9 +1872,9 @@ S||Record control number|0|0|w||X|||||||||0||0|0|||
 S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
-T|765|Original language entry|0|1|12abcdghikmnorstuwxyz4|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd765.html|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Display constant controller)|0|0|2||X||1|P|765-ind2.tab|||||0||0|0|||
+T|765|Original language entry|0|1|abcdghikmnorstuwxyz4|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd765.html|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Display constant controller)|0|0|2||X||1|P|765-ind2.tab|||||0||0|0|||
 S||Main entry heading|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|1|c||X|||||||||0||0|0|||
@@ -1886,9 +1895,9 @@ S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||ISBN|0|1|z||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
-T|767|Translation Entry|0|1|12abcdghikmnorstuwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd767.html|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Display constant controller)|0|0|2||X||1|P|765-ind2.tab|||||0||0|0|||
+T|767|Translation Entry|0|1|abcdghikmnorstuwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd767.html|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Display constant controller)|0|0|2||X||1|P|765-ind2.tab|||||0||0|0|||
 S||Main entry heading|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|0|c||X|||||||||0||0|0|||
@@ -1909,9 +1918,9 @@ S||International Standard Serial Number|0|0|x||X|||||||||0||0|0|||
 S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||International Standard Book Number|0|0|z||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
-T|770|Supplement/special issue entry|0|1|12abcdghikmnorstuwxyz4|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd770.html|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Display constant controller)|0|0|2||X||1|P|770-ind2.tab|||||0||0|0|||
+T|770|Supplement/special issue entry|0|1|abcdghikmnorstuwxyz4|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd770.html|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Display constant controller)|0|0|2||X||1|P|770-ind2.tab|||||0||0|0|||
 S||Main entry heading|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|1|c||X|||||||||0||0|0|||
@@ -1932,9 +1941,9 @@ S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||ISBN|0|0|z||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
-T|772|Supplement parent entry|0|1|12abcdghikmnorstuwxyz4|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd772.html|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Display constant controller)|0|0|2||X||1|P|772-ind2.tab|||||0||0|0|||
+T|772|Supplement parent entry|0|1|abcdghikmnorstuwxyz4|||1||||||||1|http://www.loc.gov/marc/bibliographic/bd772.html|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Display constant controller)|0|0|2||X||1|P|772-ind2.tab|||||0||0|0|||
 S||Main entry heading|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|1|c||X|||||||||0||0|0|||
@@ -1955,9 +1964,9 @@ S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||ISBN|0|0|z||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
-T|773|Host item entry|0|1|12abdghikmnopqrstuwxyz34|||||||||||1|http://www.loc.gov/marc/bibliographic/bd773.html|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Display constant controller)|0|0|2||X||1|P|773-ind2.tab|||||0||0|0|||
+T|773|Host item entry|0|1|abdghikmnopqrstuwxyz34|||||||||||1|http://www.loc.gov/marc/bibliographic/bd773.html|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Display constant controller)|0|0|2||X||1|P|773-ind2.tab|||||0||0|0|||
 S||Main entry heading|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Place, publisher, date of publication|0|0|d||X|||||||||0||0|0|||
@@ -1980,9 +1989,9 @@ S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||ISBN|0|0|z||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
-T|774|Constituent unit entry|0|1|12abcdghikmnorstuwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd774.html|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Display constant controller)|0|0|2||X||1|P|774-ind2.tab|||||0||0|0|||
+T|774|Constituent unit entry|0|1|abcdghikmnorstuwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd774.html|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Display constant controller)|0|0|2||X||1|P|774-ind2.tab|||||0||0|0|||
 S||Main entry heading|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|1|c||X|||||||||0||0|0|||
@@ -2003,9 +2012,9 @@ S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||ISBN|0|0|z||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
-T|775|Other edition entry|0|1|12abcdefgikmnorhstuwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd775.html|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Display constant controller)|0|0|2||X||1|P|775-ind2.tab|||||0||0|0|||
+T|775|Other edition entry|0|1|abcdefgikmnorhstuwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd775.html|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Display constant controller)|0|0|2||X||1|P|775-ind2.tab|||||0||0|0|||
 S||Main entry heading|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|1|c||X|||||||||0||0|0|||
@@ -2028,9 +2037,9 @@ S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||ISBN|0|0|z||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
-T|776|Additional physical form entry|0|1|12abcdghikmnorstuwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd776.html|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Display constant controller)|0|0|2||X||1|P|776-ind2.tab|||||0||0|0|||
+T|776|Additional physical form entry|0|1|abcdghikmnorstuwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd776.html|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Display constant controller)|0|0|2||X||1|P|776-ind2.tab|||||0||0|0|||
 S||Main entry heading|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|1|c||X|||||||||0||0|0|||
@@ -2051,9 +2060,9 @@ S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||ISBN|0|1|z||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
-T|777|Issued with entry|0|1|12abcdghikmnostwxy4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd777.html|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Display constant controller)|0|0|2||X||1|P|777-ind2.tab|||||0||0|0|||
+T|777|Issued with entry|0|1|abcdghikmnostwxy4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd777.html|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Display constant controller)|0|0|2||X||1|P|777-ind2.tab|||||0||0|0|||
 S||Main entry heading|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|1|c||X|||||||||0||0|0|||
@@ -2071,9 +2080,9 @@ S||Record control number|0|1|w||X|||||||||0||0|0|||
 S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
-T|780|Preceding entry|0|1|12abcdghikmnorstuwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd780.html|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Type of relationship)|0|0|2||X||1|P|780-ind2.tab|||||0||0|0|||
+T|780|Preceding entry|0|1|abcdghikmnorstuwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd780.html|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Type of relationship)|0|0|2||X||1|P|780-ind2.tab|||||0||0|0|||
 S||Main entry heading|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|1|c||X|||||||||0||0|0|||
@@ -2094,9 +2103,9 @@ S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||ISBN|0|1|z||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
-T|785|Succeeding entry|0|1|12abcdghikmnorstuwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd785.html|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Type of relationship)|0|0|2||X||1|P|785-ind2.tab|||||0||0|0|||
+T|785|Succeeding entry|0|1|abcdghikmnorstuwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd785.html|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Type of relationship)|0|0|2||X||1|P|785-ind2.tab|||||0||0|0|||
 S||Main entry heading|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|1|c||X|||||||||0||0|0|||
@@ -2117,9 +2126,9 @@ S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||ISBN|0|1|z||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
-T|786|Data Source Entry|0|1|12abcdghijkmnoprstuvwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd786.html|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Type of relationship)|0|0|2||X||1|P|786-ind2.tab|||||0||0|0|||
+T|786|Data Source Entry|0|1|abcdghijkmnoprstuvwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/bd786.html|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Type of relationship)|0|0|2||X||1|P|786-ind2.tab|||||0||0|0|||
 S||Main entry heading|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|0|c||X|||||||||0||0|0|||
@@ -2143,9 +2152,9 @@ S||International Standard Serial Number|0|0|x||X|||||||||0||0|0|||
 S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||International Standard Book Number|0|0|z||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
-T|787|Nonspecific realtionship entry|0|1|12abcdghikmnorstuwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/litespa/elbdnota.htm#mrcb787|0|0|||
-S||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
-S||Indicator 2 (Display constant controller)|0|0|2||X||1|P|787-ind2.tab|||||0||0|0|||
+T|787|Nonspecific realtionship entry|0|1|abcdghikmnorstuwxyz4|||||||||||1|http://www.loc.gov/marc/bibliographic/litespa/elbdnota.htm#mrcb787|0|0|||
+IND||Indicator 1 (Note controller)|0|0|1||X||1|P|247-ind2.tab|||||0||0|0|||
+IND||Indicator 2 (Display constant controller)|0|0|2||X||1|P|787-ind2.tab|||||0||0|0|||
 S||Main entry heading|0|0|a||X|||||||||0||0|0|||
 S||Edition|0|0|b||X|||||||||0||0|0|||
 S||Qualifying information|0|1|c||X|||||||||0||0|0|||
@@ -2166,10 +2175,11 @@ S||ISSN|0|0|x||X|||||||||0||0|0|||
 S||CODEN designation|0|0|y||X|||||||||0||0|0|||
 S||International Standard Book Number|0|0|z||X|||||||||0||0|0|||
 S||Relationship code|0|0|4||X|||||||||0||0|0|||
+TAB||8XX|0|0||||||||||||0||0|0|||
 H||Holdings, Alternate Graphics, Etc.|0|0||||||||||||0||0|0|||
-T|800|Series Added Entry-Personal Name|0|1|12abcdefghjklmnopqrstuvwx0345|||||||||||1|http://www.loc.gov/marc/bibliographic/bd800.html|0|0|||
-S||Indicator 1 (Type of personal name entry element)|0|0|1||X||1|P|100-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|800|Series Added Entry-Personal Name|0|1|abcdefghjklmnopqrstuvwx0345|||||||||||1|http://www.loc.gov/marc/bibliographic/bd800.html|0|0|||
+IND||Indicator 1 (Type of personal name entry element)|0|0|1||X||1|P|100-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Personal name|0|0|a||X|||||||||0||0|0|||
 S||Numeration|0|0|b||X|||||||||0||0|0|||
 S||Titles and other words associated with a name|0|0|c||X|||||||||0||0|0|||
@@ -2197,9 +2207,9 @@ S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|810|Series Added Entry-Corporate Name|0|1|12abcdefghklmnoprstuvwx0345|||||||||||1|http://www.loc.gov/marc/bibliographic/bd810.html|0|0|||
-S||Indicator 1 (Type of corporate name entry element)|0|0|1||X||1|P|110-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|810|Series Added Entry-Corporate Name|0|1|abcdefghklmnoprstuvwx0345|||||||||||1|http://www.loc.gov/marc/bibliographic/bd810.html|0|0|||
+IND||Indicator 1 (Type of corporate name entry element)|0|0|1||X||1|P|110-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Corporate name or jurisdiction name as entry element|0|0|a||X|||||||||0||0|0|||
 S||Subordinate unit|0|0|b||X|||||||||0||0|0|||
 S||Location of meeting|0|0|c||X|||||||||0||0|0|||
@@ -2225,9 +2235,9 @@ S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|811|Series Added Entry-Meeting Name|0|1|12acdefghjklnpqstuvwx0345|||||||||||1|http://www.loc.gov/marc/bibliographic/bd811.html|0|0|||
-S||Indicator 1 (Type of meeting name entry element)|0|0|1||X||1|P|110-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|811|Series Added Entry-Meeting Name|0|1|acdefghjklnpqstuvwx0345|||||||||||1|http://www.loc.gov/marc/bibliographic/bd811.html|0|0|||
+IND||Indicator 1 (Type of meeting name entry element)|0|0|1||X||1|P|110-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Meeting name or jurisdiction name as entry element|0|0|a||X|||||||||0||0|0|||
 S||Location of meeting|0|0|c||X|||||||||0||0|0|||
 S||Date of meeting|0|0|d||X|||||||||0||0|0|||
@@ -2251,9 +2261,9 @@ S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Materials specified|0|0|3||X|||||||||0||0|0|||
 S||Relator code|0|0|4||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|830|Series Added Entry-Uniform Title|0|1|12adfghklmnoprstvwx035|||||||||||1|http://www.loc.gov/marc/bibliographic/bd830.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2 (Non-filing characters)|0|0|2||X||1|P|130-ind1.tab|||||0||0|0|||
+T|830|Series Added Entry-Uniform Title|0|1|adfghklmnoprstvwx035|||||||||||1|http://www.loc.gov/marc/bibliographic/bd830.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2 (Non-filing characters)|0|0|2||X||1|P|130-ind1.tab|||||0||0|0|||
 S||Uniform title|0|0|a||X|||||||||0||0|0|||
 S||Date of treaty signing|0|0|d||X|||||||||0||0|0|||
 S||Date of a work|0|0|f||X|||||||||0||0|0|||
@@ -2279,13 +2289,13 @@ F|842|Textual Physical Form Designator|0|0|||X|||||||||1|http://www.loc.gov/marc
 F|843|Reproduction Note|0|1|||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd84188x.html|0|0|||
 F|844|Name of Unit|0|0|||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd84188x.html|0|0|||
 F|845|Terms Governing Use and Reproduction|0|1|||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd84188x.html|0|0|||
-T|850|Holding institution|0|1|12a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd850.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|850|Holding institution|0|1|a|||||||||||1|http://www.loc.gov/marc/bibliographic/bd850.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Holding institution|0|1|a||X|1||||||||0||0|0|||
-T|852|Location|0|1|12abcdefghijklmnpqstuxz23||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd852.html|0|0|||
-S||Indicator 1 (Shelving scheme)|0|0|1||X||1|P|852-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Shelving order)|0|0|2||X||1|P|852-ind2.tab|||||0||0|0|||
+T|852|Location|0|1|abcdefghijklmnpqstuxz23||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd852.html|0|0|||
+IND||Indicator 1 (Shelving scheme)|0|0|1||X||1|P|852-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Shelving order)|0|0|2||X||1|P|852-ind2.tab|||||0||0|0|||
 S||Location|0|0|a||X|||D||BIB_|@autoridades.pft|||0||0|0|||
 S||Sublocation or collection|0|0|b||X|||||||||0||0|0|||
 S||Shelving location|0|0|c||X|||||||||0||0|0|||
@@ -2312,9 +2322,9 @@ S||Materials specified|0|0|3||X|||||||||0||0|0|||
 F|853|Captions and Pattern - Basic Bibliographic Unit|0|1|||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd84188x.html|0|0|||
 F|854|Captions and Pattern - Supplementary Material|0|1|||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd84188x.html|0|0|||
 F|855|Captions and Pattern - Indexes|0|1|||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd84188x.html|0|0|||
-T|856|Electronic location and access|0|1|12abcdfhijklmnopqrstuvwxyz23||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd856.html|0|0|||
-S||Indicator 1 (Access method)|0|0|1||X||1|P|856-ind1.tab|||||0||0|0|||
-S||Indicator 2 (Relationship)|0|0|2||X||1|P|856-ind2.tab|||||0||0|0|||
+T|856|Electronic location and access|0|1|abcdfhijklmnopqrstuvwxyz23||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd856.html|0|0|||
+IND||Indicator 1 (Access method)|0|0|1||X||1|P|856-ind1.tab|||||0||0|0|||
+IND||Indicator 2 (Relationship)|0|0|2||X||1|P|856-ind2.tab|||||0||0|0|||
 S||Host name|0|0|a||X|||||||||0||0|0|||
 S||Access number|0|0|b||X|||||||||0||0|0|||
 S||Compression information|0|0|c||X|||||||||0||0|0|||
@@ -2351,15 +2361,15 @@ F|876|Item Information - Basic Bibliographic Unit|0|1|||X|||||||||1|http://www.l
 F|877|Item Information - Supplementary Material|0|1|||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd84188x.html|0|0|||
 F|878|Item Information - Indexes|0|1|||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd84188x.html|0|0|||
 F|880|Alternate Graphic Representation|0|1|||X|||||||||1|http://www.loc.gov/marc/bibliographic/bd880.html|0|0|||
-T|882|Replacement Record Information|0|0|12aiw|||||||||||1|http://www.loc.gov/marc/bibliographic/bd882.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|882|Replacement Record Information|0|0|aiw|||||||||||1|http://www.loc.gov/marc/bibliographic/bd882.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Replacement title|0|0|a||X|||||||||0||0|0|||
 S||Explanatory text|0|0|i||X|||||||||0||0|0|||
 S||Replacement bibliographic record control number|0|0|w||X|||||||||0||0|0|||
-T|883|Machine-generated Metadata Provenance|0|1|12acdqxuw0|||||||||||1|http://www.loc.gov/marc/bibliographic/bd883.html|0|0|||
-S||Indicator 1 (Method of machine assignment)|0|0|1||X||1|P|883-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|883|Machine-generated Metadata Provenance|0|1|acdqxuw0|||||||||||1|http://www.loc.gov/marc/bibliographic/bd883.html|0|0|||
+IND||Indicator 1 (Method of machine assignment)|0|0|1||X||1|P|883-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Generation process|0|0|a||X|||||||||0||0|0|||
 S||Confidence value|0|0|c||X|||||||||0||0|0|||
 S||Generation date|0|0|d||X|||||||||0||0|0|||
@@ -2368,17 +2378,17 @@ S||Validity end date|0|0|x||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
 S||Bibliographic record control number|0|0|w||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
-T|884|Description Conversion Information|0|1|12agkqu|||||||||||1|http://www.loc.gov/marc/bibliographic/bd884.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|884|Description Conversion Information|0|1|agkqu|||||||||||1|http://www.loc.gov/marc/bibliographic/bd884.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Conversion process|0|0|a||X|||||||||0||0|0|||
 S||Conversion date|0|0|g||X|||||||||0||0|0|||
 S||Identifier of source metadata|0|0|k||X|||||||||0||0|0|||
 S||Conversion agency|0|0|q||X|||||||||0||0|0|||
 S||Uniform Resource Identifier|0|0|u||X|||||||||0||0|0|||
-T|885|Matching Information|0|1|12abcdwxz025|||||||||||1|http://www.loc.gov/marc/bibliographic/bd884.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|885|Matching Information|0|1|abcdwxz025|||||||||||1|http://www.loc.gov/marc/bibliographic/bd884.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Matching information|0|0|a||X|||||||||0||0|0|||
 S||Status of matching and its checking|0|0|b||X|||||||||0||0|0|||
 S||Confidence value|0|0|c||X|||||||||0||0|0|||
@@ -2389,16 +2399,17 @@ S||Public note|0|0|z||X|||||||||0||0|0|||
 S||Authority record control number or standard number|0|0|0||X|||||||||0||0|0|||
 S||Source|0|0|2||X|||||||||0||0|0|||
 S||Institution to which field applies|0|0|5||X|||||||||0||0|0|||
-T|886|Foreign MARC Information Field|0|1|12ab2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd886.html|0|0|||
-S||Indicator 1 (Type of field)|0|0|1||X||1|P|886-ind1.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|886|Foreign MARC Information Field|0|1|ab2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd886.html|0|0|||
+IND||Indicator 1 (Type of field)|0|0|1||X||1|P|886-ind1.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Tag of the foreign MARC field|0|0|a||X|||||||||0||0|0|||
 S||Content of the foreign MARC field|0|0|b||X|||||||||0||0|0|||
 S||Source of data|0|0|2||X|||||||||0||0|0|||
-T|887|Non-MARC Information Field|0|1|12a2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd887.html|0|0|||
-S||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
-S||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+T|887|Non-MARC Information Field|0|1|a2|||||||||||1|http://www.loc.gov/marc/bibliographic/bd887.html|0|0|||
+IND||Indicator 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicator 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
 S||Content of non-MARC field|0|0|a||X|||||||||0||0|0|||
 S||Source of data|0|0|2||X|||||||||0||0|0|||
-F|980|Last modification date|0|1|||OD|||||||||0||0|0|||
+TAB||9XX|0|0||||||||||||0||0|0|||
 F|911|FRBR-key|0|0|||X|||D||KEY_|v911|v911||0||0|0|||
+F|980|Last modification date|0|1|||OD|5||||||||0||0|0|||
