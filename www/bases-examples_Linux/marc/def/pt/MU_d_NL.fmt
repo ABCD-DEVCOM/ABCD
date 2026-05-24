@@ -1,4 +1,6 @@
+TAB||Líder|0|0||||||||||||0||0|0|||
 LDR||Líder|0|1||||||||||||1||
+TAB||0XX|0|0||||||||||||0||0|0|||
 H||0XX: Controle|0|0||||||||||||0||
 AI|1|Número de controle|1|0|||X||20|||CN_|v1|v1||1||
 F|3|Identificador de número de controle|0|0|||X||20|||||||1||
@@ -173,6 +175,7 @@ S||Sigla do órgão normativo|0|0|b||X|||||||||0||
 S||Data de aprovação ou publicação da norma|0|0|c||X|||||||||0||
 S||Data de validade|0|0|d||X|||||||||0||
 S||Data de cancelamento ou substituição|0|0|e||X|||||||||0||
+TAB||1XX|0|0||||||||||||0||0|0|||
 H||1XX: Entradas principais|0|1||||||||||||0||
 T|100|Entrada principal - Nome pessoal|0|0|12abcdefgjklnpqtu246||X|2|103|D|marc|AU_|@autoridades.pft|||1||
 S||Indicador 1|0|0|1||X||1|P|100-ind1.tab|||||0||
@@ -253,6 +256,7 @@ S||Versão|0|0|s||X|||||||||0||
 S||Título da obra|0|0|t||X|||||||||0||
 S||Fonte do cabeçalho|0|0|2||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
+TAB||2XX|0|0||||||||||||0||0|0|||
 H||20X-24X: Títulos|0|1||||||||||||0||
 T|210|Título abreviado|0|1|12ab26||X|1|100|||||||1||
 S||Indicador 1|0|0|1||X||1|P|210-ind1.tab|||||0||
@@ -371,6 +375,7 @@ S||Manufatureiro|0|1|f||X|||||||||0||
 S||Data de manufatura|0|1|g||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
+TAB||3XX|0|0||||||||||||0||0|0|||
 H||3XX: Descrição física, etc.|0|0||||||||||||0||
 T|300|Descrição física|0|1|12abcefg36||X|1|100|||||||1||
 S||Indicador 1|0|0|1||X||1|||||||0||
@@ -406,6 +411,7 @@ S||Indicador 2|0|0|2||X||1|||||||0||
 S||Datas de publicação e/ou designação sequencial|0|0|a||X|||||||||0||
 S||Fonte da informação|0|0|z||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
+TAB||4XX|0|0||||||||||||0||0|0|||
 H||4XX: Informação de séries|0|0||||||||||||0||
 T|490|Informação de série|0|1|12avx36||X|1|100|D|autoridades|CT_|@author.pft|||1||
 S||Indicador 1|0|0|1||X||1|P|490-ind1.tab|||||0||
@@ -415,6 +421,7 @@ S||Número do volume ou designação sequencial da série|0|1|v||X|||||||||0||
 S||ISSN|0|1|x||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
+TAB||5XX|0|0||||||||||||0||0|0|||
 H||5XX: Notas|0|0||||||||||||0||
 T|500|Nota geral|0|1|12a356||X|2|100|||||||1||
 S||Indicador 1|0|0|1||X||1|||||||0||
@@ -601,6 +608,7 @@ S||Bibliografia|0|0|a||X|||||||||0||
 S||Catálogo coletivo|0|0|b||X|||||||||0||
 S||Base bibliográfica|0|0|c||X|||||||||0||
 S||Período de abrangência (Ano/mês)|0|0|d||X|||||||||0||
+TAB||6XX|0|0||||||||||||0||0|0|||
 H||6XX: Assuntos|0|0||||||||||||0||
 T|600|Assunto - Nome pessoal|0|1|12abcdefghjklmnopqrstuvxyz2346||X|2|100|D|marc|AU_|@autoridades.pft|||1||
 S||Indicador 1|0|0|1||X||1|P|600-ind1.tab|||||0||
@@ -772,6 +780,7 @@ S||Subdivisão geográfica|0|1|z||X|||D|autoridades|SG_|@author.pft|||0||
 S||Fonte do termo|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
+TAB||7XX|0|0||||||||||||0||0|0|||
 H||70X-75X: Entradas secundárias|0|0||||||||||||0||
 T|700|Entrada secundária - Nome pessoal|0|1|12abcdefghijklmnopqrstu2456||X|2|100|D|marc|AU_|@autoridades.pft|||1||
 S||Indicador 1|0|0|1||X||1|P|700-ind1.tab|||||0||
@@ -1238,6 +1247,7 @@ S||ISBN|0|1|z||X|||||||||0||
 S||Código de relação|0|1|4||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
 S||Subcampo de controle|0|0|7||X|||||||||0||
+TAB||8XX|0|0||||||||||||0||0|0|||
 H||80X-83X: Entradas secundárias - Séries|0|0||||||||||||0||
 T|830|Entrada secundária de série - Título uniforme|0|1|12adfghklmnoprstvwx356||X|1|100|D|autoridades|CT_|@author.pft|||1||
 S||Indicador 1|0|0|1||X||1|||||||0||
@@ -1324,6 +1334,7 @@ S||Nota pública|0|1|z||X|||||||||0||
 S||Método de acesso|0|0|2||X|||||||||0||
 S||Material especificado|0|0|3||X|||||||||0||
 S||Ligação|0|0|6||X|||||||||0||
+TAB||9XX|0|0||||||||||||0||0|0|||
 H||9XX: Informações locais|0|0||||||||||||0||
 T|949|Dados de registro|0|1|12aevybcfdnpqktxwz||X|3|100|||||||1||
 S||Indicador 1|0|0|1||X||1|||||||0||

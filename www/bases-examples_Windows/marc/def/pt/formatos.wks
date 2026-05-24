@@ -1,4 +1,4 @@
-BK_a_NL|Material textual
+BK_a_LI|Material textual
 VM_g_NL|Material projetável
 VM_k_NL|Material não projetável bidimensional
 VM_o_NL|Kit (dois ou mais tipos)
@@ -13,4 +13,3 @@ MU_d_NL|Música manuscrita
 MU_i_NL|Gravação de som não musical
 MU_j_NL|Gravação de som musical
 todos|Todos os campos
-teste|teste|
