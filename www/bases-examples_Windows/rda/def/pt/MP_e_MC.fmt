@@ -90,6 +90,27 @@ S||Extensão|0|1|a||X|||||||||0||
 S||Outras desc.. físicas|0|0|b||X|||||||||0||
 S||Dimensões|0|1|c||X|||||||||0||
 S||Material complementar|0|0|e||X|||||||||0||
+T|336|Tipo de conteúdo|0|0|ab12|||||||||||0||0|0|||
+IND||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+S||Termo de tipo de conteúdo|0|0|a||X|||||||||0||0|0|||
+S||Número de controle de registro de autoridade ou número padrão|0|0|b||X|||||||||0||0|0|||
+S||URI de objeto do mundo real|0|0|1||X|||||||||0||0|0|||
+S||Fonte|0|0|2||X|||||||||0||0|0|||
+T|337|Tipo de mídia|0|0|ab12|||||||||||0||0|0|||
+IND||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+S||Termo de tipo de mídia|0|0|a||X|||||||||0||0|0|||
+S||Código do tipo de mídia|0|0|b||X|||||||||0||0|0|||
+S||URI de objeto do mundo real|0|0|1||X|||||||||0||0|0|||
+S||Fonte|0|0|2||X|||||||||0||0|0|||
+T|338|Tipo de Suporte|0|0|ab12|||||||||||0||0|0|||
+IND||Indicador 1|0|0|1||X||1|P|Ind-b.tab|||||0||0|0|||
+IND||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||0|0|||
+S||Termo do tipo de operadora|0|0|a||X|||||||||0||0|0|||
+S||Código do tipo de operadora|0|0|b||X|||||||||0||0|0|||
+S||URI de objeto do mundo real|0|0|1||X|||||||||0||0|0|||
+S||Fonte|0|0|2||X|||||||||0||0|0|||
 T|342|Dados de referência geoespacial|0|1|12abcdk||X||100|||||||1||
 IND||Indicador 1|0|0|1||X||1|P|342-ind1.tab|||||0||
 IND||Indicador 2|0|0|2||X||1|P|342-ind2.tab|||||0||
@@ -124,6 +145,8 @@ T|521|Público-alvo|0|1|12a||X|2|100|||||||1||
 IND||Indicador 1|0|0|1||X||1|P|521-ind1.tab|||||0||
 IND||Indicador 2|0|0|2||X||1|P|Ind-b.tab|||||0||
 S||Público-alvo|0|0|a||X|||||||||0||
+T|590|Nota local de catalogação|0|0|a||X|5|100|||||||0||0|0|||
+S||Nota|0|0|a||X|5|100|||||||0||0|0|||
 TAB||6XX|0|0||||||||||||0||0|0|||
 H||ENTRADAS SECUNDÁRIAS|0|0||||||||||||0||
 T|600|Nome pessoal como assunto|0|1|12abcdqvxy||X|2|100|D||AU_|@autoridades.pft|||1||

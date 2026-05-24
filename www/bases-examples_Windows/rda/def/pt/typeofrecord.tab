@@ -1,10 +1,10 @@
 3006 3007
 BK_a_LI.fmt|a|m|Livro
-BK_a_TE.fmt|t|m|<b>Material textual (Tese/Dissertação)</b>
-VM_g_MP.fmt|g|m|<b>Material projetável</b>
+BK_a_TE.fmt|t|m|Material textual (Tese/Dissertação)
+VM_g_MP.fmt|g|m|Material projetável
 CF_m_AC.fmt|m|m|Software
-MP_e_MC.fmt|e|m|<b>Material cartográfico</b>
+MP_e_MC.fmt|e|m|Material cartográfico
 SE_s_PE.fmt|s|s|Periódico
-SE_s_AP.fmt|s|b|<b>Recuso contínuo (Arigo de periódico)</b>
-VM_o_KI.fmt|o|m|<b>Kit (dois ou mais tipos publicados juntos)</b>
+SE_s_AP.fmt|s|b|Recurso contínuo (Artigo de periódico)
+VM_o_KI.fmt|o|m|Kit (dois ou mais tipos publicados juntos)
 VM_p_MM.fmt|p|c|<b>Material misto (vários tipos)</b>
