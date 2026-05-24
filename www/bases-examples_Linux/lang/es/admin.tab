@@ -380,3 +380,6 @@ or_drag=o arrastre
 files_here=archivo(s) aquí
 sending=Enviando...
 upload_success=Subida completada con éxito
+log_exec=Registro de ejecución
+index_params=Parámetros de indexación
+mx_exec_report=Informe de ejecución de MX
