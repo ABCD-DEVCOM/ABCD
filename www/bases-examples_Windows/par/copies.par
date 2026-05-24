@@ -1,5 +1,7 @@
 copies.*=%path_database%copies/data/copies.*
 rda.*=%path_database%rda/data/rda.*
+marc.*=%path_database%marc/data/marc.*
+biblo.*=%path_database%biblo/data/biblo.*
 loanobjects.*=%path_database%loanobjects/data/loanobjects.*
 STW=%path_database%copies/data/copies.stw
 copies.pft=%path_database%copies/pfts/%lang%/copies.pft

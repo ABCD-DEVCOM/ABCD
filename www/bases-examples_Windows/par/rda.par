@@ -1,6 +1,5 @@
 rda.*=%path_database%rda/data/rda.*
 copies.*=%path_database%copies/data/copies.*
-loanobjects.*=%path_database%loanobjects/data/loanobjects.*
 FRBRkey.pft=%path_database%rda/pfts/%lang%/FRBRkey.pft
 FRBRbase.pft=%path_database%rda/pfts/%lang%/FRBRbase.pft
 rda_opac.pft=%path_database%rda/pfts/%lang%/rda_opac.pft
@@ -13,7 +12,7 @@ isisac.tab=%path_database%isisac.tab
 isisuc.tab=%path_database%isisuc.tab
 copies.pft=%path_database%copies/pfts/pt/copies.pft
 inven.pft=%path_database%copies/pfts/pt/inven.pft
-inven*=%path_database%copies/pfts/pt/inven.pft
+loanobjects.*=%path_database%loanobjects/data/loanobjects.*
 loan.pft=%path_database%loanobjects/pfts/pt/loan.pft
 trans.*=%path_database%trans/data/trans.*
 opac.pft=%path_database%rda/pfts/%lang%/opac.pft
