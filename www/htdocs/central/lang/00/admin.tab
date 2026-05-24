@@ -537,3 +537,6 @@ error_processing=Error processing response. Please try again.
 http_error=HTTP Error: 
 error_saving=Error saving to: 
 root_dir=Root
+log_exec=Execution Log
+index_params=Indexing Parameters
+mx_exec_report=MX Execution Report

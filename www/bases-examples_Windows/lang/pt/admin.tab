@@ -538,3 +538,6 @@ set_log_cleared=Log limpo com sucesso.
 hide_top_bar=Ocultar barra superior
 show_top_bar=Exibir barra superior
 autofill=Usar Próximo
+log_exec=Registro de execução
+index_params=Parâmetros de indexação
+mx_exec_report=Relatório de execução do MX
