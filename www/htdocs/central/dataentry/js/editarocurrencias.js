@@ -2,6 +2,7 @@
 20250402 fho4abcd More readable code, improve generated html, add translation and hovered texts
 20250402 fho4abcd Copy default from worksheet to <input value=...>, replace dropdown by button
 20250901 fho4abcd Copy default from worksheet for dropdown list in case of redraw command
+20260529 rogercgui Implement type IND for indicators, added historical fallback for older databases that still use ‘S’ for indicators, added comments and improved code readability
 */
 // The occurrences of the field / para colocar las ocurrencias del campo
 var valoresCampo=new Array(200)
@@ -60,12 +61,30 @@ nSC=SubCampos.length
 valoresCampo = Contenido.split("\n")
 
 // The Select is created for the occurrences of the field/  Se crea el Select para las ocurrencias del campo
-Titulo=window.opener.NombreC
+Titulo = window.opener.NombreC
 //  alert( "titel="+Titulo)
-Tx=Titulo.split('|')
+
+Tx = Titulo.split('|')
 // Fields: 0:Type, 1:Tag, 2:Title, 3:I, 4:Repeatable, 5:Subfield(s), 6:Input type, 7:rows, 8:cols,
 //         9:PL-Type, 10:PL-Name, 11:PL:Prefix, 12:PL-Detail, 13:List-as, 14:Extract-as,
 //         15:Default, 16:Help, 17:Help-URL, 18:Link-FDT, 19:Req?, 20:Field-Validation
+
+
+// ==== ABCD CORRECTION: DYNAMIC RECONSTRUCTION OF SUBFIELDS ====
+// Ensures that the renderer reads all subfields (including IND)
+// even if the cataloguer has forgotten to declare them in the main FDT.
+var subc_reais = "";
+for (var k = 0; k < nSC; k++) {
+	if (Trim(SubCampos[k]) != "") {
+		var xparts = SubCampos[k].split('|');
+		if (xparts.length > 5 && xparts[5]) {
+			subc_reais += xparts[5];
+		}
+	}
+}
+if (subc_reais != "") {
+	Tx[5] = subc_reais;
+}
 
 // write the leading question mark
 document.write("<table width=950 cellpadding=0 cellspacing=0>")
