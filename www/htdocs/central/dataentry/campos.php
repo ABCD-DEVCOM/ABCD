@@ -5,6 +5,8 @@
 20250402 fho4abcd Improved html, removed obsolete code and redundant spacing
 20250402 fho4abcd Added standard breadcrumb & action div. Action buttons: moved to top, modified text, hover and color
 20250402 fho4abcd Added translations for js. Added standard helper and footer
+20260529 rogercgui Implement type IND for indicators, added historical fallback for older databases that still use ‘S’ for indicators, added comments and improved code readability
+
 */
   session_start();
 if (!isset($_SESSION["permiso"])){
@@ -19,6 +21,7 @@ include("../common/header.php");
 
 // Extract the subfields
 $fp=explode("\n",$arrHttp["SubC"]);
+
 $subc="";
 foreach ($fp as $linea){
 	$linea=trim($linea);
@@ -44,31 +47,55 @@ echo "is_marc='".$arrHttp["is_marc"]."'\n";
 echo "PickList=new Array()\n";
 echo "NamePickList=new Array()\n";
 echo "SubCampos=new Array()\n";
-foreach ($fp as $linea){
-	$linea=trim($linea);
-	if (trim($linea)!=""){
-		$l=explode('|',$linea);
-		$ix=$ix+1;
-		if ($l[0]=="S") {
-			$ind_sc=$ix;
-	        $Ind="";
-	        if ($ind_sc<2 and $arrHttp["is_marc"]=="S"){
-	           	if (substr($subc,$ind_sc,1)==1 or substr($subc,$ind_sc,1)==2)
-	           		$Ind="I";
-	        }
-	        $key=$Ind.substr($subc,$ind_sc,1);
-			if (trim($l[11])!=""){
-				echo "NamePickList['".$key."']='".$l[11]."'\n";
-				PickList($key,$l[11]);
-			}else{
-				$l=$ix-1;
-				echo "PickList['".$key."']=''\n";
+
+// Array para reconstruir a variável SubC global do JS legado
+$subc_js_array = array();
+
+foreach ($fp as $linea) {
+	$linea = trim($linea);
+	if ($linea != "") {
+		$l = explode('|', $linea);
+
+		// Processes only Indicators (IND) and Subfields (S), as per the original logic
+		if (isset($l[0]) && ($l[0] == "S" || $l[0] == "IND")) {
+
+			// Adds the entire row to the array that JavaScript uses to build the table in a rigid manner
+			$subc_js_array[] = $linea;
+
+			$code = isset($l[5]) ? trim($l[5]) : "";
+			$key = $code;
+
+			// Power the I1 and I2 switches for the indicators
+			if ($l[0] == "IND") {
+				$key = "I" . $code;
 			}
-			echo "SubCampos['$key']='$key'\n";
-		}else{
+			// Historical fallback for older databases that still use ‘S’ for indicators
+			elseif (count($subc_js_array) <= 2 && isset($arrHttp["is_marc"]) && $arrHttp["is_marc"] == "S") {
+				if ($code == "1" || $code == "2") {
+					$key = "I" . $code;
+				}
+			}
+
+			// Populate the picklists and their names based on the configuration
+			if (isset($l[11]) && trim($l[11]) != "") {
+				echo "NamePickList['" . $key . "']='" . addslashes(trim($l[11])) . "'\n";
+				PickList($key, trim($l[11]));
+			} else {
+				echo "PickList['" . $key . "']=''\n";
+			}
+
+			// Alimenta os rótulos de forma indexada
+			$label = isset($l[2]) ? trim($l[2]) : $key;
+			echo "SubCampos['" . $key . "']='" . addslashes($label) . "'\n";
 		}
 	}
 }
+
+// RECONSTRUCT THE SUBC VARIABLE
+// The JavaScript 'editarocurrencias.js' performs a .split("\\n") on it and bases the entire for loop on it
+$subc_string_final = implode("\\n", $subc_js_array);
+echo "SubC = \"" . addslashes($subc_string_final) . "\";\n";
+
 // Next statements define variables for the textstrings used in the js files
 echo "trn_mod_picklist=\"".$msgstr["mod_picklist"]."\"\n";
 echo "trn_reload_picklist=\"".$msgstr["reload_picklist"]."\"\n";
