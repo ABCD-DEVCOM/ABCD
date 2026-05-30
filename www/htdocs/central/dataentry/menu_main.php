@@ -25,6 +25,7 @@
  * 2025-08-05 fho4abcd Store fst data in array (corrupted by last change), add minimal comment
  * 2026-05-07 rogercgui Replace the structure in dhtmlX with a more standard HTML/CSS layout, improving readability and maintainability. This also includes the addition of FontAwesome icons for better visual cues on the buttons. The JavaScript functions are kept inline for simplicity, but could be further modularized if needed.
  * 2026-05-23 rogercgui Added critical fix to translate the %path_database% macro in dr_path.def to the actual system path, ensuring that folder creation works correctly regardless of the environment. This resolves a major issue where the newfolder.php script was creating directories in the wrong location due to an unresolved macro in the path definition.
+ * 2026-05-28 rogercgui Added a critical fix to the onButtonClick function to prevent unintended side effects when programmatically changing the "browseby" selection. This ensures that updates to the selection made by the system (e.g., after a search) do not trigger the user's click action, which could lead to confusion or errors in navigation. The function now updates the selection without calling onButtonClick recursively, maintaining the integrity of the user experience.
  */
 
 
@@ -79,14 +80,14 @@ if (file_exists($fstfile)) {
 	$fst = file($fstfile);
 }
 
-// Verificar se tesauro existe para esta base 
+// Check whether a thesaurus exists for this database 
 $tesaurus = null;
 $tesfile  = $db_path_db . "def/" . $lang_sess . "/tesaurus.tab";
 if (file_exists($tesfile)) {
 	$tesaurus = true;
 }
 
-// Carregar definição da base (def_db)
+// Load database definition (def_db)
 $def_db = array();
 $deffile = $db_path_db . "def/" . $db . ".def";
 if (!file_exists($deffile)) {
@@ -149,8 +150,8 @@ if (empty($formatos)) {
 }
 
 /*
- * Worksheets são os arquivos .wkf (ou listados em worksheets.tab).
- * Se nenhum arquivo de lista existir, varre os arquivos .wkf na pasta de PFTs.
+ * Worksheets are the .wkf files (or those listed in worksheets.tab).
+ * If no list file exists, scan the .wkf files in the PFTs folder.
  */
 $worksheets = array();
 $wksfile    = $db_path_db . "pfts/" . $lang_sess . "/worksheets.tab";
@@ -349,9 +350,9 @@ if (file_exists($wksfile)) {
 		}
 
 		/*
-   * Em monitores com largura < 900px, esconder os rótulos de texto dos
-   * grupos de controles preserva o layout sem scroll horizontal,
-   * mantendo a altura do iframe estável.
+   * On screens wider than 900px, hiding the text labels for
+   * control groups preserves the layout without horizontal scrolling,
+   * keeping the iframe height consistent.
    */
 		@media (max-width: 900px) {
 			.abcd-toolbar-group label {
@@ -382,7 +383,9 @@ if (file_exists($wksfile)) {
 				var sel = document.getElementById('browseby');
 				if (sel) {
 					sel.value = valor;
-					onButtonClick('browseby', valor);
+					// CORRECTION: Do not call onButtonClick("browseby", value) here.
+					// Programmatic updates (made by the system following a search) 
+					// should not trigger the user's click action.
 				}
 			}
 		};
@@ -486,7 +489,15 @@ if (file_exists($wksfile)) {
 				} else {
 					top.browseby = valor;
 				}
-			} catch (e) {}
+
+				// ABCD FIX: The system's original trigger to force the screen to reload 
+				// whilst retaining the current record, but applying the new "browseby".
+				if (top.mfn > 0 || top.Mfn_Search > 0) {
+					top.Menu('same');
+				}
+			} catch (e) {
+				console.error("Erro ao alterar modo de navegação:", e);
+			}
 		}
 
 		/**
@@ -865,7 +876,7 @@ if (file_exists($wksfile)) {
 						</button>
 					<?php endif; ?>
 
-					<!-- Imprimir / Relatórios -->
+					<!-- Print / Reports -->
 					<?php
 					if (
 						isset($_SESSION["permiso"]["CENTRAL_ALL"])      ||
@@ -880,7 +891,7 @@ if (file_exists($wksfile)) {
 						</button>
 					<?php endif; ?>
 
-					<!-- Administrar -->
+					<!-- Manage -->
 					<?php
 					if (
 						isset($_SESSION["permiso"]["CENTRAL_ALL"])       ||

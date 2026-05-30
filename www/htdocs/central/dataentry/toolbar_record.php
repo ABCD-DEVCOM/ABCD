@@ -12,6 +12,7 @@
 2025-03-05 fho4abcd Remove barcode option here. (there is no single record specific code)
 2025-12-08 fho4abcd Improve html & improve indent source code
 2025-12-23 fho4abcd Upgrade html code to latest standard+ improve scrolling of button bar
+2026-01-15 rogercgui Fix the "Select Record" checkbox to properly reflect the current record's selection status, ensuring that it is checked when the record is selected and unchecked when it is not. This resolves an issue where the checkbox state was not accurately representing the selection status of the record, improving the user experience and preventing confusion during record management tasks.
 */
 
 //echo $arrHttp["ventana"];
@@ -92,10 +93,7 @@ if (!isset($arrHttp["ventana"])) {
 								}
 
 								// Prevents an error when the MFN does not exist.
-								$mfn_val = $arrHttp["Mfn"] ?? "";
-								if ($mfn_val != "") {
-									$mfn_val = 0;
-								}
+								$mfn_val = (isset($arrHttp["Mfn"]) && trim($arrHttp["Mfn"]) !== "") ? trim($arrHttp["Mfn"]) : 0;
 
 						?>
 								<label class="check_sec">
@@ -105,8 +103,8 @@ if (!isset($arrHttp["ventana"])) {
 								<script>
 									var selecttop = top.main.document.getElementById("sel_mfn");
 									var checkvalue = top.SeleccionarRegistroCheck(<?php echo $mfn_val; ?>);
-									if (checkvalue == true) {
-										selecttop.setAttribute("checked", true);
+									if (checkvalue == true && selecttop) {
+										selecttop.checked = true;
 									}
 								</script>
 
