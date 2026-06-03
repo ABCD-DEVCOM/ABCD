@@ -19,6 +19,7 @@
 20250901 fho4abcd Edit button for edit picklists
 20251211 fho4abcd Resolve some html issue's
 20251223 fho4abcd Formatted code +HTML5
+20260602 rogercgui Added suppot for more fixed fields: Matrix (M) and LDR. For Matrix, both Edit and Add buttons are added if the field is repeatable in the FDT. For LDR, only the Edit button is added.
 */
 require_once("combo_inc.php");
 require_once("../common/inc_calendar.php");
@@ -245,7 +246,7 @@ function PrepararFormato()
 
 					// The Icon and the Title
 					if (substr($titulo, 0, 1) != "<" and $numero_secciones > 0)
-						// Importante: classes far fa-plus-square para o JS encontrar
+						// Important: Create a "fa-plus-square" class so that JavaScript can find it
 						echo "<i class=\"far fa-plus-square\" style=\"vertical-align:middle\"></i> <b>$titulo</b>";
 					else
 						echo $titulo;
@@ -382,8 +383,9 @@ function PrepararFormato()
 										$wks_a = "";
 									else
 										$wks_a = $arrHttp["wks_a"];
-									if ($t[7] != "I") echo "<a  class=\"bt-fdt\" href='javascript:Campos(document.forma1.tag$tag,$ixicampo,\"$fe\",\"$Repetible\",\"$help_url\",\"" . $wks_a . "\")'><i class=\"fas fa-plus\"></i></a>";
+									if ($t[7] != "I") echo "<a  class=\"bt-fdt\" href='javascript:Campos(document.forma1.tag$tag,$ixicampo,\"$fe\",\"$Repetible\",\"$help_url\",\"" . $wks_a . "\")'><i class=\"fas fa-edit\"></i></a>";
 								} else {
+									// Fixed fields of type Matrix (M) and LDR: Edit button (and Add button for M if Repetible)
 									if ($tipo == "M") {
 										$fe = "";
 										if (isset($arrHttp["wks_a"])) {
@@ -397,8 +399,19 @@ function PrepararFormato()
 													$fe = "";
 											}
 										}
+
+										$router_tab = (isset($t[11]) && trim($t[11]) != "") ? trim($t[11]) : "ldr_06.tab";
+
 										if ($t[7] != "I") {
-											echo "<a class=\"bt-fdt\" href='javascript:CampoFijo(document.forma1.tag$tag,$ixicampo,\"$fe\",\"$base\",\"\",\"$help_url\",\"$tag_tipol\",\"$tag_nivelr\")'><i class=\"fas fa-plus\"></i></a>";
+											// Button 1: Edit the current line - edit/pencil icon
+											$btn_edit_title = $msgstr["ff_edit_matrix"] ?? "Edit selected matrix";
+											echo "<a class=\"bt-fdt\" href='javascript:CampoFijoGenerico(document.forma1.tag$tag, $ixicampo, \"$fe\", \"$base\", \"$router_tab\", \"$help_url\", \"$tag_tipol\", \"$tag_nivelr\")' title=\"$btn_edit_title\"><i class=\"fas fa-edit\"></i></a>";
+
+											// Button 2: New Occurrence (Only appears if the field is Repeatable in the FDT - Column 4)
+											if (isset($t[4]) && $t[4] == "1") {
+												$btn_add_title = $msgstr["ff_add_occ"] ?? "Add New Entry";
+												echo "<a class=\"bt-fdt\" href='javascript:CampoFijoNovaOcorrencia(document.forma1.tag$tag, $ixicampo, \"$fe\", \"$base\", \"$router_tab\", \"$help_url\", \"$tag_tipol\", \"$tag_nivelr\")' title=\"$btn_add_title\"><i class=\"fas fa-plus\"></i></a>";
+											}
 										}
 									}
 									if ($tipo == "LDR") {
@@ -870,7 +883,68 @@ function PrepararFormato()
 	}
 	if ($obligatorio == "S")
 		echo "<span style='color:red;'>" . $msgstr["mandatory_field"] . "</span>";
+
+	if ($obligatorio == "S")
+		echo "<span style='color:red;'>" . $msgstr["mandatory_field"] . "</span>";
+
 	echo "\n<script>
+    function CampoFijoGenerico(Ctrl, Ix, fe, base, router_tab, Help, tipol, nivelr) {
+        var cat = '';
+        var content = Ctrl.value || '';
+        var cursorPos = Ctrl.selectionStart || 0;
+        var textBeforeCursor = content.substring(0, cursorPos);
+        var currentLineIndex = textBeforeCursor.split(String.fromCharCode(10)).length - 1;
+        
+        var lines = content.split(String.fromCharCode(10));
+        for (var j = 0; j < lines.length; j++) {
+            lines[j] = lines[j].replace(String.fromCharCode(13), ''); 
+        }
+        
+        if (currentLineIndex >= lines.length) currentLineIndex = lines.length - 1;
+        if (currentLineIndex < 0) currentLineIndex = 0;
+        
+        var lineContent = lines[currentLineIndex] || '';
+        
+        if (router_tab.indexOf('ldr_06') > -1) {
+            var leader = document.forma1.tag3006;
+            if (leader && leader.value.length >= 7) {
+                cat = leader.value.charAt(6);
+            } else if (fe.length > 0) {
+                var parts = fe.split('_');
+                if (parts.length > 1 && parts[1].length === 1) {
+                    cat = parts[1];
+                }
+            }
+        } else {
+            if (lineContent.length > 0) {
+                cat = lineContent.charAt(0);
+            }
+        }
+        
+        var url = 'campofijo.php?base=' + base + '&fixed_tab=' + router_tab + '&categoria=' + cat + '&Tag=' + Ctrl.name + '&occ=' + currentLineIndex;
+        
+        var msgwin = window.open(url, 'CampoFijo', 'width=800, height=600, scrollbars, resizable');
+        msgwin.focus();
+    }
+
+    function CampoFijoNovaOcorrencia(Ctrl, Ix, fe, base, router_tab, Help, tipol, nivelr) {
+        
+        var content = Ctrl.value || '';
+        content = content.trim(); 
+        
+        var nextOcc = 0;
+        if (content.length > 0) {
+            var lines = content.split(String.fromCharCode(10));
+            nextOcc = lines.length; 
+        }
+        
+        var cat = '';
+        var url = 'campofijo.php?base=' + base + '&fixed_tab=' + router_tab + '&categoria=' + cat + '&Tag=' + Ctrl.name + '&occ=' + nextOcc;
+
+		var msgwin = window.open(url, 'CampoFijo', 'width=800, height=600, scrollbars, resizable');
+        msgwin.focus();
+    }
+
     function OpenAll(){
 	secciones=new Array()
 	ixs=-1\n";
