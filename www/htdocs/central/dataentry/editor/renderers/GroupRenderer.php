@@ -6,6 +6,12 @@
  * Created: 2026-04-19
  * Description: Renderer for group fields in the ABCD data entry editor.
  * Updated to natively support 'IND' tags for correct MARC21 formatting.
+ * 
+ * Change Log:
+ * - 2026-04-19: Initial creation of the GroupRenderer class with methods for rendering group fields and handling subfield definitions.
+ * - 2026-05-01: Added support for rendering subfields inline within the group field, based on configuration settings.
+ * - 2026-06-10: Refactored the render method to separate traditional and inline rendering logic, and added a method to extract subfield definitions from the FDT or local variables.
+ * - 2026-06-11: Implemented JavaScript functions to handle dynamic addition and removal of subfield rows in inline mode, and to update the hidden input field with the correct MARC21 string format whenever changes are made.
  */
 class GroupRenderer
 {
@@ -14,10 +20,9 @@ class GroupRenderer
 
     private static function sanitize($text)
     {
-        if (!mb_check_encoding($text, 'UTF-8')) {
-            return htmlspecialchars($text, ENT_QUOTES, 'ISO-8859-1');
-        }
-        return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+        $search = ['&', '"', "'", '<', '>'];
+        $replace = ['&amp;', '&quot;', '&#039;', '&lt;', '&gt;'];
+        return str_replace($search, $replace, $text);
     }
 
     private static function loadPicklist($file)
@@ -329,8 +334,13 @@ class GroupRenderer
                         var code = input.getAttribute('data-subcode');
                         var val = input.value.trim();
                         if (val !== '') { 
-                            occString += '^' + code + val; 
-                            hasSubfieldsData = true; 
+                            if (code === '_') {
+                                implicitSubfield = val;
+                                hasSubfieldsData = true;
+                            } else {
+                                explicitSubfields += '^' + code + val; 
+                                hasSubfieldsData = true; 
+                            }
                         }
                     }
                 });

@@ -5,11 +5,26 @@
  * Author: Roger C. Guilherme
  * Created: 2026-04-19
  * Description: Renderer for table fields with modern HTML5 Drag and Drop.
+ * 
+ * Change log:
+ * - 2026-04-19: Initial creation of the TableRenderer class with methods for rendering tables based on field definitions and values.
+ * - 2026-05-01: Added comments and documentation for the render method and its parameters.
+ * - 2026-06-10: Implemented drag-and-drop functionality for reordering rows in the table, along with visual feedback during dragging.
+ * - 2026-06-11: Refactored the render method to improve readability and maintainability, and added a helper method to inject necessary JavaScript for drag-and-drop functionality.
  */
 
 class TableRenderer
 {
     private static $jsInjected = false;
+
+    // The Charset Shield. Prevents characters like º and ª from corrupting the string!
+    private static function sanitize($text)
+    {
+        if (!mb_check_encoding($text, 'UTF-8')) {
+            return htmlspecialchars($text, ENT_QUOTES, 'ISO-8859-1');
+        }
+        return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+    }
 
     public static function render($filas, $tag, $fondocelda, $field_t): void
     {
@@ -38,7 +53,7 @@ class TableRenderer
         echo "<td colspan='2' class='table-fdt-four' style='padding: 15px 10px 20px 0;'>";
 
         echo "<div style='font-weight:bold; font-size:14px; color:#0056b3; margin-bottom:10px; border-bottom:1px solid #e0e0e0; padding-bottom:5px;'>";
-        echo htmlspecialchars($t[2] ?? '', ENT_QUOTES, 'UTF-8');
+        echo self::sanitize($t[2] ?? '');
         echo "</div>";
 
         echo "<div class='abcd-table-container' style='border: 1px solid #c0c0c0; border-left: 4px solid #17a2b8; background-color: #fafcfc; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 10px; overflow-x: auto;'>";
@@ -46,7 +61,6 @@ class TableRenderer
 
         echo "<thead><tr>";
 
-        // Coluna do "Pegador" (Drag handle) apenas em edição
         if (!isset($ver)) {
             echo "<th style='width: 20px; border-bottom: 2px solid #ddd; text-align: center;'><i class='fas fa-arrows-alt-v' style='color: #aaa;'></i></th>";
         }
@@ -135,10 +149,8 @@ class TableRenderer
             }
 
             $bgColor = ($i % 2 == 0) ? '#ffffff' : '#f9f9f9';
-            // Adicionamos as classes de identificação para o Drag and Drop
             echo "<tr class='draggable-table-row' style='background:{$bgColor}; border-bottom:1px solid #eee;'>";
 
-            // Célula do Pegador
             if (!isset($ver)) {
                 echo "<td class='drag-handle' style='text-align: center; vertical-align: middle; cursor: grab; color: #ccc;' title='Arraste para reordenar'><i class='fas fa-grip-vertical'></i></td>";
             }
@@ -171,7 +183,7 @@ class TableRenderer
                 switch ($td7) {
                     case "I":
                         if (isset($ver)) echo $campo;
-                        else echo "<input type=hidden name=tag$Etq id=tag$Etq value=\"" . htmlspecialchars($campo, ENT_QUOTES) . "\">\n";
+                        else echo "<input type=hidden name=tag$Etq id=tag$Etq value=\"" . self::sanitize($campo) . "\">\n";
                         break;
                     case "S":
                         $nombrec = "tag" . $tag . "_" . $i . "_" . substr($subc, $j, 1);
@@ -208,28 +220,28 @@ class TableRenderer
                                 echo "<textarea name=tag" . $Etq . " rows=" . $td8 . " cols=" . $n . " style=\"$style_input\" ";
                                 if ($maxlength > 0) echo " onKeyDown=\"textCounter(document.forma1.tag" . $Etq . ",document.forma1.rem$Etq,$maxlength)\" onKeyUp=\"textCounter(document.forma1.tag" . $Etq . ",document.forma1.rem$Etq,$maxlength)\"";
                                 else if ($td20 == "U") echo " onKeyUp=\"CheckInventory($Etq)\"";
-                                echo " id=tag" . $Etq . ">" . htmlspecialchars($campo, ENT_QUOTES) . "</textarea>";
+                                echo " id=tag" . $Etq . ">" . self::sanitize($campo) . "</textarea>";
                                 if ($i == 0) echo "\n<script>max_l['$Etq']=$maxlength</script>\n";
                                 if ($maxlength > 0) {
                                     $lengthmax = strlen($campo) == 0 ? $maxlength : $maxlength - strlen($campo);
                                     echo "<br><input tabindex='0' type=\"text\" name=\"rem$Etq\" size=\"3\" maxlength=\"$maxlength\" value=\"$lengthmax\" class=charCount onfocus=blur()>" . $msgstr["avalchars"] . "\n";
                                 }
                             } else {
-                                echo nl2br(htmlspecialchars($campo, ENT_QUOTES));
+                                echo nl2br(self::sanitize($campo));
                             }
                         } else {
                             if (!isset($ver)) {
                                 echo "<input tabindex='0' type=text name=tag" . $Etq . " id=tag" . $Etq . " size=$n style=\"$style_input\" ";
                                 if ($maxlength != 0) echo " maxlength=$maxlength ";
-                                echo " value=\"" . htmlspecialchars($campo, ENT_QUOTES) . "\">";
+                                echo " value=\"" . self::sanitize($campo) . "\">";
                             } else {
-                                echo nl2br(htmlspecialchars($campo, ENT_QUOTES));
+                                echo nl2br(self::sanitize($campo));
                             }
                         }
                         break;
                     case "XF":
                         if (isset($ver)) echo $campo;
-                        else echo "<input tabindex='0' type=text name=tag" . $Etq . " id=tag" . $Etq . " size=$n maxlength=$n style=\"$style_input\" value=\"" . htmlspecialchars($campo, ENT_QUOTES) . "\">";
+                        else echo "<input tabindex='0' type=text name=tag" . $Etq . " id=tag" . $Etq . " size=$n maxlength=$n style=\"$style_input\" value=\"" . self::sanitize($campo) . "\">";
                         break;
                     case "U":
                         if (isset($ver)) echo $campo;
@@ -246,7 +258,7 @@ class TableRenderer
                     case "K":
                         if (isset($ver)) echo $campo;
                         else {
-                            echo "<input tabindex='0' type=text name=tag" . $Etq . " id=tag" . $Etq . " size=$n style=\"$style_input\" value=\"" . htmlspecialchars($campo, ENT_QUOTES) . "\">";
+                            echo "<input tabindex='0' type=text name=tag" . $Etq . " id=tag" . $Etq . " size=$n style=\"$style_input\" value=\"" . self::sanitize($campo) . "\">";
                             echo "<a class=\"bt-fdt\" href=javascript:EnviarArchivo('tag$Etq')><i class=\"fas fa-upload\" alt=\"Subir archivo al servidor\"></i></a>";
                             echo "<a href=javascript:EditarArchivo('tag$Etq')><i class=\"far fa-edit\" alt=\"Editar archivo existente\"></i></a>";
                         }
@@ -255,18 +267,18 @@ class TableRenderer
                         if (isset($ver)) echo $campo;
                         else {
                             echo "<input type=hidden name=autoincrement value=$Etq>";
-                            echo "<input type=hidden name=tag" . $Etq . " size=$n value=\"" . htmlspecialchars($campo, ENT_QUOTES) . "\">" . htmlspecialchars($campo, ENT_QUOTES);
+                            echo "<input type=hidden name=tag" . $Etq . " size=$n value=\"" . self::sanitize($campo) . "\">" . self::sanitize($campo);
                         }
                         break;
                     case "N":
                         if (isset($ver)) echo $campo;
-                        else echo "<input type='number' name=tag" . $Etq . " size=$n style=\"$style_input\" value=\"" . htmlspecialchars($campo, ENT_QUOTES) . "\">";
+                        else echo "<input type='number' name=tag" . $Etq . " size=$n style=\"$style_input\" value=\"" . self::sanitize($campo) . "\">";
                         break;
                     case "RO":
                         if (isset($ver)) echo $campo;
                         else {
-                            echo htmlspecialchars($campo, ENT_QUOTES);
-                            echo "<input type=hidden name=tag" . $Etq . " id=tag" . $Etq . " size=$n value=\"" . htmlspecialchars($campo, ENT_QUOTES) . "\" onfocus=blur()>";
+                            echo self::sanitize($campo);
+                            echo "<input type=hidden name=tag" . $Etq . " id=tag" . $Etq . " size=$n value=\"" . self::sanitize($campo) . "\" onfocus=blur()>";
                         }
                         break;
                     case "DC":
@@ -279,7 +291,7 @@ class TableRenderer
                     case "OC":
                         if (isset($ver)) echo $campo;
                         else {
-                            echo "<input tabindex='0' type=text name=tag" . $Etq . " size=10 style=\"$style_input\" value=\"" . htmlspecialchars($campo, ENT_QUOTES) . "\" onfocus=blur()>";
+                            echo "<input tabindex='0' type=text name=tag" . $Etq . " size=10 style=\"$style_input\" value=\"" . self::sanitize($campo) . "\" onfocus=blur()>";
                             if ($campo == "") echo "<a class=\"bt-fdt\" href=javascript:AgregarOperador('tag$Etq')><i class=\"fas fa-plus\"  title='" . $msgstr["add"] . "'></i></a>";
                         }
                         break;

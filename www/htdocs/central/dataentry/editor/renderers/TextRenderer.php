@@ -6,6 +6,12 @@
  * 
  * Description: Renderer for text fields in the ABCD data entry editor.
  * This class generates the HTML for rendering text input fields based on the field configuration and options provided. It supports various input types, including single-line text, multi-line textareas, password fields, and auto-increment fields, with appropriate handling for each type.
+ * 
+ * Change log:
+ * - 2026-04-19: Initial creation of the TextRenderer class with the render method to generate HTML for text fields.
+ * - 2026-05-01: Added comments and documentation for the render method and its parameters.
+ * - 2026-06-10: Implemented support for password fields with optional secure password validation based on configuration settings.
+ * - 2026-06-11: Refactored the render method to improve readability and maintainability, and added handling for auto-increment fields with permission checks for assigning control numbers.
  */
 
 
@@ -71,6 +77,19 @@ class TextRenderer {
             }
         } else {
             $campo = rtrim($valortag[$tag]);
+
+            // FIX: Prepares the implicit subfield for legacy JavaScript (campos.php)
+            // Temporarily injects "^_" so that editarocurrencias.js doesn't go blank.
+            if (substr($subc, 0, 1) == '_') {
+                $linhas = explode("\n", $campo);
+                foreach ($linhas as &$linha) {
+                    if (trim($linha) != "" && substr($linha, 0, 1) != '^') {
+                        $linha = "^_" . $linha;
+                    }
+                }
+                $campo = implode("\n", $linhas);
+            }
+
             if ($numl < count($dummy)) $numl = count($dummy);
             if ($numl > 30) {
                 $numl = 30;
