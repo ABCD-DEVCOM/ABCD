@@ -22,6 +22,7 @@
 		  Improve html due to open form by scripts_dataentry.php
 		  Translated some texts and added some comments
 20251223 fho4abcd HTML5
+20260617 rogercgui Fix login undefined error in PHP 8.1+ when session variable is not set (e.g. when session expires and user tries to save a record)
 */
 
 /**
@@ -55,6 +56,7 @@ unset($_SESSION["REC_PASS"]);
 set_time_limit(0);
 if (!isset($_SESSION["permiso"])){
 	header("Location: ../common/error_page.php") ;
+	die;
 }
 $lang=$_SESSION["lang"];
 //error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING );
@@ -565,7 +567,7 @@ if ($arrHttp["Opcion"]=="ver" or $arrHttp["Opcion"]=="cancelar" or $arrHttp["Opc
     else
 	$sort="";
 }
-$arrHttp["login"]=$_SESSION["login"];
+$login = isset($_SESSION["login"]) ? $_SESSION["login"] : "";
 $arrHttp["Notificacion"]="N";
 //If there is a leader, it is read to see in which fields the type of literature and the bibliographic level are found.
 if (file_exists($db_path.$arrHttp["base"]."/def/".$lang_db."/typeofrecord.tab")){
@@ -620,7 +622,7 @@ $Tabla_sel=array();
 $base =$arrHttp["base"];
 $cipar =$arrHttp["cipar"];
 if (isset($arrHttp["Mfn"]))$Mfn=$arrHttp["Mfn"];
-$login=$arrHttp["login"];
+$login = isset($arrHttp["login"]) ? $arrHttp["login"] : "";
 if (!isset($arrHttp["ver"])) $arrHttp["ver"]="";
 if ($arrHttp["ver"]=="S") {
     $ver=true;

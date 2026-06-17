@@ -1,5 +1,5 @@
 <?php
-/*
+	/*
 20210914 fho4abcd modified size of popup window for upload
 20220116 fho4abcd modified size of popup window for capturaclaves
 20220202 fho4abcd modified size of popup window for picklist
@@ -15,9 +15,12 @@
 20251209 fho4abcd Closed form forma1, removed empty source code lines
 20251211 fho4abcd No close of form forma1, is extended later
 20251215 fho4abcd Upgrade html code to latest standard. Removed timestamp from file references to improve caching
+20260617 rogercgui Fix login undefined error in PHP 8.1+ when session variable is not set (e.g. when session expires and user tries to save a record)
 */
-if (!isset($_SESSION["permiso"])) {
+
+	if (!isset($_SESSION["permiso"])) {
 	header("Location: ../common/error_page.php");
+	die;
 }
 ?>
 <!-- calendar stylesheet -->
