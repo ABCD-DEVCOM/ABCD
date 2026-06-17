@@ -130,6 +130,11 @@ if (!$is_central_context) {
 		}
 		$actualbase = $_REQUEST["base"];
 	} else {
+		// NEW LOCK: If strict mode is enabled and there is no base, it blocks access (iAH style)
+		if (isset($opac_strict_mode) && $opac_strict_mode === true) {
+			die("<h1>Access Denied</h1><p>It is strictly necessary to specify a database parameter (e.g., ?base=your_db).</p>");
+		}
+
 		if (!isset($_REQUEST['modo'])) {
 			$_REQUEST["modo"] = "integrado";
 		}
