@@ -23,6 +23,8 @@
  *  2025-03-15 rogercgui added hidden input target_db to search_free.php and set its value in dropdown_db.php
  *  2025-03-10 rogercgui changed dropdown db to use data-value and data-text instead of javascript function
  *  2026-04-12 rogercgui Prevents errors if pagination ('from') exceeds the total due to bots
+ *  2026-04-10 rogercgui Adds support for multiple values in URL parameters (e.g., facets) when changing format
+ *  2026-06-17 rogercgui Final corrections and code cleanup after testing with various databases and configurations. This includes fixing edge cases in relevance calculation, ensuring proper encoding handling, and improving the robustness of the format selection logic.
  * -------------------------------------------------------------------------
  */
 
@@ -290,10 +292,15 @@ function searchDirect($bd_list, $db_path, $Expresion, $termo_livre, $Expr_faceta
 	$busqueda = $Expresion;
 	if (isset($_REQUEST["coleccion"]) and $_REQUEST["coleccion"] != "") {
 		$coleccion = explode('|', urldecode($_REQUEST["coleccion"]));
-		if ($Expresion != "" and $Expresion != '$' and $Expresion != $coleccion[2] . $coleccion[0]) {
-			$busqueda = "(" . $Expresion . ") and (" . $coleccion[2] . $coleccion[0] . ")";
+
+		// CORREÇÃO: Garante que os índices existam antes de concatená-los
+		$col0 = isset($coleccion[0]) ? $coleccion[0] : '';
+		$col2 = isset($coleccion[2]) ? $coleccion[2] : '';
+
+		if ($Expresion != "" and $Expresion != '$' and $Expresion != $col2 . $col0) {
+			$busqueda = "(" . $Expresion . ") and (" . $col2 . $col0 . ")";
 		} else {
-			$busqueda = $coleccion[2] . $coleccion[0];
+			$busqueda = $col2 . $col0;
 		}
 	}
 	if (!empty($Expr_facetas)) {
@@ -673,10 +680,25 @@ if (!function_exists('pc_permute')) {
 if (!isset($_REQUEST["Opcion"])) die;
 if (!isset($_REQUEST["indice_base"])) $_REQUEST["indice_base"] = 0;
 if (isset($rec_pag)) $_REQUEST["count"] = $rec_pag;
-if (!isset($_REQUEST["desde"]) || trim($_REQUEST["desde"]) == "") $_REQUEST["desde"] = 1;
-if (!isset($_REQUEST["count"]) || trim($_REQUEST["count"]) == "") $_REQUEST["count"] = $npages;
-$desde = $_REQUEST["desde"];
-$count = $_REQUEST["count"];
+
+// CORRECTION: Forces text input and prevents bots from submitting text in the pagination parameters, which could break the script. If 'desde' or 'count' are missing, empty, or not numeric, we set them to default values.
+$npages_fallback = isset($npages) ? $npages : 25;
+
+if (!isset($_REQUEST["desde"]) || trim($_REQUEST["desde"]) == "" || !is_numeric($_REQUEST["desde"])) {
+	$_REQUEST["desde"] = 1;
+}
+if (!isset($_REQUEST["count"]) || trim($_REQUEST["count"]) == "" || !is_numeric($_REQUEST["count"])) {
+	$_REQUEST["count"] = $npages_fallback;
+}
+
+// Forces conversion to an integer (required by the 'array_slice' function in PHP 8+)
+$desde = (int)$_REQUEST["desde"];
+$count = (int)$_REQUEST["count"];
+
+// Extra protection: prevents negative or zero page numbers (which also break the script)
+if ($desde < 1) $desde = 1;
+if ($count < 1) $count = 25;
+
 if (!isset($_REQUEST["alcance"]) || $_REQUEST["alcance"] == "") $_REQUEST["alcance"] = "and";
 
 // --- LOG E CONSTRUÇÃO DA EXPRESSÃO ---
@@ -690,22 +712,23 @@ if (isset($_REQUEST['Opcion']) && $_REQUEST['Opcion'] == 'libre' && isset($_REQU
 }
 if ($termo_para_log) registrar_log_busca($termo_para_log);
 
-// --- INÍCIO DA CORREÇÃO DE EXIBIÇÃO (Russo/Polonês) ---
-// Decodifica entidades que vieram do dicionário para exibir o termo puro na tela
+// --- START OF DISPLAY CORRECTION (Russian/Polish) ---
+// Decodes entities retrieved from the dictionary to display the raw term on the screen
 if (isset($_REQUEST['Sub_Expresion'])) {
 	$Expresion = mb_decode_numericentity(htmlspecialchars_decode($_REQUEST['Sub_Expresion']), [0x80, 0xffff, 0, 0xffff], 'UTF-8');
 }
 if (isset($_REQUEST['Expresion'])) {
 	$Expresion = mb_decode_numericentity(htmlspecialchars_decode($_REQUEST['Expresion']), [0x80, 0xffff, 0, 0xffff], 'UTF-8');
 }
-// --- FIM DA CORREÇÃO ---
+// --- END OF CORRECTION ---
 
 $Expresion = construir_expresion();
 $_REQUEST["Expresion"] = $Expresion;
 
 if (isset($_REQUEST["coleccion"]) and $_REQUEST["coleccion"] != "") {
 	$coleccion = explode('|', urldecode($_REQUEST["coleccion"]));
-	$expr_coleccion = $coleccion[1];
+	// CORRECTION: Array key protection
+	$expr_coleccion = isset($coleccion[1]) ? htmlspecialchars($coleccion[1]) : 'Coleção';
 	echo "<div style='margin-top:30px;display: block;width:100%;font-size:12px;'><h3>$expr_coleccion</h3></div>";
 }
 
@@ -1021,52 +1044,55 @@ if ($total_registros == 0 && ($Expresion != '$' || !empty($Expr_facetas))) {
 				$sugestao_frase = $melhor_frase_match;
 				$qualquer_mudanca = true;
 			} else {
-				// ETAPA 2 FALHA: Nenhuma frase encontrada. Tenta palavra por palavra
-				$tokens_originais = preg_split('/\s+/', $termo_pesquisado_original, -1, PREG_SPLIT_NO_EMPTY);
-				$tokens_norm = preg_split('/\s+/', $entrada_normalizada, -1, PREG_SPLIT_NO_EMPTY);
-				$tokens_sugeridos = [];
+					// ETAPA 2 FALHA: Nenhuma frase encontrada. Tenta palavra por palavra
+					$tokens_originais = preg_split('/\s+/', $termo_pesquisado_original, -1, PREG_SPLIT_NO_EMPTY);
+					$tokens_norm = preg_split('/\s+/', $entrada_normalizada, -1, PREG_SPLIT_NO_EMPTY);
+					$tokens_sugeridos = [];
 
-				foreach ($tokens_norm as $i => $token) {
-					$melhor_token_match = null;
-					$distancia_min_token = 1000;
-					$len_token = mb_strlen($token, 'UTF-8');
+					foreach ($tokens_norm as $i => $token) {
+						$melhor_token_match = null;
+						$distancia_min_token = 1000;
+						$len_token = mb_strlen($token, 'UTF-8');
 
-					if ($len_token <= 2) { // Não tenta corrigir "do", "de", etc.
-						$tokens_sugeridos[] = $tokens_originais[$i];
-						continue;
-					}
+						// CORREÇÃO: Previne o erro "Undefined array key" caso a limpeza de caracteres 
+						// tenha gerado uma contagem desigual entre a string limpa e a original
+						$token_orig = isset($tokens_originais[$i]) ? $tokens_originais[$i] : $token;
 
-					$limite_dist_token = max(1, floor($len_token / 3));
+						if ($len_token <= 2) { // Não tenta corrigir "do", "de", etc.
+							$tokens_sugeridos[] = $token_orig;
+							continue;
+						}
 
-					foreach ($dicionario_unificado as $ent) {
-						$termo_dic_norm = removeacentos(mb_strtolower($ent['termo'], 'UTF-8'));
+						$limite_dist_token = max(1, floor($len_token / 3));
 
-						// Compara o token com termos do dicionário
-						$distancia_token = levenshtein($token, $termo_dic_norm);
+						foreach ($dicionario_unificado as $ent) {
+							$termo_dic_norm = removeacentos(mb_strtolower($ent['termo'], 'UTF-8'));
 
-						if ($distancia_token > 0 && $distancia_token <= $limite_dist_token) {
-							if ($distancia_token < $distancia_min_token) {
-								$distancia_min_token = $distancia_token;
-								$melhor_token_match = $ent['termo'];
+							// Compara o token com termos do dicionário
+							$distancia_token = levenshtein($token, $termo_dic_norm);
+
+							if ($distancia_token > 0 && $distancia_token <= $limite_dist_token) {
+								if ($distancia_token < $distancia_min_token) {
+									$distancia_min_token = $distancia_token;
+									$melhor_token_match = $ent['termo'];
+								}
 							}
 						}
-					}
 
-					if ($melhor_token_match !== null) {
-						$tokens_sugeridos[] = $melhor_token_match;
-						if (mb_strtolower($melhor_token_match, 'UTF-8') !== mb_strtolower($tokens_originais[$i], 'UTF-8')) {
-							$qualquer_mudanca = true;
+						if ($melhor_token_match !== null) {
+							$tokens_sugeridos[] = $melhor_token_match;
+							if (mb_strtolower($melhor_token_match, 'UTF-8') !== mb_strtolower($token_orig, 'UTF-8')) {
+								$qualquer_mudanca = true;
+							}
+						} else {
+							$tokens_sugeridos[] = $token_orig;
 						}
-					} else {
-						$tokens_sugeridos[] = $tokens_originais[$i];
 					}
-				}
 
-				if ($qualquer_mudanca) {
-					$sugestao_frase = implode(' ', $tokens_sugeridos);
-				}
+					if ($qualquer_mudanca) {
+						$sugestao_frase = implode(' ', $tokens_sugeridos);
+					}
 			}
-
 			// Bloco de exibição (agora só executa se uma sugestão válida foi gerada)
 			if ($qualquer_mudanca && !empty($sugestao_frase)) {
 				$parametros_link = $_GET;
