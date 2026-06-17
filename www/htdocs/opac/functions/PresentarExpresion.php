@@ -152,17 +152,25 @@ function PresentarExpresion($base)
         }
 
         // ---------------------------------------------------------
-        // Se não há Sub_Expresion, apenas usa Expresion simples
+        // If there is no Sub_Expression, just use a simple Expression
         // ---------------------------------------------------------
     } else {
+        // FIX: Prevents an "Undefined array key" error if the parameter does not exist
+        $req_expresion = isset($_REQUEST["Expresion"]) ? $_REQUEST["Expresion"] : '';
+
         if (isset($_REQUEST["prefijo"]))
-            $Exp_b = str_replace($_REQUEST["prefijo"], '', $_REQUEST["Expresion"]);
+            $Exp_b = str_replace($_REQUEST["prefijo"], '', $req_expresion);
         else
-            $Exp_b = $_REQUEST["Expresion"];
+            $Exp_b = $req_expresion;
+    }
+
+    // FIX: Prevents the "Passing null to parameter" error in PHP 8.1+
+    if ($Exp_b === null) {
+        $Exp_b = '';
     }
 
     // =========================================================
-    // Limpeza final: remove marcadores internos usados pelo OPAC
+    // Final cleanup: removes internal markers used by OPAC
     // =========================================================
     $Exp_b = str_replace('$#$C_', '', $Exp_b);
     $Exp_b = str_replace('$#$', '', $Exp_b);
@@ -173,7 +181,7 @@ function PresentarExpresion($base)
     if (isset($_REQUEST["prefijo"])) $Exp_b = str_replace($_REQUEST["prefijo"], '', $Exp_b);
 
     // =========================================================
-    // Retorna a expressão final legível para exibição ao usuário
+    // Returns the final expression in a readable format for display to the user
     // =========================================================
     return $Exp_b;
 }
