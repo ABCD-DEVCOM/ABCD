@@ -4,6 +4,7 @@
 2025-09-28 rogercgui added check if indice.ix has fields with columnas to show button
 2025-11-18 rogercgui corrected to use $hide_filter variable
 2026-03-24 rogercgui Change the layout to make it look more balanced; Create a valid conditional for the search button.
+2026-06-16 rogercgui Added a UX fix to allow the URL to open the index menu by default if requested.
 */
 ?>
 
@@ -20,7 +21,6 @@ if (!isset($titulo_pagina)) {
 	<?php
 	} else {
 		if ($base != "") {
-			// VERIFICAÇÃO ADICIONADA
 			if (isset($bd_list[$base])) {
 				echo "<h6 class=\"text-dark\">" . $bd_list[$base]["titulo"] . "</h6>";
 				$yaidentificado = "S";
@@ -119,16 +119,29 @@ if (!isset($mostrar_libre) || $mostrar_libre != "N") {
 								}
 							}
 						}
-
-						if ($mostrar_botao_indice) { ?>
-							<button type="button" class="btn btn-outline-secondary btn-sm flex-grow-1 flex-md-grow-0" onclick="showhide('sub_menu')">
-								<i class="fas fa-list"></i> <?php echo $msgstr["front_indice_alfa"]; ?>
-							</button>
+						if ($mostrar_botao_indice) {
+							// If you're in the integrated search, the button takes you back to the Home screen while preserving the search criteria
+							if (isset($actualScript) && $actualScript == "buscar_integrada.php") {
+								$url_home_indice = "index.php";
+								$params = array();
+								if ($base != "") $params['base'] = $base;
+								if (isset($actual_context) && $actual_context != "") $params['ctx'] = $actual_context;
+								$params['open_index'] = 'Y'; // It tells the Home page that the index should open right away!
+								$url_home_indice .= (!empty($params)) ? "?" . http_build_query($params) : "";
+					?>
+								<button type="button" class="btn btn-outline-secondary btn-sm flex-grow-1 flex-md-grow-0" onclick="window.location.href='<?php echo $url_home_indice; ?>'">
+									<i class="fas fa-list"></i> <?php echo $msgstr["front_indice_alfa"]; ?>
+								</button>
+							<?php } else { ?>
+								<button type="button" class="btn btn-outline-secondary btn-sm flex-grow-1 flex-md-grow-0" onclick="showhide('sub_menu')">
+									<i class="fas fa-list"></i> <?php echo $msgstr["front_indice_alfa"]; ?>
+								</button>
 					<?php }
+						}
 					} ?>
 
 					<?php
-					// VALIDAÇÃO DA BUSCA AVANÇADA
+					// VALIDATE ADVANCED SEARCH
 					$BusquedaAvanzada = "N";
 					$file_av = "";
 					if (isset($_REQUEST["modo"]) && $_REQUEST["modo"] == "integrado") {
@@ -157,9 +170,12 @@ if (!isset($mostrar_libre) || $mostrar_libre != "N") {
 				</div>
 			</div>
 
-			<?php if (!isset($_REQUEST["submenu"]) || $_REQUEST["submenu"] != "N") { ?>
+			<?php if (!isset($_REQUEST["submenu"]) || $_REQUEST["submenu"] != "N") {
+				// UX FIX: Checks whether the URL requested that the menu open by default
+				$display_status = (isset($_REQUEST["open_index"]) && $_REQUEST["open_index"] == 'Y') ? 'block' : 'none';
+			?>
 				<div style="clear:both;"></div>
-				<div id="sub_menu" style="display: none;" class="mt-2 p-3 bg-light border rounded">
+				<div id="sub_menu" style="display: <?php echo $display_status; ?>;" class="mt-2 p-3 bg-light border rounded">
 					<?php
 					if ($multiplesBases == "Y" && $base != "") {
 						$dbname = $base;
