@@ -188,7 +188,7 @@ $prefijo = $arrHttp["prefijo"];
                 <input type=hidden name=cipar value='<?php echo $arrHttp["cipar"] ?>'>
                 <input type=hidden name=Expresion value=''>
                 <input type=hidden name=prefijo value='<?php echo $prefijo ?>'>
-                <input type=hidden name=Diccio value='<?php echo $arrHttp["Diccio"] ?>'>
+                <input type=hidden name=Diccio value='<?php if (isset($arrHttp["Diccio"])) echo $arrHttp["Diccio"] ?>'>
                 <input type=hidden name=desde value='<?php if (isset($arrHttp["desde"])) echo $arrHttp["desde"] ?>'>
                 <input type=hidden name=toolbar value='<?php if (isset($arrHttp["toolbar"])) echo $arrHttp["toolbar"] ?>'>
                 <input type=hidden name=campo value="<?php echo urldecode($arrHttp["campo"]) ?>">
