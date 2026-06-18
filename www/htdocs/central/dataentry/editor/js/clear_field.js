@@ -9,11 +9,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         var btnLimpar = document.createElement('a');
         btnLimpar.href = 'javascript:void(0);';
-        btnLimpar.title = 'Limpar campo';
+        btnLimpar.title = 'Clear field';
         btnLimpar.className = 'btn-limpar-abcd';
         btnLimpar.innerHTML = '<i class="fas fa-eraser"></i>';
-        btnLimpar.style.marginLeft = '4px'; // Um pequeno respiro para não colar na caixa
-
+        btnLimpar.style.marginLeft = '4px'; 
         campo.parentNode.insertBefore(btnLimpar, campo.nextSibling);
     });
 });
