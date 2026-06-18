@@ -799,66 +799,77 @@ switch ($arrHttp["Opcion"]) {
 			die;
 	}else{
 	    include("toolbar_record.php");
-	    if ($resultado!="no"){	//resultado=no indica que ya se formateo el registro
-		$ver="s";
-		if ($arrHttp["Formato"]!=""){
-		    echo "<table style='width:100%'><tr><td><font size+1>$registro.</td></table>";
-		}else{
-		    $res=LeerRegistro($base,$cipar,$arrHttp["Mfn"],$maxmfn,"leer",$arrHttp["login"],"");
-		    echo $arrHttp["Opcion"]." ".$clave_proteccion;
-		    $ver=true;
-		    if (isset($arrHttp["wks"])){
-		    }else{
-			GetRecordType();
-		    }
-		    PlantillaDeIngreso();
-		}
-		if (isset($tm)){   //para ver si hay tipo de material  y no viene fijado anteriormente
-		    foreach ($tm as $linea){
-			$linea=trim($linea);
-			$tym=explode('|',trim($linea));
-			if (!isset($valortag[$tl])){
-			    $arrHttp["wks_a"]=$linea;
-			    $arrHttp["wks"]=$tym[0];
-			    $arrHttp["wk_tipom_1"]=$tym[1];
-			    $arrHttp["wk_tipom_2"]=$tym[2];
-			    break;
+			if ($resultado != "no") {	//resultado=no indica que ya se formateo el registro
+				$ver = "s";
+				if ($arrHttp["Formato"] != "") {
+					echo "<table style='width:100%'><tr><td><font size+1>$registro.</td></table>";
+				} else {
+					$res = LeerRegistro($base, $cipar, $arrHttp["Mfn"], $maxmfn, "leer", $arrHttp["login"], "");
+					echo $arrHttp["Opcion"] . " " . $clave_proteccion;
+					$ver = true;
+					if (isset($arrHttp["wks"])) {
+					} else {
+						GetRecordType();
+					}
+					PlantillaDeIngreso();
+				}
+				if (isset($tm)) {   //para ver si hay tipo de material  y no viene fijado anteriormente
+					foreach ($tm as $linea) {
+						$linea = trim($linea);
+						$tym = explode('|', trim($linea));
+
+						// PROTEÇÃO PHP 8: Garante que os índices existam após o explode
+						$tym_0 = isset($tym[0]) ? $tym[0] : "";
+						$tym_1 = isset($tym[1]) ? $tym[1] : "";
+						$tym_2 = isset($tym[2]) ? $tym[2] : "";
+
+						if (!isset($valortag[$tl])) {
+							$arrHttp["wks_a"] = $linea;
+							$arrHttp["wks"] = $tym_0;
+							$arrHttp["wk_tipom_1"] = $tym_1;
+							$arrHttp["wk_tipom_2"] = $tym_2;
+							break;
+						}
+
+						// PROTEÇÃO PHP 8: Garante que os valores lidos da base existam antes de comparar
+						$vt_tl = isset($valortag[$tl]) ? $valortag[$tl] : "";
+						$vt_nr = isset($valortag[$nr]) ? $valortag[$nr] : "";
+
+						if (($vt_tl == $tym_1 and $tym_2 == "") or ($vt_tl == $tym_1 and $vt_nr == $tym_2)) {
+							$arrHttp["wks_a"] = $linea;
+							$arrHttp["wks"] = $tym_0;
+							$arrHttp["wk_tipom_1"] = $tym_1;
+							$arrHttp["wk_tipom_2"] = $tym_2;
+						}
+					}
+					PlantillaDeIngreso();
+					if (!isset($arrHttp["encabezado"])) ColocarMfn();
+				}
+			} else {
+				$ver = "s";
+				//echo "<br><input type=checkbox value=".$arrHttp["Mfn"]." onclick=javascript:SeleccionarRegistro(".$arrHttp["Mfn"].")> ".$msgstr["seleccionar"];
+				echo "<table style='width:100%'><tr><td>";
+				if ($arrHttp["Formato"] != "") {
+					echo "<div id=results>" . $registro . "</div>";
+				} else {
+					$res = LeerRegistro($base, $cipar, $arrHttp["Mfn"], $maxmfn, "leer", $login, "");
+					$ver = true;
+					if (isset($arrHttp["wks"])) {
+					} else {
+						GetRecordType();
+					}
+					PlantillaDeIngreso();
+				}
 			}
-			if ($valortag[$tl]==$tym[1] and $tym[2]==""  or $valortag[$tl]==$tym[1] and $valortag[$nr]==$tym[2]) {
-			    $arrHttp["wks_a"]=$linea;
-			    $arrHttp["wks"]=$tym[0];
-			    $arrHttp["wk_tipom_1"]=$tym[1];
-			    $arrHttp["wk_tipom_2"]=$tym[2];
-			}
-		    }
-		    PlantillaDeIngreso();
-		    if (!isset($arrHttp["encabezado"])) ColocarMfn();
 		}
-	    }else{
-		$ver="s";
-		//echo "<br><input type=checkbox value=".$arrHttp["Mfn"]." onclick=javascript:SeleccionarRegistro(".$arrHttp["Mfn"].")> ".$msgstr["seleccionar"];
-		echo "<table style='width:100%'><tr><td>";
-		if ($arrHttp["Formato"]!=""){
-		    echo "<div id=results>".$registro."</div>";
-		}else{
-		    $res=LeerRegistro($base,$cipar,$arrHttp["Mfn"],$maxmfn,"leer",$arrHttp["login"],"");
-		    $ver=true;
-		    if (isset($arrHttp["wks"])){
-		    }else{
-			GetRecordType();
-		    }
-		    PlantillaDeIngreso();
-		}
-	    }
-	}
-	echo "</td></table>\n";
-	echo "</form>"; // closes open form from scripts_dataentry
-	if (!isset($arrHttp["footer"]) or (isset($arrHttp["footer"]) and strtoupper($arrHttp["footer"])!="N"))
-	    include("../common/footer.php");
-	die;
-       	break;
-    case "ver":	//View:Present the record in the selected format.
-	include ("scripts_dataentry.php");
+		echo "</td></table>\n";
+		echo "</form>"; // closes open form from scripts_dataentry
+		if (!isset($arrHttp["footer"]) or (isset($arrHttp["footer"]) and strtoupper($arrHttp["footer"]) != "N"))
+			include("../common/footer.php");
+		die;
+		break;
+	case "ver":	//View:Present the record in the selected format.
+		include ("scripts_dataentry.php");
 	$salida= LeerRegistroFormateado($arrHttp["Formato"]);
 	if ($arrHttp["Opcion"]!="actualizar" and $record_deleted=="Y") include "../common/inc_div-helper.php";
 	if ($record_deleted=="N") include("toolbar_record.php");
@@ -962,7 +973,7 @@ switch ($arrHttp["Opcion"]) {
 	$arrHttp["lock"] ="S";
     case "password_ok":
     case "leer":
-	$res=LeerRegistro($base,$cipar,$arrHttp["Mfn"],$maxmfn,$arrHttp["Opcion"],$arrHttp["login"],"");
+	$res=LeerRegistro($base,$cipar,$arrHttp["Mfn"],$maxmfn,$arrHttp["Opcion"],$login,"");
 	if ($clave_proteccion!="" and $_SESSION["profile"]!="adm"
 	    and !isset($_SESSION["permiso"][$arrHttp["base"]."_CENTRAL_EDITPROTECTEDRECORD"])
 	    and !isset($_SESSION["permiso"][$arrHttp["base"]."_CENTRAL_ALL"])){
