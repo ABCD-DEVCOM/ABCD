@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+$is_opac_admin = true;
 include("../../config_opac.php");
 $charset = $opac_charset_config;
 
