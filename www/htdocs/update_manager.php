@@ -70,7 +70,7 @@ const PROTECTED_FILES = [
 // List of Origin Files/Folders (in ZIP) for partial update.
 $PARTIAL_UPDATE_SOURCES = [];
 $PARTIAL_UPDATE_SOURCES[] = 'www/htdocs/update_manager.php';
-$PARTIAL_UPDATE_SOURCES[] = 'www/htdocs/upgrade/update_actions.php';// To see the file in the ZIP (if any)
+$PARTIAL_UPDATE_SOURCES[] = 'www/htdocs/upgrade/update_actions.php'; // To see the file in the ZIP (if any)
 $PARTIAL_UPDATE_SOURCES[] = 'www/htdocs/central';
 $PARTIAL_UPDATE_SOURCES[] = 'www/htdocs/assets';
 $PARTIAL_UPDATE_SOURCES[] = 'www/htdocs/opac';
@@ -136,9 +136,9 @@ function writeLog($message, $type = 'INFO')
     global $log_file;
     $timestamp = date('H:i:s');
     file_put_contents($log_file, "[$timestamp] [$type] " . $message . PHP_EOL, FILE_APPEND);
-    $retval= htmlspecialchars($message);
-    if ( $type == 'warning') {
-        $retval="<span style='color:#ffc107'>".$retval."</span>";
+    $retval = htmlspecialchars($message);
+    if ($type == 'warning') {
+        $retval = "<span style='color:#ffc107'>" . $retval . "</span>";
     }
     return "[$timestamp] " . $retval;
 }
@@ -225,10 +225,10 @@ function getLatestReleaseInfo()
 
 function checkLastError()
 {
-    $errmsg=error_get_last();
-    if ($errmsg!=null) {
+    $errmsg = error_get_last();
+    if ($errmsg != null) {
         error_clear_last();
-        throw new Exception("Detected problem: ".$errmsg["message"]);
+        throw new Exception("Detected problem: " . $errmsg["message"]);
     }
 }
 function restoreConfigs()
@@ -253,7 +253,6 @@ function restoreConfigs()
         recursiveCopy($opac_uploads_bkp, $opac_uploads_src);
         $logs[] = writeLog("The 'opac/uploads' folder has been successfully restored.");
     }
-
 }
 // ============================================================================
 // AJAX HANDLER
@@ -266,8 +265,8 @@ if (isset($_POST['ajax_action'])) {
 
     $action = $_POST['ajax_action'];
     $logs = [];
-    $phplogfile=ini_get("error_log");
-    ini_set('display_errors', 0);// PHP errors are logged, but not displayed. Avoids "Invalid Server Response"
+    $phplogfile = ini_get("error_log");
+    ini_set('display_errors', 0); // PHP errors are logged, but not displayed. Avoids "Invalid Server Response"
 
     try {
         // === STEP 1: INITIALIZATION & BACKUP ===
@@ -414,8 +413,8 @@ if (isset($_POST['ajax_action'])) {
 
             if ($script_to_run) {
                 $logs[] = writeLog("Executing migration tasks...");
-                if ( !is_readable($script_to_run) ){
-                    throw new Exception("Migration script: ".$script_to_run." is not readable");
+                if (!is_readable($script_to_run)) {
+                    throw new Exception("Migration script: " . $script_to_run . " is not readable");
                 }
                 include($script_to_run);
                 checkLastError(); // this is a catch all in case the error detection in the script is corrupted
@@ -497,21 +496,21 @@ if (isset($_POST['ajax_action'])) {
                     }
 
                     if ($d_path && file_exists($s_path)) {
-                       $logs[] = writeLog("Updating '{$d_path}'...");
-                       if (is_dir($s_path)) {
+                        $logs[] = writeLog("Updating '{$d_path}'...");
+                        if (is_dir($s_path)) {
                             recursiveDelete($d_path);
-			    checkLastError();
+                            checkLastError();
                             recursiveCopy($s_path, $d_path);
-			    checkLastError();
+                            checkLastError();
                         } else {
                             $parent = dirname($d_path);
                             if (!is_dir($parent)) mkdir($parent, 0755, true);
                             copy($s_path, $d_path);
-			    checkLastError();
+                            checkLastError();
                             if ($os_in_gitname == "Linux" && pathinfo($d_path, PATHINFO_EXTENSION) == "") chmod($d_path, 0755);
                         }
-                    } else if ( !file_exists($s_path)) {
-                        $logs[] = writeLog("'{$d_path}' NOT updated (No source). Old version may be present","warning");     
+                    } else if (!file_exists($s_path)) {
+                        $logs[] = writeLog("'{$d_path}' NOT updated (No source). Old version may be present", "warning");
                     }
                 }
             } else {
@@ -531,7 +530,7 @@ if (isset($_POST['ajax_action'])) {
             // Restore Configs
             $logs[] = writeLog("Restoring protected files...");
             restoreConfigs();
-            ini_set('display_errors', 1);// PHP errors are  displayed. "
+            ini_set('display_errors', 1); // PHP errors are  displayed. "
 
             // Cleanup
             recursiveDelete($temp_dir);
@@ -539,13 +538,13 @@ if (isset($_POST['ajax_action'])) {
         }
     } catch (Exception $e) {
         $logs[] = writeLog($e, "ERROR");
-        if ($phplogfile!="") {
-            $logmessage3='See also PHP logfile '.$phplogfile;
+        if ($phplogfile != "") {
+            $logmessage3 = 'See also PHP logfile ' . $phplogfile;
             $logs[] = writeLog("");
             $logs[] = writeLog($logmessage3);
         }
         restoreConfigs();
-        $logs[] = writeLog('Temporary files in '.$temp_dir.' are not removed  for the purpose of supporting the error investigation! '.
+        $logs[] = writeLog('Temporary files in ' . $temp_dir . ' are not removed  for the purpose of supporting the error investigation! ' .
             'Temporary files will be automatically removed when upgrade is restarted.');
         sendJsonResponse('error', 90, $e->getMessage());
     }
@@ -733,7 +732,7 @@ include("central/common/institutional_info.php");
 
             <div id="final-msg" style="display:none; text-align:center; margin-top:20px;">
                 <h2 style="color:#28a745">Update Complete!</h2>
-		<div><?php echo ("Log file: ".$log_file);?></div>
+                <div><?php echo ("Log file: " . $log_file); ?></div>
                 <button class="btn-action" onclick="window.location.href='update_manager.php'">Reload Page</button>
             </div>
 
@@ -756,9 +755,9 @@ include("central/common/institutional_info.php");
             await runLoop('extract', type);
             await runStep('install', type);
         } catch (e) {
-            console.error(e);/* to view this F12: Opens inspect window in firefox*/
+            console.error(e); /* to view this F12: Opens inspect window in firefox*/
             appendLog(`<span style="color:#ff6666">FATAL ERROR: ${e.message}</span>`);
-	    appendLog(`<span style="color:#ffc107"><?php echo ("More in log: ".$log_file);?></span>`)
+            appendLog(`<span style="color:#ffc107"><?php echo "More in log: " . str_replace('\\', '/', $log_file); ?></span>`);
             document.getElementById('pBar').style.background = '#dc3545';
             alert("Update Failed");
         }
