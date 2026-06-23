@@ -54,7 +54,7 @@ $opac_multi_context = false;
 /*
  * Strict Mode: Blocks access if no context is defined in the URL.
  */
-$opac_strict_mode   = false;
+$opac_strict_mode   = true;
 
 /*
  * CONTEXT MAP
@@ -94,7 +94,7 @@ if (!$is_central_context) {
 
 	// 3. FINAL DECISION
 	if (!$db_path_resolved) {
-		if ($opac_multi_context === true && $opac_strict_mode === true) {
+		if ($opac_multi_context === true && $opac_strict_mode === true && !isset($is_opac_admin)) {
 			die("<h1>Access Denied</h1><p>It is necessary to specify a library context (e.g., ?ctx=demo).</p>");
 		}
 		if (isset($_REQUEST["db_path"])) {
@@ -131,7 +131,7 @@ if (!$is_central_context) {
 		$actualbase = $_REQUEST["base"];
 	} else {
 		// NEW LOCK: If strict mode is enabled and there is no base, it blocks access (iAH style)
-		if (isset($opac_strict_mode) && $opac_strict_mode === true) {
+		if (isset($opac_strict_mode) && $opac_strict_mode === true && !isset($is_opac_admin)) {
 			die("<h1>Access Denied</h1><p>It is strictly necessary to specify a database parameter (e.g., ?base=your_db).</p>");
 		}
 

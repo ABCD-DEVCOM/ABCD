@@ -209,22 +209,24 @@ class GroupRenderer
         echo "<td style='padding: 10px 15px; border-bottom: 2px solid #b9d8d9;'>";
         echo "<div style='display: grid; grid-template-columns: minmax(120px, auto) 1fr; gap: 8px 15px; align-items: center;'>";
 
-        // Ensure that we capture the first two characters if there are indicators in the database, but only if it's not a template row (which should start empty)
-        $ind_string = "";
-        if (!$isTemplate && strlen($occ_val) > 0) {
-            // The MARC standard specifies that, if there are indicators, they consist of the first two characters.
-            if (substr($occ_val, 0, 1) !== '^') {
-                $pos_delimitador = strpos($occ_val, '^');
-                if ($pos_delimitador !== false && $pos_delimitador <= 2) {
-                    $ind_string = substr($occ_val, 0, $pos_delimitador);
-                } elseif ($pos_delimitador === false && strlen($occ_val) == 2) {
-                    $ind_string = $occ_val; // Exceção: Campo só com indicadores
-                }
+        // Checks whether any indicators have been defined for this tag in the FDT
+        $hasIndicatorsDef = false;
+        foreach ($subfield_defs as $def) {
+            if ($def['is_ind']) {
+                $hasIndicatorsDef = true;
+                break;
             }
         }
 
+        // Smart extraction for MARC21: If the FDT indicates that it has an indicator, the first two characters are always the indicator.
+        $ind_string = "";
+        if (!$isTemplate && strlen($occ_val) > 0 && $hasIndicatorsDef) {
+            // Fill with space if the database has accidentally stored only one character
+            $padded_val = str_pad($occ_val, 2, ' ');
+            $ind_string = substr($padded_val, 0, 2);
+        }
+
         foreach ($subfield_defs as $chave_composta => $def) {
-            // It strips the actual code from the subfield (e.g., "IND_1" becomes "1" again, 'S_a' becomes "a" again)
             $parts = explode('_', $chave_composta, 2);
             $code = isset($parts[1]) ? $parts[1] : $chave_composta;
 
@@ -248,15 +250,16 @@ class GroupRenderer
 
             echo "<div class='subfield-input-container' style='display:flex; align-items:center; width:100%;'>";
 
-            // Added a 'data-is-ind' attribute to the HTML so that JavaScript can tell the difference between indicators and subfields, which is crucial for constructing the correct MARC21 string.
             $data_is_ind = $def['is_ind'] ? "data-is-ind='true'" : "";
 
             if (!empty($def['options']) || $def['type'] == 'S') {
                 echo "<select class='inline-sub-input td' data-subcode='{$code}' {$data_is_ind} style='padding: 4px; border: 1px solid #ccc; font-family: monospace; border-radius: 2px; flex-grow:1;' onchange='ABCD_updateHiddenTag(\"{$tag}\")'>";
                 echo "<option value=''></option>";
                 foreach ($def['options'] as $optVal => $optLabel) {
-                    $selected = ($val === $optVal) ? "selected" : "";
-                    echo "<option value='" . self::sanitize($optVal) . "' $selected>" . self::sanitize($optLabel) . "</option>";
+                    // FIX PRINCIPAL: Forçamos o $optVal e o $val a serem lidos como "string", 
+                    // resolvendo a pegadinha das picklists numéricas do PHP.
+                    $selected = ((string)$val === (string)$optVal) ? "selected" : "";
+                    echo "<option value='" . self::sanitize((string)$optVal) . "' $selected>" . self::sanitize((string)$optLabel) . "</option>";
                 }
                 echo "</select>";
             } elseif ($def['type'] == 'U') {
@@ -273,7 +276,6 @@ class GroupRenderer
                     UploadRenderer::injectAssets();
                 }
             } else {
-                // Restores the original behavior: Type 'X' is Textarea, Type 'XF' is Input Text
                 if (strtoupper($def['type']) === 'X') {
                     $rows = 1;
                     if ($def['maxlength'] !== '') {
@@ -292,7 +294,7 @@ class GroupRenderer
 
         echo "<td style='width:50px; vertical-align:middle; text-align:center; border-left: 1px solid #eee; border-bottom: 2px solid #b9d8d9;'>";
         echo "<a href='javascript:void(0)' onclick='ABCD_addInlineRow(\"{$tag}\", this)' title='Adicionar' style='display:inline-block; margin-bottom: 8px;'><i class='fas fa-plus' style='color:#28a745; font-size: 14px;'></i></a><br>";
-        
+
         echo "<a href='javascript:void(0)' onclick='ABCD_removeInlineRow(\"{$tag}\", this)' title='Remover'><i class='fas fa-trash-alt' style='color:#dc3545; font-size: 14px;'></i></a>";
         echo "</td></tr>";
     }
@@ -310,25 +312,23 @@ class GroupRenderer
             
             rows.forEach(function(row) {
                 var inputs = row.querySelectorAll('.inline-sub-input');
-                var occString = '';
-                var ind1 = ' '; // Padrão vazio MARC
+                var implicitSubfield = '';
+                var explicitSubfields = '';
+                var ind1 = ' ';
                 var ind2 = ' ';
                 var hasSubfieldsData = false;
                 var hasIndicators = false;
 
-                // Primeiro Passamos lendo os indicadores
                 inputs.forEach(function(input) {
                     if (input.hasAttribute('data-is-ind')) {
                         var code = input.getAttribute('data-subcode');
                         var val = input.value;
-                        if (val === '') val = ' '; // Um espaço em branco se estiver vazio
-                        
+                        if (val === '') val = ' ';                        
                         if (code == '1') { ind1 = val; hasIndicators = true; }
                         if (code == '2') { ind2 = val; hasIndicators = true; }
                     }
                 });
 
-                // Agora lemos os subcampos reais
                 inputs.forEach(function(input) {
                     if (!input.hasAttribute('data-is-ind')) {
                         var code = input.getAttribute('data-subcode');
@@ -345,14 +345,14 @@ class GroupRenderer
                     }
                 });
                 
-                // Se houver dados no subcampo, montamos a string final: ind1 + ind2 + subcampos
                 if (hasSubfieldsData) {
-                    var finalString = (hasIndicators ? (ind1 + ind2) : '') + occString;
+                    var finalString = (hasIndicators ? (ind1 + ind2) : '') + implicitSubfield + explicitSubfields;
                     isisStringArray.push(finalString);
                 }
             });
             
             var hiddenInput = document.getElementById('tag' + tag);
+            // Aqui está a barra dupla '\\n' restaurada para não quebrar o parser do PHP!
             if(hiddenInput && hiddenInput.value !== isisStringArray.join('\\n')) {
                 hiddenInput.value = isisStringArray.join('\\n');
                 if(typeof CheckInventory === 'function') CheckInventory();
