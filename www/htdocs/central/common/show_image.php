@@ -9,6 +9,8 @@ Modifications:
 	2026-03-08 fho4abcd Process HTTP_REFERRER to allow OPAC and deny self-typed URL and some injected URL's 
 	2026-03-08 fho4abcd Better filename checks, improved comments and messages
 	2026-03-24 fho4abcd Clear output buffer before sending image data
+	2026-06-27 rogercgui Added permission to space in the filename, to allow for filenames with spaces. This is important for compatibility with Windows systems and user-friendly file naming.
+
 Function:
 	Display media in a safe way, controlled by the application.
 	For this purpose the media are located outside the DOCUMENT_ROOT tree, and this script
@@ -137,8 +139,8 @@ if ( !isset($arrHttp["image"]) ) {
 		die;
 	}
 	// SANITISATION
-	// Removes dangerous characters, but ALLOWS slash (/), dot (.), underscore (_) and minus (-).
-	$testimagefilename = preg_replace('/[^a-zA-Z0-9\/._-]/', '', $imagefilename, -1, $count);
+	// Removes dangerous characters, but ALLOWS spaces ( ), slash (/), dot (.), underscore (_) and minus (-).
+	$testimagefilename = preg_replace('/[^a-zA-Z0-9\/._ -]/', '', $imagefilename, -1, $count);
 	if ( $imagefilename != $testimagefilename ) {
 		echo $err_pref."URL parameter 'image' contains $count not allowed character(s)"."</p>";
 		die;
