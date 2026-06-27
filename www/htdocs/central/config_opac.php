@@ -54,7 +54,7 @@ $opac_multi_context = false;
 /*
  * Strict Mode: Blocks access if no context is defined in the URL.
  */
-$opac_strict_mode   = true;
+$opac_strict_mode   = false;
 
 /*
  * CONTEXT MAP
