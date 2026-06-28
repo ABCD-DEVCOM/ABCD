@@ -5,6 +5,11 @@
  * Author: Roger C. Guilherme
  * Created: 2026-05-02
  * * Description: Unified modular renderer for Upload fields (Type U) with CSS, JS, and Translations
+ * 
+ * changes:
+ * 2026-05-02 rogercgui: Initial version
+ * 2026-06-05 rogercgui: Added support for subdirectory input in the modal and improved error handling
+ * 2026-06-27 rogercgui: Added logic to avoid duplicating the subdirectory in the filename if it is already included
  */
 
 
@@ -92,6 +97,7 @@ class UploadRenderer
         $str_error_server = $msgstr["error_server"] ?? "Server Communication Error";
         $str_error_parse = $msgstr["error_parse"] ?? "Invalid response from the server. The file may exceed the PHP size limit, or the destination folder does not have write permissions.";
         $str_details = $msgstr["details"] ?? "Server error details:";
+        $str_storein = $msgstr["storein"] ?? "Subdirectory / Destination (optional):";
 
 ?>
 
@@ -281,6 +287,10 @@ class UploadRenderer
                             <button type='button' class='abcd-modal-close' onclick='document.getElementById("abcdUploadModal").remove()'>&times;</button>
                         </div>
                         <div class='abcd-modal-body'>
+                            <div style='margin-bottom: 15px;'>
+                                <label style='font-size: 13px; font-weight: bold; color: #555; display: block; margin-bottom: 5px;'><?php echo $str_storein; ?></label>
+                                <input type='text' id='abcdStoreIn_` + tagId + `' placeholder='Ex: ebooks/1/' style='width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'>
+                            </div>
                             <input type='file' id='abcdFileInput_` + tagId + `' ` + multipleAttr + ` style='display:none' onchange='ABCD_handleFileSelect(this, "` + tagId + `")'>
                             <div class='abcd-modal-dropzone' id='abcdDropzone_` + tagId + `' onclick='document.getElementById("abcdFileInput_" + "` + tagId + `").click()'>
                                 <i class='fas fa-cloud-upload-alt'></i>
@@ -339,7 +349,15 @@ class UploadRenderer
 
             function ABCD_uploadFileAjax(filesArray, tagId, wrapperElement = null, isFromModal = false) {
                 let baseName = (typeof top.base !== 'undefined') ? top.base : (document.forma1 && document.forma1.base ? document.forma1.base.value : '');
-                let storein = (typeof top.img_dir !== 'undefined') ? top.img_dir : '';
+
+                // Capture the subdirectory entered in the modal (if it exists)
+                let modalStoreIn = document.getElementById('abcdStoreIn_' + tagId);
+                let storein = modalStoreIn ? modalStoreIn.value.trim() : '';
+
+                // Fallback to the system global variable if the field is empty
+                if (storein === '' && typeof top.img_dir !== 'undefined') {
+                    storein = top.img_dir;
+                }
 
                 let formData = new FormData();
                 for (let i = 0; i < filesArray.length; i++) {
@@ -380,15 +398,33 @@ class UploadRenderer
                             if (response.success) {
                                 let inputField = document.getElementById(tagId);
                                 if (inputField) {
+
+                                    // Reconstruct the relative path and place it alongside the file
+                                    let pathPrefix = '';
+                                    if (storein !== '') {
+                                        pathPrefix = storein;
+                                        if (pathPrefix.charAt(pathPrefix.length - 1) !== '/') {
+                                            pathPrefix += '/';
+                                        }
+                                    }
+
+                                    let newNamesArray = response.filenames.map(function(name) {
+                                        // Only add the folder if it isn’t included by default
+                                        if (pathPrefix !== "" && name.indexOf(pathPrefix) !== 0) {
+                                            return pathPrefix + name;
+                                        }
+                                        return name;
+                                    });
+                                    let newNames = newNamesArray.join('\n');
+
                                     if (inputField.tagName === 'TEXTAREA') {
-                                        let newNames = response.filenames.join('\n');
                                         if (inputField.value.trim() !== '') {
                                             inputField.value += '\n' + newNames;
                                         } else {
                                             inputField.value = newNames;
                                         }
                                     } else {
-                                        inputField.value = response.filenames[0];
+                                        inputField.value = newNamesArray[0];
                                     }
 
                                     inputField.dispatchEvent(new Event('change', {
