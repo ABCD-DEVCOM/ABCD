@@ -128,22 +128,6 @@ a.textBot:hover {
 		background: url('../images/search.png') no-repeat center;
 	}
 
-	.homepage .mainBox .orderSection .sectionIcon {
-		background: url('../images/icon/mainBox_titleSection.png') no-repeat center;
-	}
-
-	.homepage .mainBox .fascicleSection .sectionIcon {
-		background: url('../images/icon/mainBox_fascicleSection.png') no-repeat center;
-	}
-
-	.homepage .mainBox .maskSection .sectionIcon {
-		background: url('../images/icon/mainBox_maskSection.png') no-repeat center;
-	}
-
-	.homepage .mainBox .toolSection .sectionIcon {
-		background: url('../images/icon/mainBox_toolSection.png') no-repeat center;
-	}
-
 	.homepage .mainBox .loanSection .sectionIcon {
 		background: url('../images/icon/mainBox_loanSection.png') no-repeat center;
 	}
@@ -155,7 +139,6 @@ a.textBot:hover {
 	.homepage .mainBox .boxContent .sectionButtons A.defaultButton {
 		color: #000;
 	}
-
 
 	.homepage .mainBox .boxContent .sectionButtons A.menuButton {
 		color: #000;

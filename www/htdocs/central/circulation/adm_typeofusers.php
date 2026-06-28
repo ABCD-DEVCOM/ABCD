@@ -1,178 +1,191 @@
 <?php
 /* Modifications
-2021-02-09 fho4abcd Original name for dhtmlX.js
 2024-04-01 fho4abcd stylesheet from assets + setImagePath + redesign to remove the mix of html and dhtmlx script
+2026-06-28 rogercgui Refactored: Removed dhtmlXGrid, native HTML table with generic JS, PRG pattern added, UI fixes
 */
-/* See https://docs.dhtmlx.com/api__dhtmlxgrid_addrow.html
-*/
+
 session_start();
-if (!isset($_SESSION["permiso"])){
-	header("Location: ../common/error_page.php") ;
+if (!isset($_SESSION["permiso"])) {
+	header("Location: ../common/error_page.php");
 }
-if (!isset($_SESSION["lang"]))  $_SESSION["lang"]="en";
+if (!isset($_SESSION["lang"]))  $_SESSION["lang"] = "en";
 include("../common/get_post.php");
 include("../config.php");
-$lang=$_SESSION["lang"];
+$lang = $_SESSION["lang"];
 
 include("../lang/dbadmin.php");
 include("../lang/prestamo.php");
 
-//foreach ($arrHttp as $var=>$value) echo "$var = $value<br>";
-
 include("../common/header.php");
-?>
-<body>
-<link rel="stylesheet" type="text/css" href="/assets/css/dhtmlXGrid.css">
-<script src="../dataentry/js/dhtml_grid/dhtmlX.js"></script>
-<script src="../dataentry/js/lr_trim.js"></script>
-<script>
-	function AgregarFila(ixfila,Option){
-		switch (Option){
-			case "BEFORE":
-				ixf=mygrid.getRowsNum()+1
-				ref=ixf
-				break
-			case "AFTER":
-				ixf=mygrid.getRowsNum()+2
-				ref=ixf-1
-				break
-			default:
-				ixf=mygrid.getRowsNum()+2
-				break
-		}
-		mygrid.addRow((new Date()).valueOf(),['','',''],ixfila)
-       	mygrid.selectRow(ixfila);
-	}
-	function Capturar_Grid(){
-		cols=mygrid.getColumnCount()
-		rows=mygrid.getRowsNum()
-		VC=""
-		for (i=0;i<rows;i++){
-			if (Trim(mygrid.cells2(i,0).getValue())!=""){
-				if (VC!="") VC=VC+"\n"
-				for (j=0;j<cols;j++){
-					cell=mygrid.cells2(i,j).getValue()
-					if (j!=13) VC=VC+cell+'|'
-				}
-			}
-		}
-		return VC
-	}
-	function Enviar(){
-		document.forma1.ValorCapturado.value=Capturar_Grid()
-		document.forma1.submit()
-	}
-</script>
 
-<?php
-$encabezado="";
+$encabezado = "";
 include("../common/institutional_info.php");
 ?>
+<script src="../dataentry/js/abcd_grid.js"></script>
+
 <div class="sectionInfo">
 	<div class="breadcrumb">
-    <?php echo $msgstr["typeofusers"];?>
+		<?php echo $msgstr["typeofusers"]; ?>
 	</div>
 	<div class="actions">
-<?php
-	$ayuda="/circulation/loans_typeofusers.html";
-    $backtocancelscript="configure_menu.php?encabezado=s";
-	$savescript="javascript:Enviar()";
-    include "../common/inc_cancel.php";
-    include "../common/inc_save.php";
-?>
-    </div>
-    <div class="spacer">&#160;</div>
+		<?php
+		$ayuda = "/circulation/loans_typeofusers.html";
+		$backtoscript = "configure_menu.php?encabezado=s";
+		$savescript = "javascript:Enviar()";
+		include "../common/inc_back.php";
+		include "../common/inc_save.php";
+		?>
+	</div>
+	<div class="spacer">&#160;</div>
 </div>
+
+<?php include "../common/inc_div-helper.php"; ?>
+
 <?php
-include "../common/inc_div-helper.php";
+// Aviso visual de sucesso do PRG posicionado corretamente e com Auto-Hide
+if (isset($_GET['msg']) && $_GET['msg'] == 'success') {
 ?>
+	<div id="msg-success" style="background-color: var(--abcd-green, #28a745); color: white; padding: 12px 20px; margin: 15px; border-radius: 4px; text-align: center; font-size: 14px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: opacity 0.5s ease;">
+		<i class="fas fa-check-circle" style="margin-right: 8px;"></i> <?php echo isset($msgstr["updated"]) ? $msgstr["updated"] : "Dados salvos com sucesso!"; ?>
+	</div>
+	<script>
+		setTimeout(function() {
+			var msgDiv = document.getElementById('msg-success');
+			if (msgDiv) {
+				msgDiv.style.opacity = '0';
+				setTimeout(function() {
+					msgDiv.style.display = 'none';
+				}, 500);
+			}
+			// Limpa a URL silenciosamente
+			window.history.replaceState({}, document.title, window.location.pathname);
+		}, 3000);
+	</script>
+<?php
+}
+?>
+
 <div class="middle form">
 	<div class="formContent">
-	<br>
-		<a class="bt bt-blue mb-2" href="javascript:void(0)" onclick="AgregarFila(mygrid.getRowIndex(mygrid.getSelectedId()),'BEFORE')">
-			<?php echo $msgstr["addrowbef"]?>
+		<br>
+		<a class="bt bt-blue mb-2" href="javascript:void(0)" onclick="addEmptyRow('fstBody', 'rowTemplate', 'BEFORE')">
+			<i class="fas fa-plus"></i> <?php echo $msgstr["addrowbef"] ?>
 		</a>
-		<a class="bt bt-blue mb-2" href="javascript:void(0)" onclick="AgregarFila(mygrid.getRowIndex(mygrid.getSelectedId())+1,'AFTER')">
-			<?php echo $msgstr["addrowaf"]?>
+		<a class="bt bt-blue mb-2" href="javascript:void(0)" onclick="addEmptyRow('fstBody', 'rowTemplate', 'AFTER')">
+			<i class="fas fa-plus"></i> <?php echo $msgstr["addrowaf"] ?>
 		</a>
-		<a class="bt bt-red mb-2" href="javascript:void(0)" onclick="mygrid.deleteSelectedItem()">
-			<?php echo $msgstr["remselrow"]?>
-		</a><br>
-	<span class="bt-disabled"><i class="fas fa-info-circle"></i> <?php echo $msgstr['double_click']?></span><br>
-	<span class="bt-disabled"><i class="fas fa-info-circle"></i> <?php echo $msgstr['picklist_sort']?></span><br>
-	<span class="bt-disabled"><i class="fas fa-info-circle"></i> <?php echo $msgstr['picklist_move']?></span><br>
-<?php
+		<br><br>
 
-	unset($fp);
-	$archivo=$db_path."circulation/def/".$_SESSION["lang"]."/typeofusers.tab";
-	if (!file_exists($archivo)) $archivo=$db_path."circulation/def/".$lang_db."/typeofusers.tab";
-	if (file_exists($archivo)){
-		$fp=file($archivo);
-	}else{
-		$fp=array();
-		for ($i=0;$i<10;$i++){
-			$fp[$i]='|||||';
+		<?php
+		unset($fp);
+		$archivo = $db_path . "circulation/def/" . $_SESSION["lang"] . "/typeofusers.tab";
+		if (!file_exists($archivo)) $archivo = $db_path . "circulation/def/" . $lang_db . "/typeofusers.tab";
+		if (file_exists($archivo)) {
+			$fp = file($archivo);
+		} else {
+			$fp = array();
+			for ($i = 0; $i < 5; $i++) {
+				$fp[$i] = '|||||';
+			}
 		}
-	}
-?>
-	<!-- A div that serves as container for the grid Object. Siz is not very important -->
-	<div id="gridbox" xwidth="100px" height="100px" style="background-color:white;"></div>
-	<script>
-    var mygrid = new dhtmlXGridObject('gridbox');
+		?>
 
-	mygrid.setImagePath("/assets/images/dhtml_grid/imgs/");
-	mygrid.setHeader(
-		"<?php echo $msgstr["usertype"];?>,<?php echo $msgstr["description"]?>,<?php echo $msgstr["tit_np"]?>,<?php echo $msgstr["web_reserve"]?>");
-	mygrid.setInitWidths("100,200,50,50")
-	mygrid.setColAlign("left,left,justify,center")
-	mygrid.setColTypes("ed,ed,ed,ed");
-    mygrid.enableAutoWidth(true);
-    mygrid.enableAutoHeight(true,800);
- 	mygrid.setColSorting("str,str,int,int")
-    mygrid.enableDragAndDrop(true);
-	mygrid.init();
-	index=-1;
-	<?php
-	$t=array();
-	foreach ($fp as $value){
-		$value=trim($value);
-		$value.="||||";
-		if (trim($value)!=""){
-			$value=str_replace("'","\'",$value);
-			$t=explode("|",$value);
-			if (!isset($t[0])) $t[0]="";
-			$t[0]=trim($t[0]);
-			$t[1]=trim($t[1]);
-			$t[2]=trim($t[2]);
-			$t[3]=trim($t[3]);
-			?>
-			index++;
-			/*first parameter must be unique, also for fast processors*/
-			mygrid.addRow((new Date()).valueOf()+index,['<?php echo $t[0]?>','<?php echo $t[1]?>','<?php echo $t[2]?>','<?php echo $t[3]?>'],index)
-			<?php
-		}
+		<form name="typeofusers_form" id="typeofusersForm" method="post" onsubmit="return false;">
+			<div class="row m-0">
+				<div class="col-12 p-0">
+					<table class="table striped table-fst" id="fstTable" style="width: 100%;">
+						<thead>
+							<tr>
+								<th width="20%"><?php echo $msgstr["usertype"]; ?></th>
+								<th width="45%"><?php echo $msgstr["description"]; ?></th>
+								<th width="10%" style="text-align: center;"><?php echo $msgstr["tit_np"]; ?></th>
+								<th width="10%" style="text-align: center;"><?php echo $msgstr["web_reserve"]; ?></th>
+								<th width="15%" style="text-align: center;"><?php echo $msgstr["actions"] ?? "Ações"; ?></th>
+							</tr>
+						</thead>
+						<tbody id="fstBody">
+							<?php
+							foreach ($fp as $value) {
+								$value = trim($value);
+								if ($value === "") continue;
+
+								$value .= "||||";
+								$t = explode("|", $value);
+								$usertype = trim($t[0] ?? "");
+								$description = trim($t[1] ?? "");
+								$tit_np = trim($t[2] ?? "");
+								$web_reserve = trim($t[3] ?? "");
+
+								echo "<tr class='fst-row'>";
+								echo "<td><input type='text' name='row_usertype' value='" . $usertype . "' style='width: 100%; box-sizing: border-box;'></td>";
+								echo "<td><input type='text' name='row_description' value='" . $description . "' style='width: 100%; box-sizing: border-box;'></td>";
+								echo "<td><input type='text' name='row_tit_np' value='" . $tit_np . "' style='width: 100%; box-sizing: border-box; text-align: center;'></td>";
+								echo "<td><input type='text' name='row_web_reserve' value='" . $web_reserve . "' style='width: 100%; box-sizing: border-box; text-align: center;'></td>";
+
+								echo "<td class='actions-cell' style='text-align: center;'>";
+								echo "<button type='button' class='bt bt-gray' onclick='moveRow(this, -1)'><i class='fas fa-arrow-up'></i></button> ";
+								echo "<button type='button' class='bt bt-gray' onclick='moveRow(this, 1)'><i class='fas fa-arrow-down'></i></button> ";
+								echo "<button type='button' class='bt bt-blue' onclick='duplicateRow(this)'><i class='far fa-copy'></i></button> ";
+								echo "<button type='button' class='bt bt-red' onclick='deleteRow(this)'><i class='fas fa-trash-alt'></i></button>";
+								echo "</td>";
+								echo "</tr>";
+							}
+							?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</form>
+
+		<form name="forma1" action="typeofusers_update.php" method="post">
+			<input type="hidden" name="ValorCapturado">
+			<input type="hidden" name="desc">
+			<input type="hidden" name="Opcion" value="">
+			<input type="hidden" name="base" value="users">
+		</form>
+
+	</div>
+</div>
+
+<template id="rowTemplate">
+	<tr class="fst-row">
+		<td><input type="text" name="row_usertype" value="" style="width: 100%; box-sizing: border-box;"></td>
+		<td><input type="text" name="row_description" value="" style="width: 100%; box-sizing: border-box;"></td>
+		<td><input type="text" name="row_tit_np" value="" style="width: 100%; box-sizing: border-box; text-align: center;"></td>
+		<td><input type="text" name="row_web_reserve" value="" style="width: 100%; box-sizing: border-box; text-align: center;"></td>
+		<td class="actions-cell" style="text-align: center;">
+			<button type="button" class="bt bt-gray" onclick="moveRow(this, -1)"><i class="fas fa-arrow-up"></i></button>
+			<button type="button" class="bt bt-gray" onclick="moveRow(this, 1)"><i class="fas fa-arrow-down"></i></button>
+			<button type="button" class="bt bt-blue" onclick="duplicateRow(this)"><i class="far fa-copy"></i></button>
+			<button type="button" class="bt bt-red" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i></button>
+		</td>
+	</tr>
+</template>
+
+<script>
+	function Capturar_Grid() {
+		var rows = document.querySelectorAll(".fst-row");
+		var VC = "";
+
+		rows.forEach(function(row) {
+			var usertype = row.querySelector("input[name='row_usertype']").value.trim();
+			var description = row.querySelector("input[name='row_description']").value.trim();
+			var tit_np = row.querySelector("input[name='row_tit_np']").value.trim();
+			var web_reserve = row.querySelector("input[name='row_web_reserve']").value.trim();
+
+			if (usertype !== "") {
+				if (VC !== "") VC += "\n";
+				VC += usertype + "|" + description + "|" + tit_np + "|" + web_reserve + "|";
+			}
+		});
+
+		return VC;
 	}
-	?>
-	mygrid.clearSelection()
-	mygrid.setColWidth(2,80)
-	mygrid.setColWidth(3,80)
-	mygrid.setSizes();
+
+	function Enviar() {
+		document.forma1.ValorCapturado.value = Capturar_Grid();
+		document.forma1.submit();
+	}
 </script>
-<br><br>
-</form>
-<form name=forma1 action=typeofusers_update.php method=post>
-<input type=hidden name=ValorCapturado>
-<input type=hidden name=desc>
-<input type=hidden name=Opcion value=>
-<input type=hidden name=base value=users>
-</form>
 
-
-
-<?php
-
-echo "</div></div></div>";
-include("../common/footer.php");
-echo "</body></html>" ;
-
-?>
+<?php include("../common/footer.php"); ?>

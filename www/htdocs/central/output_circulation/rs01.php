@@ -90,7 +90,7 @@ global $msgstr,$arrHttp,$db_path,$xWxis,$tagisis,$Wxis,$wxisUrl,$lang_db;
 
 include("../common/header.php");
 
-include("../common/institutional_info.php");
+//include("../common/institutional_info.php");
 include("../circulation/scripts_circulation.php");
 ?>
 
@@ -101,10 +101,10 @@ include("../circulation/scripts_circulation.php");
 	</div>
 	<div class="actions">
 		<?php 
-		$backtoscript="../circulation/estado_de_cuenta.php?reserve=S";
-		include "../common/inc_back.php"; ?>
+		//$backtoscript="../circulation/estado_de_cuenta.php?reserve=S";
+		//include "../common/inc_back.php"; ?>
 	</div>
-<?php include("../circulation/submenu_prestamo.php");?>
+<?php //include("../circulation/submenu_prestamo.php");?>
 </div>
 
 <div class="middle form">
@@ -342,9 +342,7 @@ if ($found==0){
 </div>
 
 </div>
-<font size=1 color=#cccccc>reserve_01.pft - tit_reserve_01.tab
 
-<?php include '../common/footer.php';?>
 
 
 

@@ -14,6 +14,8 @@ include("../lang/prestamo.php");
 //foreach ($arrHttp as $var=>$value) echo "$var = $value<br>";
 include("../common/header.php");
 
+
+
 function LeerPft($pft_name, $base)
 {
 	global $arrHttp, $db_path, $lang_db;
@@ -123,7 +125,7 @@ $codigo = LeerPft("loans_uskey.pft", "users");
 	}
 
 	function Output(code, name) {
-		document.getElementById('loading').style.display = 'block';
+		//document.getElementById('preloader').style.display = 'block';
 		if (Trim(document.usersearch.usercode.value) != "")
 			document.output.user.value = document.usersearch.usercode.value
 		for (i = 0; i < document.inventorysearch.sort.length; i++) {
@@ -134,6 +136,7 @@ $codigo = LeerPft("loans_uskey.pft", "users");
 		document.output.action = "../output_circulation/" + name + ".php"
 		document.output.code.value = code
 		document.output.name.value = name
+		document.output.target = "receiver"
 		document.output.submit()
 	}
 </script>
@@ -254,7 +257,7 @@ include "../common/inc_div-helper.php";
 	<input type="hidden" name="lang" value="<?php echo $lang; ?>">
 	<input type="hidden" name="reserva" value="S">
 </form>
-<?php include("../common/footer.php");
+<?php 
 echo "</body></html>";
 if (isset($arrHttp["error"]) and $arrHttp["inventory"] != "") {
 	echo "
@@ -263,4 +266,6 @@ if (isset($arrHttp["error"]) and $arrHttp["inventory"] != "") {
 	</script>
 	";
 }
+
+include("../common/footer.php");
 ?>
