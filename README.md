@@ -10,7 +10,7 @@
   <p align="center">
     Welcome to the development of the ABCD!
     <br />
-    <a href="https://github.com/ABCD-DEVCOM/ABCD/blob/master/ABCofABCD_2.0f.pdf" target="_blank"><strong>Explore the ABC of ABCD »</strong></a>
+    <a href="[https://github.com/ABCD-DEVCOM/ABCD/blob/master/ABCofABCD_2.0f.pdf](https://abcd-devcom.github.io/)" target="_blank"><strong>Explore the ABCD Knowledge Base »</strong></a>
     <br />
     <br />
     <a href="https://demo.abcd-community.org/" target="_blank">View Demo</a>
@@ -54,39 +54,24 @@ Acronym **ABCD** stands for:
 > **A**utomatización de **B**ibliotecas y **C**entros de **D**ocumentación<br>
 > **A**utomation des **B**ibliothèques et **C**entres de **D**ocumentacion<br>
 > **A**utomatização das **B**ibliotecas e dos **C**entros de **D**ocumentação<br>
-> **A**utomatisering van **B**ibliotheken en **C**entra voor **D**ocumentatie
+> **A**utomeatisering van **B**ibliotheken en **C**entra voor **D**ocumentatie
 
-ABCD was initially developed by [Bireme](http://regional.bvsalud.org/local/Site/bireme/I/homepage.htm) with the support of [VLIR/UOS](https://www.vliruos.be/en/home/1) and based on [UNESCO-supported ISIS-technology](http://www.unesco.org/isis). Currently the development is solely done by volunteers in several countries but not enough thanks can be given to G. Ascencio and E. Spinak.
+ABCD was initially developed by BIREME with the support of VLIR/UOS and based on UNESCO-supported ISIS-technology. Following BIREME's departure from the project, ABCD is now solely maintained, updated, and evolved by the global open-source community. Special historical thanks are given to G. Ascencio and E. Spinak for their foundational roles.
 
 ---
 
-The name itself already expresses the ambition of the software suite : not only providing automation functions for
-the 'classic' libraries but also other information providers such as documentation centres. Flexibility and versatility
-are at the forefront of the criteria on which the software is developed. This flexibility e.g. is illustrated by the
-fact that in principle, but also practically, any bibliographic structure can be managed by the software, or even
-created by itself. Even non-bibliographic structures can be created, as long as the information is mainly 'textual'
-information, as this is the limitation put by the underlying database technology, which is the (CDS/)ISIS textual
-database. Good understanding of some basic ISIS-related concepts and techniques, e.g. the Formatting Language,
-is crucial for full mastering of the ABCD-software. For this reason some sections of this Manual will also deal
-with the underlying ISIS-technology.
+The name itself already expresses the ambition of the software suite: not only providing automation functions for the 'classic' libraries but also other information providers such as documentation centres. Flexibility and versatility are at the forefront of the criteria on which the software is developed. This flexibility e.g. is illustrated by the fact that in principle, but also practically, any bibliographic structure can be managed by the software, or even created by itself. Even non-bibliographic structures can be created, as long as the information is mainly 'textual' information, as this is the limitation put by the underlying database technology, which is the ISIS textual database. Good understanding of some basic ISIS-related concepts and techniques, e.g. the Formatting Language, is crucial for full mastering of the ABCD-software. For this reason some sections of this Manual will also deal with the underlying ISIS-technology.
 
-ABCD is called a 'suite' of softwares for library and documentation centres automation because it exists of some
-relatively independent modules, which can fully co-operate but also can exist without each other. In fact some
-existing advanced softwares, mostly having already shown their potential in demanding environments in BIREME-
-applications (within the Virtual Health Library context), were adopted and adapted into ABCD - that is why the
-original names such as iAH, SeCS (both developed by BIREME) and EmpWeb (Empréstimos en Web) developed
-originally by KALIO ltda. of Uruguay and amply tested in Valparaiso at the University) are maintained. These main
-parts are shown, with their hierarchical relationships, at the second level in the following picture:
+ABCD is called a 'suite' of software because it consists of relatively independent modules, which fully co-operate to provide a complete automation solution. The current architecture has been streamlined by the community into a cohesive native environment, eliminating legacy software dependencies. The main parts of the modern ecosystem and their hierarchical relationships are shown in the following picture:
 
-![estructure_ABCD-1024x576](https://user-images.githubusercontent.com/20482054/124363175-28618800-dc10-11eb-85c9-b2630cfaaad3.jpg)
-
+<img width="4059" height="2482" alt="ABCD Suite Architecture" src="https://github.com/user-attachments/assets/bee79f7b-1984-4206-958c-e007586a774c" />
 
 
 ### Built With
 
-ABCD is being written using the languages.
+ABCD is written and maintained using the following core technologies:
 * [PHP](https://www.php.net/)
-* [CISIS](https://wiki.bireme.org/pt/index.php/CISIS)
+* [CISIS](https://github.com/ABCD-DEVCOM/ABCD) (Legacy core engine discontinued by BIREME, now actively maintained and developed by the ABCD Community)
 * [HTML](https://en.wikipedia.org/wiki/HTML)
 * [JavaScript](https://en.wikipedia.org/wiki/JavaScript)
 
@@ -98,13 +83,9 @@ ABCD is supported on **Windows** and **Linux**
 [Download all code from GitHub ABCD-DEVCOM / ABCD](https://github.com/ABCD-DEVCOM/ABCD)  
  
 
-Installation prerequisites and installation procedure vary by version and by installed components.
-See [Installation folder](https://github.com/ABCD-DEVCOM/ABCD/tree/master/zz_installation) for detailed instructions and material.
-Note that the ABCD downloads do not include software prerequisites
-
-[Download EmpWeb](https://github.com/ABCD-Community/EmpWeb)
-
-`EmpWeb` has additional prerequisites (SQL,Java). Details in the repository.
+Installation prerequisites and installation procedures vary by version.
+See the [Installation folder](https://github.com/ABCD-DEVCOM/ABCD/tree/master/zz_installation) for detailed instructions and material.
+Note that the ABCD downloads do not include third-party software prerequisites.
 
 
 
@@ -115,36 +96,34 @@ You can try the ABCD software on an online installation of the ABCD. All feature
 
 Our demo version is synchronized with the development in the Github repository, so there may be some bugs.
 
-We will soon make a more stable demo version available in parallel with development for comparison
+We will soon make a more stable demo version available in parallel with development for comparison.
 
-Instructions
+Instructions:
 To enter the modules, you shall follow the instructions below:
 
 
 ***ABCD – Administration*** – http://demo.abcd-community.org/
 
 _Rights: System Administrator, Database administrator, Database Operators, Loan administrator_
- ```
- User: abcd
- Password: adm
-  ```  
-  
-_Rights: Database administrator, Database Operators_
+
 ```
+
+User: abcd
+Password: adm
+
+```
+
+_Rights: Database administrator, Database Operators_
+
+```
+
 User: abcd
 Password: dboper
-```  
+
+```
 
  
-***ABCD – Public site*** – https://demo.abcd-community.org/site/
-
-***ABCD – Public site administrator*** – https://demo.abcd-community.org/site/admin
-
-_Rights: Administrator_
-```
-User: adm
-Password: x
- ```  
+***ABCD – OPAC (Public Interface)*** – https://demo.abcd-community.org/opac/
 
 _For more examples, please refer to the [Documentation](https://github.com/ABCD-DEVCOM/ABCD/blob/master/ABCofABCD_2.0f.pdf)_
 
@@ -152,11 +131,11 @@ _For more examples, please refer to the [Documentation](https://github.com/ABCD-
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **create value and are greatly appreciated**.
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/ABCD`)
-3. Change or create a file (`git add [files changed]  or : git add . `(f or all files))
+3. Change or create a file (`git add [files changed]` or `git add .` for all files)
 4. Commit your Changes (`git commit -m 'Add some ABCD Feature'`)
 5. Push to the Branch (`git push -u origin master`)
 6. Open a Pull Request
@@ -169,13 +148,13 @@ Contributions are what make the open source community such an amazing place to b
 <!-- LICENSE -->
 ## License
 
-ABCD is an application of software released to the public according to the terms of the [LGPLv3](https://www.gnu.org/licenses/lgpl-3.0.en.html) license, taking into consideration the disclaimers to protect BIREME and other institutions participants on any liability regarding the access, development, distribution, use, merchantability and marketing related to the software;
+ABCD is an application released to the public according to the terms of the [LGPLv3](https://www.gnu.org/licenses/lgpl-3.0.en.html) license, taking into consideration the disclaimers to protect the community and participating institutions from any liability regarding the access, development, distribution, use, merchantability and marketing related to the software.
 
 ABCD reuses several other libraries and modules. These dependencies retain their original licenses.
 
 For those interested in more information about the licensing, check http://www.opensource.org/licenses/alphabetical.
 
-For a comparisom between software licenses, check http://en.wikipedia.org/wiki/Comparison_of_free_software_licences.
+For a comparison between software licenses, check http://en.wikipedia.org/wiki/Comparison_of_free_software_licences.
 
 
 
@@ -188,4 +167,4 @@ Project Link: [https://github.com/ABCD-DEVCOM/ABCD/](https://github.com/ABCD-DEV
 
 Website: https://abcd-community.org/
 
-
+```
