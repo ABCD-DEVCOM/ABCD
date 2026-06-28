@@ -1089,4 +1089,4 @@ function PrepararFormato()
 		}
 	});
 </script>
-<script src="editor/js/clear_field.js"></script>
+<script src="../dataentry/editor/js/clear_field.js"></script>

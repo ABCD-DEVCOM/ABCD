@@ -5,6 +5,7 @@
 20220214 fho4abcd Change DOCUMENT_ROOT in $db_path, better indicator for ROOT, allow %path_database%, don't show dr_path for explorar
 20220224 fho4abcd Function CopiarImagen: fixed form->supplied form + always close on trigger
 20260522 rogercgui Critical fix: Added missing $db_path definition in the file, which is essential for determining the correct directory paths for file operations. This variable is typically defined in the included config.php, but it was not being set in this script, leading to errors when trying to access or manipulate files. The fix ensures that $db_path is properly initialized from the configuration, allowing the script to function correctly when handling file uploads and directory exploration.
+20260627 rogercgui Enhancement: Improved the file upload process to handle Windows-style paths more robustly. The script now uses json_encode to safely encode the source path, preventing issues with backslashes and special characters in file paths. This change ensures that file uploads work correctly across different operating systems, particularly when dealing with Windows paths that may contain backslashes or other problematic characters.
 */
 
 session_start();
@@ -206,7 +207,7 @@ if (trim($source) != "") {
 		echo "<input type=hidden name=folder>\n";
 		echo "</form>";
 
-		// CORREÇÃO: Fechar as tags HTML para a tela não ficar com visual quebrado
+		// Close the HTML tags so that the screen doesn’t look broken
 		echo "</div></div></body></html>";
 
 		die;
@@ -214,7 +215,7 @@ if (trim($source) != "") {
 		//==============function=========================
 		function Encabezamiento()
 		{
-			global $tag, $msgstr, $arrHttp, $targetForm;
+			global $tag, $msgstr, $arrHttp, $targetForm, $source;
 
 		?>
 			<title><?php echo $msgstr["explore"]; ?></title>
@@ -225,14 +226,21 @@ if (trim($source) != "") {
 						var field = window.opener.document.<?php echo $targetForm; ?>.<?php echo $tag ?>;
 						var campo = field.value;
 
-						// Se for um Textarea (Repetível/Múltiplo), anexa com quebra de linha
+						var relativePath = <?php echo json_encode($source); ?>;
+						var finalImg = Img;
+
+						if (relativePath !== "" && finalImg.indexOf(relativePath) !== 0) {
+							finalImg = relativePath + finalImg;
+						}
+
+						// If it is a Textarea (Repeatable/Multiple), append with a line break
 						if (field.tagName === 'TEXTAREA') {
-							if (campo === "") field.value = Img;
-							else field.value = campo + "\n" + Img;
+							if (campo === "") field.value = finalImg;
+							else field.value = campo + "\n" + finalImg;
 						} else {
-							// Se for um Input (Simples/Único), apenas substitui o valor
-							field.value = Img;
-							self.close(); // Fecha automaticamente porque só cabe um arquivo!
+							// If it is an Input (Simple/Single), it simply replaces the value
+							field.value = finalImg;
+							self.close();
 						}
 					}
 				<?php } ?>
@@ -332,9 +340,9 @@ if (trim($source) != "") {
 						var formData = new FormData();
 						formData.append('arquivo_upload_ajax', file);
 
-						formData.append('base', '<?php echo isset($arrHttp["base"]) ? $arrHttp["base"] : ""; ?>');
-						formData.append('path', '<?php echo isset($arrHttp["path"]) ? $arrHttp["path"] : ""; ?>');
-						formData.append('source', '<?php echo isset($arrHttp["source"]) ? $arrHttp["source"] : ""; ?>');
+						formData.append('base', <?php echo isset($arrHttp["base"]) ? json_encode($arrHttp["base"]) : '""'; ?>);
+						formData.append('path', <?php echo isset($arrHttp["path"]) ? json_encode($arrHttp["path"]) : '""'; ?>);
+						formData.append('source', <?php echo isset($arrHttp["source"]) ? json_encode($arrHttp["source"]) : '""'; ?>);
 
 						var container = document.getElementById('uploadProgressContainer');
 						var bar = document.getElementById('uploadProgressBar');
@@ -343,7 +351,7 @@ if (trim($source) != "") {
 						container.style.display = 'block';
 
 						var xhr = new XMLHttpRequest();
-						
+
 						xhr.open('POST', window.location.href, true);
 
 						xhr.upload.onprogress = function(e) {
@@ -365,9 +373,16 @@ if (trim($source) != "") {
 										if (res.status === 'success') {
 											status.innerText = '<?php echo $msgstr["upload_complete"] ?? "Upload complete! Updating folder..."; ?>';
 											bar.style.background = '#005aa9';
+
+											<?php if (isset($tag) and trim($tag) != "") { ?>
+												if (typeof CopiarImagen === 'function') {
+													CopiarImagen(res.file);
+												}
+											<?php } ?>
+
 											setTimeout(function() {
 												window.location.reload();
-											}, 600);
+											}, 800);
 										} else {
 											alert("<?php echo $msgstr['server_error'] ?? 'Server Error: '; ?>" + res.message);
 											container.style.display = 'none';
