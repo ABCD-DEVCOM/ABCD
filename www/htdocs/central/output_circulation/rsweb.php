@@ -265,7 +265,7 @@ global $msgstr,$arrHttp,$db_path,$xWxis,$tagisis,$Wxis,$wxisUrl,$lang_db,$Pft_ni
 
 include("../common/header.php");
 
-include("../common/institutional_info.php");
+//include("../common/institutional_info.php");
 include("../circulation/scripts_circulation.php");
 
 switch ($arrHttp["code"]){
@@ -302,10 +302,10 @@ switch ($arrHttp["code"]){
 	</div>
 	<div class="actions">
 		<?php 
-		$backtoscript="../circulation/estado_de_cuenta.php?reserve=S";
-		include "../common/inc_back.php"; ?>
+		//$backtoscript="../circulation/estado_de_cuenta.php?reserve=S";
+		//include "../common/inc_back.php"; ?>
 	</div>
-<?php include("../circulation/submenu_prestamo.php");?>
+<?php //include("../circulation/submenu_prestamo.php");?>
 </div>
 
 <div class="middle form">
@@ -585,6 +585,3 @@ function Prestar(inventario,usuario,base,prefijo,formato,copies){
 	document.prestar.submit()
 }
 </script>
-
-
-<?php include '../common/footer.php';?>
