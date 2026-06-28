@@ -62,9 +62,14 @@ include("../acquisitions/javascript.php");
 			mydiv.style.display = 'block';
 			return "N";
 		}
-		document.getElementById('middleForm').style.display = 'none'
-		document.getElementById('my_id').style.display = 'block'
-		mydiv.style.display = 'none';
+
+		var elMiddle = document.getElementById('middleForm');
+		if (elMiddle) elMiddle.style.display = 'none';
+
+		var elMyId = document.getElementById('my_id');
+		if (elMyId) elMyId.style.display = 'block';
+
+		if (mydiv) mydiv.style.display = 'none';
 	}
 
 	function RefrescarPicklist(tabla, Ctrl, valor) {
@@ -87,7 +92,7 @@ include("../acquisitions/javascript.php");
 		msgwin.focus()
 	}
 
-	//SE ACTUALIZA EL SELECT CON LA TABLA ACTUALIADA
+	// THE SELECT STATEMENT IS UPDATED WITH THE UPDATED TABLE
 	ValorTabla = ""
 	SelectName = ""
 	ValorOpcion = ""
@@ -242,7 +247,7 @@ include "../common/inc_div-helper.php";
 				<?php echo $msgstr["dispcopies"]; ?>
 			</a>
 
-			<!--	<input type=checkbox checked value=Y  name=createloans>
+			<!--<input type=checkbox checked value=Y  name=createloans>
 		<label for="regCopies">
 			<strong><?php echo $msgstr["regcopies"] ?></strong>
 		</label>-->
@@ -327,7 +332,7 @@ function LeerFst($base)
 			break;
 		}
 	}
-	// Si no se ha definido el tag para el número de control en la fdt, se produce un error
+	// If the tag for the control number has not been defined in the FDT, an error occurs
 	if ($tag_ctl == "") {
 		$error = "missingctl";
 	}
@@ -364,16 +369,23 @@ function LeerFdt($base)
 ?>
 
 <script type="text/javascript">
-	const textarea = document.querySelector('textarea')
-	textarea.onkeypress = (event) => {
-		const keyCode = event.keyCode
-		if (keyCode === 13) {
-			document.getElementById("copies").disabled = true;
-			console.log('Field number of copies has been blocked!');
-		}
+	const textarea = document.querySelector('textarea');
+	// Protection: Only injects the event if there is a textarea on the screen
+	if (textarea) {
+		textarea.onkeypress = (event) => {
+			const keyCode = event.keyCode;
+			if (keyCode === 13) {
+				var copiesInput = document.getElementById("copies");
+				if (copiesInput) copiesInput.disabled = true;
+				console.log('Field number of copies has been blocked!');
+			}
+		};
 	}
 
-	document.forma1.tag200[2].disabled = true;
+	// Protection: Only disables the tag200 array if it exists on the page
+	if (document.forma1 && document.forma1.tag200 && document.forma1.tag200.length > 2) {
+		document.forma1.tag200[2].disabled = true;
+	}
 
 	function CheckInventory(tag) {
 		// Function in the acquisitions/javascript.php file
