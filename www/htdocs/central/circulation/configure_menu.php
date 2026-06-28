@@ -6,7 +6,7 @@
  * @desc:      Configuration menu
  * @author:    Guilda Ascencio
  * @since:     20091203
- * @version:   2.2
+ * @version:   3.8.4
  *
  * changelog:
  * 2026-06-07 rogercgui Refactored circulation configure menu to use Font Awesome icons instead of image tags for better consistency and maintainability.
