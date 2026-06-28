@@ -1,5 +1,6 @@
 UNICODE=0
+CISIS_VERSION=16-60
 SUBFIELDS_INLINE=N
-ROOT=%path_database%biblo/collection/
-COLLECTION=%path_database%biblo/collection/
+ROOT=%path_database%isadg/
+COLLECTION=%path_database%isadg/
 DIRTREE_EXT=*.def,*.iso,*.png,*.gif,*.jpg,*.pdf,*.xrf,*.mst,*.n01,*.n02,*.l01,*.l02,*.cnt,*.ifp,*.fmt,*.fdt,*.pft,*.fst,*.tab,*.txt,*.par,*.html,*.zip,
