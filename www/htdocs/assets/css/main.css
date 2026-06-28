@@ -376,7 +376,79 @@ a.singleButton:hover {
     transform: translateY(-2px);
 }
 
-/* Estilos Específicos */
+
+/* BUTTONS WITH FONTAWESOME */
+
+.menuButton-fa {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 240px;
+    /* Standard width of the ABCD buttons */
+    min-height: 65px;
+    background-color: var(--abcd-white, #ffffff);
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    margin: 5px 15px 15px 0;
+    text-decoration: none !important;
+    /* Anula sublinhado padrão do link */
+    color: var(--abcd-steel-blue, #336699);
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    vertical-align: top;
+}
+
+.menuButton-fa:hover,
+.menuButton-fa:focus {
+    background-color: var(--abcd-gray-100, #f8f9fa);
+    border-color: var(--abcd-blue, #003366);
+    text-decoration: none !important;
+    /* Prevents the hover effect from causing the text to be underlined */
+}
+
+.menuButton-fa i {
+    font-size: 24px;
+    width: 50px;
+    /* Fixed space so that the icon does not push the text out of place */
+    text-align: center;
+    flex-shrink: 0;
+    color: inherit;
+}
+
+.menuButton-fa span {
+    font-size: 85%;
+    line-height: 1.3;
+    padding-right: 10px;
+    display: block;
+    float: none;
+    margin: 0;
+    width: auto;
+}
+
+/* SECTION TITLE */
+.homepage .mainBox .boxContent .sectionTitleIcons {
+    position: relative !important;
+    /* Anula o absolute do main.css */
+    top: auto !important;
+    display: flex !important;
+    align-items: center;
+    padding: 0 0 15px 0 !important;
+    width: 100%;
+}
+
+.homepage .mainBox .boxContent .sectionTitleIcons h1 {
+    margin: 0 !important;
+}
+
+/* Alignment of icons in section headings*/
+.loanSection .sectionTitleIcons i {
+    font-size: 24px;
+    margin-right: 10px;
+    color: inherit;
+}
+
+/* Specific Styles */
 a.singleButton {
     display: block;
     float: left;
@@ -1451,12 +1523,6 @@ a.CatexploreButton {
     background-color: var(--abcd-white);
 }
 
-a.origendatabaseButton {
-    background: url('../images/icon/basededatosorigen.png') no-repeat center;
-    background-size: 44px;
-    background-position: 10px;
-    background-color: var(--abcd-white);
-}
 
 /* --- 6.2. Ícones de Circulação --- */
 a.exploreButton {
@@ -1567,48 +1633,6 @@ a.reportsButton {
 
 a.reserveButton {
     background: url('../svg/main/main_book_clock_32_regular.svg') no-repeat left;
-    background-size: 44px;
-    background-position: 10px;
-    background-color: var(--abcd-white);
-}
-
-a.usersconfigureButton {
-    background: url('../images/icon/usersconfigure.png') no-repeat center;
-    background-size: 44px;
-    background-position: 10px;
-    background-color: var(--abcd-white);
-}
-
-a.userstypeButton {
-    background: url('../images/icon/userstype.png') no-repeat center;
-    background-size: 44px;
-    background-position: 10px;
-    background-color: var(--abcd-white);
-}
-
-a.itemstypeButton {
-    background: url('../images/icon/itemstype.png') no-repeat center;
-    background-size: 44px;
-    background-position: 10px;
-    background-color: var(--abcd-white);
-}
-
-a.currency_daysButton {
-    background: url('../images/icon/currency_days.png') no-repeat center;
-    background-size: 44px;
-    background-position: 10px;
-    background-color: var(--abcd-white);
-}
-
-a.calendarButton {
-    background: url('../images/icon/calendar.png') no-repeat center;
-    background-size: 44px;
-    background-position: 10px;
-    background-color: var(--abcd-white);
-}
-
-a.loanpolicyButton {
-    background: url('../images/icon/loanpolicy.png') no-repeat center;
     background-size: 44px;
     background-position: 10px;
     background-color: var(--abcd-white);
@@ -1751,10 +1775,6 @@ a.checkButton img {
     background: url('../images/icon/clean.png') no-repeat center;
 }
 
-a.discardButton img {
-    background: url('../images/icon/trashcan_full.png') no-repeat center;
-}
-
 a.copiesdbaddButton img {
     background: url('../images/icon/db_update.png') no-repeat center;
 }
@@ -1765,10 +1785,6 @@ a.purchaseorderButton img {
 
 a.receiptsButton img {
     background: url('../images/icon/receipts.png') no-repeat center;
-}
-
-a.homeButton img {
-    background: url('../../images/icon/home.png') no-repeat center;
 }
 
 
@@ -2233,18 +2249,6 @@ body:first-of-type .homepage .mainBox .boxContent .searchTitles .stInput input.t
 
 .homepage .mainBox .searchSection .sectionIcon {
     background: url('../images/search.png') no-repeat center;
-}
-
-.homepage .mainBox .orderSection .sectionIcon {
-    background: url('../images/icon/mainBox_titleSection.png') no-repeat center;
-}
-
-.homepage .mainBox .fascicleSection .sectionIcon {
-    background: url('../images/icon/mainBox_fascicleSection.png') no-repeat center;
-}
-
-.homepage .mainBox .maskSection .sectionIcon {
-    background: url('../images/icon/mainBox_maskSection.png') no-repeat center;
 }
 
 .homepage .mainBox .helpSection .sectionIcon {
