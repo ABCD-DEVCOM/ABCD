@@ -76,6 +76,8 @@ if ( (substr($db_path, strlen($db_path)-1,1) <> "/") AND (substr($db_path, strle
 // Construction of executable path and URL                             
 
 $app_path="central";                    // Folder with the administration module
+define('ABCD_CENTRAL_PATH', $ABCD_scripts_path . $app_path . '/');
+define('ABCD_CONTENT_PATH', $ABCD_scripts_path . 'content/');
 $wxis_exec="wxis".$exe_ext;                // name and extension of wxis executable
 $mx_exec="mx".$exe_ext;                    // name and extension of mx executable
 $msg_path=$db_path;                        // path where the message-files are stored, typical the database-directory
@@ -158,6 +160,12 @@ if (isset($_REQUEST["lang"])){
 if (isset($_SESSION["lang"])) $lang=$_SESSION["lang"];
 $_SESSION["lang"]=$lang;
 
+// After version 4, the language files are loaded using the LanguageManager class, which implements a cascading translation system allowing user overrides without modifying the core files. The priority is as follows:
+require_once ABCD_CENTRAL_PATH . 'common/LanguageManager.php';
+
+global $langManager;
+$langManager = new \ABCD\Common\LanguageManager(ABCD_CENTRAL_PATH, ABCD_CONTENT_PATH);
+
 // Default langue for the databases definition
 if (isset($def["DEFAULT_DBLANG"])){
 	$lang_db=$def["DEFAULT_DBLANG"];
@@ -233,11 +241,11 @@ if (file_exists(realpath(dirname(__FILE__)).DIRECTORY_SEPARATOR."config_extended
 	$charset="ISO-8859-1";
 }
 // Send characterset to the server. Note that the browser gets it via the html header.
-header('Content-type: text/html; charset='.$charset);
-
-if (session_status() != PHP_SESSION_NONE )  $_SESSION["meta_encoding"]=$meta_encoding;
-
-
+// Send characterset to the server ONLY if not in update mode
+if (!defined('ABCD_UPDATE_MODE')) {
+	header('Content-type: text/html; charset=' . $charset);
+}
+if (session_status() != PHP_SESSION_NONE)  $_SESSION["meta_encoding"] = $meta_encoding;
 
 
 if (isset($def["CISIS_VERSION"]) and $def["CISIS_VERSION"]!="16-60" and $def["CISIS_VERSION"]!="" ){
