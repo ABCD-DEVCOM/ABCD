@@ -37,7 +37,7 @@ function get_langtab () {
  	}
  	if (!file_exists($langtab_file)) {
         // Try absolute default language. 
- 		$langtab_file=dirname(__FILE__)."/../lang/00/lang.tab";
+ 		$langtab_file=dirname(__FILE__)."/../lang/en/lang.tab";
  	}
  	if (!file_exists($langtab_file)){
 		echo "</select></form></table><div><font color=red>".$msgstr["flang"]." ".$langtab_file."</font></div>";

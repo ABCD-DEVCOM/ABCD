@@ -1,96 +1,88 @@
 <?php
-/* Modifications
-20210430 fho4abcd Encode only the value, not the key (used by the code)
-20210430 fho4abcd Encode to UTF-8 only for UTF-8 and if the value is not UTF-8
-20210430 fho4abcd Optimize flow: coding activities only if the key is not present in $msgstr
-20210521 fho4abcd Language 00 located in central/lang
-*/
-/*
-Function:
-    Read a message file into associative array $msgstr
-    Requires $msg_tab for the message file name
-    Requires $msg_path, $db_path, $_SESSION["lang"] to select the file location
-    Requires $charset for ISO-8859-1/UTF-8 selection
-Usage: include "read_msg.php"
-Fileformat: lines with <key>=<message>
-*/
-/* Comments on coding issues
-- Strings may contain " and ' characters.
-  When present " confuses current javascript encoding. ' is not tested extensively but can fail
-  Conversion into html codes &#34;/&quot; and &#39;/&apos; can solve this
-  Effect on display: shows these strings in html:OK, in javascript alerts:NOTOK
-  In order to be safe: Conversion applied. Replacement is UTF-8 safe
 
-- A html page (or frame if used) can contain only 1 character encoding.
-  == developer conflict: The database can be in code X and the language files in code Y
+declare(strict_types=1);
 
-- ISO   language files can be used for ISO databases
-- UTF-8 language files can be used for UTF-8 databases.
-- ISO   language files can be converted to UTF-8 for working with UTF-8 databases
-  The reverse is practically impossible
+/**
+ * Centralized Message Reader for ABCD
+ * Loads translation files using a cascading fallback system.
+ * * Hierarchy Priority:
+ * 1. Base Language (en) in Central (Fallback to prevent blank screens)
+ * 2. Selected Language in Central (Factory default translations)
+ * 3. Selected Language in Content (User custom overrides)
+ */
 
-- ABCD has currently no option to enforce a language encoding driven by database encoding
+global $msg_tab, $msgstr, $charset, $ABCD_scripts_path;
 
-- Files do not have an indicator of their encoding (and may use mixed encodings).
-  A user indicator (like a filename with suffix "utf8") is not (yet) trusted in this code release
-*/
+// Ensure $msgstr is initialized as an array
+if (!isset($msgstr) || !is_array($msgstr)) {
+    $msgstr = [];
+}
 
-global $lang,$charset;
-if (isset($msg_path) and $msg_path!="")
-	$path=$msg_path;
-else
-	$path=$db_path;
+// If no specific file is requested by the parent script, abort processing
+if (!isset($msg_tab) || empty($msg_tab)) {
+    return;
+}
 
-// Process the language specific file
-$a=$path."lang/".$lang."/$msg_tab";
-if (file_exists($a)) {
-	$fp=file($a);
-	foreach($fp as $var=>$value){
-        if (trim($value)!="") {
-            $m=explode('=',$value,2);
-            $key=trim($m[0]);
-            if (!isset($msgstr[$key]) and isset($m[1]) and trim($m[1]!="")) {
-                $value=$m[1];
-                $value=str_replace('"','&quot;',$value);
-                $value=str_replace("'",'&apos;',$value);
-                if ($charset=="UTF-8") {
-                    if (!mb_check_encoding($value,'UTF-8')) {
-                        $value=mb_convert_encoding($value,'UTF-8','ISO-8859-1');
-                    }
-                }
-                $msgstr[$key]=trim($value);
-            }
+// Define paths (fallback to directory traversal if constants are missing)
+$centralPath = defined('ABCD_CENTRAL_PATH') ? ABCD_CENTRAL_PATH : dirname(__DIR__) . DIRECTORY_SEPARATOR;
+$contentPath = defined('ABCD_CONTENT_PATH') ? ABCD_CONTENT_PATH : dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'content' . DIRECTORY_SEPARATOR;
+
+$currentLang = $_SESSION['lang'] ?? 'en';
+$baseLang = 'en'; // Changed from '00' to 'en' per architectural decision
+$systemCharset = $charset ?? 'ISO-8859-1';
+
+if (!function_exists('loadTranslationFile')) {
+    /**
+     * Reads a .tab file and safely merges its contents into the target array.
+     */
+    function loadTranslationFile(string $filePath, array &$targetArray, string $targetCharset): void
+    {
+        if (!file_exists($filePath)) {
+            return;
         }
-	}
-}
-// Process the fallback file (language 00)
-// Fullpath is used to get correct error message if missing
-$a=dirname(__FILE__)."/00/$msg_tab";
-if (file_exists($a)) {
-	$fp=file($a);
-	foreach($fp as $var=>$value){
-		if (trim($value)!="") {
-			$m=explode('=',$value,2);
-			$key=trim($m[0]);
-            if (!isset($msgstr[$key]) and isset($m[1]) and trim($m[1]!="")) {
-                $value=$m[1];
-                $value=str_replace('"','&quot;',$value);
-                $value=str_replace("'",'&apos;',$value);
-                if ($charset=="UTF-8") {
-                    if (!mb_check_encoding($value,'UTF-8')) {
-                        $value=mb_convert_encoding($value,'UTF-8','ISO-8859-1');
-                    }
-                }
-                $msgstr[$key]=trim($value);
+
+        // Read file ignoring newlines and empty lines for speed
+        $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if ($lines === false) {
+            return;
+        }
+
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            // Skip comments and invalid lines
+            if (str_starts_with($line, '#') || !str_contains($line, '=')) {
+                continue;
             }
-		}
-	}
-} else {
-    // issue an error message. This is in the top area, maybe before any other output
-    $langerrormessage="<body><div><font color=red>";
-    $langerrormessage.="Fallback language table <b>$a</b> not present";
-    $langerrormessage.="</font></div>";
-    echo $langerrormessage;
+
+            // Split on the first '=' to allow equal signs in the translation text
+            [$key, $value] = explode('=', $line, 2);
+            $key = trim($key);
+            $value = trim($value);
+
+            // Legacy HTML entities encoding ported from the original script
+            $value = str_replace('"', '&quot;', $value);
+            $value = str_replace("'", '&apos;', $value);
+
+            // Character set normalization
+            if ($targetCharset === 'UTF-8' && !mb_check_encoding($value, 'UTF-8')) {
+                $value = mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1');
+            }
+
+            // Merge key into the global array. 
+            // If the key already exists, it is intentionally overwritten (Cascade effect)
+            $targetArray[$key] = $value;
+        }
+    }
 }
-    
-?>
+
+// 1. BASE LOAD: Always load English first to guarantee 100% term coverage
+loadTranslationFile($centralPath . "lang/{$baseLang}/{$msg_tab}", $msgstr, $systemCharset);
+
+// 2. CORE LOAD: Load the selected factory language, overwriting English terms
+if ($currentLang !== $baseLang) {
+    loadTranslationFile($centralPath . "lang/{$currentLang}/{$msg_tab}", $msgstr, $systemCharset);
+}
+
+// 3. CUSTOM LOAD: Load user modifications from the 'content' directory, overwriting Core
+loadTranslationFile($contentPath . "lang/{$currentLang}/{$msg_tab}", $msgstr, $systemCharset);
