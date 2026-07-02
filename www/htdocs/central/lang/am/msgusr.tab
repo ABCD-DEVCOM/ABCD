@@ -1,0 +1,4 @@
+1=Record cannot be deleted. It is linked to the copies or loanobjects database
+2=Record cannot be deleted. It is linked to the loanobjects database.
+3=Record cannot be deleted. It is linked to the trans database.
+4=User cannot be deleted. He/she has pending loans.

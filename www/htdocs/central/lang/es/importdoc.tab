@@ -1,0 +1,11 @@
+confailed=Error de conversión!
+doclocked=El documento no se creó. Este puede estar bloqueado!
+documentfield=Documento copiado en el campo
+filetoobig=El archivo es muy grande!
+fullindexinfo=Por favor generar el archivo invertido completo!
+importdocfail=Falló la importación del documento!
+install=Por favor instale tika.jar o pdftohtml.exe en la carpeta  cgi-bin
+m_importdoc=Importar documento
+uploaderror=Lo siento, el tamaño del archivo sobrepasa el limite PHP!
+uploadfile=Subir archivo
+urlfield=La URL se agrega al campo

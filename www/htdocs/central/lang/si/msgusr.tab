@@ -1,0 +1,4 @@
+001=Record cannot be deleted. Is linked to copies or loanobjects databases
+002=Record cannot be deleted. Is linked to loanobjects database
+003=Record cannot be deleted. Is linked to trans database
+004=User cannot be deleted. Has pending loans

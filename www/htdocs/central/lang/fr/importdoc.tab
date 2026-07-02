@@ -1,0 +1,15 @@
+confailed=Echec de la conversion !
+convertermissing=convertisseur manquant dans le dossier cgi-bin
+doclocked=Le document n'est pas créé. Il pourrait être verrouillé !
+documentfield=Document copié dans le champ
+explorar=explorer
+filetoobig=le fichier est trop gros !
+fnl=fichier non chargé
+fullindexinfo=Veuillez regénérer entièrement le fichier inversé !
+importdocfail=Echec de l'importation du document !
+install=Veuillez installer soit tika.jar ou pdftohtml.exe dans le dossier cgi-bin
+m_importdoc=Importer le document
+nomultiple=Ne pas enregistrer le document dans plusieurs notices
+uploaderror=Désolé, la taille du fichier dépasse celle autorisée par PHP !
+uploadfile=Téléchargé le fichier
+urlfield=L'URL est ajouté au champ
