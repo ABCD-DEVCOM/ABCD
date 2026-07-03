@@ -383,7 +383,7 @@ function PrepararFormato()
 										$wks_a = "";
 									else
 										$wks_a = $arrHttp["wks_a"];
-									if ($t[7] != "I") echo "<a  class=\"bt-fdt\" href='javascript:Campos(document.forma1.tag$tag,$ixicampo,\"$fe\",\"$Repetible\",\"$help_url\",\"" . $wks_a . "\")'><i class=\"fas fa-edit\"></i></a>";
+									if ($t[7] != "I") echo "<a title=\"." . $msgstr['edit_occ'] . "\" class=\"bt-fdt\" href='javascript:Campos(document.forma1.tag$tag,$ixicampo,\"$fe\",\"$Repetible\",\"$help_url\",\"" . $wks_a . "\")'><i class=\"fas fa-plus\"></i></a>";
 								} else {
 									// Fixed fields of type Matrix (M) and LDR: Edit button (and Add button for M if Repetible)
 									if ($tipo == "M") {
@@ -427,7 +427,7 @@ function PrepararFormato()
 									echo "<a class=\"tooltip\"><i class=\"far fa-life-ring\"></i><span> " . $hlp_tip[$tag] . "</span></a>";
 								if ($help == 1 or $help_url != "") {
 									if ($help_url == "") {
-										if ($t[7] != "I") echo "<a tabindex='-1' class=\"bt-fdt bt-fdt-question\" href=javascript:Ayuda($tag)><i class=\"fas fa-question\"></i></a>";
+										if ($t[7] != "I") echo "<a title=\"" . $msgstr['help'] . "\" tabindex='-1' class=\"bt-fdt bt-fdt-question\" href=javascript:Ayuda($tag)><i class=\"fas fa-question\"></i></a>";
 									} else {
 										if ($t[7] != "I") echo "<a tabindex='-1' class=\"bt-fdt bt-fdt-question\" href='javascript:msgh=window.open(\"$help_url\",\"help\",\"width=600,height=400\");msgh.focus()'><i class=\"fas fa-question\"></i></a>";
 									}
