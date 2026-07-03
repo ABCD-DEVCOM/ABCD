@@ -398,19 +398,27 @@ if (!isset($_SESSION["login"]) or $_SESSION["profile"] != "adm") {
 }
 //$Permiso=$_SESSION["permiso"];
 
-//SE LEE LA LISTA DE MENSAJES DISPONIBLEE
-$l = $msg_path . 'lang/';
-if ($handle = opendir($l)) {
-	$lang_dir = "";
-	while (false !== ($entry = readdir($handle))) {
-		if ($entry != "." and $entry != ".." and is_dir($l . $entry)) {
-			if ($lang_dir == "")
-				$lang_dir = $entry;
-			else
-				$lang_dir .= ";" . $entry;
-		}
-	}
-	closedir($handle);
+// SE LEE LA LISTA DE MENSAJES DISPONIBLES (Modernizado via LanguageManager)
+global $langManager;
+$lang_dir = "";
+
+if (isset($langManager)) {
+    // Carrega a lista oficial de idiomas usando o inglês como fallback
+    $availableLangs = $langManager->loadTranslations('lang.tab', 'en');
+    $langKeys = [];
+    
+    foreach ($availableLangs as $code => $name) {
+        if ($code !== 'lang') {
+            $langKeys[] = $code; // Guarda apenas a sigla (ex: pt, en, es)
+        }
+    }
+    // Transforma o array em uma string separada por ponto-e-vírgula (ex: "en;es;pt")
+    $lang_dir = implode(';', $langKeys);
+}
+
+// Fallback de segurança caso a leitura falhe
+if (empty($lang_dir)) {
+    $lang_dir = "en;es;pt";
 }
 
 // Databases list
