@@ -758,3 +758,4 @@ ff_no_categories=No category configured in this file. Add the first one using th
 ff_add_category_to=Add New Category to
 ff_add_category=Add Category
 ff_fdt=FDT
+edit_occ=Edit occurrence(s) and subfields
