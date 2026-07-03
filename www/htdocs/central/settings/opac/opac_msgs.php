@@ -68,7 +68,7 @@ if (file_exists($a)) {
 	}
 }
 
-$a=$path."lang/00/opac.tab";
+$a=$path."lang/en/opac.tab";
 if (file_exists($a)) {
 	$fp=file($a);
 	foreach($fp as $var=>$value){
