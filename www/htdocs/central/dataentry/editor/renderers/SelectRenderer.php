@@ -135,8 +135,7 @@ class SelectRenderer {
             }
             echo ">\n";
             if ($selected == false) {
-                echo "<option disabled selected>-" . $msgstr['seloption'] . "-</option>";
-            }
+                echo "<option value=\"\" disabled selected>" . $msgstr["seloption"] . "</option>\n";            }
             $check = "";
             foreach ($opc as $key1 => $key2) {
                 $opcVal = $key2;

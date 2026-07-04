@@ -1,5 +1,5 @@
 <?php
-	/*
+/*
 20210914 fho4abcd modified size of popup window for upload
 20220116 fho4abcd modified size of popup window for capturaclaves
 20220202 fho4abcd modified size of popup window for picklist
@@ -18,7 +18,7 @@
 20260617 rogercgui Fix login undefined error in PHP 8.1+ when session variable is not set (e.g. when session expires and user tries to save a record)
 */
 
-	if (!isset($_SESSION["permiso"])) {
+if (!isset($_SESSION["permiso"])) {
 	header("Location: ../common/error_page.php");
 	die;
 }
@@ -388,19 +388,28 @@ function CancelarActualizacion(){
 							case "select-one":
 								break;
 							case "select-multiple":
-								Ctrl = eval("document.forma1." + nombre)
-								for (ixsel = 0; ixsel < Ctrl.length; ixsel++)
+								Ctrl = eval("document.forma1." + nombre);
+								for (ixsel = 0; ixsel < Ctrl.length; ixsel++) {
 									if (Ctrl.options[ixsel].selected) {
-										if (VC[nombre] == "undefined") {
+
+										// Ignore options whose value is explicitly empty (placeholder)
+										if (Ctrl.options[ixsel].value === "") {
+											Ctrl.options[ixsel].selected = false;
+											continue;
+										}
+
+										// Improved validation for 'undefined'
+										if (typeof VC[nombre] === "undefined" || VC[nombre] == "undefined") {
 											VC[nombre] = "S";
 											ValorCapturado = nombre + "_" + Ctrl.options[ixsel].value;
-											Ctrl.options[ixsel].selected = false
+											Ctrl.options[ixsel].selected = false;
 										} else {
 											ValorCapturado = ValorCapturado + "\n" + nombre + "_" + Ctrl.options[ixsel].value;
-											Ctrl.options[ixsel].selected = false
+											Ctrl.options[ixsel].selected = false;
 										}
 									}
-								break
+								}
+								break;
 						}
 					}
 				}
