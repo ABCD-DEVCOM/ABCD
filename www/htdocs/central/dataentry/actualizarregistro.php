@@ -4,6 +4,7 @@
 20220711 fho4abcd Use $actparfolder as location for .par files
 20230106 fho4abcd Use div-helper, improve human readability, removed trailing \n before explosion of value
 20260324 rogecgui Fix PHP 8 bug in CodificaSubCampos: prevent empty delimiter from swallowing the first character of a field
+20260707 rogercgui Fix collumn width in the output of duplicate validation;
 */
 
 
@@ -66,32 +67,54 @@ global $arrHttp,$db_path,$Wxis,$xWxis,$wxisUrl,$fdt,$msgstr,$def,$actparfolder;
 }
 
 /*====================================================*/
-function CodificaSubCampos($campo,$numsubc,$subc,$delimsc){
-$valores=explode("\n",$campo);
-$salida="";
- 	foreach ($valores as $lin){
-		$lin=trim($lin);
-		if($lin!=""){
- 			for ($isc=0;$isc<strlen($subc);$isc++){
-   				$delim=substr($delimsc,$isc,1);
-   				if ($isc==0){
-					if (substr($subc,$isc,1)!=" " and substr($subc,$isc,1)!="_") {
-				    	$lin='^'.substr($subc,$isc,1).$lin;
-					}
-   				}else{
-                    if ($delim != "") {  
-                        $pos = strpos($lin, $delim);
-                        if (is_integer($pos)) {
-                            $lin = substr($lin, 0, $pos) . '^' . substr($subc, $isc, 1) . trim(substr($lin, $pos + 1));
+function CodificaSubCampos($campo, $numsubc, $subc, $delimsc)
+{
+    $valores = explode("\n", $campo);
+    $salida = "";
+
+    foreach ($valores as $lin) {
+        $lin = trim($lin);
+
+        if ($lin != "") {
+            for ($isc = 0; $isc < strlen($subc); $isc++) {
+                $delim = substr($delimsc, $isc, 1);
+                $letra_subc = substr($subc, $isc, 1);
+
+                if ($isc == 0) {
+                    if ($letra_subc != " " && $letra_subc != "_") {
+                        // Avoid duplicating the prefix of the first subfield if it is already filled in
+                        if (substr($lin, 0, 2) !== '^' . $letra_subc) {
+                            $lin = '^' . $letra_subc . $lin;
                         }
                     }
-   				}
+                } else {
+                    if ($delim != "") {
+                        $marcador = '^' . $letra_subc;
 
-  			}
-	  		$salida=$salida."\n".$lin;
-		}
- 	}
- 	return $salida;
+                        // CRITICAL: Only attempt to convert the delimiter character (e.g. “(”) 
+                        // if the subfield marker (e.g. “^r”) does NOT YET exist in the string.
+                        if (strpos($lin, $marcador) === false) {
+
+                            $pos = strpos($lin, $delim);
+
+                            if ($pos !== false) {
+                                $lin = substr($lin, 0, $pos) . $marcador . trim(substr($lin, $pos + 1));
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Generates the output by fixing the original bug that left a \n at the start of the string
+            if ($salida === "") {
+                $salida = $lin;
+            } else {
+                $salida .= "\n" . $lin;
+            }
+        }
+    }
+
+    return $salida;
 }
 
 /*====================================================*/
