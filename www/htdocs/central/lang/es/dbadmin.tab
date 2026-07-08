@@ -414,3 +414,5 @@ ff_no_categories=Ninguna categoría configurada en este archivo. Añada la primera
 ff_add_category_to=Añadir Nueva Categoría al
 ff_add_category=Añadir Categoría
 ff_fdt=FDT
+empty_dir=El directorio seleccionado está vacío.
+upload_files_first=Por favor, suba archivos primero.

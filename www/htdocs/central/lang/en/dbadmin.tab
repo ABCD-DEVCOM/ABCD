@@ -759,3 +759,5 @@ ff_add_category_to=Add New Category to
 ff_add_category=Add Category
 ff_fdt=FDT
 edit_occ=Edit occurrence(s) and subfields
+empty_dir=The selected directory is empty.
+upload_files_first=Please upload files first.
