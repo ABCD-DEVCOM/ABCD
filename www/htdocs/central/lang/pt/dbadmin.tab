@@ -732,3 +732,5 @@ ff_add_category_to=Adicionar Nova Categoria ao
 ff_add_category=Adicionar Categoria
 ff_fdt=FDT
 edit_occ=Editar subcampos
+empty_dir=O diret?rio selecionado est? vazio.
+upload_files_first=Fa?a o upload de arquivos primeiro.

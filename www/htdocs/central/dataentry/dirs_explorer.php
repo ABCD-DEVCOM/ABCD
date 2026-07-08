@@ -19,7 +19,6 @@ include("../common/get_post.php");
 include("../config.php");
 //foreach ($arrHttp as $var=>$value) echo "$var=$value<br>";
 
-include("../config.php");
 
 // =========================================================================
 // BUILT-IN AJAX UPLOAD ENGINE (Path + Source Correction)

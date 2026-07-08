@@ -195,11 +195,11 @@ global $arrHttp,$img_path,$msgstr,$targetForm;
 			     {$i=2;
 			     Encabezamiento();
 			   }
-				// CORREÇÃO: Avisa visualmente quando o diretório estiver vazio
+
 				if (count($turinys["tipas"]) <= 2 && $root) {
 					echo "<div style='text-align:center; padding: 40px; color:#999;'>";
 					echo "<i class='far fa-folder-open fa-3x'></i><br><br>";
-					echo "O diretório selecionado está vazio.<br><small>Faça o upload de arquivos primeiro.</small></div>";
+					echo $msgstr["empty_dir"] . "<br><small>" . $msgstr["upload_files_first"] . "</small></div>";
 				}
 
 	           for ($i;$i<count($turinys["tipas"]);$i++)
