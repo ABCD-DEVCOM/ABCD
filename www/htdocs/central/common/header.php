@@ -19,6 +19,8 @@ else
 
 $htmllang = "";
 if (isset($lang)) $htmllang = $lang;
+
+echo abcd_run_hook('abcd_header_end', '');
 ?>
 <!DOCTYPE html>
 <html lang=<?php echo $lang; ?>>

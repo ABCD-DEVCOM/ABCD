@@ -172,6 +172,8 @@ if (in_array($current_script, $allowed_scripts) && $config_show_lang == "Y") {
 
 <?php
 
+echo abcd_run_hook('abcd_footer_end', '');
+
 if ((!isset($def["CHECK_VERSION"])) || ($def["CHECK_VERSION"] != "N")) {
 	if (isset($_SESSION["permiso"])) { // Verifies if the user is logged in
 		if (isset($update_info) && $update_info['update_available']): ?>
