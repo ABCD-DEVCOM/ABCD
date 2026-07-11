@@ -1,0 +1,37 @@
+F|1|ID|0|0|||AI||5|||CN_|v1|v1||0||0|0|||
+F|5|Tipo de obra literária|0|0|||R|1|3|P|tipoliteratura.tab||||S|0||0|0|||
+F|6|Nível Bibliográfico|0|0|||R|1|2|P|nivelbiblio.tab||||as|0||0|0|||
+F|94|Status da solicitação|0|0|||S|||P|status.tab|||||0||0|0|||
+F|100|Data da solicitação|0|0|||RO||8|||||||0||0|0|||
+TAB||Publicação solicitada|0|0||||||||||||0||0|0|||
+F|10|Autor do artigo/capítulo|0|0|||X||70|||||||0||0|0|||
+F|12|Título do artigo/capítulo|0|0|||X||70|||||||0||0|0|||
+F|16|Autor do livro/tese|0|0|||X||70|||||||0||0|0|||
+F|18|Título da tese/livro|0|0|||X||70|||||||0||0|0|||
+F|30|Título da revista|0|0|||X||70|||||||0||0|0|||
+F|31|Volume da revista|0|0|||X||10|||||||0||0|0|||
+F|32|N.º da publicação periódica|0|0|||X||10|||||||0||0|0|||
+F|20|Primeira Página|0|0|||X||10|||||||0||0|0|||
+F|21|Última página|0|0|||X||10|||||||0||0|0|||
+F|64|Ano de publicação|0|0|||X||4|||||||0||0|0|||
+F|65|Edição|0|0|||X||10|||||||0||0|0|||
+TAB||Dados do solicitante|0|0||||||||||||0||0|0|||
+F|510|Nome|1|0|||X||70|||||||0||0|0|||
+F|630|ID|0|0|||X||10|||||||0||0|0|||
+F|512|Telefone|0|1|||X|2|12|||||||0||0|0|||
+F|520|Categoria|0|0|||S|||P|categoria.tab|||||0||0|0|||
+F|528|E-mail|0|0|||X||70|||||||0||0|0|||
+F|68|Observações sobre o solicitante|0|0|||X|3|70|||||||0||0|0|||
+TAB||Status da solicitação|0|0||||||||||||0||0|0|||
+F|69|Nota interna sobre a solicitação|0|0|||X|3|70|||||||0||0|0|||
+F|98|Data do manuseio|0|0|||D||10|||||||0||0|0|||
+F|99|Data do processamento|0|0|||ISO||8|||||||0||0|0|||
+F|938|URL do documento enviado|0|1|||X||70|||||||0||0|0|||
+F|101|Data de conclusão do pedido|0|0|||D||10|||||||0||0|0|||
+F|102|Data de encerramento do processo|0|0|||ISO||8|||||||0||0|0|||
+F|530|Tópico|0|1|||X|3|70|||||||0||0|0|||
+F|900|Fonte de referência|0|0|||X||70|||||||0||0|0|||
+F|901|Solicitação transferida para|0|1|||X||70|||||||0||0|0|||
+F|902|Número da solicitação transferida|0|1|||X||20|||||||0||0|0|||
+F|936|Responsável por|0|0|||X||10|||||||0||0|0|||
+F|998|Data da última modificação|0|1|||OD|3|20|||||||0||0|0|||

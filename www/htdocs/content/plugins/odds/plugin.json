@@ -1,0 +1,13 @@
+{
+  "name": "ODDS",
+  "slug": "odds",
+  "version": "2.1.0",
+  "description": "Online Document Delivery Service for ABCD",
+  "entry": "index.php",
+  "settings_page": "admin/settings.php",
+  "hooks": [
+    "central_menu",
+    "abcd_header_end"
+  ],
+  "config_bridge": true
+}

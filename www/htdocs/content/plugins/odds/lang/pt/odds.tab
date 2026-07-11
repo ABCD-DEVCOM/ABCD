@@ -1,0 +1,119 @@
+welcome=Olá! [dia] [mês] [ano] 
+title=Serviço de entrega de documentos on-line
+subtitle=Os campos marcados com * são obrigatórios
+name=Nome
+category=Categoria
+email=E-mail
+email_apoderado=Cópia para o agente	
+phone=Telefone de contato
+comments=Comentários
+subid=A identificação deve ser apenas números
+subname=Exemplo: Silva, João
+subtitle_request=Solicitação de dados
+subtitle_request_minimal=Selecione o tipo de material solicitado
+subtitle_user=Dados do usuário
+level=Nível bibliográfico
+send_button=Enviar
+clean_button=Limpar
+cancel_button=Fechar
+error_any1=Por favor, entre um valor para
+error_any2=ou um valor para
+error_both1=Especificação de um valor para
+error_both2=requer também um valor para
+error_both3=e vice-versa.
+odds=Serviço de entrega de documentos on-line
+odds_cre_rec1=Registro criado
+odds_cre_rec2=na base de dados
+odds_doesnotexist=não existe
+odds_id=ID
+odds_id_min=Tamanho mínimo de
+odds_forattr=para o atributo
+odds_form=Formulário de solicitação
+odds_form_st=Pedido de armazenamento em banco de dados
+odds_nocontent=não existe ou não tem conteúdo
+odds_nocontrolnr=Nenhum número de controle (~identificação do pedido) gerado para o registro.
+odds_nohelp=Não foi encontrado nenhum arquivo de ajuda válido.
+odds_nolevelentry=não contém uma linha com a abreviação de nível	
+odds_inv_values=contém uma linha com número inválido de entradas
+odds_int=Por favor, digite apenas caracteres numéricos para
+odds_page_init=A página inicial não pode ser maior do que a página final. Favor corrigir
+odds_selectlevel=Selecionar nível
+odds_setvalue=Por favor, defina um valor para
+odds_specjv=especificado no atributo data-jv
+odds_try_default=Tente arquivo de idioma padrão
+odds_unkn_chkfunc=Função de verificação desconhecida
+odds_valid_mail=Favor inserir um valor válido de e-mail em
+odds_valreq=Valor necessário para
+odds_year=Quatro dígitos necessários para
+odds_year_major=O ano não pode exceder o ano atual. Favor corrigir
+odds_year_old=O ano não pode ser inferior a 1850. Por favor, corrija
+notice_success=O pedido foi aceito em nosso sistema. O documento chegará em sua conta dentro de 24 horas durante os dias úteis.
+notice_error=O pedido não pôde ser aceito em nosso sistema. Em caso de qualquer dúvida : entre em contato conosco por e-mail
+notice_back=Para nova solicitação, clique aqui.
+odds_admin_panel|Painel de Administração do ODDS
+odds_tab_smtp|Servidor de E-mail (SMTP)
+odds_tab_templates|Modelos de Mensagem
+odds_tab_tables|Tabelas Dinâmicas
+odds_smtp_title|Configuração SMTP
+odds_smtp_desc|Configure as credenciais usadas para o envio de e-mails.
+odds_smtp_host|Host SMTP
+odds_smtp_port|Porta SMTP
+odds_smtp_user|Usuário / E-mail
+odds_smtp_pass|Senha / Senha de App
+odds_smtp_from_mail|E-mail do Remetente
+odds_smtp_from_name|Nome do Remetente
+odds_btn_save|Salvar Configurações
+odds_save_success|Salvo com sucesso!
+odds_tpl_desc|Edite o conteúdo enviado aos usuários quando os pedidos são processados.
+odds_tpl_help_title|Códigos Dinâmicos Disponíveis
+odds_tpl_help_desc|O sistema substituirá as variáveis por dados reais:
+odds_tpl_help_name|Nome do Solicitante
+odds_tpl_help_title_doc|Referência / Título do Documento
+odds_tpl_help_date|Data da Solicitação
+odds_tpl_help_notes|Observações da Biblioteca
+odds_tpl_help_link|Links para download
+odds_tpl_help_url|URL base do ODDS
+odds_tpl_single|Modelo de E-mail: Arquivo Único
+odds_tpl_multiple|Modelo de E-mail: Múltiplos Arquivos
+odds_tpl_cancel|Modelo de E-mail: Cancelamento
+odds_tbl_select|Selecione a tabela para editar:
+odds_tbl_code|Código (Chave)
+odds_tbl_desc|Descrição (Rótulo)
+odds_tbl_actions|Ações
+odds_tbl_del_err|Não é possível remover a última linha.
+title|Comutação Bibliográfica
+subtitle|
+welcome|Bem-vindo
+odds_form|Formulário ODDS
+subtitle_user|Dados do Usuário
+odds_id|Matrícula / ID
+subid|
+name|Nome
+subname|
+category|Categoria
+odds_selectlevel|-- Selecione --
+email|E-mail
+phone|Telefone
+subtitle_request|Dados da Solicitação
+subtitle_request_minimal|Informação mínima obrigatória
+level|Nível Bibliográfico
+comments|Comentários
+send_button|Enviar
+odds_nocontrolnr|Número de controle não encontrado.
+odds_cre_rec1|Registro criado
+odds_cre_rec2|na base de dados
+notice_success|Sucesso
+notice_error|Erro
+notice_back|Voltar
+odds_inv_values|Valores inválidos
+archivo|Arquivo
+odds_doesnotexist|não existe
+odds_try_default|Tentando o padrão
+odds_nolevelentry|Nenhuma entrada para o nível
+odds_tab_access=Controle de acesso
+odds_access_title=Controle de acesso (OPAC)
+odds_access_desc=Defina quem pode solicitar documentos por meio do formulário ODDS:
+odds_access_public=Público:
+odds_access_public_desc=Qualquer pessoa pode preencher o formulário (permitido o acesso anônimo).
+odds_access_auth=Somente autenticados:
+odds_access_auth_desc=Requer uma sessão ativa no OPAC. Bloqueia automaticamente os campos de ID do usuário e Nome.

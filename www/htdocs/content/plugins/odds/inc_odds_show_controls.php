@@ -41,43 +41,44 @@ function _process_level($level,$odds_show_file,$file_contents, $variable_fields,
     }    
 }
 /************ function _build_input */
-function _build_input($odds_show_file, $line, array $values, array $variable_fields) {
-    global $msgstr,$db_path;
+function _build_input($odds_show_file, $line, array $values, array $variable_fields)
+{
+    global $msgstr, $db_path;
+
     if (count($values) < 4 || count($values) > 5) {
-        echo "<div style='color:red'>".$msgstr["archivo"]." ".$odds_show_file." ".$msgstr["odds_inv_values"]."&rarr;".$line."&larr;</div>";
+        $error_msg = $msgstr["odds_inv_values"] ?? "Invalid values";
+        echo "<div style='color:red'>" . ($msgstr["archivo"] ?? "File") . " {$odds_show_file} {$error_msg} &rarr;{$line}&larr;</div>";
         return "";
     }
-    $input = "";        
+
+    $input = "";
     $input_name     = $values[0];
-    $input_label    = $values[1];
-    $input_label    = str_replace('*', '<font color="red">*</font>', $input_label);
-    $input_type     = isset($values[2]) ? trim($values[2]) : ''; 
-    $input_length   = isset($values[3]) ? trim($values[3]) : '';
-    $input_validate = isset($values[4]) ? trim($values[4]) : '';
+    $input_label    = str_replace('*', '<font color="red">*</font>', $values[1]);
+    $input_type     = $values[2] ?? '';
+    $input_length   = $values[3] ?? '';
+    $input_validate = $values[4] ?? '';
 
-    $input_value = "";
-    if ( isset($variable_fields[$input_name])) $input_value=$variable_fields[$input_name];
+    $input_value = $variable_fields[$input_name] ?? "";
+
     $validate_entry = "";
-    if ($input_validate !='') {
-        $validate_entry = trim($input_validate);
-        $validate_entry = "data-jv='".$validate_entry."'";
+    if ($input_validate !== '') {
+        $validate_entry = "data-jv='" . trim($input_validate) . "'";
     }
 
-    // set referer
-    $referer="";
-    if (isset($variable_fields['referer'])) {
-        $referer=$variable_fields['referer'];
-    }
-    if ($input_name == "tag900") {
-        $input .= _add_source($input_label, $input_length, $referer, $variable_fields);
+    $referer = $variable_fields['referer'] ?? "";
+
+    if ($input_name === "tag900") {
+        $input .= _add_source($values[1], $input_length, $referer, $variable_fields);
     } else {
-        $input = "<label class='lbl' for='".$input_name."'>". utf8_decode($input_label) ."</label>\n";
-        $input.= "<input value='".utf8_decode($input_value)."' type='".$input_type."'";
-        $input.= " id='".$input_name."' name='".$input_name."' size='". $input_length ."' maxlength='". $input_length ."'";
-        $input.= " ".$validate_entry; 
-        $input.= " />\n";
-        $input.= "<div class = 'subtitle_blank'></div>\n";
+        // PHP 8.2+ safe alternative to utf8_decode()
+        $safe_label = mb_convert_encoding($input_label, 'ISO-8859-1', 'UTF-8');
+        $safe_value = mb_convert_encoding($input_value, 'ISO-8859-1', 'UTF-8');
+
+        $input .= "<label class='lbl' for='{$input_name}'>{$safe_label}</label>\n";
+        $input .= "<input value='{$safe_value}' type='{$input_type}' id='{$input_name}' name='{$input_name}' size='{$input_length}' maxlength='{$input_length}' {$validate_entry} />\n";
+        $input .= "<div class='subtitle_blank'></div>\n";
     }
+
     return $input;
 }
 

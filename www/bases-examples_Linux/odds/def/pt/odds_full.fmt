@@ -1,0 +1,47 @@
+F|1|Record ID|0|0|||AI||5|||CN_|v1|v1||0||0|
+F|5|Literature type|0|0|||R|1|3|P|tipoliteratura.tab||||S|0||0|
+F|6|Bibliogr. level|0|0|||R|1|4|P|nivelbiblio.tab||||as|0||0|
+F|94|Request status|0|0|||S|||P|status.tab|||||0||0|
+F|100|Request date|0|0|||RO||8|||||||0||0|
+H||Requested document ------------------|0|0||||||||||||0||0|
+F|10|Author article/chapter|0|0|||X||70|||||||0||0|
+F|12|Title article/chapter|0|0|||X||70|||||||0||0|
+F|16|Author book/thesis|0|0|||X||70|||||||0||0|
+F|18|Title book/chapter|0|0|||X||70|||||||0||0|
+F|30|Journal title|0|0|||X||70|||||||0||0|
+F|31|Journal volume|0|0|||X||10|||||||0||0|
+F|32|Journal no.|0|0|||X||10|||||||0||0|
+F|20|First page|0|0|||X||10|||||||0||0|
+F|21|Last page|0|0|||X||10|||||||0||0|
+F|65|Edition|0|0|||X||10|||||||0||0|
+F|118|Verdict no.|0|0|||X|1|10|||||||0||0|
+F|117|Court|0|0|||X|1|60|||||||0||0|
+F|116|Case|0|0|||X|1|60|||||||0||0|
+F|86|Law no. or name|0|0|||X|1|40|||||||0||0|
+F|217|Ruling institution|0|0|||X|1|40|||||||0||0|
+F|218|Resolutions and Ordinances|0|0|||X|1|40|||||||0||0|
+F|53|Conference/Meeting|0|0|||X|1|40|||||||0||0|
+F|590|Legal advice|0|0|||XF|1|20|||||||0||0|
+F|64|Publication year|0|0|||X||4|||||||0||0|
+H||Dates requester --------------------------|0|0||||||||||||0||0|
+F|510|Name of requester|1|0|||X||70|D|users|NO_|V510|V510, "-"v100, "-"v98||0||0|
+F|630|Identity Card|0|0|||X||10|||||||0||0|
+F|512|Tel.|0|1|||X|2|14|||||||0||0|
+F|520|User category|0|0|||S|||P|categoria.tab|||||0||0|
+F|525|Topic|0|1|||M|4|70|P|topicarea.tab|||||0||0|
+F|528|E-mail|0|1|||X|2|70|||||||0||0|
+F|828|Agent e-mail|0|0|||X|1|70|||||||0||0|
+F|68|Notes requester|0|0|||X|3|70|||||||0||0|
+F|900|Source of reference|0|0|||X||70|||||||0||0|
+H||Progress status ---------------|0|0||||||||||||0||0|
+F|69|Internal progress notes|0|0|||X|3|70|||||||0||0|
+F|98|Date attended|0|0|||D||10|||||||0||0|
+F|99|Date attended|0|0|||ISO||8|||||||0||0|
+F|101|Date service closure|0|0|||D||10|||||||0||0|
+F|102|Date service closure|0|0|||ISO||8|||||||0||0|
+F|938|URL sent document|0|1|||U|3|70|||||||0||0|
+F|901|Request forwarded to|0|1|||X||70|||||||0||0|
+F|902|No. of forwarded request|0|1|||X||20|||||||0||0|
+F|936|Processed by|0|0|||OC||10|||||||0||0|
+F|998|Date of last modification|0|1|||OD|3|20|||||||0||0|
+F|999|MFN in database BAEU|0|0|||RO|1|6|||||||0||0|
