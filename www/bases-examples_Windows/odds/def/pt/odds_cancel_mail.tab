@@ -1,0 +1,9 @@
+subject = Serviço de referência - Resposta à sua solicitação.
+<p>Prezado(a) <strong>[nome]</strong><br />
+Sua solicitação datada de [data] referente ao documento [request_data] não pôde ser atendida pelo seguinte motivo:<br />
+[notes].<br />
+Em caso de dúvidas, entre em contato conosco pelo e-mail mail@library.org<br />
+&nbsp;</p>
+
+<p>Atenciosamente,<br />
+Administração da Biblioteca</p>
