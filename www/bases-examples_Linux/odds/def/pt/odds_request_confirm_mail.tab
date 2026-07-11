@@ -1,0 +1,6 @@
+subject = Recebemos sua solicitação - Acompanhamento: [mfn]
+<p>Olá <strong>[name]</strong>,</p>
+<p>Recebemos sua solicitação para o documento <strong>"[title]"</strong>.</p>
+<p>Seu número de protocolo é <strong>[mfn]</strong>.</p>
+<p>Por favor, aguarde nosso contato. Em breve o material será disponibilizado.</p>
+<p>Atenciosamente,<br />Equipe da Biblioteca</p>
