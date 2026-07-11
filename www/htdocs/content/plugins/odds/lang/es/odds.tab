@@ -1,0 +1,170 @@
+HEADER_MESSAGES
+REQUEST_MESSAGES
+cancel_button = Cerrar
+cancel_button = Cerrar
+cancel_button = Cerrar
+category = Categoría 
+clean_button = Limpiar
+comments = Comentarios
+comments = Observaciones
+edit_help_file = editar archivo de ayuda
+email = Correo electrónico *
+email_apoderado = ¿Con copia al email del apoderado?
+error_sar = Debe completar el título del artículo ó la página inicial
+help = ayuda
+help_select =  Clickee aquí para desplegar
+id = Cédula de Identidad * 
+lang = Lenguaje
+level = Tipo de documento bibliográfico
+module_name = SOLICITUD DE ENVIO DE DOCUMENTOS
+name = Nombre *
+notice_error = La solicitud no ha podido ser ingresada a nuestro sistema.\nAnte cualquier dudas, comuníquese a nuestro email: biblioteca@aeu.org.uy.
+notice_reload = La solicitud ya ha sido efectuada.\nAnte cualquier dudas, comuníquese a nuestro email: biblioteca@aeu.org.uy.
+notice_success = La solicitud ha sido ingresada a nuestro sistema.\nEl material le llegará a su cuenta en un plazo no mayor a 24 horas (días hábiles).
+phone = Teléfono de contacto (uno)
+selectlevel = Seleccionar
+send_button = Enviar
+subtitle = Los campos marcados con * son obligatorios
+subtitle_request = Datos de la solicitud
+subtitle_request_minimal = Seleccione el tipo de material que desea para ingresar su solicitud
+title = Servicio Electrónico Envío Documentos
+welcome = ¡Bienvenido! [day] de [month] de [year].
+
+
+
+
+odds_admin_panel|Panel de Administración de ODDS
+odds_tab_smtp|Servidor de Correo (SMTP)
+odds_tab_templates|Plantillas de Mensajes
+odds_tab_tables|Tablas Dinámicas
+odds_smtp_title|Configuración SMTP
+odds_smtp_desc|Configure las credenciales utilizadas para enviar correos.
+odds_smtp_host|Servidor SMTP
+odds_smtp_port|Puerto SMTP
+odds_smtp_user|Usuario / Correo
+odds_smtp_pass|Contraseña / Contraseña de App
+odds_smtp_from_mail|Correo del Remitente
+odds_smtp_from_name|Nombre del Remitente
+odds_btn_save|Guardar Configuraciones
+odds_save_success|¡Guardado con éxito!
+odds_tpl_desc|Edite el contenido enviado a los usuarios cuando se procesan las solicitudes.
+odds_tpl_help_title|Códigos Dinámicos Disponibles
+odds_tpl_help_desc|El sistema reemplazará las variables con datos reales:
+odds_tpl_help_name|Nombre del Solicitante
+odds_tpl_help_title_doc|Referencia / Título del Documento
+odds_tpl_help_date|Fecha de Solicitud
+odds_tpl_help_notes|Notas de la Biblioteca
+odds_tpl_help_link|Enlaces de descarga
+odds_tpl_help_url|URL base de ODDS
+odds_tpl_single|Plantilla de Correo: Archivo Único
+odds_tpl_multiple|Plantilla de Correo: Múltiples Archivos
+odds_tpl_cancel|Plantilla de Correo: Cancelación
+odds_tbl_select|Seleccione la tabla para editar:
+odds_tbl_code|Código (Clave)
+odds_tbl_desc|Descripción (Etiqueta)
+odds_tbl_actions|Acciones
+odds_tbl_del_err|No se puede eliminar la última fila.
+title|Conmutación Bibliográfica
+subtitle|
+welcome|Bienvenido
+odds_form|Formulario ODDS
+subtitle_user|Datos del Usuario
+odds_id|Matrícula / ID
+subid|
+name|Nombre
+subname|
+category|Categoría
+odds_selectlevel|-- Seleccionar --
+email|Correo Electrónico
+phone|Teléfono
+subtitle_request|Datos de la Solicitud
+subtitle_request_minimal|Información mínima obligatoria
+level|Nivel Bibliográfico
+comments|Comentarios
+send_button|Enviar
+odds_nocontrolnr|Número de control no encontrado.
+odds_cre_rec1|Registro creado
+odds_cre_rec2|en base de datos
+notice_success|Éxito
+notice_error|Error
+notice_back|Volver
+odds_inv_values|Valores inválidos
+archivo|Archivo
+odds_doesnotexist|no existe
+odds_try_default|Intentando el predeterminado
+odds_nolevelentry|Ninguna entrada para el nivel
+odds_nohelp|Archivo de ayuda no encontrado.
+odds_int=Por favor, ingresa solo caracteres numéricos para
+odds_page_init=La página inicial no puede ser mayor que la página final. Por favor, corríjalo
+odds_selectlevel=Seleccionar nivel
+odds_setvalue=Por favor, establezca un valor para
+odds_specjv=especificado en el atributo data-jv
+odds_unkn_chkfunc=Función de verificación desconocida
+odds_valid_mail=Por favor, ingresa una dirección de correo electrónico válida en
+odds_valreq=Valor requerido para
+odds_year=Se requieren cuatro dígitos para
+odds_year_major=El año no puede ser posterior al año actual. Por favor, corríjalo
+odds_year_old=El año no puede ser anterior a 1850. Por favor, corríjalo
+notice_success=La solicitud ha sido aceptada en nuestro sistema. El documento llegará a su cuenta en un plazo de 24 horas durante los días hábiles.
+notice_error=No se pudo aceptar la solicitud en nuestro sistema. En caso de cualquier duda: contáctenos por correo electrónico
+odds_admin_panel|Panel de administración de ODDS
+odds_tab_smtp|Servidor de correo electrónico (SMTP)
+odds_tab_templates|Plantillas de mensajes
+odds_tab_tables|Tablas dinámicas
+odds_smtp_title|Configuración de SMTP
+odds_smtp_desc|Configura las credenciales que se usan para enviar correos electrónicos.
+odds_smtp_host|Servidor SMTP
+odds_smtp_port|Puerto SMTP
+odds_smtp_user|Usuario / Correo electrónico
+odds_smtp_pass|Contraseña / Contraseña de la aplicación
+odds_smtp_from_mail|Correo electrónico del remitente
+odds_smtp_from_name|Nombre del remitente
+odds_btn_save|Guardar configuración
+odds_save_success|¡Guardado con éxito!
+odds_tpl_desc|Edita el contenido que se envía a los usuarios cuando se procesan los pedidos.
+odds_tpl_help_title|Códigos dinámicos disponibles
+odds_tpl_help_desc|El sistema sustituirá las variables por datos reales:
+odds_tpl_help_name|Nombre del solicitante
+odds_tpl_help_title_doc|Referencia / Título del documento
+odds_tpl_help_date|Fecha de la solicitud
+odds_tpl_help_notes|Notas de la biblioteca
+odds_tpl_help_link|Enlaces de descarga
+odds_tpl_help_url|URL base de ODDS
+odds_tpl_single|Plantilla de correo electrónico: archivo único
+odds_tpl_multiple|Plantilla de correo electrónico: Varios archivos
+odds_tpl_cancel|Plantilla de correo electrónico: Cancelación
+odds_tbl_select|Seleccione la tabla para editar:
+odds_tbl_code|Código (Clave)
+odds_tbl_desc|Descripción (Etiqueta)
+odds_tbl_actions|Acciones
+odds_tbl_del_err|No se puede eliminar la última fila.
+title|Búsqueda bibliográfica
+subtitle|
+welcome|Bienvenido
+odds_form|Formulario ODDS
+subtitle_user|Datos del usuario
+odds_id|Número de matrícula / ID
+subid|
+name|Nombre
+subname|
+category|Categoría
+odds_selectlevel|-- Seleccionar --
+email|Correo electrónico
+phone|Teléfono
+subtitle_request|Datos de la solicitud
+subtitle_request_minimal|Información mínima obligatoria
+level|Nivel bibliográfico
+comments|Comentarios
+send_button|Enviar
+odds_nocontrolnr|No se encontró el número de control.
+odds_cre_rec1|Registro creado
+odds_cre_rec2|en la base de datos
+notice_success|Éxito
+notice_error|Error
+odds_tab_access=Control de acceso
+odds_access_title=Control de acceso (OPAC)
+odds_access_desc=Defina quién puede solicitar documentos mediante el formulario ODDS:
+odds_access_public=Público:
+odds_access_public_desc=Cualquier persona puede completar el formulario (se permite el acceso anónimo).
+odds_access_auth=Solo usuarios autenticados:
+odds_access_auth_desc=Requiere una sesión activa en el OPAC. Bloquea automáticamente los campos de ID de usuario y Nombre.

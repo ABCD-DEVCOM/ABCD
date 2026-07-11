@@ -1,0 +1,111 @@
+    .odds-admin-container {
+        font-family: Verdana, Arial, sans-serif;
+        font-size: 13px;
+        color: #333;
+    }
+
+    .odds-tabs {
+        display: flex;
+        border-bottom: 2px solid #3669c6;
+        margin-bottom: 20px;
+    }
+
+    .odds-tab-btn {
+        background-color: #f1f1f1;
+        border: 1px solid #ccc;
+        border-bottom: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        margin-right: 5px;
+        border-radius: 5px 5px 0 0;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .odds-tab-btn:hover {
+        background-color: #e9e9e9;
+    }
+
+    .odds-tab-btn.active {
+        background-color: #3669c6;
+        color: white;
+        border-color: #3669c6;
+    }
+
+    .odds-tab-content {
+        display: none;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-top: none;
+        background: #fff;
+    }
+
+    .odds-tab-content.active {
+        display: block;
+    }
+
+    .odds-form-group {
+        margin-bottom: 15px;
+    }
+
+    .odds-form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .odds-form-group input[type="text"],
+    .odds-form-group input[type="number"],
+    .odds-form-group input[type="password"] {
+        width: 100%;
+        max-width: 400px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .odds-btn-save {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .odds-btn-save:hover {
+        background-color: #45a049;
+    }
+
+    .odds-btn-action {
+        background-color: #f1f1f1;
+        border: 1px solid #ccc;
+        padding: 4px 8px;
+        cursor: pointer;
+    }
+
+    .odds-btn-action:hover {
+        background-color: #ddd;
+    }
+
+    .fst-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .fst-table th,
+    .fst-table td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .fst-table th {
+        background-color: #f5f5f5;
+    }
+
+    .fst-input {
+        width: 95%;
+        padding: 4px;
+    }

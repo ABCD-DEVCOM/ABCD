@@ -1,0 +1,122 @@
+welcome=Welcome ! [day] [month] [year]
+title=Online Document Delivery Service
+subtitle=Fields marked with * are mandatory
+name=Name
+category=Category 
+email=E-mail
+email_apoderado=Copy to agent
+phone=Tel.no. of contact
+comments=Remarks
+subid=ID should be only digits
+subname=Example: Smith, John
+subtitle_request=Request data
+subtitle_request_minimal=Select type of material wanted in request
+subtitle_user=User data
+level=Bibliographic level
+send_button=Send
+clean_button=Clean
+cancel_button=Close
+comments=Comments
+error_any1=Please enter a value for
+error_any2=or a value for
+error_both1=Specification of a value for
+error_both2=requires also a value for
+error_both3=and vice-versa.
+odds=Online Document Delivery Service
+odds_cre_rec1=Created record 
+odds_cre_rec2=in database
+odds_doesnotexist=does not exist
+odds_id=ID
+odds_id_min=Minimum length of
+odds_forattr=for attribute
+odds_form=Request form
+odds_form_st=Store request in database
+odds_nocontent=does not exist or has no content
+odds_nocontrolnr=No control number (~request ID) generated for the record.
+odds_nohelp=No valid help file found.
+odds_nolevelentry=does not contain a line with level abbreviation
+odds_inv_values=contains a line with invalid number of entries
+odds_int=Please enter only numerical characters for
+odds_page_init=The initial page cannot be greater than the end page.  Please correct
+odds_selectlevel=Select level
+odds_setvalue=Please set a value for
+odds_specjv=specified in attribute data-jv
+odds_try_default=Trying default language file
+odds_unkn_chkfunc=Unknown check function
+odds_valid_mail=Please enter a valid email value in
+odds_valreq=Value required for
+odds_year=Four digits required for
+odds_year_major=The year cannot exceed the current year. Please correct
+odds_year_old=The year cannot be less than 1850. Please correct
+notice_success=The request is accepted in our system.<br>The document will arrive on your account within 24 hours during working days. 
+cancel_button=Close
+notice_error=The request could not be accepted in our system.<br>In case of any question : contact us by email
+notice_back=For new request click here.
+odds_admin_panel|ODDS Administration Panel
+odds_tab_smtp|E-mail Server (SMTP)
+odds_tab_templates|Message Templates
+odds_tab_tables|Dynamic Tables
+odds_smtp_title|SMTP Configuration
+odds_smtp_desc|Configure the credentials used to send confirmation and notification emails.
+odds_smtp_host|SMTP Host
+odds_smtp_port|SMTP Port
+odds_smtp_user|Username / E-mail
+odds_smtp_pass|Password / App Password
+odds_smtp_from_mail|Sender E-mail (From)
+odds_smtp_from_name|Sender Name (Alias)
+odds_btn_save|Save Settings
+odds_save_success|Saved successfully!
+odds_tpl_desc|Edit the content sent to users when their document requests are fulfilled or cancelled.
+odds_tpl_help_title|Available Shortcodes
+odds_tpl_help_desc|The system will automatically replace these tags with real data before sending the email:
+odds_tpl_help_name|Requester Name
+odds_tpl_help_title_doc|Document Reference / Title
+odds_tpl_help_date|Request Date
+odds_tpl_help_notes|Library Notes (Useful for cancellations)
+odds_tpl_help_link|Download links (Success templates only)
+odds_tpl_help_url|ODDS Root URL
+odds_tpl_single|Single File E-mail Template
+odds_tpl_multiple|Multiple Files E-mail Template
+odds_tpl_cancel|Cancellation E-mail Template
+odds_tbl_select|Select table to edit:
+odds_tbl_code|Code (Key)
+odds_tbl_desc|Description (Label)
+odds_tbl_actions|Actions
+odds_tbl_del_err|Cannot remove the last row.
+title|Document Delivery
+subtitle|
+welcome|Welcome
+odds_form|ODDS Form
+subtitle_user|User Data
+odds_id|ID
+subid|
+name|Name
+subname|
+category|Category
+odds_selectlevel|-- Select --
+email|Email
+phone|Phone
+subtitle_request|Request Data
+subtitle_request_minimal|Minimal info required
+level|Level
+comments|Comments
+send_button|Send
+odds_nocontrolnr|No control number found.
+odds_cre_rec1|Created record
+odds_cre_rec2|in DB
+notice_success|Success
+notice_error|Error
+notice_back|Go Back
+odds_inv_values|Invalid values
+archivo|File
+odds_doesnotexist|does not exist
+odds_try_default|Trying default
+odds_nolevelentry|No level entry
+odds_nohelp|No valid help file found.
+odds_tab_access=Access Control
+odds_access_title=Access Control (OPAC)
+odds_access_desc=Define who can request documents through the ODDS form:
+odds_access_public=Public:
+odds_access_public_desc=Anyone can fill the form (Anonymous allowed).
+odds_access_auth=Authenticated Only:
+odds_access_auth_desc=Requires an active OPAC session. Automatically locks the user ID and Name fields.
