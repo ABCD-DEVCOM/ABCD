@@ -84,6 +84,11 @@ include("../common/header.php");
 							<span><i class="fas fa-database" style="font-size: 2em; margin: 0 10px 0 -30px;"></i><strong><?php echo $msgstr["dblist"]; ?></strong></span>
 						</a>
 
+
+						<a href='Javascript:Ejecutar("../settings/plugins_manager.php","")' class="menuButton">
+							<span><i class="fas fa-plug" style="font-size: 2em; margin: 0 10px 0 -30px; color: #0984e3;"></i><strong>Plugins</strong></span>
+						</a>
+
 						<a href='Javascript:Ejecutar("../settings/editar_correo_ini.php","")' class="menuButton">
 							<span><i class="fas fa-envelope" style="font-size: 2em; margin: 0 10px 0 -30px;"></i><strong><?php echo $msgstr["set_mail"]; ?></strong></span>
 						</a>
@@ -99,6 +104,7 @@ include("../common/header.php");
 						<a href='Javascript:Ejecutar("../settings/admin_logs.php","")' class="menuButton">
 							<span><i class="fas fa-bug" style="font-size: 2em; margin: 0 10px 0 -30px; color: #d63031;"></i><strong><?php echo $msgstr["set_log_error"]; ?></strong></span>
 						</a>
+
 
 						<?php
 						$script_abcd_stats = 'abcd_stats.php';
