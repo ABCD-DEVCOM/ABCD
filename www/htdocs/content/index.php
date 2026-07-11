@@ -1,7 +1,7 @@
 
 <?php
 
-function randomBowie() {
+function randomLSD() {
 $names = array(
 
 'Picture yourself in a boat on a river
@@ -60,4 +60,4 @@ return $names[rand ( 0 , count($names) -1)];
 
 
 echo '
-<pre>'.randomBowie().'</pre>';
+<pre>'.randomLSD().'</pre>';
