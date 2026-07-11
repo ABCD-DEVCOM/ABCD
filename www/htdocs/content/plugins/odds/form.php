@@ -40,6 +40,14 @@ global $msgstr;
 if (!is_array($msgstr)) {
     $msgstr = [];
 }
+
+
+require_once $abcdPath . '/common/LanguageManager.php';
+$langManager = new \ABCD\Common\LanguageManager($abcdPath, $abcdPath . '/../content');
+$plugin_msgs = $langManager->loadPluginTranslations($pluginPath, 'odds', 'odds.tab', $lang);
+$msgstr = array_merge($msgstr, $plugin_msgs);
+
+
 @include_once($abcdPath . "/lang/admin.php");
 include($pluginPath . "/lang/odds.php");
 
@@ -63,7 +71,7 @@ if ($oddsAccess === 'auth_only' && !$isOpacLogged) {
 }
 
 $requestData = [
-    'id'       => $isOpacLogged ? $_SESSION['user_id'] : ($_REQUEST['tag630'] ?? $_REQUEST['id'] ?? ''),
+    'id'       => $isOpacLogged ? $_SESSION['user_id'] : ($_REQUEST['tag630'] ?? ''),
     'name'     => $isOpacLogged ? $_SESSION['user_name'] : ($_REQUEST['tag510'] ?? $_REQUEST['name'] ?? ''),
     'email'    => $_REQUEST['tag528'] ?? $_REQUEST['email'] ?? '',
     'phone'    => $_REQUEST['tag512'] ?? $_REQUEST['phone'] ?? '',
@@ -168,7 +176,7 @@ $welcomeMsg = str_replace(
 
                             <div class="col-md-12 mt-4">
                                 <label for="comments" class="form-label fw-bold"><?php echo $msgstr['comments'] ?? 'Comments'; ?>:</label>
-                                <textarea class="form-control bg-light" id="comments" name="tag068" rows="4" style="resize:none;"><?php echo htmlspecialchars($requestData['comments']); ?></textarea>
+                                <textarea class="form-control bg-light" id="comments" name="tag068" rows="4" style="resize:none;"><?php echo $requestData['comments']; ?></textarea>
                             </div>
                         </div>
 
@@ -219,8 +227,11 @@ $welcomeMsg = str_replace(
             return;
         }
         try {
-            // Uses relative routing to preserve custom URL endpoints
-            const response = await fetch(`?action=ajax&level=${encodeURIComponent(level)}`);
+            // Pegamos o idioma que o PHP já definiu no carregamento da página
+            const currentLang = '<?php echo $lang; ?>';
+
+            // Passamos o idioma explicitamente na requisição AJAX
+            const response = await fetch(`?action=ajax&level=${encodeURIComponent(level)}&lang=${currentLang}`);
             if (!response.ok) throw new Error('Failed to load fields');
             container.innerHTML = await response.text();
         } catch (error) {

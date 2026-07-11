@@ -18,6 +18,40 @@ function _remove_comments($text) {
     $text = preg_replace('/\n\s*\n/', "\n", $text);     //remove concatenated \n
     return $text;
 }
+
+/**
+ * Resolves the correct path for structural .tab files using the Core vs Content architecture.
+ */
+function get_odds_tab_file(string $filename, string $lang): ?string
+{
+    global $db_path;
+
+    $bridge = PluginBridge::getInstance();
+    $abcdPath = rtrim($bridge->get('abcd_path', realpath(__DIR__ . '/../../../central')), '/\\');
+    $contentPath = realpath($abcdPath . '/../content');
+    $pluginSlug = 'odds';
+
+    // COFRE (Content): /content/lang/{lang}/plugins/odds/{filename}
+    $cofreFile = "{$contentPath}/lang/{$lang}/plugins/{$pluginSlug}/{$filename}";
+    if (file_exists($cofreFile)) return $cofreFile;
+
+    // MOTOR (Core): /plugins/odds/lang/{lang}/{filename}
+    $motorFile = __DIR__ . "/lang/{$lang}/{$filename}";
+    if (file_exists($motorFile)) return $motorFile;
+
+    // MOTOR FALLBACK (Core EN): /plugins/odds/lang/en/{filename}
+    $motorFallback = __DIR__ . "/lang/en/{$filename}";
+    if (file_exists($motorFallback)) return $motorFallback;
+
+    // LEGACY FALLBACK: bases/odds/def/{lang}/{filename}
+    if (!empty($db_path)) {
+        $legacyFile = rtrim($db_path, '/\\') . "/odds/def/{$lang}/{$filename}";
+        if (file_exists($legacyFile)) return $legacyFile;
+    }
+
+    return null;
+}
+
 /************ function _process_level */
 function _process_level($level,$odds_show_file,$file_contents, $variable_fields,&$optional_inputs){
     global $msgstr,$db_path;
@@ -70,9 +104,8 @@ function _build_input($odds_show_file, $line, array $values, array $variable_fie
     if ($input_name === "tag900") {
         $input .= _add_source($values[1], $input_length, $referer, $variable_fields);
     } else {
-        // PHP 8.2+ safe alternative to utf8_decode()
-        $safe_label = mb_convert_encoding($input_label, 'ISO-8859-1', 'UTF-8');
-        $safe_value = mb_convert_encoding($input_value, 'ISO-8859-1', 'UTF-8');
+        $safe_label = $input_label;
+        $safe_value = $input_value;
 
         $input .= "<label class='lbl' for='{$input_name}'>{$safe_label}</label>\n";
         $input .= "<input value='{$safe_value}' type='{$input_type}' id='{$input_name}' name='{$input_name}' size='{$input_length}' maxlength='{$input_length}' {$validate_entry} />\n";
