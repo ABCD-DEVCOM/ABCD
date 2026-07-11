@@ -1,30 +1,43 @@
 # BEGIN ABCD
 
-RewriteEngine Off
+RewriteEngine On
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 RewriteBase /
+
+# ------------------------------------------------------------
+# ABCD SERVICE ROUTE
+# ------------------------------------------------------------
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+
+# 1. Ignore rules if the requested file physically exists (CSS, JS, Images)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# 2. Directions to ABCD Services
+# Captura o service id e o restante da path (para assets, etc)
+RewriteRule ^service/([a-zA-Z0-9_\-]+)/?(.*)$ plugin.php?id=$1&path=$2 [QSA,L]
+
+# Path to OPAC or default index
 RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]
 
+
 # Disable directory browsing
 Options All -Indexes
 
-
 # Deny access to config.php file
 <files config.php>
-order allow,deny
-deny from all
+    Require all denied
 </files>
-
 
 # Deny access to all .htaccess files
 <files ~ "^.*\.([Hh][Tt][Aa])">
-order allow,deny
-deny from all
-satisfy all
+    Require all denied
 </files>
-
 
 # END ABCD

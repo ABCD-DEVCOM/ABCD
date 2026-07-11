@@ -12,110 +12,103 @@
  * */
 
 
-
 declare(strict_types=1);
 
 namespace ABCD\Common;
 
-/**
- * Language Manager for ABCD System
- *
- * Handles the cascading translation system allowing user overrides without
- * modifying the core files.
- * * Priority: 
- * 1. content/lang/{lang} (Custom Overrides)
- * 2. central/lang/{lang} (Core Translations)
- * 3. central/lang/en     (Core English Fallback)
- */
-class LanguageManager 
+class LanguageManager
 {
     private string $centralPath;
     private string $contentPath;
     private string $defaultLang = 'en';
 
-    /**
-     * @param string $centralPath Path to the core engine directory (central)
-     * @param string $contentPath Path to the user data directory (content)
-     */
-    public function __construct(string $centralPath, string $contentPath) 
+    public function __construct(string $centralPath, string $contentPath)
     {
-        // Ensure paths end with a directory separator
         $this->centralPath = rtrim($centralPath, '/\\') . DIRECTORY_SEPARATOR;
         $this->contentPath = rtrim($contentPath, '/\\') . DIRECTORY_SEPARATOR;
     }
 
-    /**
-     * Parses a .tab translation file into an associative array.
-     *
-     * @param string $filePath Full path to the .tab file.
-     * @return array<string, string> Dictionary of translation keys and values.
-     */
-    private function parseTabFile(string $filePath): array 
+    private function parseTabFile(string $filePath): array
     {
         $translations = [];
-        
+
         if (!file_exists($filePath)) {
             return $translations;
         }
 
-        // Read file ignoring empty lines and new lines at the end
         $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        
+
         if ($lines === false) {
             return $translations;
         }
 
         foreach ($lines as $line) {
+            // Remove UTF-8 BOM if present
+            $line = preg_replace('/^[\xef\xbb\xbf]+/', '', $line);
             $line = trim($line);
-            
-            // Skip comments or invalid lines without '='
-            if (str_starts_with($line, '#') || !str_contains($line, '=')) {
+
+            if (empty($line) || str_starts_with($line, '#')) {
                 continue;
             }
 
-            // Split only on the first '=' character
-            [$key, $value] = explode('=', $line, 2);
-            $translations[trim($key)] = trim($value);
+            $delimiter = str_contains($line, '|') ? '|' : '=';
+            $parts = explode($delimiter, $line, 2);
+
+            if (count($parts) === 2) {
+                $translations[trim($parts[0])] = trim($parts[1]);
+            }
         }
 
         return $translations;
     }
 
     /**
-     * Loads and merges translations for a specific module/file using the cascade logic.
-     *
-     * @param string $fileName The name of the tab file (e.g., 'admin.tab')
-     * @param string $userLang The selected language code (e.g., 'pt', 'es')
-     * @return array<string, string> Merged translations
+     * Loads Core Translations
+     * Priority: content/lang > central/lang > central/lang/en
      */
-    public function loadTranslations(string $fileName, string $userLang): array 
+    public function loadTranslations(string $fileName, string $userLang): array
     {
-        // 1. Fallback: Core English ensures no blank strings
-        $baseFile = $this->centralPath . "lang/{$this->defaultLang}/{$fileName}";
-        $baseTranslations = $this->parseTabFile($baseFile);
+        $baseTranslations = $this->parseTabFile($this->centralPath . "lang/{$this->defaultLang}/{$fileName}");
 
-        // 2. Core Translation: Factory default for requested language
         $coreTranslations = [];
         if ($userLang !== $this->defaultLang) {
-            $coreFile = $this->centralPath . "lang/{$userLang}/{$fileName}";
-            $coreTranslations = $this->parseTabFile($coreFile);
+            $coreTranslations = $this->parseTabFile($this->centralPath . "lang/{$userLang}/{$fileName}");
         }
 
-        // 3. Custom Override: User modified translations in content directory
-        $customFile = $this->contentPath . "lang/{$userLang}/{$fileName}";
-        $customTranslations = $this->parseTabFile($customFile);
+        $customTranslations = $this->parseTabFile($this->contentPath . "lang/{$userLang}/{$fileName}");
 
-        // array_merge overwrites keys that already exist with the ones from the later arrays
         return array_merge($baseTranslations, $coreTranslations, $customTranslations);
     }
 
     /**
-     * Maintains backward compatibility for getting the general languages list file.
-     * * @param string $userLang The selected language code
-     * @return string Valid file path to the lang.tab file
-     * @throws \RuntimeException If no lang.tab is found anywhere
+     * Loads Plugin Translations with cascading logic.
+     * Priority: Vault (content/lang/{lang}/plugins/{slug}/) > Plugin (lang/{lang}/) > Plugin (lang/en/)
      */
-    public function getLangListFile(string $userLang): string 
+    public function loadPluginTranslations(string $pluginDir, string $pluginSlug, string $fileName, string $userLang): array
+    {
+        $pluginDir = rtrim($pluginDir, '/\\') . DIRECTORY_SEPARATOR;
+
+        // 1. Core English Fallback (Inside Plugin)
+        $baseFile = $pluginDir . "lang/en/{$fileName}";
+        $baseTranslations = $this->parseTabFile($baseFile);
+
+        // 2. Core Translation: Factory language (Inside Plugin)
+        $coreTranslations = [];
+        if ($userLang !== 'en') {
+            $coreFile = $pluginDir . "lang/{$userLang}/{$fileName}";
+            $coreTranslations = $this->parseTabFile($coreFile);
+        }
+
+        // 3. User Custom Override (Inside Content Vault / Cofre)
+        $customFile = $this->contentPath . "lang/{$userLang}/plugins/{$pluginSlug}/{$fileName}";
+        $customTranslations = $this->parseTabFile($customFile);
+
+        // Merge: Custom overrides core, core overrides base
+        return array_merge($baseTranslations, $coreTranslations, $customTranslations);
+    }
+
+    
+    public function getLangListFile(string $userLang): string
     {
         $attempts = [
             $this->contentPath . "lang/{$userLang}/lang.tab",
