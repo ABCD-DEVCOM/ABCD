@@ -779,6 +779,15 @@ function CancelarActualizacion(){
 			}
 		}
 
+		var buttons = newRow.querySelectorAll('button');
+		for (var i = 0; i < buttons.length; i++) {
+			var btn = buttons[i];
+			var onclickAttr = btn.getAttribute('onclick');
+			if (onclickAttr) {
+				btn.setAttribute('onclick', onclickAttr.replace(tag + "_" + lastIndex, tag + "_" + nextIndex));
+			}
+		}
+
 		tbody.appendChild(newRow);
 	}
 
