@@ -15,13 +15,19 @@
  * */
 
 if (!class_exists('PluginBridge')) {
+    header("HTTP/1.1 403 Forbidden");
     die("Direct access forbidden.");
 }
 
+// Log in to ensure that your language is saved
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Retrieves the language from the URL (if available) and saves it in the session for subsequent screens
+if (isset($_REQUEST['lang']) && !empty($_REQUEST['lang'])) {
+    $_SESSION['lang'] = trim($_REQUEST['lang']);
+}
 $lang = $_SESSION['lang'] ?? 'en';
 
 $bridge = PluginBridge::getInstance();

@@ -1,4 +1,6 @@
-<span class=?aditional_box_title?>Condições do serviço:</span>
+<h5 class="card-title text-primary mb-3 fw-bold border-bottom pb-2">Condições do serviço:</h5>
+
+
 <ul>
     <li>É possível solicitar até 5 documentos por dia, desde que o número total de páginas seja inferior a 50.</li>
     <li>É necessário preencher um formulário para cada documento solicitado.</li>

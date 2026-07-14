@@ -29,10 +29,6 @@ subtitle_request = Datos de la solicitud
 subtitle_request_minimal = Seleccione el tipo de material que desea para ingresar su solicitud
 title = Servicio Electrónico Envío Documentos
 welcome = ¡Bienvenido! [day] de [month] de [year].
-
-
-
-
 odds_admin_panel|Panel de Administración de ODDS
 odds_tab_smtp|Servidor de Correo (SMTP)
 odds_tab_templates|Plantillas de Mensajes
@@ -168,3 +164,14 @@ odds_access_public=Público:
 odds_access_public_desc=Cualquier persona puede completar el formulario (se permite el acceso anónimo).
 odds_access_auth=Solo usuarios autenticados:
 odds_access_auth_desc=Requiere una sesión activa en el OPAC. Bloquea automáticamente los campos de ID de usuario y Nombre.
+odds_val_help_desc=Utiliza estas palabras clave en la columna de validación para garantizar la integridad de los datos:
+odds_val_required=El campo no puede quedar vacío.
+odds_val_uint=Solo números enteros positivos.
+odds_val_no_trim=No se permiten espacios al principio ni al final.
+odds_val_email=Dirección de correo electrónico válida.
+odds_val_year=Formato AAAA.
+odds_val_min=Mínimo de N caracteres.
+odds_val_max=Máximo de N caracteres.
+odds_val_pg_init=La página final debe ser mayor o igual que la página inicial.
+odds_show_controls=Creador dinámico de formularios
+odds_val_show_control_i=Configura los campos que se mostrarán para cada nivel bibliográfico. <b>Solo se pueden seleccionar los campos que estén presentes en la estructura de la base de datos ODDS (FDT).

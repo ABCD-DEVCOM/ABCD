@@ -60,6 +60,55 @@ if (!empty($dbPath)) {
 abcd_add_hook('central_menu', function(string $menuHtml) use ($bridge): string {
     $lang = $bridge->get('lang', 'en');
     // The link safely redirects the librarian to the standard cataloguing tool for the odds database
-    $menuHtml .= '<li><a href="/central/dataentry/inicio_base.php?base=odds&lang=' . urlencode($lang) . '">ODDS Management</a></li>';
+    $menuHtml .= '<a href="/central/settings/plugin_admin.php?plugin=odds" class="menuButton utilsButton">';
+	$menuHtml .= '<span><strong><?php echo $msgstr["configure_ODDS"]. " ABCD"?></strong></span>';
+	$menuHtml .= '</a>';
+
     return $menuHtml;
 });
+
+/**
+ * Register ODDS translation button in the main translation menu
+ */
+abcd_add_hook('abcd_translation_menu', function(string $menuHtml) use ($bridge): string {
+    global $msgstr;
+    $lang = $bridge->get('lang', 'en');
+    $label = $msgstr["odds"] ?? 'ODDS';
+    
+    $menuHtml .= '<a href="../lang/translate.php?lang=' . urlencode($lang) . '&table=odds.tab&plugin=odds" class="menuButton moduleButton">';
+    $menuHtml .= '<span><strong>' . htmlspecialchars($label) . '</strong></span>';
+    $menuHtml .= '</a>';
+    
+    return $menuHtml;
+});
+
+/**
+ * Register ODDS Help Information button in the main translation menu
+ */
+abcd_add_hook('abcd_translation_menu', function (string $menuHtml) use ($bridge): string {
+    global $msgstr;
+    $lang = $bridge->get('lang', 'en');
+    $label = $msgstr["odds_help_info"] ?? 'ODDS Help Information';
+
+    $menuHtml .= '<a href="../lang/translate.php?lang=' . urlencode($lang) . '&table=odds_help_info.tab&plugin=odds&type=textarea" class="menuButton moduleButton">';
+    $menuHtml .= '<span><strong>' . htmlspecialchars($label) . '</strong></span>';
+    $menuHtml .= '</a>';
+
+    return $menuHtml;
+});
+
+/**
+ * Register ODDS compare button in the translation menu
+ */
+abcd_add_hook('abcd_compare_translation_menu', function(string $menuHtml) use ($bridge): string {
+    global $msgstr;
+    $lang = $bridge->get('lang', 'en');
+    $label = $msgstr["odds"] ?? 'ODDS';
+    
+    $menuHtml .= '<a href="../lang/compare_admin.php?lang=' . urlencode($lang) . '&table=odds.tab&plugin=odds" class="menuButton moduleButton">';
+    $menuHtml .= '<span><strong>' . htmlspecialchars($label) . '</strong></span>';
+    $menuHtml .= '</a>';
+    
+    return $menuHtml;
+});
+

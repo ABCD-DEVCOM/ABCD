@@ -20,18 +20,22 @@ if (!class_exists('PluginBridge')) {
     die("Direct access forbidden.");
 }
 
-// Inicia a sessão no topo para ler o idioma antes de disparar os e-mails
+// Log in to ensure that your language is saved
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Retrieves the language from the URL (if available) and saves it in the session for subsequent screens
+if (isset($_REQUEST['lang']) && !empty($_REQUEST['lang'])) {
+    $_SESSION['lang'] = trim($_REQUEST['lang']);
+}
+$lang = $_SESSION['lang'] ?? 'en';
 
 // SECURITY: Block direct URL access (GET requests)
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: /plugin/odds/?action=form");
     exit;
 }
-
-$lang = $_SESSION['lang'] ?? 'en';
 
 $bridge = PluginBridge::getInstance();
 $dbPath = $bridge->get('db_path');

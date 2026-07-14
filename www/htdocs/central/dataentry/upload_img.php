@@ -110,12 +110,14 @@ foreach ($files['name'] as $key=>$name) {
 	if ($name!=""){
 	  	echo "$name<br>";
 	  	$max=get_cfg_var ("upload_max_filesize");
+
 	    if ((int)$files['size'][$key]==0){
 	    	$max=get_cfg_var ("upload_max_filesize");
 	    	echo "upload_max_filesize = $max<br>";
 	    	echo "File to big. Could not be uploaded. Modify the parameter upload_max_filesize in php.ini";
 	    	die;
 	    }
+		
 	    foreach ($ext_allowed as $value){
 	    	$ext_allowed[]=strtoupper($value);
 	    }

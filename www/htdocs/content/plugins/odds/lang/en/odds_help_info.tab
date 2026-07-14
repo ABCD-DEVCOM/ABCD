@@ -1,4 +1,4 @@
-<span class='aditional_box_title'>Conditions of the service:</span>
+<h5 class="card-title text-primary mb-3 fw-bold border-bottom pb-2">Conditions of the service:</h5>
 <ul>
 <li>Up to 5 document per day can be requested, as long as the total number of pages is less than 50.</li>
 <li>It is necessary to fill in a form for each requested document.</li>
