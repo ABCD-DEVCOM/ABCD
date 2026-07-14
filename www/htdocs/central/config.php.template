@@ -307,4 +307,21 @@ if ($EmpWeb) {                     //EmpWeb parameters if used
 }
 $adm_login="";                     // emergency username for administrator
 $adm_password="";                  // emergency password for administrator
+
+
+// =========================================================================
+// PLUGIN SYSTEM BOOTSTRAP
+// =========================================================================
+
+// Ensure the CONTENT directory path is defined (adjust the realpath if your structure dictates otherwise)
+if (!defined('ABCD_CONTENT_PATH')) {
+	define('ABCD_CONTENT_PATH', realpath(__DIR__ . '/../content'));
+}
+
+// Load the hook system
+require_once __DIR__ . '/common/hooks.php';
+require_once __DIR__ . '/common/PluginBridge.php'; 
+
+// Fire up all active plugins
+abcd_load_active_plugins();
 ?>
