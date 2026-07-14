@@ -392,6 +392,9 @@ if ($dirtree==1 or $dirtree=="Y"){
 					<span><strong><?php echo $msgstr["expbases"]?></strong></span>
 				</a>
 <?php }
+
+            // HOOK: Plugins can inject central_menu items here
+            echo abcd_run_hook('central_menu', '');
 }?>
             </div>
             <div class="spacer">&#160;</div>
