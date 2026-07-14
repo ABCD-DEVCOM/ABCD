@@ -1,196 +1,150 @@
 <?php
-/*
-Contains functions for odds request form
-Calling sequence:
-- read_odds_show_controls
-     +- _remove_comments
-     +- _process_level
-          +- _build_input
-               +- _add_source
-                    +- _remove_comments
 
-2022-11-19 fho4abcd Created from show-controls.php
-*/
-/************ _remove_comments */
-function _remove_comments($text) {
-    $text = preg_replace('!/\*.*?\*/!s', '', $text);    //skip comments
-    $text = str_replace("\r", '', $text);               //remove possible \r
-    $text = preg_replace('/\n\s*\n/', "\n", $text);     //remove concatenated \n
+/**
+ * Name: inc_odds_show_controls.php
+ * Author: Roger C. Guilherme
+ * Created: 2026-07-01
+ * Description: Core logic for parsing .tab form definitions for the ODDS plugin in the ABCD application.
+ * 
+ * * @package ABCD_Plugins_ODDS
+ * @requires PHP 8.1+
+ * 
+ * changelog:
+ * 20260701 rogercgui Initial creation of LanguageManager class.
+ * 
+ * */
+
+function get_odds_tab_file(string $filename, string $lang): ?string
+{
+    global $db_path;
+
+    $bridge = PluginBridge::getInstance();
+    $centralPath = rtrim($bridge->get('abcd_path', realpath(__DIR__ . '/../../../central')), '/\\');
+    $contentPath = realpath($centralPath . '/../content');
+    $pluginSlug = 'odds';
+
+    $cofreFile = "{$contentPath}/lang/{$lang}/{$filename}";
+    if (file_exists($cofreFile)) return $cofreFile;
+
+    $motorFile = "{$centralPath}/lang/{$lang}/plugins/{$pluginSlug}/{$filename}";
+    if (file_exists($motorFile)) return $motorFile;
+
+    $motorFallback = "{$centralPath}/lang/en/plugins/{$pluginSlug}/{$filename}";
+    if (file_exists($motorFallback)) return $motorFallback;
+
+    if (!empty($db_path)) {
+        $legacyFile = rtrim($db_path, '/\\') . "/odds/def/{$lang}/{$filename}";
+        if (file_exists($legacyFile)) return $legacyFile;
+    }
+    return null;
+}
+
+function _remove_comments(string $text): string
+{
+    $text = preg_replace('!/\*.*?\*/!s', '', $text);
+    $text = str_replace("\r", '', $text);
+    $text = preg_replace('/\n\s*\n/', "\n", $text);
     return $text;
 }
-/************ function _process_level */
-function _process_level($level,$odds_show_file,$file_contents, $variable_fields,&$optional_inputs){
-    global $msgstr,$db_path;
-    // split at the abbreviation of the level enclosed in double quotes
-    $labelparts = explode("\"$level\"", $file_contents, 2);
-    if (count($labelparts)<=1) {
-         echo "<div style='color:red'>".$msgstr["archivo"]." ".$odds_show_file." ".$msgstr["odds_nolevelentry"].": \"$level\"";
-         return false;
-    }
-    // Split the string after the abbreviation into lines
-    $lines = explode("\n", trim($labelparts[1]));
-    $optional_inputs="";
-    foreach ($lines as $line) {
-        $values = explode("|", $line);//// debug echo "<br>".$line;
-        if (count($values) > 1) {
-            $values = array_map('trim', $values);
-            $optional_inputs .= _build_input($odds_show_file, $line, $values, $variable_fields);
-        } else {
-            break;
-        }
-    }    
-}
-/************ function _build_input */
-function _build_input($odds_show_file, $line, array $values, array $variable_fields)
+
+function _add_source(string $source_label, string $input_length, string $referer, array $variable_fields): string
 {
-    global $msgstr, $db_path;
+    global $msgstr, $lang;
 
-    if (count($values) < 4 || count($values) > 5) {
-        $error_msg = $msgstr["odds_inv_values"] ?? "Invalid values";
-        echo "<div style='color:red'>" . ($msgstr["archivo"] ?? "File") . " {$odds_show_file} {$error_msg} &rarr;{$line}&larr;</div>";
-        return "";
+    $odds_source_file = get_odds_tab_file("source.tab", $lang);
+    if (!$odds_source_file) return "<div class='text-danger'>source.tab missing.</div>";
+
+    $rawContent = file_get_contents($odds_source_file);
+    $rawContent = preg_replace('/^\xEF\xBB\xBF/', '', $rawContent);
+    if (!mb_check_encoding($rawContent, 'UTF-8')) {
+        $rawContent = mb_convert_encoding($rawContent, 'UTF-8', 'ISO-8859-1');
     }
 
-    $input = "";
+    $file_contents = _remove_comments(trim($rawContent));
+    $lines = explode("\n", $file_contents);
+
+    $options = [];
+    foreach ($lines as $line) {
+        if (trim($line) !== "") $options[] = explode('|', trim($line));
+    }
+
+    $last_option = end($options);
+    $last_value = $last_option[0];
+    $selected = $variable_fields["tag900"] ?? "";
+
+    // Wrapper para manter o comportamento flex
+    $html = "<div class='flex-grow-1' style='min-width: 250px; max-width: 100%;'>";
+    $html .= "<label class='form-label fw-bold' for='select_source'>{$source_label}</label>";
+    $html .= "<select id='select_source' class='form-select mb-2' name='tag900' onchange=\"toggleSourceInput('{$last_value}')\">";
+
+    $is_last_selected = false;
+    foreach ($options as $opt) {
+        $val = trim($opt[0]);
+        $lbl = trim($opt[1] ?? $val);
+        $isSelected = ($val === $selected) ? "selected" : "";
+        if ($isSelected && $val === $last_value) $is_last_selected = true;
+        $html .= "<option value=\"{$val}\" {$isSelected}>{$lbl}</option>";
+    }
+    $html .= "</select>";
+
+    $tag900_visibility = $is_last_selected ? "" : "d-none";
+    $other_value = $variable_fields["tag900_other"] ?? "";
+    $html .= "<input id='tag900_other' name='tag900_other' class='form-control mb-3 {$tag900_visibility}' type='text' value='{$other_value}' placeholder='...'>";
+    $html .= "</div>";
+
+    return $html;
+}
+
+function _build_input(string $line, array $values, array $variable_fields): string
+{
     $input_name     = $values[0];
-    $input_label    = str_replace('*', '<font color="red">*</font>', $values[1]);
-    $input_type     = $values[2] ?? '';
-    $input_length   = $values[3] ?? '';
-    $input_validate = $values[4] ?? '';
+    $input_label    = str_replace('*', '<span class="text-danger">*</span>', $values[1]);
+    $input_type     = $values[2] ?? 'text';
+    $input_length   = $values[3] ?? '20';
+    $input_value    = $variable_fields[$input_name] ?? "";
 
-    $input_value = $variable_fields[$input_name] ?? "";
-
-    $validate_entry = "";
-    if ($input_validate !== '') {
-        $validate_entry = "data-jv='" . trim($input_validate) . "'";
-    }
-
-    $referer = $variable_fields['referer'] ?? "";
+    // CSS para respeitar o tamanho do input mas permitir flexibilidade
+    $input_style = "style='width: calc({$input_length}ch + 1.5rem); max-width: 100%;'";
 
     if ($input_name === "tag900") {
-        $input .= _add_source($values[1], $input_length, $referer, $variable_fields);
-    } else {
-        // PHP 8.2+ safe alternative to utf8_decode()
-        $safe_label = mb_convert_encoding($input_label, 'ISO-8859-1', 'UTF-8');
-        $safe_value = mb_convert_encoding($input_value, 'ISO-8859-1', 'UTF-8');
-
-        $input .= "<label class='lbl' for='{$input_name}'>{$safe_label}</label>\n";
-        $input .= "<input value='{$safe_value}' type='{$input_type}' id='{$input_name}' name='{$input_name}' size='{$input_length}' maxlength='{$input_length}' {$validate_entry} />\n";
-        $input .= "<div class='subtitle_blank'></div>\n";
+        return _add_source($values[1], $input_length, $variable_fields['referer'] ?? "", $variable_fields);
     }
+
+    $input = "<div class='flex-grow-1' style='min-width: 150px;'>";
+    $input .= "<label class='form-label fw-bold' for='{$input_name}'>{$input_label}</label>";
+    $input .= "<input value='{$input_value}' type='{$input_type}' id='{$input_name}' name='{$input_name}' class='form-control mb-3' {$input_style} maxlength='{$input_length}' />";
+    $input .= "</div>";
 
     return $input;
 }
 
-/************ function _add_source */
-function _add_source($source_label, $input_length, $referer, array $variable_fields) {
-    global $msgstr, $db_path, $lang;
-    $odds_source_file_name="source.tab";
-    $odds_source_file=$db_path ."odds/def/".$lang."/".$odds_source_file_name;
-    if (!file_exists($odds_source_file)) {
-        echo "<div>".$msgstr["archivo"]." ".$odds_source_file." ".$msgstr["odds_doesnotexist"]."</div>";
-        echo "<div>".$msgstr["odds_try_default"]."</div>";
-        $odds_source_file=$db_path ."/odds/def/"."en"."/".$odds_source_file_name;
-    }
-    if (!file_exists($odds_source_file)) {
-        echo "<div style='color:red'> ".$msgstr["archivo"]." ".$odds_source_file." ".$msgstr["odds_doesnotexist"]."</div>";
-        return "";
-    }
-    $file_contents = trim(file_get_contents($odds_source_file));
-    $file_contents = _remove_comments($file_contents);
+function read_odds_show_controls(string $lang, string $level, array $variable_fields, &$optional_inputs): bool
+{
+    $optional_inputs = "<div class='d-flex flex-wrap gap-3'>"; // Container pai flexível
 
-    $a_tmp = explode("\n", $file_contents);
-    $k = 0;
-    for ($j=0; $j < count($a_tmp); $j++){
-        if (trim($a_tmp[$j]) != "") {
-            $a[$k] = $a_tmp[$j];
-            $k++;
+    $odds_show_file = get_odds_tab_file("odds_show_controls.tab", $lang);
+    if (!$odds_show_file) return false;
+
+    $rawContent = file_get_contents($odds_show_file);
+    $rawContent = preg_replace('/^\xEF\xBB\xBF/', '', $rawContent);
+    if (!mb_check_encoding($rawContent, 'UTF-8')) {
+        $rawContent = mb_convert_encoding($rawContent, 'UTF-8', 'ISO-8859-1');
+    }
+
+    $file_contents = _remove_comments(trim($rawContent));
+
+    $pattern = '/\[' . preg_quote($level, '/') . '\]\s*\|.*?\n(.*?)(?=\n\[|$)/s';
+
+    if (preg_match($pattern, $file_contents, $matches)) {
+        $lines = explode("\n", trim($matches[1]));
+        foreach ($lines as $line) {
+            if (empty(trim($line))) continue;
+            $values = array_map('trim', explode("|", $line));
+            $optional_inputs .= _build_input($line, $values, $variable_fields);
         }
+        $optional_inputs .= "</div>"; // Fecha container
+        return true;
     }
-    $source = "<label class='lbl' id='lbl_source'>$source_label</label>\n";
-    $aux_last = explode('|',  $a[(count($a)-1)]); 
-    $last_value = $aux_last[0];
-    
-    $input_value = "";
-    if ( isset($variable_fields[$source_label])) $input_value=$variable_fields[$source_label];
-    $source .= "<select id='select_source' name='tag900' onChange=\"check('".$last_value."')\"> \n";
-    if ($referer == 'sa') {
-        $selected='SAR';
-    } elseif ($referer == 'iah') {
-        $selected= 'BAEU';
-    } elseif (isset($variable_fields["tag900"])) {
-        $selected=$variable_fields["tag900"];
-    } else {
-        $selected="";
-    }
-    $i=0;
-    foreach ($a as $values) {
-        $line = explode("|", $values);
-        if (trim($line[0]) == $selected) {
-            $source .= "<option selected value=\"".trim($line[0])."\">". trim($line[1])."</option>\n";
-        } else {
-            $source .= "<option value=\"".trim($line[0])."\">". trim($line[1])."</option>\n";
-        }
-        $i++;
-    }
-    $source .= "</select>";
-    // Add a text field in case of tag900
-    if ($i == count($a)) {
-        if (trim($line[0]) == $selected) {
-            $tag900_visibility="visible";
-        } else {
-            $tag900_visibility="hidden";
-        }
-        $other_value="";
-        if (isset($variable_fields["tag900_other"])) $other_value=$variable_fields["tag900_other"];
-
-        $source .="&nbsp;&nbsp;";
-        $source .="<input id='tag900_other' name='tag900_other' type='text' size='".$input_length."' maxlength='".$input_length."'";
-        $source .=" style='visibility:".$tag900_visibility."'";
-        $source .=" value='".$other_value."'>\n<br>";
-    }
-    return $source;
-}
-
-
-/************ function read_odds_show_controls */
-/*
-2022-11-19 fho4abcd Created
-Function  : Read file $db_path."/odds/def/$lang/odds_show_controls.tab"
-    The file is read and controlled for syntax (see example files).
-    In case the level is a valid value in the file a set of html input statements is returned
-Usage     : <?php include "library/read_odds_show_controls.php ?>
-Inputs:
-    $lang:   set to the current language
-    $level:  bibliografic level. Empty implies:not set
-    $variable_fields: array with tag names/tag values
-Outputs:
-    $optional_inputs:    html statements. Empty in case of errors
-Returns:
-    True(no errors) / False (errors)
-*/
-
-function read_odds_show_controls($lang, $level, $variable_fields, &$optional_inputs){
-    global $db_path, $msgstr;
-    $retval=false;
-    $optional_inputs="";
-    $filecontents="";
-    $odds_show_file_name="odds_show_controls.tab";
-    $odds_show_file=$db_path ."odds/def/".$lang."/".$odds_show_file_name;
-    if (!file_exists($odds_show_file)) {
-        echo "<div> ".$msgstr["archivo"]." ".$odds_show_file." ".$msgstr["odds_doesnotexist"]."</div>";
-        echo "<div>".$msgstr["odds_try_default"]."</div>";
-        $odds_show_file=$db_path ."/odds/def/"."en"."/".$odds_show_file_name;
-    }
-    if (!file_exists($odds_show_file)) {
-        echo "<div style='color:red'> ".$msgstr["archivo"]." ".$odds_show_file." ".$msgstr["odds_doesnotexist"]."</div>";
-        $retval=true;
-    } else if ($level!="") {
-        // The filecontents can only be processed if there is a value for level
-        $file_contents = trim(file_get_contents($odds_show_file));
-        $file_contents = _remove_comments($file_contents);
-        if (substr($file_contents,0,1)=="\n") { $file_contents=substr($file_contents,1);}
-        $retval=_process_level($level,$odds_show_file,$file_contents,$variable_fields,$optional_inputs);
-    }
-    return $retval;
+    $optional_inputs .= "</div>";
+    return false;
 }

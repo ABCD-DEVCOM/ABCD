@@ -301,7 +301,6 @@ $parsedCancel = oddsParseTemplate($templateCancel);
 // 3. Domain Tables Config (Buscando na base de dados)
 $editableTables = [
     'categoria.tab',
-    'nivelbiblio.tab',
     'source.tab',
     'status.tab',
     'tipoliteratura.tab',
@@ -323,13 +322,6 @@ if (file_exists($selectedTablePath)) {
     }
 }
 
-$activeTab = 'tab-smtp';
-if (isset($_POST['odds_admin_action'])) {
-    if ($_POST['odds_admin_action'] === 'save_template') $activeTab = 'tab-templates';
-    if ($_POST['odds_admin_action'] === 'save_table') $activeTab = 'tab-tables';
-} elseif (isset($_GET['table_file'])) {
-    $activeTab = 'tab-tables';
-}
 
 // 4. Access Control Config
 $oddsDefFile = rtrim($dbPath, '/\\') . '/odds/def/odds.def';
@@ -342,17 +334,18 @@ if (file_exists($oddsDefFile)) {
 }
 
 // Lógica da Aba Ativa (Atualizada)
-$activeTab = 'tab-access'; // Agora a aba padrão será a de Acesso
+$activeTab = 'tab-access'; // Aba padrão
 if (isset($_POST['odds_admin_action'])) {
     if ($_POST['odds_admin_action'] === 'save_smtp') $activeTab = 'tab-smtp';
     if ($_POST['odds_admin_action'] === 'test_smtp') $activeTab = 'tab-smtp';
     if ($_POST['odds_admin_action'] === 'save_template') $activeTab = 'tab-templates';
     if ($_POST['odds_admin_action'] === 'save_table') $activeTab = 'tab-tables';
     if ($_POST['odds_admin_action'] === 'save_access') $activeTab = 'tab-access';
+} elseif (isset($_POST['action']) && $_POST['action'] === 'save_odds_controls') {
+    $activeTab = 'tab-form-editor';
 } elseif (isset($_GET['table_file'])) {
     $activeTab = 'tab-tables';
 }
-
 
 ?>
 
@@ -369,6 +362,9 @@ if (isset($_POST['odds_admin_action'])) {
         <button class="odds-tab-btn <?php echo $activeTab === 'tab-smtp' ? 'active' : ''; ?>" onclick="oddsOpenTab(event, 'tab-smtp')"><?php echo $msgstr['odds_tab_smtp'] ?? 'E-mail Server (SMTP)'; ?></button>
         <button class="odds-tab-btn <?php echo $activeTab === 'tab-templates' ? 'active' : ''; ?>" onclick="oddsOpenTab(event, 'tab-templates')"><?php echo $msgstr['odds_tab_templates'] ?? 'Message Templates'; ?></button>
         <button class="odds-tab-btn <?php echo $activeTab === 'tab-tables' ? 'active' : ''; ?>" onclick="oddsOpenTab(event, 'tab-tables')"><?php echo $msgstr['odds_tab_tables'] ?? 'Dynamic Tables'; ?></button>
+        <button class="odds-tab-btn <?php echo $activeTab === 'tab-form-editor' ? 'active' : ''; ?>" onclick="oddsOpenTab(event, 'tab-form-editor')">
+            <i class="fas fa-tasks"></i> Dynamic Form Editor
+        </button>
     </div>
 
     <div id="tab-access" class="odds-tab-content <?php echo $activeTab === 'tab-access' ? 'active' : ''; ?>">
@@ -580,6 +576,28 @@ if (isset($_POST['odds_admin_action'])) {
             <br>
             <button type="button" class="odds-btn-save" onclick="submitTable()"><?php echo $msgstr['odds_btn_save'] ?? 'Save Settings'; ?></button>
         </form>
+    </div>
+    <div id="tab-form-editor" class="odds-tab-content <?php echo $activeTab === 'tab-form-editor' ? 'active' : ''; ?>">
+        <h3><?php echo $msgstr['odds_show_controls'] ?? 'Dynamic Form Builder'; ?></h3>
+        <p><?php echo $msgstr['odds_val_show_control_i'] ?? 'Configure the fields that will be displayed for each Bibliographic Level. <b>Only fields present in the ODDS database structure (FDT) can be selected.'; ?>
+
+            </b></p>
+        <div style="background-color: #f0f4f8; border-left: 5px solid #2b8a3e; padding: 15px; margin-bottom: 20px; font-size: 12px; border-radius: 3px;">
+            <strong style="color: #2b8a3e;"><i class="fas fa-check-circle"></i> <?php echo $msgstr['odds_val_help_title'] ?? 'Available Validation Methods'; ?></strong><br>
+            <?php echo $msgstr['odds_val_help_desc'] ?? 'Use these keywords in the validation column to enforce data integrity:'; ?>
+            <ul style="margin-top: 5px; margin-bottom: 0;">
+                <li><code>required</code> - <?php echo $msgstr['odds_val_required'] ?? 'Field cannot be empty.'; ?></li>
+                <li><code>uint</code> - <?php echo $msgstr['odds_val_uint'] ?? 'Positive integers only.'; ?></li>
+                <li><code>no_trim</code> - <?php echo $msgstr['odds_val_no_trim'] ?? 'No leading/trailing spaces allowed.'; ?></li>
+                <li><code>email</code> - <?php echo $msgstr['odds_val_email'] ?? 'Valid email address.'; ?></li>
+                <li><code>year</code> - <?php echo $msgstr['odds_val_year'] ?? 'YYYY format.'; ?></li>
+                <li><code>min_length:N</code> - <?php echo $msgstr['odds_val_min'] ?? 'Minimum N characters.'; ?></li>
+                <li><code>max_length:N</code> - <?php echo $msgstr['odds_val_max'] ?? 'Maximum N characters.'; ?></li>
+                <li><code>pages_initial</code> - <?php echo $msgstr['odds_val_pg_init'] ?? 'End page must be >= Initial page.'; ?></li>
+            </ul>
+        </div>
+        <?php include __DIR__ . '/editor_odds_show_controls.php'; ?>
+
     </div>
 </div>
 

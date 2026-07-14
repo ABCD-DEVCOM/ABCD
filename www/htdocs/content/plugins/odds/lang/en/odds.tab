@@ -120,3 +120,4 @@ odds_access_public=Public:
 odds_access_public_desc=Anyone can fill the form (Anonymous allowed).
 odds_access_auth=Authenticated Only:
 odds_access_auth_desc=Requires an active OPAC session. Automatically locks the user ID and Name fields.
+configure_ODDS=ODDS Management

@@ -19,12 +19,12 @@ if (!class_exists('PluginBridge')) {
     die("Direct access forbidden.");
 }
 
-// 1. Inicia a sessão para garantir que o idioma seja lembrado
+// Log in to ensure that your language is saved
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// 2. Captura o idioma da URL (se existir) e salva na sessão para as próximas telas
+// Retrieves the language from the URL (if available) and saves it in the session for subsequent screens
 if (isset($_REQUEST['lang']) && !empty($_REQUEST['lang'])) {
     $_SESSION['lang'] = trim($_REQUEST['lang']);
 }
@@ -40,6 +40,13 @@ global $msgstr;
 if (!is_array($msgstr)) {
     $msgstr = [];
 }
+
+require_once $abcdPath . '/common/LanguageManager.php';
+$langManager = new \ABCD\Common\LanguageManager($abcdPath, $abcdPath . '/../content');
+$plugin_msgs = $langManager->loadPluginTranslations($pluginPath, 'odds', 'odds.tab', $lang);
+$msgstr = array_merge($msgstr, $plugin_msgs);
+
+
 @include_once($abcdPath . "/lang/admin.php");
 include($pluginPath . "/lang/odds.php");
 
@@ -63,7 +70,7 @@ if ($oddsAccess === 'auth_only' && !$isOpacLogged) {
 }
 
 $requestData = [
-    'id'       => $isOpacLogged ? $_SESSION['user_id'] : ($_REQUEST['tag630'] ?? $_REQUEST['id'] ?? ''),
+    'id'       => $isOpacLogged ? $_SESSION['user_id'] : ($_REQUEST['tag630'] ?? ''),
     'name'     => $isOpacLogged ? $_SESSION['user_name'] : ($_REQUEST['tag510'] ?? $_REQUEST['name'] ?? ''),
     'email'    => $_REQUEST['tag528'] ?? $_REQUEST['email'] ?? '',
     'phone'    => $_REQUEST['tag512'] ?? $_REQUEST['phone'] ?? '',
@@ -85,6 +92,7 @@ $welcomeMsg = str_replace(
     [date("Y"), date("j"), date("F")],
     $msgstr["welcome"] ?? "Welcome"
 );
+
 ?>
 
 <link href="/content/plugins/odds/assets/css/odds.css" rel="stylesheet" type="text/css">
@@ -108,7 +116,6 @@ $welcomeMsg = str_replace(
                         <div class="fw-medium"><?php echo $welcomeMsg; ?></div>
                     </div>
 
-                    <!-- Uses relative action to support any routing (/service/ or /plugin/) -->
                     <form method="post" id="forma1" action="?action=process" novalidate>
                         <input type="hidden" name="tag999" id="tag999" value="<?php echo htmlspecialchars($requestData['mfn']); ?>">
 
@@ -168,7 +175,7 @@ $welcomeMsg = str_replace(
 
                             <div class="col-md-12 mt-4">
                                 <label for="comments" class="form-label fw-bold"><?php echo $msgstr['comments'] ?? 'Comments'; ?>:</label>
-                                <textarea class="form-control bg-light" id="comments" name="tag068" rows="4" style="resize:none;"><?php echo htmlspecialchars($requestData['comments']); ?></textarea>
+                                <textarea class="form-control bg-light" id="comments" name="tag068" rows="4" style="resize:none;"><?php echo $requestData['comments']; ?></textarea>
                             </div>
                         </div>
 
@@ -188,9 +195,6 @@ $welcomeMsg = str_replace(
         <div class="col-lg-4">
             <div class="card shadow-sm border-0 bg-light rounded-3 sticky-top" style="top: 20px; z-index: 1;">
                 <div class="card-body p-4">
-                    <h5 class="card-title text-primary mb-3 fw-bold border-bottom pb-2">
-                        <i class="fas fa-info-circle me-2"></i> Service Conditions
-                    </h5>
                     <div class="card-text small text-secondary">
                         <ul class="list-unstyled mb-0 odds-help-list">
                             <?php
@@ -219,8 +223,11 @@ $welcomeMsg = str_replace(
             return;
         }
         try {
-            // Uses relative routing to preserve custom URL endpoints
-            const response = await fetch(`?action=ajax&level=${encodeURIComponent(level)}`);
+            // Pegamos o idioma que o PHP já definiu no carregamento da página
+            const currentLang = '<?php echo $lang; ?>';
+
+            // Passamos o idioma explicitamente na requisição AJAX
+            const response = await fetch(`?action=ajax&level=${encodeURIComponent(level)}&lang=${currentLang}`);
             if (!response.ok) throw new Error('Failed to load fields');
             container.innerHTML = await response.text();
         } catch (error) {
@@ -317,5 +324,103 @@ $welcomeMsg = str_replace(
         } else {
             form.submit();
         }
+    }
+
+    const gap_between_pages = 30;
+
+    // Translation dictionary fed by PHP
+    const jv_errors = {
+        required: "<?php echo $msgstr['jv_required'] ?? 'This field is required.'; ?>",
+        uint: "<?php echo $msgstr['jv_uint'] ?? 'Please enter only numerical letters here.'; ?>",
+        no_trim: "<?php echo $msgstr['jv_no_trim'] ?? 'No spaces at beginning and end of field allowed.'; ?>",
+        email: "<?php echo $msgstr['jv_email'] ?? 'Please enter a valid e-mail.'; ?>",
+        min_length: "<?php echo $msgstr['jv_min_length'] ?? 'This field needs to be at least $ characters long.'; ?>",
+        max_length: "<?php echo $msgstr['jv_max_length'] ?? 'This field must have no more than $ characters in it.'; ?>",
+        year: "<?php echo $msgstr['jv_year'] ?? 'The year must be four digits.'; ?>",
+        years_validate_majority: "<?php echo $msgstr['jv_years_validate_majority'] ?? 'The year cannot exceed the current year.'; ?>",
+        years_validate_minority: "<?php echo $msgstr['jv_years_validate_minority'] ?? 'The year cannot be less than 1850.'; ?>",
+        pages_initial: "<?php echo $msgstr['jv_pages_initial'] ?? 'The end page cannot be less than the initial page.'; ?>",
+        pages_initial_gap: "<?php echo $msgstr['jv_pages_initial_gap'] ?? 'The maximum request cannot exceed ' ?> " + gap_between_pages + " <?php echo $msgstr['jv_pages'] ?? 'pages.'; ?>",
+        pages_end: "<?php echo $msgstr['jv_pages_end'] ?? 'The initial page cannot be greater than the end page.'; ?>",
+        pages_end_gap: "<?php echo $msgstr['jv_pages_end_gap'] ?? 'The maximum request cannot exceed ' ?> " + gap_between_pages + " <?php echo $msgstr['jv_pages'] ?? 'pages.'; ?>"
+    };
+
+    function validateField(inputElement) {
+        const value = inputElement.value;
+        const label = getLabelTextFor(inputElement.id);
+        const validations = inputElement.dataset.jv ? inputElement.dataset.jv.split(/\s+/) : [];
+
+        inputElement.classList.remove('is-invalid');
+
+        for (let ruleFull of validations) {
+            if (!ruleFull) continue;
+
+            let errorMsg = null;
+            // Supports params like min_length:3 or legacy min_length_3
+            let ruleParts = ruleFull.includes(':') ? ruleFull.split(':') : ruleFull.split('_');
+            let rule = ruleFull.includes(':') ? ruleParts[0] : ruleFull;
+            let param = ruleParts.length > 1 ? ruleParts[ruleParts.length - 1] : null;
+
+            // Normalize legacy names to the unified switch case
+            if (rule.startsWith('min_length')) {
+                rule = 'min_length';
+            }
+            if (rule.startsWith('max_length')) {
+                rule = 'max_length';
+            }
+
+            switch (rule) {
+                case 'required':
+                    if (!value.trim()) errorMsg = jv_errors.required;
+                    break;
+                case 'uint':
+                    if (value && !/^[0-9]+$/.test(value)) errorMsg = jv_errors.uint;
+                    break;
+                case 'no_trim':
+                    if (value && (value.startsWith(' ') || value.endsWith(' '))) errorMsg = jv_errors.no_trim;
+                    break;
+                case 'email':
+                    const emailRegex = /^[_\.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$/i;
+                    if (value && !emailRegex.test(value)) errorMsg = jv_errors.email;
+                    break;
+                case 'min_length':
+                    if (value && param && value.length < parseInt(param)) errorMsg = jv_errors.min_length.replace('$', param);
+                    break;
+                case 'max_length':
+                    if (value && param && value.length > parseInt(param)) errorMsg = jv_errors.max_length.replace('$', param);
+                    break;
+                case 'year':
+                    if (value && value.length !== 4) errorMsg = jv_errors.year;
+                    break;
+                case 'years_validate_majority':
+                    if (value && parseInt(value) > new Date().getFullYear()) errorMsg = jv_errors.years_validate_majority;
+                    break;
+                case 'years_validate_minority':
+                    if (value && parseInt(value) < 1850) errorMsg = jv_errors.years_validate_minority;
+                    break;
+                case 'pages_initial':
+                case 'pages_end':
+                    const pIni = document.getElementById('tag020') ? parseInt(document.getElementById('tag020').value) : NaN;
+                    const pEnd = document.getElementById('tag021') ? parseInt(document.getElementById('tag021').value) : NaN;
+                    if (!isNaN(pIni) && !isNaN(pEnd) && pIni > pEnd) {
+                        errorMsg = rule === 'pages_initial' ? jv_errors.pages_initial : jv_errors.pages_end;
+                    }
+                    break;
+                case 'pages_initial_gap':
+                case 'pages_end_gap':
+                    const gIni = document.getElementById('tag020') ? parseInt(document.getElementById('tag020').value) : NaN;
+                    const gEnd = document.getElementById('tag021') ? parseInt(document.getElementById('tag021').value) : NaN;
+                    if (!isNaN(gIni) && !isNaN(gEnd) && (gEnd - gIni) > gap_between_pages) {
+                        errorMsg = rule === 'pages_initial_gap' ? jv_errors.pages_initial_gap : jv_errors.pages_end_gap;
+                    }
+                    break;
+            }
+
+            if (errorMsg) {
+                inputElement.classList.add('is-invalid');
+                return `<li><b>${label}</b>: ${errorMsg}</li>`;
+            }
+        }
+        return "";
     }
 </script>

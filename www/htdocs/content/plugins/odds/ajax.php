@@ -14,26 +14,34 @@
  * 
  * */
 
-
 if (!class_exists('PluginBridge')) {
     header("HTTP/1.1 403 Forbidden");
     die("Direct access forbidden.");
 }
 
-$bridge = PluginBridge::getInstance();
-$lang   = $_SESSION['lang'] ?? 'en';
+// Log in if the plugin's router hasn't already done so
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// Importante: passamos o $lang para o gerador de controles
+$bridge = PluginBridge::getInstance();
+
+// Retrieves the language sent by JS (Step 1), with a safe fallback
+$lang = $_REQUEST['lang'] ?? $_SESSION['lang'] ?? 'en';
+
+// Ensures the global $db_path for backward compatibility with older databases
+global $db_path;
+$db_path = rtrim($bridge->get('db_path'), '/\\') . DIRECTORY_SEPARATOR;
+
 require_once __DIR__ . '/inc_odds_show_controls.php';
 
 $optionalInputs = "";
 $variableFields = $_REQUEST;
 
-// Certifique-se de que read_odds_show_controls receba o $lang atual
 $result = read_odds_show_controls($lang, $_GET['level'] ?? '', $variableFields, $optionalInputs);
 
 if (!$result && empty($optionalInputs)) {
-    echo "<div class='alert alert-danger'>Error loading configuration.</div>";
+    echo "<div class='alert alert-danger'>Error loading dynamic fields configuration.</div>";
 } else {
     echo $optionalInputs;
 }

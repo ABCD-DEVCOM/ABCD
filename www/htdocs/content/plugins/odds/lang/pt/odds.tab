@@ -117,3 +117,15 @@ odds_access_public=Público:
 odds_access_public_desc=Qualquer pessoa pode preencher o formulário (permitido o acesso anônimo).
 odds_access_auth=Somente autenticados:
 odds_access_auth_desc=Requer uma sessão ativa no OPAC. Bloqueia automaticamente os campos de ID do usuário e Nome.
+odds_val_help_desc=Use estas palavras-chave na coluna de validação para garantir a integridade dos dados:
+odds_val_required=O campo não pode ficar vazio.
+odds_val_uint=Apenas números inteiros positivos.
+odds_val_no_trim=Não são permitidos espaços à esquerda ou à direita.
+odds_val_email=Endereço de e-mail válido.
+odds_val_year=Formato AAAA.
+odds_val_min=Mínimo de N caracteres.
+odds_val_max=Máximo de N caracteres.
+odds_val_pg_init=A página final deve ser >= a página inicial.
+odds_show_controls=Construtor Dinâmico de Formulários
+odds_val_show_control_i=Configure os campos que serão exibidos para cada nível bibliográfico. <b>Somente os campos presentes na estrutura do banco de dados ODDS (FDT) podem ser selecionados.
+configure_ODDS=Configuração ODDS
