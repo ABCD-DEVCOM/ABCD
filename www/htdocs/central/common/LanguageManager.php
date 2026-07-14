@@ -5,12 +5,19 @@
  * Author: Roger C. Guilherme
  * Created: 2026-07-01
  * Description: Language management class for the ABCD application.
- * This class handles the loading and management of translation strings for different languages, implementing a cascading translation system that allows for user overrides without modifying the core files.
- * changelog:
- * 20260701 rogercgui Initial creation of LanguageManager class.
+ * This class handles the loading and management of translation strings for different languages, 
+ * implementing a cascading translation system that allows for user overrides without modifying the core files.
  * 
- * */
-
+ * Priority for Core:
+ * 1. content/lang/{lang}/{fileName} (User Overrides)
+ * 2. central/lang/{lang}/{fileName} (Core Translations)
+ * 3. central/lang/en/{fileName}     (Core English Fallback)
+ * 
+ * Priority for Plugins:
+ * 1. content/lang/{lang}/{fileName}          (User Overrides)
+ * 2. plugins/{pluginSlug}/lang/{lang}/{fileName} (Core Plugin Translations)
+ * 3. plugins/{pluginSlug}/lang/en/{fileName}     (Plugin English Fallback)
+ */
 
 declare(strict_types=1);
 
@@ -63,51 +70,55 @@ class LanguageManager
     }
 
     /**
-     * Loads Core Translations
-     * Priority: content/lang > central/lang > central/lang/en
+     * Loads Core Translations with cascading logic.
      */
     public function loadTranslations(string $fileName, string $userLang): array
     {
-        $baseTranslations = $this->parseTabFile($this->centralPath . "lang/{$this->defaultLang}/{$fileName}");
+        // 3. Core English Fallback
+        $baseFile = $this->centralPath . "lang/{$this->defaultLang}/{$fileName}";
+        $baseTranslations = $this->parseTabFile($baseFile);
 
+        // 2. Core Translation: Factory language
         $coreTranslations = [];
         if ($userLang !== $this->defaultLang) {
-            $coreTranslations = $this->parseTabFile($this->centralPath . "lang/{$userLang}/{$fileName}");
+            $coreFile = $this->centralPath . "lang/{$userLang}/{$fileName}";
+            $coreTranslations = $this->parseTabFile($coreFile);
         }
 
-        $customTranslations = $this->parseTabFile($this->contentPath . "lang/{$userLang}/{$fileName}");
+        // 1. User Custom Override (Inside Content Vault)
+        $customFile = $this->contentPath . "lang/{$userLang}/{$fileName}";
+        $customTranslations = $this->parseTabFile($customFile);
 
+        // Merge: Custom overrides Core, Core overrides Base
         return array_merge($baseTranslations, $coreTranslations, $customTranslations);
     }
 
     /**
      * Loads Plugin Translations with cascading logic.
-     * Priority: Vault (content/lang/{lang}/plugins/{slug}/) > Plugin (lang/{lang}/) > Plugin (lang/en/)
      */
     public function loadPluginTranslations(string $pluginDir, string $pluginSlug, string $fileName, string $userLang): array
     {
         $pluginDir = rtrim($pluginDir, '/\\') . DIRECTORY_SEPARATOR;
 
-        // 1. Core English Fallback (Inside Plugin)
+        // 3. Plugin English Fallback
         $baseFile = $pluginDir . "lang/en/{$fileName}";
         $baseTranslations = $this->parseTabFile($baseFile);
 
-        // 2. Core Translation: Factory language (Inside Plugin)
+        // 2. Plugin Core Translation: Factory language
         $coreTranslations = [];
         if ($userLang !== 'en') {
             $coreFile = $pluginDir . "lang/{$userLang}/{$fileName}";
             $coreTranslations = $this->parseTabFile($coreFile);
         }
 
-        // 3. User Custom Override (Inside Content Vault / Cofre)
-        $customFile = $this->contentPath . "lang/{$userLang}/plugins/{$pluginSlug}/{$fileName}";
+        // 1. User Custom Override (Inside Content Vault)
+        $customFile = $this->contentPath . "lang/{$userLang}/{$fileName}";
         $customTranslations = $this->parseTabFile($customFile);
 
-        // Merge: Custom overrides core, core overrides base
+        // Merge: Custom overrides Plugin Core, Plugin Core overrides Plugin Base
         return array_merge($baseTranslations, $coreTranslations, $customTranslations);
     }
 
-    
     public function getLangListFile(string $userLang): string
     {
         $attempts = [
