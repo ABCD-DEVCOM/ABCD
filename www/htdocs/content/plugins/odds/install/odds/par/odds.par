@@ -1,0 +1,5 @@
+odds.*=%path_database%odds/data/odds.*
+odds.pft=%path_database%odds/pfts/es/odds.pft
+prologoact.pft=%path_database%www/prologoact.pft
+epilogoact.pft=%path_database%www/epilogoact.pft
+users.*=%path_database%users/data/users.*

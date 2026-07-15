@@ -1,0 +1,28 @@
+[as] | Artigo de periódico
+tag010 | Autor do artigo capítulo | text | 60
+tag012 | Título do artigo capítulo | text | 60
+tag030 | Título da revista | text | 60
+tag031 | Volume da revista | text | 6
+tag032 | N.º da publicação periódica | text | 6
+tag020 | Primeira Página | text | 6 | uint pages_initial pages_end
+tag021 | Última página | text | 6 | uint pages_initial pages_end
+tag064 | Ano de publicação | text | 6 | required uint year years_validate_minority years_validate_majority
+tag900 | Fonte de referência | text | 35
+[am] | capítulo de libro
+tag010 | Autor do artigo capítulo | text | 60
+tag012 | Título do artigo capítulo | text | 60
+tag016 | Autor do livro tese | text | 60 | required
+tag018 | Título da tese livro | text | 60 | required
+tag020 | Primeira Página | text | 6 | uint pages_initial pages_end
+tag021 | Última página | text | 6 | uint pages_initial pages_end
+tag065 | Edição | text | 6 | uint year
+tag064 | Ano de publicação | text | 4 | required  uint  year  years_validate_minority  years_validate_majority
+tag900 | Fonte de referência | text | 35
+[amc] | trabajo en congreso
+tag016 | Autor do artigo capítulo | text | 60 | required
+tag018 | Título do artigo capítulo | text | 60 | required
+tag530 | Tópico | text | 60
+tag020 | Primeira Página | text | 6 | uint  pages_initial pages_end
+tag021 | Última página | text | 6 | uint pages_initial pages_end
+tag064 | Ano de publicação | text | 6 | uint  year  years_validate_minority  years_validate_majority
+tag900 | Fonte de referência | text | 35

@@ -1,0 +1,9 @@
+BAEU|Bases de datos AEU
+SAR|Servicio de alerta bibliográfico
+DOF|Diario Oficial
+CADE|CADE
+/* others_x - siempre graba el mismo valor en la base: 'others' */
+others_1|El derecho digital 
+others_2|Portal Poder Judicial
+/* siempre la última opción es la que despliega un input de tipo texto para especificar el valor */
+others_3|otros - indique por favor
