@@ -1,0 +1,182 @@
+proc(
+
+ '<9001 0>ID of request</9001><9002>',v1,'</9002>'
+ '<9001 0>Date of request: </9001>',  '<9002 0>', v100*6.2,'/',v100*4.2,'/',v100*0.4, '</9002>',
+ '<9001 0>Status</9001>',
+ '<9002>',
+    if v94='0' then  'Not processed', fi,
+    if v94='1' then  'In process: ',v99*6.2,'/',v99*4.2,'/',v99*0.4, fi,
+    if v94='2' then  'Processed:',  v101,'<br>'
+                     'Notes: ',    v69,      fi,
+    if v94='3' then 'Cancelled: ', v101,  '<br>',
+                     'Notes: ',    v69,   fi,
+ '</9002>',
+
+ if p(v510) then '<9001>Requester</9001><9002>',v510,'</9002>', fi,
+ if p(v630) then '<9001>ID</9001><9002>',v630,'</9002>', fi,
+ '<9001 0><hr></9001><9002><hr></9002>',
+
+'<9001 0>Document Request</9001><9002></9002>',
+'<9001 0><hr></9001><9002></9002>',
+
+ if s(v5,v6)<>'' then '<9001>type of document</9001><9002>',v5,'-',v6,'</9002>', fi,
+
+ if p(v10) then  '<9001 0>Author of article/chapter</9001><9002>', v10+|; |  ,'</9002>', fi/
+ if p(v12) then  '<9001 0>Title of article/chapter</9001><9002>', v12+|; |  ,'</9002>', fi/
+ if p(v16) then  '<9001 0>Author of book</9001><9002>', v16+|; |  ,'</9002>', fi/
+ if p(v18) then  '<9001 0>Title of book</9001><9002>', v18+|; |  ,'</9002>', fi/
+
+ if p(v30) then  '<9001 0>Journal</9001><9002>', v30+|; |  ,'</9002>', fi/
+ if p(v31) then  '<9001 0>Volume</9001><9002>', v31+|; |  ,'</9002>', fi/
+ if p(v32) then  '<9001 0>no.</9001><9002>', v32+|; |  ,'</9002>', fi/
+
+ if p(v53) then  '<9001 0>Meeting</9001><9002>', v53+|; |  ,'</9002>', fi/
+
+ if p(v590) then  '<9001 0>Issuing body</9001><9002>', v590+|; |  ,'</9002>', fi/
+
+ if p(v20) then  '<9001 0>1st Pag. </9001><9002>', v20+|; |  ,'</9002>', fi/
+ if p(v21) then  '<9001 0>Last Pag.</9001><9002>', v21+|; |  ,'</9002>', fi/
+ if p(v65) then  '<9001 0>Edition</9001><9002>', v65+|; |  ,'</9002>', fi/
+
+ if p(v118) then  '<9001 0>Ruling</9001><9002>', v118+|; |  ,'</9002>', fi/
+ if p(v117) then  '<9001 0>Tribunal</9001><9002>', v117+|; |  ,'</9002>', fi/
+ if p(v116) then  '<9001 0>Case</9001><9002>', v116+|; |  ,'</9002>', fi/
+
+ if p(v86) then  '<9001 0>Law</9001><9002>', v86+|; |  ,'</9002>', fi/
+ if p(v217) then  '<9001 0>Legislat. Institution</9001><9002>', v217+|; |  ,'</9002>', fi/
+ if p(v218) then  '<9001 0>Resolution, Ruling, etc</9001><9002>', v218+|; |  ,'</9002>', fi/
+
+ if p(v64) then  '<9001 0>Year</9001><9002>', v64+|; |  ,'</9002>', fi/
+ if p(v999) then '<9001 0>MFN iAH</9001><9002>', v999  ,'</9002>', fi/
+ if p(v938) then '<1938>', ( v938,if occ <nocc(v938) then '|' fi),'</1938>', fi/
+
+ '<9001 0><hr></9001><9002><hr></9002>',
+
+
+),
+/*  ------------  fin del proc -----  */
+
+
+'<table width="1024px">'/,
+  '<tr>'
+
+    '<td width="50%" valign="top">',
+        '<table width="100%">'
+
+
+   ( if p(v9001) then
+   '<tr >',
+      '<td align="left" width="25%" valign="top" >',
+       '<font face="verdana" color="maroon" size=2 ><b>',  v9001,    '</b>',  '</font>',
+      '</td>',
+      '<td valign="top" width="75%"  >',
+	 '<font face="verdana" size=2>', '<div style="text-align: justify">',  v9002, '</div>'  '</font>',
+      '</td></tr>',
+   fi/ ),
+
+
+/*  url al pdf  */
+(if p(v938) then 
+   '<tr >',
+      '<td align="left" width="25%" valign="top" >',
+       '<font face="verdana" color="maroon" size=2 ><b>URL:</b>',  '</font>',
+      '</td>',
+      '<td valign="top" width="75%"  >',
+	 '<font face="verdana" size=2>', v938  '</font>',
+          '<br>'  
+          '<a href="http://127.0.0.1/docs/odds/', v938, '" target="_blank">Check URL</a>',
+      '</td></tr>',
+fi)
+
+'<tr><td >',
+
+'<tr>
+<td colspan=2>'
+/* --------------- BLAT --------------- */
+`<script type="text/javascript" src="../odds/js/lib.js"></script>`,
+if '0' = '0' then 
+  s1:= ( if s(v12,v18,v590,v86)<>'' then   v12". ",v18, "Exp. "v590, v86  ' / ',v16+|; |". ",v43 fi),
+  
+  /* pedido que  se va a cancelar */
+  if v94 = '3' then
+      `<a href="#" onclick="return getOutput('`,v528,`','`,v828,`','`,v100,`','`,v510,`','`, v94,`','`,v1938,`', '`,v69,`', '`,s1,`');"><button id="send_mail_button" style="display: inline-block; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05); font: 100 15px/normal Verdana, Helvetica, Sans-Serif; color: #FFF;  text-align: center; vertical-align: middle; text-decoration: none;  text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);cursor: pointer;border-style: solid;border-width: 1px; border-radius: 3px; background-repeat: repeat-x; padding: 3px 7px 3px 7px;background-color: #708bb1;">
+      Notification of cancelled request</button></a><div id="output"></div>`/,
+  fi,
+
+  /* pedido a satasficer */
+  if v94 = '2' then
+      `<a href="#" onclick="return getOutput('`,v528,`','`,v828,`','`,v100,`','`,v510,`','`, v94,`','`,v1938,`', '`,v69,`', '`,s1,`');"><button id="send_mail_button" style="display: inline-block; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05); font: 100 15px/normal Verdana, Helvetica, Sans-Serif; color: #FFF;  text-align: center; vertical-align: middle; text-decoration: none;  text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);cursor: pointer;border-style: solid;border-width: 1px; border-radius: 3px; background-repeat: repeat-x; padding: 3px 7px 3px 7px;background-color: #708bb1;">Notification of successful request</button></a><div id="output"></div>`/,
+      
+  fi,
+
+fi,
+/* --------------- fin BLAT --------------- */
+'</td>
+</tr>'
+
+'<P>'/  
+ 	'</td></tr></table></td>'
+
+/* columna derecha de la tabla */
+
+     '<td width="30%" valign="top" style="border:1px solid black;">',
+        
+        '<table  style:"font:arial; size=:large;" width="100%">'
+
+'<span  style:"font:arial; size=:large;">',
+         '<tr><td ><b>REQUESTER DATA</b><HR>',
+'USER CODE : CO_'v630,'<p>',
+           if p(v510) then '<b>'v510, ' -- ',v20,'</b><br>', fi,
+
+          if l->users(|CO_|V630)=0 then 'User with ID 'v630,' <b>is not registered</b>'
+
+            else 
+
+             ref->users(l->users(|CO_|V630),
+              '<table>',
+                '<tr><td>Type of user</td><td>' ,v10^a,'</td></tr>',
+                '<tr><td>Expiry Date</td><td>'  ,v18,'</td></tr>'
+,               '<tr><td>Reg. No.</td><td>'  ,v31,'</td></tr>',
+
+                 if s(v710,v711)<>'' then 
+                   '<tr><td>Suspended</td><td>' ,v710,'</td></tr>',
+                   '<tr><td>Reason</td><td>' ,v711,'</td></tr>',
+                 fi,
+
+'<td valign="top" align="center">',
+    if p(v620) then 
+'<img src="http://mtl.mu.ac.ke/central/common/show_image.php?base=users&image=/',v620,'" ','width=100 height=140 align=left><br> <br>',
+   else 
+'<img src="http://mtl.mu.ac.ke/central/common/show_image.php?base=users&image=/',right(v630,1),'/',v630,'.jpg" ','width=150 height=210 align=left><br> <br>',
+
+fi,
+
+'</td>',
+
+
+'<tr><td>',
+if p(v512) then '<br><font face=arial size=2><b>Tel.</b>: <font face=arial size=2>'v512+|; |, fi/
+if p(v520) then '<br><font face=arial size=2><b>Cat. of user</b>: <font face=arial size=2>'v520+|; |, fi/
+if p(v528) then '<br><font face=arial size=2><b>E-mail</b>: <font face=arial size=2>'v528+|; |, fi/
+if p(v68) then '<br><font face=arial size=2><b>Notes by requester</b>: <font face=arial size=2>'v68+|; |, fi/
+if p(v900) then '<br><font face=arial size=2><b>Source of reference</b>: <font face=arial size=2>'v900+|; |, fi/
+'</td></tr>',
+
+
+'</span>'
+             '</table>',
+
+
+              ),   /* fin del ref->users */
+
+           fi, 
+
+        '</td></tr>',
+
+
+
+
+
+       '</table>'
+
+'</td></tr></table>'

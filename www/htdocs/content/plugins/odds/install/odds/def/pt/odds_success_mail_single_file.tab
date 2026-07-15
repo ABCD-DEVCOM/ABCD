@@ -1,0 +1,6 @@
+subject = Serviço de Referência - Resposta à sua solicitação.
+<p>Olá <strong>[nome]</strong><br />
+Sua solicitação datada de [data] referente ao documento [request_data] foi atendida, e você poderá obtê-lo no endereço [url] por [number_of_days] dias.</p>
+
+<p>Atenciosamente,<br />
+Serviço de Referência - Biblioteca</p>

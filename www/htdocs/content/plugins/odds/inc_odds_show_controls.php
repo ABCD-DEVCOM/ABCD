@@ -23,13 +23,16 @@ function get_odds_tab_file(string $filename, string $lang): ?string
     $contentPath = realpath($centralPath . '/../content');
     $pluginSlug = 'odds';
 
+    // 1. Primary path: Content Vault (User Overrides)
     $cofreFile = "{$contentPath}/lang/{$lang}/{$filename}";
     if (file_exists($cofreFile)) return $cofreFile;
 
-    $motorFile = "{$centralPath}/lang/{$lang}/plugins/{$pluginSlug}/{$filename}";
+    // 2. Secondary path: Core Plugin translations (Factory default)
+    $motorFile = "{$contentPath}/plugins/{$pluginSlug}/lang/{$lang}/{$filename}";
     if (file_exists($motorFile)) return $motorFile;
 
-    $motorFallback = "{$centralPath}/lang/en/plugins/{$pluginSlug}/{$filename}";
+    // 3. Fallback path: Core Plugin English (Factory fallback)
+    $motorFallback = "{$contentPath}/plugins/{$pluginSlug}/lang/en/{$filename}";
     if (file_exists($motorFallback)) return $motorFallback;
 
     if (!empty($db_path)) {

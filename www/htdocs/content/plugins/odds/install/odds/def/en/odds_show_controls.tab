@@ -1,0 +1,28 @@
+[as] | Journal article 
+tag010 | Article author | text | 60
+tag012 | Article title: | text | 60 
+tag030 | Title of journal: | text | 60
+tag031 | Volume of journal: | text | 5 
+tag032 | Number of journal: | text | 5 
+tag020 | First page: | text | 5 | uint pages_initial pages_end 
+tag021 | Last page: | text | 5 | uint pages_initial pages_end 
+tag064 | Publication year: * | text | 4 | required uint year years_validate_minority years_validate_majority
+tag900 | Reference source: | text | 35
+[am] | Book Chapter
+tag010 | Chapter author: | text | 60
+tag012 | Chapter title: | text | 60 
+tag016 | Book author: * | text | 60 | required 
+tag018 | Book title: * | text | 60 | required 
+tag020 | First page: | text | 5 | uint pages_initial pages_end 
+tag021 | Last page: | text | 5 | uint pages_initial pages_end 
+tag065 | Edition: | text | 4 | uint year
+tag064 | Publication year: * | text | 4 | required uint year years_validate_minority years_validate_majority
+tag900 | Reference source: | text | 35 
+[amc] Conference Presentation
+tag016 | Paper author: * | text | 60 | required 
+tag018 | Paper title: * | text | 60 | required
+tag053 | Confernence/meeting: | text | 60 
+tag020 | First page: | text | 5 | uint pages_initial pages_end 
+tag021 | Last page: | text | 5 | uint pages_initial pages_end 
+tag064 | Publication year: | text | 4 | uint year years_validate_minority years_validate_majority
+tag900 | Reference source: | text | 35 

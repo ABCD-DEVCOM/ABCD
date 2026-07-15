@@ -26,25 +26,46 @@ function load_info(string $lang): array
     $helpfile = "odds_help_info.tab";
     $help_read = [];
 
-    // 1. Primary path: Inside the plugin's selected language folder
-    $plugin_lang_file = __DIR__ . DIRECTORY_SEPARATOR . "lang" . DIRECTORY_SEPARATOR . $lang . DIRECTORY_SEPARATOR . $helpfile;
+    // Use PluginBridge to get correct absolute paths
+    if (class_exists('PluginBridge')) {
+        $bridge = PluginBridge::getInstance();
+        $centralPath = rtrim($bridge->get('abcd_path', realpath(__DIR__ . '/../../../central')), '/\\');
+    } else {
+        // Fallback if PluginBridge is somehow not available
+        $centralPath = realpath(__DIR__ . '/../../../central');
+    }
 
-    // 2. Fallback path: Inside the plugin's English folder
-    $plugin_fallback_file = __DIR__ . DIRECTORY_SEPARATOR . "lang" . DIRECTORY_SEPARATOR . "en" . DIRECTORY_SEPARATOR . $helpfile;
+    $contentPath = realpath($centralPath . '/../content');
+    $pluginSlug = 'odds';
+
+    // 1. Primary path: Content Vault (User Overrides)
+    $cofreFile = "{$contentPath}/lang/{$lang}/{$helpfile}";
+
+    // 2. Secondary path: Core Plugin translations (Factory default)
+    $motorFile = "{$contentPath}/plugins/{$pluginSlug}/lang/{$lang}/{$helpfile}";
+
+    // 3. Fallback path: Core Plugin English (Factory fallback)
+    $motorFallback = "{$contentPath}/plugins/{$pluginSlug}/lang/en/{$helpfile}";
 
     $file_to_read = false;
 
-    // Determine which file to read
-    if (file_exists($plugin_lang_file)) {
-        $file_to_read = $plugin_lang_file;
-    } elseif (file_exists($plugin_fallback_file)) {
-        $file_to_read = $plugin_fallback_file;
+    // Determine which file to read based on priority
+    if (file_exists($cofreFile)) {
+        $file_to_read = $cofreFile;
+    } elseif (file_exists($motorFile)) {
+        $file_to_read = $motorFile;
+    } elseif (file_exists($motorFallback)) {
+        $file_to_read = $motorFallback;
     }
 
     // Read and parse the file
     if ($file_to_read !== false) {
         $lines = file($file_to_read, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         if ($lines !== false) {
+            // Remove BOM if present on the first line before trimming
+            if (isset($lines[0])) {
+                $lines[0] = preg_replace('/^\xEF\xBB\xBF/', '', $lines[0]);
+            }
             $help_read = array_map('trim', $lines);
         }
     }
