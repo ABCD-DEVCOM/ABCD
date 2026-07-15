@@ -25,19 +25,55 @@ if (!empty($dbPath)) {
     // 1. Auto-installation logic for the ISIS database files
     if (!is_dir($targetBaseDir) && is_dir($sourceTemplate)) {
         mkdir($targetBaseDir, 0775, true);
-        
+
+        $targetParDir = rtrim($dbPath, '/\\') . DIRECTORY_SEPARATOR . 'par';
+        if (!is_dir($targetParDir)) {
+            mkdir($targetParDir, 0775, true);
+        }
+
+        // OS Detection to select the correct ISIS binary data folder
+        $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+        $validDataFolder = $isWindows ? 'data-win' : 'data-lin';
+
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($sourceTemplate, RecursiveDirectoryIterator::SKIP_DOTS),
             RecursiveIteratorIterator::SELF_FIRST
         );
 
         foreach ($iterator as $item) {
-            $targetPath = $targetBaseDir . '/' . $iterator->getSubPathName();
+            $subPath = $iterator->getSubPathName();
+            $pathParts = explode(DIRECTORY_SEPARATOR, $subPath);
+            $topFolder = $pathParts[0];
+
+            // Ignore the data folder belonging to the incompatible OS
+            if (($topFolder === 'data-win' && !$isWindows) || ($topFolder === 'data-lin' && $isWindows)) {
+                continue;
+            }
+
+            // Route files to their respective physical destinations
+            if ($topFolder === $validDataFolder) {
+                $pathParts[0] = 'data';
+                $targetSubPath = implode(DIRECTORY_SEPARATOR, $pathParts);
+                $targetPath = $targetBaseDir . DIRECTORY_SEPARATOR . $targetSubPath;
+            } elseif ($topFolder === 'par') {
+                // Route parameter files directly to the global bases/par/ folder
+                array_shift($pathParts);
+                if (empty($pathParts)) continue; // Skip the 'par' directory itself
+                $targetPath = $targetParDir . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $pathParts);
+            } else {
+                // Standard folders (def, pfts, etc.) go to bases/odds/
+                $targetPath = $targetBaseDir . DIRECTORY_SEPARATOR . $subPath;
+            }
+
             if ($item->isDir()) {
                 if (!is_dir($targetPath)) {
                     mkdir($targetPath, 0775, true);
                 }
             } else {
+                $parentDir = dirname($targetPath);
+                if (!is_dir($parentDir)) {
+                    mkdir($parentDir, 0775, true);
+                }
                 copy($item->getPathname(), $targetPath);
             }
         }
