@@ -1,0 +1,9 @@
+[title]
+fields = "010, 050"
+
+[subject]
+fields = "110"
+
+[general]
+fields = "100"
+

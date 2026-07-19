@@ -1,0 +1,9 @@
+spectrum.*=%path_database%spectrum/data/spectrum.*
+htmlgizmo.*=%path_database%spectrum/data/htmlgizmo.*
+spectrum.pft=%path_database%spectrum/pfts/pt/spectrum.pft
+prologoact.pft=%path_database%www/prologoact.pft
+epilogoact.pft=%path_database%www/epilogoact.pft
+STW=%path_database%spectrum/data/spectrum.stw
+isisac.tab=%path_database%isisactab.tab
+isisuc.tab=%path_database%isisuctab.tab
+autoridades_opac.pft=%path_database%spectrum/pfts/autoridades_opac.pft
