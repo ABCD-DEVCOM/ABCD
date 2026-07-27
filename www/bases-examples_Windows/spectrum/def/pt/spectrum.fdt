@@ -1,0 +1,87 @@
+TAB||0 - Identificação e Classificação|0|0||||||||||||0||0|0|||
+F|001|001 ID (Inventário)|0|0|||AI||6|||||||1||0|0|||
+F|002|002 - Número de Tombo (Acessionamento)|1|0|||X||30|||||||1||0|0|||
+F|010|010 - Nome do Objeto (Object Name)|0|0|||X|||||||||1||0|0|||
+F|020|020 - Classificação (Taxonomia/Chenhall)|0|0|||X|||||||||1||0|0|||
+F|030|030 - Número de Itens (Quantidade)|0|0|||X|||||||||1||0|0|||
+F|050|050 - Título Específico (Se houver)|0|0|||X|||||||||0||0|0|||
+F|060|060 - Categoria / Tipologia|0|0|||X|||||||||1||0|0|||
+F|070|070 - Código de Barras/RFID|0|0|||X|||||||||1||0|0|||
+TAB||1 - Descrição Visual|0|0||||||||||||0||0|0|||
+F|100|100 - Descrição Resumida|0|0|||X|3||||||||1||0|0|||
+F|110|110 - Descrição Detalhada/Analítica|0|0|||X|9||||||||1||0|0|||
+F|120|120 - Descrição Física (Marcas/Inscrições)|0|0|||X|3||||||||0||0|0|||
+TAB||2 - Características Físicas|0|0||||||||||||0||0|0|||
+F|200|200 - Material (Repetitivo)|0|1|||X|||||||||1||0|0|||
+F|210|210 - Material do suporte|0|1|||X|||||||||1||0|0|||
+F|220|220 - Técnica (Repetitivo)|0|1|||X|||||||||1||0|0|||
+F|230|230 - Dimensões (^aAlt ^bLarg ^cProf ^dDiam)|0|0|||X|||||||||1||0|0|||
+F|240|240 - Dimensões do suporte|0|0|||X|||||||||1||0|0|||
+F|250|250 - Peso|0|0|||X|||||||||1||0|0|||
+TAB||3 - Autoria e Produção|0|0||||||||||||0||0|0|||
+F|300|300 - Autor/Artista (Repetitivo)|0|1|||X|||||||||1||0|0|||
+F|310|310 - Fabricante/Editora|0|0|||X|||||||||1||0|0|||
+F|320|320 - Biografia/Histórico do Autor|0|0|||X|3||||||||1||0|0|||
+F|330|330 - Data/Período de Criação (AAAA-MM-DD)|0|0|||X|||||||||1||0|0|||
+F|340|340 - Local de Produção|0|0|||X|||||||||1||0|0|||
+TAB||4 - Procedência e Aquisição|0|0||||||||||||0||0|0|||
+F|400|400 - Procedência (Doador/Vendedor)|0|0|||X|||||||||1||0|0|||
+F|410|410 - Data de Aquisição (AAAA-MM-DD)|0|0|||X|||||||||1||0|0|||
+F|420|420 - Valor de Aquisição|0|0|||X|||||||||1||0|0|||
+F|430|430 - Forma de Aquisição (Compra/Doação)|0|0|||X|||||||||1||0|0|||
+F|440|440 - Histórico de Procedência|0|1|||X|3||||||||1||0|0|||
+TAB||5 - Conservação e Condição|0|0||||||||||||0||0|0|||
+F|500|500 - Estado de Conservação (Repetitivo)|0|1|||XF|||||||||1||0|0|||
+F|510|510 - Data da Avaliação|0|1|||X|||||||||1||0|0|||
+F|520|520 - Condição de acesso/Manuseio|0|0|||X|||||||||1||0|0|||
+F|530|530 - Descrição de Danos/Ocorrências|0|1|||X|||||||||1||0|0|||
+F|540|540 - Tratamento/Recomendação|0|1|||X|||||||||1||0|0|||
+F|550|550 - Prioridade de Restauro|0|0|||X|||||||||1||0|0|||
+F|560|560 - Intervenções Anteriores|0|1|||X|||||||||1||0|0|||
+TAB||6 - Conjuntos|0|0||||||||||||0||0|0|||
+F|600|600 - É um conjunto?|0|0|||X|||||||||1||0|0|||
+F|610|610 - Nome do Conjunto/Coleção|0|0|||X|||||||||1||0|0|||
+F|620|620 - Nº de Peças no conjunto|0|0|||X|||||||||1||0|0|||
+F|630|630 - Relação Partes/Todo|0|1|||X|||||||||0||0|0|||
+TAB||7 - Inscrições e Marcas|0|0||||||||||||0||0|0|||
+F|700|700 - Tem Inscrição? (S/N)|0|0|||X|||||||||0||0|0|||
+F|710|710 - Quantidade de Inscrições|0|0|||X|||||||||0||0|0|||
+T|720|Inscrições (Grupo)|0|1|ablt||TB|||||||||0||0|0|||
+S||Tipo (Assinatura, Etiqueta, Placa...)|0|0|a||X|||||||||0||0|0|||
+S||Localização (Base frente, Verso...)|0|0|b||X|||||||||0||0|0|||
+S||Idioma da transcrição|0|0|l||X|||||||||0||0|0|||
+S||Transcrição/Conteúdo (O texto escrito)|0|0|t||X|||||||||0||0|0|||
+F|730|730 - Localização da inscrição na peça|0|1|||XF|||||||||0||0|0|||
+F|740|740 - Conteúdo/Transcrição|0|1|||X|||||||||0||0|0|||
+F|750|750 - Transcrição da inscrição|0|0|||X|||||||||0||0|0|||
+F|760|760 - Observação da inscrição|0|0|||X|||||||||0||0|0|||
+TAB||8 - Localização e Movimentação|0|0|||X|||||||||0||0|0|||
+F|800|800 - Localização Física Atual|0|1|||X|||||||||0||0|0|||
+F|810|810 - Histórico de Movimentação|0|1|||X|||||||||0||0|0|||
+F|820|820 - Anexos|0|1|||U|8|100|||||||0||0|0|||
+F|821|821 - Anexos públicos|0|1|||U|8|100|||||||0||0|0|||
+F|830|830 - Histórico da Peça|0|0|||X|||||||||0||0|0|||
+F|840|840 - Fonte de Pesquisa|0|0|||X|||||||||0||0|0|||
+F|850|850 - Informações de Comodato/Empréstimo|0|1|||X|||||||||0||0|0|||
+F|851|851 - Nome do Comodatário|0|0|||X|||||||||0||0|0|||
+F|852|852 - Contato do Comodatário|0|0|||X|||||||||0||0|0|||
+F|853|853 - Responsável pela Autorização|0|0|||X|||||||||0||0|0|||
+F|860|860 - Seguro e Apólices|0|1|||X|||||||||0||0|0|||
+F|861|861 - Data da Avaliação do Valor de Seguro|0|0|||X|||||||||0||0|0|||
+F|862|862 - Nota da Avaliação|0|0|||X|||||||||0||0|0|||
+F|863|863 - Autor da Nota de Avaliação|0|0|||X|||||||||0||0|0|||
+F|870|870 - Observações Gerais|0|1|||X|||||||||0||0|0|||
+F|880|880 - Nome do Técnico|0|0|||X|||||||||0||0|0|||
+F|890|890 - Data de atualização do registro|0|0|||OD|5|6|||||||0||0|0|||
+F|891|891 - Responsável pela atualização|0|0|||X|||||||||0||0|0|||
+F|892|892 - Nome do técnico responsável pela revisão pós-mudança|0|0|||X|||||||||0||0|0|||
+F|893|893 - Data de revisão pós-mudança|0|0|||X|||||||||0||0|0|||
+TAB||9 - Direitos e Licenças|0|0|||X|||||||||0||0|0|||
+F|900|900 - Titular dos Direitos Autorais|0|0|||X|||||||||0||0|0|||
+F|910|910 - Tipo de Direito1|0|0|||X|||||||||0||0|0|||
+F|920|920 - Status (Domínio Público/Copyright)|0|0|||X|||||||||0||0|0|||
+F|930|930 - Licença de Uso (CC-BY, etc)|0|0|||X|||||||||0||0|0|||
+F|940|940 - Data de Expiração|0|0|||X|||||||||0||0|0|||
+F|950|950 - Fonte da Informação|0|0|||X|||||||||0||0|0|||
+F|960|960 - Notas sobre os Direitos|0|0|||X|||||||||0||0|0|||
+F|980|980 - Log do Sistema|0|0|||OD|5|6|||||||0||0|0|||

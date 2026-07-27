@@ -1,0 +1,351 @@
+'<style>
+    /* --- ESTILO GERAL DA FICHA --- */
+    .museum-card {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #fff;
+        max-width: 100%;
+        margin: auto;
+        color: #444;
+    }
+
+    /* --- CABEÇALHO HERO --- */
+    .obj-header {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 8px 8px 0 0;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .obj-tombo {
+        background: rgba(255,255,255,0.2);
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.9em;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .obj-title {
+        margin: 10px 0 5px 0;
+        font-size: 1.8em;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+    .obj-subtitle {
+        font-style: italic;
+        opacity: 0.9;
+        font-size: 1.1em;
+    }
+
+    /* --- LAYOUT DE COLUNAS (FLEXBOX) --- */
+    .museum-body {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 25px;
+        padding: 0 10px 20px 10px;
+    }
+    .museum-content {
+        flex: 1 1 60%;
+        min-width: 300px;
+    }
+    .museum-sidebar {
+        flex: 0 0 350px; /* Largura fixa da barra lateral */
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* Responsividade: Telas menores que 900px empilham as colunas */
+    @media (max-width: 900px) {
+        .museum-sidebar {
+            flex: 1 1 100%;
+        }
+    }
+
+    /* --- ESTILO DA GALERIA --- */
+    .gallery-item img {
+        width: 100%;
+        height: auto;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease;
+    }
+    .gallery-item img:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* --- SEÇÕES E TÍTULOS --- */
+    h3.section-title {
+        color: #2c3e50;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 10px;
+        margin-top: 20px;
+        font-size: 1.3em;
+        display: flex;
+        align-items: center;
+    }
+    h3.section-title i {
+        margin-right: 10px;
+        color: #007bff;
+        opacity: 0.7;
+    }
+    /* Tira a margem superior do primeiro título de cada coluna */
+    .museum-content h3.section-title:first-child,
+    .museum-sidebar h3.section-title:first-child {
+        margin-top: 0;
+    }
+
+    /* --- TABELAS --- */
+    table.museum-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 25px;
+    }
+    table.museum-table th {
+        text-align: left;
+        padding: 12px 15px;
+        width: 250px;
+        color: #555;
+        font-weight: 600;
+        border-bottom: 1px solid #eee;
+        vertical-align: top;
+        background-color: #fcfcfc;
+    }
+    table.museum-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #eee;
+        color: #333;
+        vertical-align: top;
+    }
+    table.museum-table tr:hover td {
+        background-color: #f8f9fa;
+    }
+
+    /* --- ESTILO DAS INSCRIÇÕES --- */
+    .insc-item {
+        background-color: #f8f9fa;
+        border-left: 4px solid #007bff;
+        padding: 10px;
+        margin-bottom: 8px;
+        border-radius: 0 4px 4px 0;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .insc-badge {
+        background-color: #e9ecef;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 0.8em;
+        color: #495057;
+        margin-right: 8px;
+        text-transform: uppercase;
+    }
+    .insc-local { color: #666; font-size: 0.9em; margin-right: 10px; }
+    .insc-texto { display: block; margin-top: 6px; color: #222; line-height: 1.4; }
+    
+    /* --- TAGS ESPECIAIS --- */
+    .dim-tag {
+        display: inline-block;
+        background: #f1f3f5;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 0.9em;
+        margin-right: 5px;
+        border: 1px solid #dee2e6;
+    }
+</style>'
+
+
+
+'<div class="museum-card">'
+
+    '<div class="obj-header">'
+        '<span class="obj-tombo"><i class="fas fa-barcode"></i> 'v002'</span>'
+        '<div class="obj-title">'v010'</div>'
+        if p(v050) then '<div class="obj-subtitle">'v050'</div>' fi
+    '</div>'
+
+    ''
+    '<div class="museum-body">'
+
+        ''
+        '<div class="museum-content">'
+
+            '<h3 class="section-title"><i class="fas fa-fingerprint"></i> Identificação e Classificação</h3>'
+            ' <table class="museum-table">'
+                if p(v001) then '<tr><th>ID Provisório/Antigo</th><td>'v001+|<br>|,'</td></tr>' fi
+                if p(v020) then '<tr><th>Classificação</th><td>'v020+|<br>|,'</td></tr>' fi
+                if p(v060) then '<tr><th>Categoria / Tipologia</th><td>'v060+|<br>|,'</td></tr>' fi
+                if p(v030) then '<tr><th>Quantidade de Itens</th><td>'v030+|<br>|,'</td></tr>' fi
+                if p(v070) then '<tr><th>Código de Barras/RFID</th><td>'v070+|<br>|,'</td></tr>' fi
+            '</table>'
+
+            if p(v100) or p(v110) or p(v120) then
+                '<h3 class="section-title"><i class="fas fa-eye"></i> Descrição Visual</h3>
+                <table class="museum-table">'
+                if p(v100) then '<tr><th>Descrição Resumida</th><td>'v100+|<br>|,'</td></tr>' fi
+                if p(v110) then '<tr><th>Descrição Analítica</th><td>'v110+|<br>|,'</td></tr>' fi
+                if p(v120) then '<tr><th>Marcas Físicas</th><td>'v120+|<br>|,'</td></tr>' fi
+                '</table>'
+            fi
+
+            if p(v200) or p(v220) or p(v230) then
+                '<h3 class="section-title"><i class="fas fa-ruler-combined"></i> Características Físicas</h3>
+                <table class="museum-table">'
+                if p(v200) then '<tr><th>Material</th><td>'v200+|<br>|,'</td></tr>' fi
+                if p(v210) then '<tr><th>Material do Suporte</th><td>'v210+|<br>|,'</td></tr>' fi
+                if p(v220) then '<tr><th>Técnica</th><td>'v220+|<br>|,'</td></tr>' fi
+                
+                if p(v230) then 
+                    '<tr><th>Dimensões da Obra</th><td>'
+                    if p(v230^a) then '<span class="dim-tag">Alt: <b>'v230^a'</b></span>' fi
+                    if p(v230^b) then '<span class="dim-tag">Larg: <b>'v230^b'</b></span>' fi
+                    if p(v230^c) then '<span class="dim-tag">Prof: <b>'v230^c'</b></span>' fi
+                    if p(v230^d) then '<span class="dim-tag">Diâm: <b>'v230^d'</b></span>' fi
+                    if a(v230^a) then v230 fi
+                    '</td></tr>' 
+                fi
+                
+                if p(v240) then '<tr><th>Dimensões do Suporte</th><td>'v240+|<br>|,'</td></tr>' fi
+                if p(v250) then '<tr><th>Peso</th><td>'v250+|<br>|,'</td></tr>' fi
+                '</table>'
+            fi
+
+            if p(v300) or p(v330) then
+                '<h3 class="section-title"><i class="fas fa-user-edit"></i> Autoria e Produção</h3>
+                <table class="museum-table">'
+                if p(v300) then '<tr><th>Autor / Artista</th><td><strong>'v300+|<br>|,'</strong></td></tr>' fi
+                if p(v310) then '<tr><th>Fabricante</th><td>'v310+|<br>|,'</td></tr>' fi
+                if p(v330) then '<tr><th>Período/Data de Criação</th><td><i class="far fa-calendar-alt"></i> 'v330+|<br>|,'</td></tr>' fi
+                if p(v340) then '<tr><th>Local/Forma de Produção</th><td>'v340+|<br>|,'</td></tr>' fi
+                if p(v320) then '<tr><th>Nota Biográfica</th><td>'v320+|<br>|,'</td></tr>' fi
+                '</table>'
+            fi
+
+            if p(v400) or p(v410) then
+                '<h3 class="section-title"><i class="fas fa-box-open"></i> Procedência e Aquisição</h3>
+                <table class="museum-table">'
+                if p(v400) then '<tr><th>Procedência</th><td>'v400+|<br>|,'</td></tr>' fi
+                if p(v430) then '<tr><th>Forma de Aquisição</th><td>'v430+|<br>|,'</td></tr>' fi
+                if p(v410) then '<tr><th>Data de Entrada</th><td>'v410+|<br>|,'</td></tr>' fi
+                if p(v420) then '<tr><th>Valor</th><td>'v420+|<br>|,'</td></tr>' fi
+                '</table>'
+            fi
+
+            if p(v500) or p(v530) then
+                '<h3 class="section-title"><i class="fas fa-stethoscope"></i> Conservação e Condição</h3>
+                <table class="museum-table">'
+                if p(v500) then '<tr><th>Estado de Conservação</th><td>'v500+|<br>|,'</td></tr>' fi
+                if p(v530) then '<tr><th>Danos/Ocorrências</th><td>'v530+|<br>|,'</td></tr>' fi
+                if p(v540) then '<tr><th>Recomendação</th><td>'v540+|<br>|,'</td></tr>' fi
+                if p(v510) then '<tr><th>Data da Avaliação</th><td>'v510+|<br>|,'</td></tr>' fi
+                if p(v550) then '<tr><th>Prioridade</th><td>'v550+|<br>|,'</td></tr>' fi
+                if p(v560) then '<tr><th>Intervenções Anteriores</th><td>'v560+|<br>|,'</td></tr>' fi
+                '</table>'
+            fi
+
+            if p(v700) or p(v720) then
+                '<h3 class="section-title"><i class="fas fa-signature"></i> Inscrições e Marcas</h3>
+                <table class="museum-table">'
+                if p(v700) then '<tr><th>Possui Inscrição?</th><td>'v700'</td></tr>' fi
+                if p(v710) then '<tr><th>Quantidade</th><td>'v710'</td></tr>' fi
+                
+                if p(v720) then 
+                    '<tr>
+                        <th>Inscrições Detalhadas</th>
+                        <td>'
+                        (
+                            '<div class="insc-item">
+                                <span class="insc-badge">'v720^a'</span>
+                                <span class="insc-local"><i class="fas fa-map-marker-alt"></i> '
+                                
+                                ''
+                                if v720^b = 'f.c.s.e.' then 'Frente - Canto Superior Esquerdo' fi
+                                if v720^b = 'f.ac.c.'  then 'Frente - Acima ao Centro' fi
+                                if v720^b = 'f.c.s.d.' then 'Frente - Canto Superior Direito' fi
+                                if v720^b = 'f.c.e.'   then 'Frente - Centro à Esquerda' fi
+                                if v720^b = 'f.c.'     then 'Frente - Centro' fi
+                                if v720^b = 'f.c.d.'   then 'Frente - Centro à Direita' fi
+                                if v720^b = 'f.c.i.e.' then 'Frente - Canto Inferior Esquerdo' fi
+                                if v720^b = 'f.ab.c.'  then 'Frente - Abaixo ao Centro' fi
+                                if v720^b = 'f.c.i.d.' then 'Frente - Canto Inferior Direito' fi
+                                if v720^b = 'm.ac.' then 'Moldura - Acima' fi
+                                if v720^b = 'm.ab.' then 'Moldura - Abaixo' fi
+                                if v720^b = 'm.e.'  then 'Moldura - Esquerda' fi
+                                if v720^b = 'm.d.'  then 'Moldura - Direita' fi
+                                if v720^b = 'v.c.s.e'  then 'Verso - Canto Superior Esquerdo' fi
+                                if v720^b = 'v.ac.c.'  then 'Verso - Acima ao Centro' fi
+                                if v720^b = 'v.c.s.d'  then 'Verso - Canto Superior Direito' fi
+                                if v720^b = 'v.c.e.'   then 'Verso - Centro à Esquerda' fi
+                                if v720^b = 'v.c.'     then 'Verso - Centro' fi
+                                if v720^b = 'v.c.d.'   then 'Verso - Centro Direito' fi
+                                if v720^b = 'v.c.i.e.' then 'Verso - Canto Inferior Esquerdo' fi
+                                if v720^b = 'v.i.c'    then 'Verso - Inferior Centro' fi
+                                if v720^b = 'v.c.i.d'  then 'Verso - Canto Inferior Direito' fi
+                                if v720^b = 'chassi ac.' then 'Chassi - Acima' fi
+                                if v720^b = 'chassi ab.' then 'Chassi - Abaixo' fi
+                                if v720^b = 'chassi e.'  then 'Chassi - Esquerda' fi
+                                if v720^b = 'chassi d.'  then 'Chassi - Direita' fi
+                                if v720^b = 'v.m.ac.' then 'Verso - Moldura - Acima' fi
+                                if v720^b = 'v.m.e.'  then 'Verso - Moldura - Esquerda' fi
+                                if v720^b = 'v.m.d.'  then 'Verso - Moldura - Direita' fi
+                                if v720^b = 'v.m.ab.' then 'Verso - Moldura - Abaixo' fi
+                                if v720^b = 'f.f.'   then 'Face Frontal' fi
+                                if v720^b = 'f.p.'   then 'Face Posterior' fi
+                                if v720^b = 'f.s.'   then 'Face Superior' fi
+                                if v720^b = 'f.i.'   then 'Face Inferior' fi
+                                if v720^b = 'f.l.e.' then 'Face Lateral Esquerda' fi
+                                if v720^b = 'f.l.d.' then 'Face Lateral Direita' fi
+                                if v720^b = 'b.f.f.'   then 'Base - Face Frontal' fi
+                                if v720^b = 'b.f.p.'   then 'Base - Face Posterior' fi
+                                if v720^b = 'b.f.s.'   then 'Base - Face Superior' fi
+                                if v720^b = 'b.f.i.'   then 'Base - Face Inferior' fi
+                                if v720^b = 'b.f.l.e.' then 'Base - Face Lateral Esquerda' fi
+                                if v720^b = 'b.f.l.d.' then 'Base - Face Lateral Direita' fi
+                                if v720^b = 'int.f.f'   then 'Interno - Face Frontal' fi
+                                if v720^b = 'int.f.p'   then 'Interno - Face Posterior' fi
+                                if v720^b = 'int.f.s'   then 'Interno - Face Superior' fi
+                                if v720^b = 'int.f.i'   then 'Interno - Face Inferior' fi
+                                if v720^b = 'int.f.l.e' then 'Interno - Face Lateral Esquerda' fi
+                                if v720^b = 'int.f.l.d' then 'Interno - Face Lateral Direita' fi
+                                if a(v720^b) then '' else if v720^b : '.' then '' else v720^b fi fi
+
+                                '</span>
+                                <span class="insc-texto">Transcr: <strong>'v720^t'</strong></span>
+                             </div>'
+                        )
+                        '</td>
+                    </tr>' 
+                fi
+                '</table>'
+            fi
+
+            '<h3 class="section-title"><i class="fas fa-map-marked-alt"></i> Localização e Controle</h3>'
+            '<table class="museum-table">'
+            if p(v800) then '<tr><th>Localização Atual</th><td><strong>'v800+|<br>|,'</strong></td></tr>' fi
+            if p(v810) then '<tr><th>Histórico de Locais</th><td>'v810+|<br>|,'</td></tr>' fi
+            if p(v820) then '<tr><th>Nomes de Arquivo</th><td>'v820+|<br>|,'</td></tr>' fi
+            if p(v870) then '<tr><th>Observações Gerais</th><td>'v870+|<br>|,'</td></tr>' fi
+            if p(v890) then '<tr><th>Última Atualização</th><td>'v890' ('v880')</td></tr>' fi
+            '</table>'
+
+        '</div>' ''
+
+        ''
+        if p(v820) then 
+            '<div class="museum-sidebar">'
+                '<h3 class="section-title"><i class="far fa-images"></i> Mídia</h3>'
+                (
+                    '<a href="../common/show_image.php?image='v820'&base=spectrum" target="_blank" class="gallery-item">'
+                        '<img src="../common/show_image.php?image='v820'&base=spectrum" alt="Imagem associada ao registro">'
+                    '</a>'
+                /)
+            '</div>'
+        fi
+
+    '</div>' ''
+
+'</div>'
