@@ -1,16 +1,20 @@
 <?php
+
 /**
  * -------------------------------------------------------------------------
- * Helper: Construtor de Expressão de Busca
+ * Helper: Search Expression Builder
  * Author: Roger C. Guilherme
  * Date: 2026-07-28
+ * Description: Build the final expression by combining the base expression, the collection and the active facets.
+ * A single source is used by buscar_integrada.php and facets.php to ensure consistency.
  * -------------------------------------------------------------------------
  */
-
-function build_search_expression($Expresion, $coleccion_str, $Expr_facetas) {
+function montarExpressaoBusca($Expresion, $Expr_facetas = '')
+{
     $busqueda = $Expresion;
-    if (isset($coleccion_str) and $coleccion_str != "") {
-        $coleccion = explode('|', urldecode($coleccion_str));
+
+    if (isset($_REQUEST["coleccion"]) && $_REQUEST["coleccion"] != "") {
+        $coleccion = explode('|', urldecode($_REQUEST["coleccion"]));
         $col0 = isset($coleccion[0]) ? $coleccion[0] : '';
         $col2 = isset($coleccion[2]) ? $coleccion[2] : '';
 
@@ -20,15 +24,16 @@ function build_search_expression($Expresion, $coleccion_str, $Expr_facetas) {
             $busqueda = $col2 . $col0;
         }
     }
+
     if (!empty($Expr_facetas)) {
         $f = explode('|', $Expr_facetas);
         if (isset($f[1]) && !empty(trim($f[1]))) {
             $exFacetas = trim($f[1]);
-            if ($busqueda == "" || $busqueda == '$') $busqueda = $exFacetas;
-            else $busqueda = "(" . $busqueda . ") and (" . $exFacetas . ")";
+            $busqueda = ($busqueda == "" || $busqueda == '$')
+                ? $exFacetas
+                : "(" . $busqueda . ") and (" . $exFacetas . ")";
         }
     }
-    if (empty($busqueda)) $busqueda = '$';
-    
-    return $busqueda;
+
+    return empty($busqueda) ? '$' : $busqueda;
 }

@@ -19,7 +19,7 @@
 
 function facetas()
 {
-    global $db_path, $lang, $msgstr, $actparfolder, $xWxis, $busqueda, $Expresion, $primera_base, $ABCD_scripts_path, $IsisScript, $expresion, $base;
+    global $db_path, $lang, $msgstr, $actparfolder, $xWxis, $busqueda, $Expresion, $primera_base, $ABCD_scripts_path, $IsisScript, $expresion, $base, $Web_Dir;
 
     $facetas = "S";
 
@@ -33,12 +33,18 @@ function facetas()
             $bases_para_processar = array_keys($bd_list);
         }
 
-        $expresionOriginal = construir_expresion();
+        // 1. Obtém as facetas ativas da URL (se houver)
+        $Expr_facetas = isset($_REQUEST["facetas"]) && $_REQUEST["facetas"] != "" ? urldecode($_REQUEST["facetas"]) : "";
+
+        // 2. Constrói a expressão usando a Fonte Única de Verdade
+        require_once $Web_Dir . 'includes/search/expression_builder.php';
+        $expresionOriginal = montarExpressaoBusca(construir_expresion(), $Expr_facetas);
 
         $termo_livre = isset($_REQUEST["Sub_Expresion"]) ? urldecode($_REQUEST["Sub_Expresion"]) : "";
         $tem_truncagem = (strpos($termo_livre, '$') !== false);
 
         $expresionSemAcento = removeacentos($expresionOriginal);
+
         $expresionClean = str_replace(['(', ')', '+and+'], ['', '', ') and ('], $expresionSemAcento);
 
         foreach ($bases_para_processar as $base_atual) {

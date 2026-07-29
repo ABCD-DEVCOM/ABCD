@@ -39,24 +39,7 @@ function searchAndOrganizeResults($bd_list, $db_path, $Expresion, $termo_livre, 
         }
     }
 
-    $busqueda = $Expresion;
-    if (isset($_REQUEST["coleccion"]) and $_REQUEST["coleccion"] != "") {
-        $coleccion = explode('|', urldecode($_REQUEST["coleccion"]));
-        if ($Expresion != "" and $Expresion != '$' and $Expresion != $coleccion[2] . $coleccion[0]) {
-            $busqueda = "(" . $Expresion . ") and (" . $coleccion[2] . $coleccion[0] . ")";
-        } else {
-            $busqueda = $coleccion[2] . $coleccion[0];
-        }
-    }
-    if (!empty($Expr_facetas)) {
-        $f = explode('|', $Expr_facetas);
-        if (isset($f[1]) && !empty(trim($f[1]))) {
-            $exFacetas = trim($f[1]);
-            if ($busqueda == "" || $busqueda == '$') $busqueda = $exFacetas;
-            else $busqueda = "(" . $busqueda . ") and (" . $exFacetas . ")";
-        }
-    }
-    if (empty($busqueda)) $busqueda = '$';
+    $busqueda = montarExpressaoBusca($Expresion, $Expr_facetas);
 
     // STEP 1: GET THE TOTAL
     $total_base = [];
