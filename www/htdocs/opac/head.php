@@ -40,7 +40,9 @@ header("Pragma: no-cache"); // Para HTTP/1.0
 //include ("get_ip_address.php");
 //session_cache_limiter("private_no_expire");
 
-$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/";
+// FIX: Provide a fallback for HTTP_HOST to prevent undefined key warnings
+$http_host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$http_host}/";
 $ActualDir = getcwd();
 
 //foreach ($_REQUEST as $var => $value) echo "$var=>$value<br>";
