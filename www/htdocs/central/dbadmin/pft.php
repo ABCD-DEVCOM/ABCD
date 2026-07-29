@@ -381,45 +381,56 @@ include("../common/header.php");
 			document.savesearch.submit()
 		}
 
+		/**
+		 * Checks for DOM element existence to prevent crashes for restricted profiles (guests)
+		 * who do not have CENTRAL_EDPFT permissions and therefore lack these fields.
+		 */
 		function SelectExistingFormat() {
-			document.forma1.headings.value = ""
-			document.forma1.pft.value = ""
-			document.forma1.nombre.value = ""
-			document.forma1.descripcion.value = ""
-			document.forma1.prefixsubfield.checked = false;
-			document.forma1.fieldquote.checked = false;
+			if (document.forma1.headings) document.forma1.headings.value = "";
+			if (document.forma1.pft) document.forma1.pft.value = "";
+			if (document.forma1.nombre) document.forma1.nombre.value = "";
+			if (document.forma1.descripcion) document.forma1.descripcion.value = "";
+			if (document.forma1.prefixsubfield) document.forma1.prefixsubfield.checked = false;
+			if (document.forma1.fieldquote) document.forma1.fieldquote.checked = false;
+
 			tipoacro = "T";
-			for (i = 0; i < document.forma1.tipof.length; i++) document.forma1.tipof[i].checked = false;
-			for (i = 0; i < document.forma1.separ.length; i++) document.forma1.separ[i].checked = false;
 
-			ix = document.forma1.fgen.selectedIndex
-			if (ix == 0) return
-			format = document.forma1.fgen.options[ix].value
+			if (document.forma1.tipof) {
+				for (i = 0; i < document.forma1.tipof.length; i++) document.forma1.tipof[i].checked = false;
+			}
+			if (document.forma1.separ) {
+				for (i = 0; i < document.forma1.separ.length; i++) document.forma1.separ[i].checked = false;
+			}
 
-			formatar = format.split('|')
+			ix = document.forma1.fgen.selectedIndex;
+			if (ix == 0) return;
+
+			format = document.forma1.fgen.options[ix].value;
+			formatar = format.split('|');
 			separset = false;
-			if (0 in formatar) document.forma1.nombre.value = formatar[0]
-			if (1 in formatar) document.forma1.descripcion.value = formatar[1]
-			if (2 in formatar) {
+
+			if (0 in formatar && document.forma1.nombre) document.forma1.nombre.value = formatar[0];
+			if (1 in formatar && document.forma1.descripcion) document.forma1.descripcion.value = formatar[1];
+			if (2 in formatar && document.forma1.tipof) {
 				for (i = 0; i < document.forma1.tipof.length; i++) {
 					if (document.forma1.tipof[i].value === formatar[2]) {
-						document.forma1.tipof[i].checked = true
-						tipoacro = document.forma1.tipof[i].value
+						document.forma1.tipof[i].checked = true;
+						tipoacro = document.forma1.tipof[i].value;
 					}
 				}
 			}
-			if (3 in formatar) {
+			if (3 in formatar && document.forma1.separ) {
 				for (i = 0; i < document.forma1.separ.length; i++) {
 					if (document.forma1.separ[i].id === formatar[3]) {
-						document.forma1.separ[i].checked = true
-						separset = true
+						document.forma1.separ[i].checked = true;
+						separset = true;
 					}
 				}
 			}
-			if (!separset && tipoacro == 'CT') document.forma1.separ[0].checked = true;
-			if (!separset && tipoacro == 'CD') document.forma1.separ[0].checked = true;
-			if (4 in formatar && formatar[4] == "1") document.forma1.prefixsubfield.checked = true
-			if (5 in formatar && formatar[5] == "1") document.forma1.fieldquote.checked = true
+			if (!separset && tipoacro == 'CT' && document.forma1.separ) document.forma1.separ[0].checked = true;
+			if (!separset && tipoacro == 'CD' && document.forma1.separ) document.forma1.separ[0].checked = true;
+			if (4 in formatar && formatar[4] == "1" && document.forma1.prefixsubfield) document.forma1.prefixsubfield.checked = true;
+			if (5 in formatar && formatar[5] == "1" && document.forma1.fieldquote) document.forma1.fieldquote.checked = true;
 		}
 
 		function SendForEdit() {
@@ -435,58 +446,76 @@ include("../common/header.php");
 			document.forma1.submit()
 		}
 
+		/**
+		 * Includes existence checks for textareas to prevent TypeError exceptions 
+		 * when the user profile lacks editing capabilities.
+		 */
 		function SubmitForm(vp) {
 			document.forma1.vp.value = vp;
 			document.forma1.target = "_self";
-			document.forma1.headings.value = document.forma1.headings.value.trimEnd()
-			de = Trim(document.forma1.Mfn.value)
-			a = Trim(document.forma1.to.value)
+
+			if (document.forma1.headings) {
+				document.forma1.headings.value = document.forma1.headings.value.trimEnd();
+			}
+
+			de = Trim(document.forma1.Mfn.value);
+			a = Trim(document.forma1.to.value);
+
 			if (de != "" || a != "") {
-				document.forma1.Opcion.value = "rango"
-				Se = ""
+				document.forma1.Opcion.value = "rango";
+				Se = "";
 				var strValidChars = "0123456789";
-				blnResult = true
+				blnResult = true;
 				for (i = 0; i < de.length; i++) {
 					strChar = de.charAt(i);
 					if (strValidChars.indexOf(strChar) == -1) {
-						alert("<?php echo $msgstr["especificarvaln"] ?>")
-						return
+						alert("<?php echo $msgstr["especificarvaln"] ?>");
+						return;
 					}
 				}
 				for (i = 0; i < a.length; i++) {
 					strChar = a.charAt(i);
 					if (strValidChars.indexOf(strChar) == -1) {
-						alert("<?php echo $msgstr["especificarvaln"] ?>")
-						return
+						alert("<?php echo $msgstr["especificarvaln"] ?>");
+						return;
 					}
 				}
-				de = Number(de)
-				a = Number(a)
+				de = Number(de);
+				a = Number(a);
 				if (de <= 0 || a <= 0 || de > a || a > top.maxmfn) {
-					alert("<?php echo $msgstr["numfr"] ?>")
-					return
+					alert("<?php echo $msgstr["numfr"] ?>");
+					return;
 				}
 			}
-			document.forma1.pft.value = document.forma1.pft.value.trim();
-			if (document.forma1.pft.value == "" && document.forma1.fgen.selectedIndex < 1 && document.forma1.pft.value == "") {
-				alert("<?php echo $msgstr["r_selgen"] ?>")
-				return
+
+			var pft_content = "";
+			if (document.forma1.pft) {
+				document.forma1.pft.value = document.forma1.pft.value.trim();
+				pft_content = document.forma1.pft.value;
 			}
+
+			if (pft_content == "" && document.forma1.fgen.selectedIndex < 1) {
+				alert("<?php echo $msgstr["r_selgen"] ?>");
+				return;
+			}
+
 			if (Trim(document.forma1.Expresion.value) == "" && Trim(document.forma1.Mfn.value) == "" && Trim(document.forma1.seleccionados.value) == "") {
-				alert("<?php echo $msgstr["r_selreg"] ?>")
-				return
+				alert("<?php echo $msgstr["r_selreg"] ?>");
+				return;
 			}
+
 			if (vp == "P") {
-				msgwin = window.open("", "VistaPrevia", "width=600,top=0,left=0,resizable, status, scrollbars")
-				document.forma1.target = "VistaPrevia"
-				msgwin.focus()
+				msgwin = window.open("", "VistaPrevia", "width=600,top=0,left=0,resizable, status, scrollbars");
+				document.forma1.target = "VistaPrevia";
+				msgwin.focus();
 			}
 			if (vp == "PRINT") {
-				msgwin = window.open("", "VistaPrevia", "width=800,top=0,left=0,resizable, status, scrollbars")
-				document.forma1.target = "VistaPrevia"
-				msgwin.focus()
+				msgwin = window.open("", "VistaPrevia", "width=800,top=0,left=0,resizable, status, scrollbars");
+				document.forma1.target = "VistaPrevia";
+				msgwin.focus();
 			}
-			document.forma1.submit()
+
+			document.forma1.submit();
 		}
 
 		function toggleLayer(whichLayer) {
@@ -549,8 +578,9 @@ include("../common/header.php");
 				} else {
 					$backtoscript = "../dataentry/inicio_main.php";
 					include "../common/inc_back.php";
+					$backtocancelscript = $backtoscript;
 				}
-				$backtocancelscript = $backtoscript;
+				
 			}
 			?>
 		</div>
