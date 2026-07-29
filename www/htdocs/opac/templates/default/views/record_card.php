@@ -115,7 +115,7 @@ function ApresentarRegistroIndividual($base, $mfn, $num_registro, $Formato, $Exp
                     if (isset($f[3]))
                         $reverse = "ON";
                     $IsisScript = $xWxis . "opac/buscar.xis";
-                    $query = "&cipar=" . $db_path . $actparfolder . "/$bd_ref.par&Expresion=" . $expr_ref . "&Opcion=buscar&base=" . $bd_ref . "&Formato=$pft_ref&count=90000&lang=" . $_REQUEST["lang"];
+                    $query = "&cipar=" . $db_path . $actparfolder . "/$bd_ref.par&Expresion=" . $expr_ref . "&Opcion=buscar&base=" . $bd_ref . "&Formato=$pft_ref&count=100&lang=" . $_REQUEST["lang"];
                     if ($reverse != "") {
                         $query .= "&reverse=On";
                     }
