@@ -24,7 +24,15 @@ if (isset($_REQUEST["db_path"])) {
 <div id="page">
 	<div id="content">
 		<?php
-		$list = explode('|', $_REQUEST["cookie"]);
+
+		// Safe initialization at the top of the file
+		$cookie_data = $_REQUEST["cookie"] ?? '';
+		$list = explode("|", $cookie_data);
+		$ll = explode("_", $list[0] ?? '');
+
+		// Safe parsing of the selected records
+		$sel_db = []; // Always initialize arrays before using them
+
 		foreach ($list as $value) {
 			$value = trim($value);
 			if ($value != "") {

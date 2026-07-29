@@ -41,6 +41,8 @@ global $terBd,$db_path,$LastKey,$bd_list,$path,$xWxis,$meta_encoding, $actparfol
 				//echo "$t<br>" ;  continue;
 				$l=explode('|',$t);
 				$linea=$l[0];
+				$Prefijo = $_REQUEST["prefijo"] ?? "";
+				$Opcion = $_REQUEST["Opcion"] ?? "";
 				$pre=trim(substr($linea,0,strlen($_REQUEST["prefijo"])));
 				if ($pre==$_REQUEST["prefijo"]){
 					$ter=substr($linea,strlen($_REQUEST["prefijo"]));

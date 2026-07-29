@@ -138,6 +138,8 @@ if (isset($_REQUEST["Opcion"]) and $_REQUEST["Opcion"] == "Guardar") {
 	if (!isset($_REQUEST["conf_WEBRESERVATION"])) $_REQUEST["conf_WEBRESERVATION"] = "N";
 	if (!isset($_REQUEST["conf_SHOWHELP"])) $_REQUEST["conf_SHOWHELP"] = "N";
 	if (!isset($_REQUEST["conf_CAPTCHA"])) $_REQUEST["conf_CAPTCHA"] = "N";
+	if (!isset($_REQUEST["conf_RELEVANCE_GATE_ENABLED"])) $_REQUEST["conf_RELEVANCE_GATE_ENABLED"] = "Y";
+	if (!isset($_REQUEST["conf_RELEVANCE_CACHE_ENABLED"])) $_REQUEST["conf_RELEVANCE_CACHE_ENABLED"] = "Y";
 
 	$saved_content = "";
 	foreach ($_REQUEST as $var => $value) {
@@ -401,6 +403,28 @@ $opac_base_url = rtrim($server_url, '/') . '/' . $opac_path_url;
 					?>
 					<input type=radio name=conf_charset value=UTF-8 <?php if ($charset_val == "UTF-8") echo " checked" ?>> UTF-8&nbsp; &nbsp;
 					<input type=radio name=conf_charset value=ISO-8859-1 <?php if ($charset_val == "ISO-8859-1") echo " checked" ?>> ISO-8859-1
+				</div>
+			</div>
+
+			<button type="button" class="accordion"><?php echo $msgstr["cfg_search_performance"]; ?></button>
+			<div class="panel">
+				<div class="formRow">
+					<label><?php echo $msgstr["cfg_relevance_gate_enabled"]; ?></label>
+					<input type="radio" name="conf_RELEVANCE_GATE_ENABLED" value="Y" <?php if (!isset($opac_gdef['RELEVANCE_GATE_ENABLED']) || $opac_gdef['RELEVANCE_GATE_ENABLED'] == "Y") echo " checked"; ?>> Y &nbsp;&nbsp;
+					<input type="radio" name="conf_RELEVANCE_GATE_ENABLED" value="N" <?php if (isset($opac_gdef['RELEVANCE_GATE_ENABLED']) && $opac_gdef['RELEVANCE_GATE_ENABLED'] == "N") echo " checked"; ?>> N
+				</div>
+				<div class="formRow">
+					<label><?php echo $msgstr["cfg_relevance_max_scored"]; ?></label>
+					<input type="number" name="conf_RELEVANCE_MAX_SCORED" value="<?php echo isset($opac_gdef['RELEVANCE_MAX_SCORED']) ? htmlspecialchars($opac_gdef['RELEVANCE_MAX_SCORED']) : '3500'; ?>" min="1">
+				</div>
+				<div class="formRow">
+					<label><?php echo $msgstr["cfg_relevance_cache_enabled"]; ?></label>
+					<input type="radio" name="conf_RELEVANCE_CACHE_ENABLED" value="Y" <?php if (!isset($opac_gdef['RELEVANCE_CACHE_ENABLED']) || $opac_gdef['RELEVANCE_CACHE_ENABLED'] == "Y") echo " checked"; ?>> Y &nbsp;&nbsp;
+					<input type="radio" name="conf_RELEVANCE_CACHE_ENABLED" value="N" <?php if (isset($opac_gdef['RELEVANCE_CACHE_ENABLED']) && $opac_gdef['RELEVANCE_CACHE_ENABLED'] == "N") echo " checked"; ?>> N
+				</div>
+				<div class="formRow">
+					<label><?php echo $msgstr["cfg_relevance_cache_ttl"]; ?></label>
+					<input type="number" name="conf_RELEVANCE_CACHE_TTL" value="<?php echo isset($opac_gdef['RELEVANCE_CACHE_TTL']) ? htmlspecialchars($opac_gdef['RELEVANCE_CACHE_TTL']) : '300'; ?>" min="1">
 				</div>
 			</div>
 

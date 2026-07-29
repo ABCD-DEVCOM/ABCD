@@ -64,7 +64,7 @@ function facetas()
                 $arrHttp["Opcion"] = "buscar";
                 $Formato = trim($formato);
 
-                $query_param = "&cipar=" . $db_path . "par/" . $arrHttp["cipar"];
+                $query_param = "&cipar=" . $db_path . $actparfolder . $arrHttp["cipar"];
 
                 $expr_final = $expresionSemAcento;
                 if ($tem_truncagem && substr($expr_final, -1) != '$') {
