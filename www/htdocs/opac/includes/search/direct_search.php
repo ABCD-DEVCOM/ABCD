@@ -46,8 +46,7 @@ function searchDirect($bd_list, $db_path, $Expresion, $termo_livre, $Expr_faceta
     $sufixo_truncagem = $tem_truncagem ? '$' : '';
 
     // Uso do Helper 1
-    $coleccion_str = isset($_REQUEST["coleccion"]) ? $_REQUEST["coleccion"] : "";
-    $busqueda = build_search_expression($Expresion, $coleccion_str, $Expr_facetas);
+    $busqueda = montarExpressaoBusca($Expresion, $Expr_facetas);
 
     // Uso do Helper 2
     $totals_data = get_wxis_totals($bd_list, $db_path, $busqueda, $sufixo_truncagem);
