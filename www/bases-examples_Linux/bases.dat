@@ -1,13 +1,13 @@
 marc|MARC|Y
 rda|MARC for RDA (Resource Description & Access)|Y
 marcuni|MARC-UTF8|Y
+spectrum|SPECTRUM - Museum Management Standard
 isadg|ISAD(G): International Standard Archival Description
 dubcore|DublinCore Repository
 agrovoc|Agrovoc Thesaurus
 biblo|Cepal|Y
 dcdspace|dSpace Bridge
 doaj|DOAJ: Directory of Open Access Journals
-odds|Online Document Delivery Service
 experts|Experts
 projects|Projects
 providers|Acq - Providers
@@ -20,3 +20,4 @@ reserve|Circ - Reservations
 suspml|Circ - Suspensions and fines
 trans|Circ - Transactions Loans
 acces|Sys - Administration Users/Operators (acces)
+odds|ODDS - Online Document Delivery Service
