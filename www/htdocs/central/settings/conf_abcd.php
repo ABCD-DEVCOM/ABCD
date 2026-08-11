@@ -105,6 +105,10 @@ include("../common/header.php");
 							<span><i class="fas fa-bug" style="font-size: 2em; margin: 0 10px 0 -30px; color: #d63031;"></i><strong><?php echo $msgstr["set_log_error"]; ?></strong></span>
 						</a>
 
+						<a href='Javascript:Ejecutar("../settings/api_manager.php","")' class="menuButton">
+							<span><i class="fas fa-network-wired" style="font-size: 2em; margin: 0 10px 0 -30px; color: #27ae60;"></i><strong>API REST</strong></span>
+						</a>
+
 
 						<?php
 						$script_abcd_stats = 'abcd_stats.php';

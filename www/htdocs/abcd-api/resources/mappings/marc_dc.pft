@@ -1,0 +1,99 @@
+'          <oai_dc:dc  
+                xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" 
+                xmlns:dc="http://purl.org/dc/elements/1.1/" 
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ 
+                http://www.openarchives.org/OAI/2.0/oai_dc.xsd">'/
+'		<dc:format>'select s(mpu,v9,mpl)
+                           case 'A':'text',if p(v8^q) then '/'v8[1]^q fi,
+                           case 'MATERIAL TEXTUAL':'text',
+                           case 'G':'video',
+                           case 'I':'audio',
+                           elsecase if a(v9) then 'text',if p(v8^q) then '/'v8[1]^q fi, else 'other' fi 
+                           endsel,
+'</dc:format>'/,
+'                <dc:type>'select s(v5.1)
+                          case 'S':'jornal article',
+                          case 'T':'thesis',
+                          case 'M':'monograph',
+                          case 'N':'non conventional',
+                          endsel,
+'</dc:type>'/,
+
+if p(v35) or p(v69) then
+'		<dc:source>'if p(v35) then v35 else v69 fi'</dc:source>'/,
+else
+'                <dc:source/>'/,
+fi,
+
+if p(v888) then
+	(if p(v888^u) then 
+|		<dc:identifier><![CDATA[|v888^u|]]></dc:identifier>|/,
+	else
+|		<dc:identifier><![CDATA[|v888^i|]]></dc:identifier>|/,
+	fi,)
+else
+'                <dc:identifier/>'/,
+fi,
+
+if p(v100) or p(v110) then
+   (if p(v100) then
+|		<dc:creator><![CDATA[|v100^*|]]></dc:creator>|/,
+   else
+|		<dc:creator><![CDATA[|v110^*|]]></dc:creator>|/,
+   fi),
+else
+   if p(v16) or p(v17) then
+      (if p(v16) then
+|		<dc:creator><![CDATA[|v16^*|]]></dc:creator>|/,
+       else
+|		<dc:creator><![CDATA[|v17^*|]]></dc:creator>|/,
+      fi),
+   else
+      if p(v23) or p(v24) then
+         (if p(v23) then
+|		<dc:creator><![CDATA[|v23^*|]]></dc:creator>|/,
+         else
+|		<dc:creator><![CDATA[|v24^*|]]></dc:creator>|/,
+         fi),
+      else
+'                <dc:creator/>'/,
+      fi,
+   fi,
+fi,
+
+if p(v245) then
+(|		<dc:title><![CDATA[|v245^*|]]></dc:title>|/),
+|		<dc:title><![CDATA[|v246^*|]]></dc:title>|/,
+fi,
+
+(if p(v40) then
+|		<dc:language>|v40^*|</dc:language>|/,
+  else
+  	if p(v12^i) then
+|		<dc:language>|v12^i|</dc:language>|/,
+    else
+	  	if p(v18^i) then
+|		<dc:language>|v18^i|</dc:language>|/,
+		fi,
+	fi,
+fi,)
+
+if p(v62) and not s(mpu,v62,mpl):'S.N' then
+'		<dc:publisher>'v62^*'</dc:publisher>'/,
+else
+'                <dc:publisher/>'/,
+fi,
+|		<dc:date>|v65.4'-'v65*4.2'-'v65*6.2|</dc:date>|/,
+
+(|		<dc:subject><![CDATA[|v71^*|]]></dc:subject>|/,)
+(|		<dc:subject><![CDATA[|v76^*|]]></dc:subject>|/,)
+
+
+if p(v650) then
+('		<dc:subject><![CDATA['v650^*']]></dc:subject>'/,)
+fi,
+if p(v650) then
+('		<dc:description><![CDATA['v600^*']]></dc:description>'/,)
+fi,
+'          </oai_dc:dc>'/
