@@ -52,6 +52,41 @@ function compileAuthCache($registry, $apiRootPath)
     file_put_contents($authFile, $content);
 }
 
+// --- HELPER FUNCTION: Detect CISIS Version from dr_path.def ---
+function detectCisisEnvironment($dbPath, $dbCode)
+{
+    $drPathFile = rtrim($dbPath, '/\\') . '/' . $dbCode . '/dr_path.def';
+
+    // Default ABCD fallback values (as seen in wxis_llamar.php)
+    $unicode = 'ansi';
+    $charset = 'ISO-8859-1';
+    $cisis_ver = '';
+
+    if (file_exists($drPathFile)) {
+        $def_db = parse_ini_file($drPathFile);
+
+        // Check CISIS_VERSION (Ignoring legacy "16-60")
+        if (isset($def_db["CISIS_VERSION"]) && $def_db["CISIS_VERSION"] !== "16-60") {
+            $cisis_ver = trim($def_db["CISIS_VERSION"]);
+        }
+
+        // Check UNICODE
+        if (isset($def_db["UNICODE"]) && $def_db["UNICODE"] !== "ansi" && $def_db["UNICODE"] !== '0') {
+            $unicode = 'utf8';
+            $charset = 'UTF-8';
+        }
+    }
+
+    if ($cisis_ver !== "") {
+        $cisis_ver .= "/";
+    }
+
+    return [
+        'cisis_version' => $unicode . '/' . $cisis_ver,
+        'source_encoding' => $charset
+    ];
+}
+
 // 2. Handle POST Actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
@@ -147,8 +182,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                     ? str_replace('/', '\\', $db_path . $dbKey . '/data/' . $dbKey)
                     : $db_path . $dbKey . '/data/' . $dbKey,
                 'mapping' => $dbKey . '.i2x',
-                'cisis_version' => 'utf8/bigisis/',
-                'source_encoding' => 'UTF-8'
+                // Now receiving values directly from the form
+                'cisis_version' => $_POST['cisis_version'][$dbKey] ?? 'ansi/',
+                'source_encoding' => $_POST['source_encoding'][$dbKey] ?? 'ISO-8859-1'
             ];
 
             // Build Search Mappings for this active DB
@@ -382,16 +418,47 @@ include("../common/header.php");
                             </div>
 
                             <div class="abcd-accordion-content">
-                                <div style="display: flex; gap: 20px; margin-bottom: 15px;">
-                                    <div style="flex-grow: 1;">
+                                <?php
+                                // Detect environment from dr_path.def
+                                $detectedEnv = detectCisisEnvironment($db_path, $dbCode);
+
+                                // If database is already saved in API config, use saved values, otherwise use detected
+                                $currentCisis = $databasesConfig[$dbCode]['cisis_version'] ?? $detectedEnv['cisis_version'];
+                                $currentEncoding = $databasesConfig[$dbCode]['source_encoding'] ?? $detectedEnv['source_encoding'];
+                                ?>
+
+                                <div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+                                    <div style="flex-grow: 1; min-width: 200px;">
                                         <label style="font-weight:bold;">API Description</label>
-                                        <input type="text" name="db_desc[<?php echo htmlspecialchars($dbCode); ?>]" value="<?php echo htmlspecialchars($currentDesc); ?>" style="width: 100%; padding: 5px;">
+                                        <input type="text" name="db_desc[<?php echo htmlspecialchars($dbCode); ?>]" value="<?php echo htmlspecialchars($currentDesc); ?>" style="width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
                                     </div>
-                                    <div style="width: 200px;">
+                                    <div style="width: 180px;">
                                         <label style="font-weight:bold;">Access Level</label>
-                                        <select name="access_level[<?php echo htmlspecialchars($dbCode); ?>]" style="width: 100%; padding: 5px;">
+                                        <select name="access_level[<?php echo htmlspecialchars($dbCode); ?>]" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
                                             <option value="public" <?php echo $currentAccess === 'public' ? 'selected' : ''; ?>>Public (No Key)</option>
                                             <option value="restricted" <?php echo $currentAccess === 'restricted' ? 'selected' : ''; ?>>Restricted (Requires Key)</option>
+                                        </select>
+                                    </div>
+                                    <div style="width: 140px;">
+                                        <label style="font-weight:bold;" title="Detected from dr_path.def">CISIS Env <i class="fas fa-magic" style="color:#aaa; font-size:10px;"></i></label>
+                                        <select name="cisis_version[<?php echo htmlspecialchars($dbCode); ?>]" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                                            <?php
+                                            $commonVersions = ['ansi/', 'utf8/', 'utf8/bigisis/', 'ansi/bigisis/'];
+                                            if (!in_array($currentCisis, $commonVersions)) {
+                                                echo "<option value=\"" . htmlspecialchars($currentCisis) . "\" selected>" . htmlspecialchars($currentCisis) . "</option>";
+                                            }
+                                            foreach ($commonVersions as $ver) {
+                                                $selected = ($currentCisis === $ver) ? 'selected' : '';
+                                                echo "<option value=\"{$ver}\" {$selected}>{$ver}</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div style="width: 120px;">
+                                        <label style="font-weight:bold;">Encoding</label>
+                                        <select name="source_encoding[<?php echo htmlspecialchars($dbCode); ?>]" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                                            <option value="ISO-8859-1" <?php echo $currentEncoding === 'ISO-8859-1' ? 'selected' : ''; ?>>ISO-8859-1</option>
+                                            <option value="UTF-8" <?php echo $currentEncoding === 'UTF-8' ? 'selected' : ''; ?>>UTF-8</option>
                                         </select>
                                     </div>
                                 </div>
