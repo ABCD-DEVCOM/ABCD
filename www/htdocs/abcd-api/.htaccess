@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /abcd-api/
+
+    # Ignora a própria chamada ao index.php para evitar loop infinito
+    RewriteCond %{REQUEST_URI} !/index\.php$
+    
+    # Envia TUDO para o roteador, mesmo que o arquivo exista fisicamente
+    RewriteRule ^(.*)$ index.php?request=$1 [QSA,L]
+</IfModule>

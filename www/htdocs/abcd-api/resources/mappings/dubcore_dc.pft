@@ -1,0 +1,47 @@
+'          <oai_dc:dc  
+                xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" 
+                xmlns:dc="http://purl.org/dc/elements/1.1/" 
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ 
+                http://www.openarchives.org/OAI/2.0/oai_dc.xsd">'/
+'		<dc:format>'select s(mpu,v9,mpl)
+                           case 'A':'text',if p(v8^q) then '/'v8[1]^q fi,
+                           case 'MATERIAL TEXTUAL':'text',
+                           case 'G':'video',
+                           case 'I':'audio',
+                           elsecase if a(v9) then 'text',if p(v8^q) then '/'v8[1]^q fi, else 'other' fi 
+                           endsel,
+'</dc:format>'/,
+
+if p(v1) or p(v11) then
+   (if p(v1) then
+|		<dc:creator><![CDATA[|v1^*|]]></dc:creator>|/,
+   else
+|		<dc:creator><![CDATA[|v11^*|]]></dc:creator>|/,
+   fi),
+fi,
+
+if p(v2) then
+(|		<dc:title><![CDATA[|v2^*|]]></dc:title>|/),
+|		<dc:title><![CDATA[|v2^*|]]></dc:title>|/,
+fi,
+
+(if p(v40) then
+|		<dc:language>|v40^*|</dc:language>|/,
+  else
+  	if p(v12^i) then
+|		<dc:language>|v12^i|</dc:language>|/,
+    else
+	  	if p(v18^i) then
+|		<dc:language>|v18^i|</dc:language>|/,
+		fi,
+	fi,
+fi,)
+
+if p(v3) then
+('		<dc:subject><![CDATA['v3^*']]></dc:subject>'/,)
+fi,
+if p(v98) then
+('		<dc:source><![CDATA['v98^*']]></dc:source>'/,)
+fi,
+'          </oai_dc:dc>'/

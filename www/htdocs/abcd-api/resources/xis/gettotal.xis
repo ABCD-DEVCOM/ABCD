@@ -1,0 +1,33 @@
+<IsisScript name="search">
+    
+	<section name="search">
+		<!-- CGI environment -->	
+		<field action="replace" tag="1">
+			<pft>			
+				'5000 app_path'/
+				'5003 dbpath'/
+				'5004 dbname'/
+			</pft>
+		</field>
+
+		<cgitable><pft>v1</pft></cgitable>
+        <field action="cgi" tag="prefix">tag</field>
+
+		<display><pft>'Content-type: text/plain'/#</pft></display>
+		<!--trace>On</trace-->
+
+		<do task="search">
+			<parm name="db"><pft>v5003,'/',v5004</pft></parm>
+			<parm name="expression"><pft>'$'</pft></parm>           
+			<parm name="count">1</parm>
+			
+			<field action="define" tag="1002">Isis_Total</field>
+
+			<loop>
+				<display><pft>v1002</pft></display>
+			</loop>
+		</do>
+
+	</section>
+
+</IsisScript>

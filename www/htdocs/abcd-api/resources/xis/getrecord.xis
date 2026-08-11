@@ -1,0 +1,75 @@
+<IsisScript name="getrecord_api">
+	<section name="search">
+		<!-- CGI environment -->	
+		<field action="replace" tag="1">
+			<pft>		
+				'5000 app_path'/	
+				'6001 database'/
+				'6002 expression'/
+				'6003 metadata_format'/
+				'7000 mapping_file'/
+			</pft>
+		</field>
+		<cgitable><pft>v1</pft></cgitable>
+        <field action="cgi" tag="prefix">tag</field>
+
+        <display><pft>'Content-type: text/xml'/#</pft></display>
+
+        <do task="search">
+		<parm name="db"><pft>v6001</pft></parm>
+			<parm name="expression"><pft>v6002, ' OR ID=',v6002,' OR ID_',v6002,</pft></parm>
+            <parm name="count">1</parm>
+			<flow action="jump"><pft>s(mpu,v6003,mpl)</pft></flow>
+
+		<label>ISIS</label>
+			<parm name="isisxml style">1</parm>
+			<parm name="isisxml table">
+				<pft>
+					'record=isis'/
+					'style=1'/						
+				</pft>
+			</parm>
+			
+			<loop>	
+				<proc>d99d1001d1002d1101d1102</proc>
+				<display><isisxml>*</isisxml></display>				
+			</loop>
+			<flow action="jump">END</flow>
+
+
+		<label>OAI_DC</label>
+			
+			<flow action="jump"><pft>if v7000 : '.i2x' then 'ISIS2XML' fi</pft></flow>				
+			<loop>
+				<field action="import" tag="list">7000</field>
+				<display><pft><pft>cat(v7000)</pft></pft></display>
+			</loop>
+			<flow action="jump">END</flow>
+
+		<label>ISIS2XML</label>
+			<parm name="isisxml style">2</parm>				
+			<parm name="isisxml table"><pft>cat(v7000)</pft></parm>
+
+			<loop>
+				<field action="import" tag="list">7000</field>
+				<display><isisxml>*</isisxml></display>
+
+			</loop>
+			<flow action="jump">END</flow>
+
+		<label>ISIS2JSON</label>
+            <parm name="db"><pft>v6001</pft></parm>
+            <parm name="isisxml style">2</parm>				
+            <parm name="isisxml table"><pft>cat(v7000)</pft></parm>
+
+            <loop>
+                <display><isisxml>*</isisxml></display>
+            </loop>
+        	<flow action="jump">END</flow>
+
+
+		<label>END</label>
+		
+		</do>
+    </section>
+</IsisScript>

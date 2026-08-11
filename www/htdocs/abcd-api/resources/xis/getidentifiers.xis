@@ -1,0 +1,43 @@
+<IsisScript name="getidentifiers_api">
+    <section name="search">
+		<!-- CGI environment -->	
+		<field action="replace" tag="1">
+			<pft>			
+				'5000 app_path'/
+				'5003 database'/
+				'5004 setSpec'/
+				'5005 date_prefix'/
+				'5006 id_field'/
+				'5007 date_field'/
+                '5008 from'/
+                '5009 count'/
+				'6001 set'/
+				'6002 metadataPrefix'/
+				'6003 expression'/
+				'6010 resumptionToken'/
+			</pft>
+		</field>
+
+		<cgitable><pft>v1</pft></cgitable>
+        <field action="cgi" tag="prefix">tag</field>
+        <display><pft>'Content-type: text/plain'/#</pft></display>
+
+        <do task="search">
+            <parm name="db"><pft>v5003</pft></parm>
+            <parm name="expression"><pft>v6003</pft></parm>
+            <parm name="from"><pft>v5008</pft></parm>
+            <parm name="count"><pft>v5009</pft></parm>
+
+            <field action="define" tag="1002">Isis_Total</field>
+
+            <loop>
+                <display>
+                    <pft>
+                        if iocc=1 then 'TOTAL=',v1002,'|' fi,
+                        mfn(0),'|'
+                    </pft>
+                </display>
+            </loop>
+        </do>
+    </section>
+</IsisScript>

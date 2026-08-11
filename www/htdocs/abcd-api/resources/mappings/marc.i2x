@@ -1,0 +1,42 @@
+root=oai_dc
+
+001 dc:identifier
+020 dc:identifier
+022 dc:identifier
+024 dc:identifier
+035 dc:identifier
+041 dc:language
+100 dc:creator
+110 dc:creator
+111 dc:creator
+210 dc:title
+240 dc:title
+245 dc:title
+246 dc:title
+260 dc:publisher
+300 dc:format
+500 dc:description
+502 dc:description
+504 dc:description
+505 dc:description
+520 dc:description
+600 dc:subject
+610 dc:subject
+611 dc:subject
+630 dc:subject
+650 dc:subject
+651 dc:coverage
+651 dc:subject
+653 dc:subject
+700 dc:creator
+710 dc:creator
+711 dc:creator
+720 dc:creator
+740 dc:title
+773 dc:relation
+780 dc:relation
+785 dc:relation
+787 dc:relation
+980 dc:date
+980 dc:date
+
