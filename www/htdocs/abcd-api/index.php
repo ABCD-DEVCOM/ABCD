@@ -48,11 +48,11 @@ function check_security($uriSegments, $configDatabases, $validKeys)
         $keyInfo = $validKeys[$hashedIncomingKey] ?? null;
 
         if ($keyInfo === null) {
-            json_response(['error' => 'Chave de API (X-API-Key) invalida ou ausente.'], 401);
+            json_response(['error' => 'Invalid or missing API key (X-API-Key).'], 401);
         }
 
         if ($isWrite && ($keyInfo['scope'] ?? 'read') === 'read') {
-            json_response(['error' => 'Esta chave nao tem permissao de escrita.'], 403);
+            json_response(['error' => 'This key does not have write permission.'], 403);
         }
     }
 }
@@ -70,17 +70,17 @@ switch ($resource) {
         break;
 
     case 'records':
-        // Esta seção será implementada nos próximos passos
+        // This section will be implemented in the next steps
         require __DIR__ . '/src/Handlers/RecordHandler.php';
         require __DIR__ . '/src/Core/CISISGateway.php';
         RecordHandler::handle($uriSegments, $configApp, $configDatabases);
         break;
 
-    case '': // Raiz da API
-        json_response(['message' => 'Bem-vindo à API do ABCD']);
+    case '': // Root of the API
+        json_response(['message' => 'Welcome to the ABCD API']);
         break;
 
     default:
-        json_response(['error' => 'Endpoint nao encontrado.'], 404);
+        json_response(['error' => 'Endpoint not found.'], 404);
         break;
 }
