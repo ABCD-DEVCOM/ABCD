@@ -733,30 +733,51 @@ function Buscar(Ctrl){
 	Ctrl.selectedIndex=0
 }
 
-function CRUZARD(Prefijo,Termino,base){
-	document.buscar.Expresion.value=""
-	document.buscar.action="buscar_integrada.php"
-	//document.buscar.base.value=""
-	document.buscar.desde.value=1
-	document.buscar.count.value=25
-	document.buscar.resaltar.value="S"
-	document.buscar.Opcion.value="detalle"
-	document.buscar.prefijo.value=Prefijo
-	document.buscar.Sub_Expresion.value=Termino
-	document.buscar.submit()
+function CRUZARD(Prefijo, Termino, base) {
+	// Apenas redireciona para a função principal para manter compatibilidade com PFTs muito antigos
+	CruzarABCD(Termino, Prefijo);
 }
 
-function CruzarABCD(Termino,Prefijo){
-	document.buscar.Expresion.value=""
-	document.buscar.action="buscar_integrada.php"
-	//document.buscar.base.value=""
-	document.buscar.desde.value=1
-	document.buscar.count.value=25
-	document.buscar.resaltar.value="S"
-	document.buscar.Opcion.value="detalle"
-	document.buscar.prefijo.value=Prefijo
-	document.buscar.Sub_Expresion.value=Termino
-	document.buscar.submit()
+function CruzarABCD(Termino, Prefijo) {
+	// 1. Limpa espaços extras e remove aspas soltas que possam quebrar a sintaxe do CISIS
+	Termino = Termino.trim().replace(/"/g, '');
+
+	// 2. Constrói a expressão booleana exata para o WXIS. Ex: (AU_Machado de Assis)
+	var novaExpressao = "(" + Prefijo + Termino + ")";
+
+	// 3. Pega a URL atual base limpa (ex: /opac/ ou /opac/index.php) preservando o .htaccess
+	var url = new URL(window.location.origin + window.location.pathname);
+
+	// 4. Injeta os parâmetros da nova pesquisa
+	url.searchParams.set('page', 'startsearch');
+	url.searchParams.set('Expresion', novaExpressao);
+	url.searchParams.set('Opcion', 'directa'); // Aciona o motor correto para gerar as facetas
+	url.searchParams.set('desde', '1');
+	url.searchParams.set('pagina', '1');
+	url.searchParams.set('resaltar', 'S');
+
+	// 5. Preserva a base de dados atual para não perder o escopo da pesquisa
+	var currentParams = new URLSearchParams(window.location.search);
+	if (currentParams.has('base')) {
+		url.searchParams.set('base', currentParams.get('base'));
+	}
+
+	// 6. Preserva o idioma
+	if (typeof OpacLang !== 'undefined') {
+		url.searchParams.set('lang', OpacLang);
+	} else if (currentParams.has('lang')) {
+		url.searchParams.set('lang', currentParams.get('lang'));
+	}
+
+	// 7. Preserva o contexto (multi-bibliotecas), se existir
+	if (typeof OpacContext !== 'undefined' && OpacContext !== "") {
+		url.searchParams.set('ctx', OpacContext);
+	} else if (currentParams.has('ctx')) {
+		url.searchParams.set('ctx', currentParams.get('ctx'));
+	}
+
+	// 8. Dispara a pesquisa com uma URL limpa (o .htaccess assumirá o roteamento interno)
+	window.location.href = url.toString();
 }
 
 //BUSQUEDA AVANZADA

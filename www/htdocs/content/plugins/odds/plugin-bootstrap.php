@@ -17,6 +17,29 @@
 $bridge = PluginBridge::getInstance();
 $dbPath = $bridge->get('db_path');
 
+// Retrieves the language from the URL (if available) and saves it in the session for subsequent screens
+if (isset($_REQUEST['lang']) && !empty($_REQUEST['lang'])) {
+    $_SESSION['lang'] = trim($_REQUEST['lang']);
+}
+$lang = $_SESSION['lang'] ?? 'en';
+
+$bridge = PluginBridge::getInstance();
+$dbPath = $bridge->get('db_path');
+$abcdPath = $bridge->get('abcd_path', realpath(__DIR__ . '/../../../central'));
+$pluginPath = realpath(__DIR__);
+
+// 3. Força o carregamento do dicionário correto do Plugin
+global $msgstr;
+if (!is_array($msgstr)) {
+    $msgstr = [];
+}
+
+require_once $abcdPath . '/common/LanguageManager.php';
+$langManager = new \ABCD\Common\LanguageManager($abcdPath, $abcdPath . '/../content');
+$plugin_msgs = $langManager->loadPluginTranslations($pluginPath, 'odds', 'odds.tab', $lang);
+$msgstr = array_merge($msgstr, $plugin_msgs);
+
+
 if (!empty($dbPath)) {
     $targetBaseDir = rtrim($dbPath, '/\\') . '/odds';
     $basesDatFile  = rtrim($dbPath, '/\\') . '/bases.dat';
@@ -94,10 +117,11 @@ if (!empty($dbPath)) {
 // 3. Register Core Hooks
 // Inject ODDS Management link into the central navigation menu
 abcd_add_hook('central_menu', function(string $menuHtml) use ($bridge): string {
+    global $msgstr;
     $lang = $bridge->get('lang', 'en');
     // The link safely redirects the librarian to the standard cataloguing tool for the odds database
     $menuHtml .= '<a href="/central/settings/plugin_admin.php?plugin=odds" class="menuButton utilsButton">';
-	$menuHtml .= '<span><strong><?php echo $msgstr["configure_ODDS"]. " ABCD"?></strong></span>';
+	$menuHtml .= '<span><strong>'.$msgstr["configure_ODDS"]. " ABCD".'</strong></span>';
 	$menuHtml .= '</a>';
 
     return $menuHtml;

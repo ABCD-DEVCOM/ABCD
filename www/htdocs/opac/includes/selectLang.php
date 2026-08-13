@@ -32,12 +32,23 @@ function selectLang()
 
     <form name="changelanguage" id="changelanguage" method="get" style="display:none;">
         <?php
-        // KEEP THE URL PARAMETERS: This is critical to maintain the user's context when changing languages.
-        foreach ($_GET as $key => $value) {
-            if ($key != 'lang' && $key != 'submit') {
+    // KEEP THE URL PARAMETERS: This is critical to maintain the user's context when changing languages.
+    foreach ($_GET as $key => $value) {
+        if ($key != 'lang' && $key != 'submit') {
+            // Se o parâmetro for um array (ex: Busca Avançada enviando camp[] e oper[])
+            if (is_array($value)) {
+                foreach ($value as $item) {
+                    // Garante que o item interno é uma string antes de converter
+                    if (is_string($item)) {
+                        echo '<input type="hidden" name="' . htmlspecialchars($key) . '[]" value="' . htmlspecialchars($item) . '">';
+                    }
+                }
+            } else {
+                // Se for uma string normal (ex: Busca Livre)
                 echo '<input type="hidden" name="' . htmlspecialchars($key) . '" value="' . htmlspecialchars($value) . '">';
             }
         }
+    }
         ?>
         <input type="hidden" name="lang" id="lang_hidden" value="<?php echo htmlspecialchars($lang2); ?>">
     </form>
