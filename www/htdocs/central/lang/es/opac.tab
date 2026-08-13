@@ -337,7 +337,7 @@ front_limpiar=Limpiar
 front_login=Iniciar sesión
 front_logout=Salir
 front_mas_terminos=Más términos
-front_mensajeb=Seleccione un campo de búsqueda e ingrese algunos términos para los datos que está intentando localizar. <br>Haga clic en <img src=../images/diccionario.gif> para mostrar el diccionario de términos para el campo seleccionado.
+front_mensajeb=Seleccione un campo de búsqueda e ingrese algunos términos para los datos que está intentando localizar. <br>Haz clic en el ícono del libro para mostrar el diccionario de términos para el campo seleccionado.
 front_menu_noau=Usuario no autorizado
 front_metasearch=Meta-Búsqueda
 front_miss_se=Por favor, ingrese su expresión de búsqueda
