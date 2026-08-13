@@ -1,12 +1,15 @@
 <?php
-/*
+    /*
 * @file        db_convert_crunchmf.php
 * @author      Roger Craveiro Guilherme
 * @date        2026-03-07
 * @description Utility to convert database files between Windows and Linux formats using the crunchmf utility.
+*
+* changes:
+* 2026-07-29: Prevents Warning: ZipArchive::extractTo(DB.xrf): Operation failed: Operation not permitted in /utilities/db_convert_crunchmf.php on line 95
 */
 
-session_start();
+    session_start();
 if (!isset($_SESSION["permiso"])) {
     header("Location: ../common/error_page.php");
     exit;
@@ -20,7 +23,7 @@ include("../lang/admin.php");
 // --- Initial Definitions ---
 $base = $arrHttp["base"];
 $bd_path = $db_path . $base;
-$data_path = $bd_path . "/data/";
+$data_path = $bd_path . "/data";
 $full_base_path = $data_path . $base;
 
 // Detect Current OS
@@ -92,15 +95,27 @@ if (isset($arrHttp["accion"]) && $arrHttp["accion"] == "convert_import") {
         $zip = new ZipArchive;
 
         if ($zip->open($zip_tmp) === TRUE) {
-            $zip->extractTo($data_path);
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $filename = $zip->getNameIndex($i);
+                $target_file = rtrim($data_path, '/\\') . DIRECTORY_SEPARATOR . $filename;
+
+                if (file_exists($target_file)) {
+                    @chmod($target_file, 0666); // Attempts to obtain permission to modify
+                    @unlink($target_file);      // Remove o arquivo conflitante
+                }
+            }
+
+            // Performs the extraction and handles any errors that may still occur
+            $extract_success = @$zip->extractTo($data_path);
             $zip->close();
 
-            $found_files = glob($data_path . $base . "_*.mst");
+            if ($extract_success) {
+                $found_files = glob($data_path . "/" . $base . "_*.mst"); 
 
-            if (count($found_files) > 0) {
-                $imported_mst = $found_files[0];
-                $imported_base_root = str_replace(".mst", "", $imported_mst);
-                $imported_xrf = $imported_base_root . ".xrf";
+                if (count($found_files) > 0) {
+                    $imported_mst = $found_files[0];
+                    $imported_base_root = str_replace(".mst", "", $imported_mst);
+                    $imported_xrf = $imported_base_root . ".xrf";
 
                 if (file_exists($imported_xrf)) {
                     $timestamp = date("YmdHis");
@@ -114,6 +129,7 @@ if (isset($arrHttp["accion"]) && $arrHttp["accion"] == "convert_import") {
                     rename($imported_xrf, $full_base_path . ".xrf");
 
                     $msg_ok = $msgstr["conv_msg_ok"] . ": " . basename($bkp_mst);
+                }
                 } else {
                     $msg_err = $msgstr["conv_so_xrf_error"];
                 }
