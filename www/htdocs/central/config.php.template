@@ -1,6 +1,6 @@
 <?php
 /* Modifications
-2021-02-03 fho4abcd: Set metaencoding only for active session (from repository ABCD2.2)
+2021-02-03 fho4abcd: Set metaencoding only for active session (from repository ABCD.2)
 2021-02-03 fho4abcd: moved comment for cisis version to actual statement
 2021-02-04 fho4abcd: ensure trailing slash for $db_path
 2021-02-10 fho4abcd: new/improved checks $ABCD_path, $db_path, abcd.def
@@ -20,7 +20,9 @@
 2023-02-23 fho4abcd  config.php->config.php.template
 2023-06-01 fho4abcd Improve charset in header statement
 2024-06-01 fho4abcd Add captcha
+2026-08-08 rogercgui Added plugin system bootstrap
 */
+
 
 ini_set('error_reporting', E_ALL);
 $cisis_versions_allowed="16-60;bigisis";
@@ -55,110 +57,115 @@ if (stripos($_SERVER["SERVER_SOFTWARE"],"Win") > 0) {
 // Ensure ABCD_path has trailing / or \.
 if ( (substr($ABCD_path, strlen($ABCD_path)-1,1) <> "/") AND (substr($ABCD_path, strlen($ABCD_path)-1,1) <> "\\")) $ABCD_path.="/";
 
-$ABCD_scripts_path=$ABCD_path. "www/htdocs/";  //PATH
+$ABCD_scripts_path = $ABCD_path . "www/htdocs/";  //PATH
 
 //IF THERE ARE MULTIPLE BASES FOLDERS THE FOLDER SELECTED IS SET
-if ( isset($_SESSION["db_path"]) and  $_SESSION["db_path"]!="")
- 	$db_path=$_SESSION["db_path"];
+if (isset($_SESSION["db_path"]) and  $_SESSION["db_path"] != "")
+	$db_path = $_SESSION["db_path"];
 
 if (isset($_REQUEST["db_path"])) {    //PARA PERMITIR MANEJAR VARIAS CARPETAS BASES DESDE EL OPAC
-	$_REQUEST["db_path"]=urldecode($_REQUEST["db_path"]);
-	$db_path=$_REQUEST["db_path"];
-	if (isset($_SESSION)) $_SESSION["db_path"]=$db_path; //CUANDO VIENE DEL OPAC NO SE TRABAJA CON SESIONES
+	$_REQUEST["db_path"] = urldecode($_REQUEST["db_path"]);
+	$db_path = $_REQUEST["db_path"];
+	if (isset($_SESSION)) $_SESSION["db_path"] = $db_path; //CUANDO VIENE DEL OPAC NO SE TRABAJA CON SESIONES
 }
 
 
 // *** NO CHANGES NEEDED BELOW HERE
 // Ensure db_path has trailing / or \.
-if ( (substr($db_path, strlen($db_path)-1,1) <> "/") AND (substr($db_path, strlen($db_path)-1,1) <> "\\")) $db_path.="/";
+if ((substr($db_path, strlen($db_path) - 1, 1) <> "/") and (substr($db_path, strlen($db_path) - 1, 1) <> "\\")) $db_path .= "/";
 
 
 // Construction of executable path and URL                             
 
-$app_path="central";                    // Folder with the administration module
-define('ABCD_CENTRAL_PATH', $ABCD_scripts_path . $app_path . '/');
-define('ABCD_CONTENT_PATH', $ABCD_scripts_path . 'content/');
-$wxis_exec="wxis".$exe_ext;                // name and extension of wxis executable
-$mx_exec="mx".$exe_ext;                    // name and extension of mx executable
-$msg_path=$db_path;                        // path where the message-files are stored, typical the database-directory
-$img_path=$db_path;                        // legacy path to the folder where the uploaded images are to be stored (the database name will be added to this path)
-$cgibin_path=$ABCD_path."www/cgi-bin/";    // path to the basic directory for CISIS-utilities
-$xWxis=$ABCD_path."www/htdocs/$app_path/dataentry/wxis/";    // path to the wxis scripts .xis for Central
+$app_path = "central";                    // Folder with the administration module
+if (!defined('ABCD_CENTRAL_PATH')) {
+	define('ABCD_CENTRAL_PATH', $ABCD_scripts_path . $app_path . '/');
+}
 
-$unicode="";
-$institution_name="";
-$cisis_ver=""; // initialisation of $cisis_ver as empty = default standard CISIS-version
-$base="";
-if (isset($arrHttp["base"])) $base=$arrHttp["base"]; // The base folder (if any)
-$actparfolder="par/";                                // The folder where the <bases>.par file is located
+if (!defined('ABCD_CONTENT_PATH')) {
+	define('ABCD_CONTENT_PATH', $ABCD_scripts_path . 'content/');
+}
+$wxis_exec = "wxis" . $exe_ext;                // name and extension of wxis executable
+$mx_exec = "mx" . $exe_ext;                    // name and extension of mx executable
+$msg_path = $db_path;                        // path where the message-files are stored, typical the database-directory
+$img_path = $db_path;                        // legacy path to the folder where the uploaded images are to be stored (the database name will be added to this path)
+
+$xWxis = $ABCD_path . "www/htdocs/$app_path/dataentry/wxis/";    // path to the wxis scripts .xis for Central
+
+$unicode = "";
+$institution_name = "";
+$cisis_ver = ""; // initialisation of $cisis_ver as empty = default standard CISIS-version
+$base = "";
+if (isset($arrHttp["base"])) $base = $arrHttp["base"]; // The base folder (if any)
+$actparfolder = "par/";                                // The folder where the <bases>.par file is located
 
 // Check existence of locations/files
 // These checks are not bulletproof: succesfull check does not guarantee correct configuration
-$document_root=$_SERVER['DOCUMENT_ROOT'];
-if (!fnmatch("*".$ABCD_path."*", $document_root)) {
-    echo "<div>Variable '\$ABCD_path' in the configuration file must be a substring of 'DocumentRoot' in the virtual host file</div>";
-    echo "<div>E.g. \"$ABCD_path\" (configured path) must be substring of \"$document_root\" (DocumentRoot)</div>";
-    echo "<div>&#8594; Please check your virtual host file and variable '\$ABCD_path' in file ".__FILE__."</div>";
-    die;
+$document_root = $_SERVER['DOCUMENT_ROOT'];
+if (!fnmatch("*" . $ABCD_path . "*", $document_root)) {
+	echo "<div>Variable '\$ABCD_path' in the configuration file must be a substring of 'DocumentRoot' in the virtual host file</div>";
+	echo "<div>E.g. \"$ABCD_path\" (configured path) must be substring of \"$document_root\" (DocumentRoot)</div>";
+	echo "<div>&#8594; Please check your virtual host file and variable '\$ABCD_path' in file " . __FILE__ . "</div>";
+	die;
 }
 if (!file_exists($ABCD_path)) {
-    echo "<div>Missing Base path to ABCD installation folder: $ABCD_path</div>";
-    echo "<div>&#8594; Please check variable '\$ABCD_path' in file ".__FILE__."</div>";
-    die;
-} 
-if (!file_exists($db_path)){
+	echo "<div>Missing Base path to ABCD installation folder: $ABCD_path</div>";
+	echo "<div>&#8594; Please check variable '\$ABCD_path' in file " . __FILE__ . "</div>";
+	die;
+}
+if (!file_exists($db_path)) {
 	echo "<div>Missing database folder :$db_path </div>";
-    echo "<div>&#8594; Please check variable '\$db_path' in file ".__FILE__."</div>";
-    echo "<div>&#8594; Please check paths in file ".dirname(__DIR__,1).DIRECTORY_SEPARATOR."dbpath.dat"."</div>";
-    die;
+	echo "<div>&#8594; Please check variable '\$db_path' in file " . __FILE__ . "</div>";
+	echo "<div>&#8594; Please check paths in file " . dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . "dbpath.dat" . "</div>";
+	die;
 }
 // Check the loaded extensions
 // Extension mbstring:several functions use mbstring functions even for iso databases
-if ( extension_loaded("mbstring") == false ) {
-    echo "<div style='color:red'>PHP extension 'mbstring' is not loaded. </div>";
-    echo "<div style='color:red'>&#8594; Please install this extension and restart the websserver</div>";
-    die;
+if (extension_loaded("mbstring") == false) {
+	echo "<div style='color:red'>PHP extension 'mbstring' is not loaded. </div>";
+	echo "<div style='color:red'>&#8594; Please install this extension and restart the websserver</div>";
+	die;
 }
 // Other extension can be added here if really necessary
 
-if (!file_exists($db_path."abcd.def")){
+if (!file_exists($db_path . "abcd.def")) {
 	echo "Missing file abcd.def in database folder $db_path";
-    die;
+	die;
 }
- 
 
-$def = parse_ini_file($db_path."abcd.def",true);      // read variables from abcd.def
+
+$def = parse_ini_file($db_path . "abcd.def", true);      // read variables from abcd.def
 
 // Other local settings to be configured
-               
-$inventory_numeric ="N";                // This variable erases the left zeroes in the inventory number
-$max_inventory_length=1;                // Add Zeroes to the left for reaching the max length of the inventory number
-$max_cn_length=1;                       // Add Zeroes to the left for reaching the max length of the control number
 
-                       
-
-$ext_allowed=array("jpg","gif","png","pdf","doc","docx","xls","xlsx","odt");    //extensions allowed for uploading files (used in dataentry/)
+$inventory_numeric = "N";                // This variable erases the left zeroes in the inventory number
+$max_inventory_length = 1;                // Add Zeroes to the left for reaching the max length of the inventory number
+$max_cn_length = 1;                       // Add Zeroes to the left for reaching the max length of the control number
 
 
-if (isset($def["INSTITUTION_NAME"])){
-	$institution_name=$def["INSTITUTION_NAME"];  // Institution name defined by abcd.def 'INSTITUTION_NAME'
+
+$ext_allowed = array("jpg", "gif", "png", "pdf", "doc", "docx", "xls", "xlsx", "odt");    //extensions allowed for uploading files (used in dataentry/)
+
+
+if (isset($def["INSTITUTION_NAME"])) {
+	$institution_name = $def["INSTITUTION_NAME"];  // Institution name defined by abcd.def 'INSTITUTION_NAME'
 } else {
-	$institution_name="Free software for library automation";
+	$institution_name = "Free software for library automation";
 }
 
 
 //Sets the default system language, if absent the system detects the browser language, if none of the previous options are valid, the default language is English.
 
-if (isset($_REQUEST["lang"])){
-	 $lang= $_REQUEST["lang"];
-} elseif (isset($def["DEFAULT_LANG"])){
-	$lang=$def["DEFAULT_LANG"];
+if (isset($_REQUEST["lang"])) {
+	$lang = $_REQUEST["lang"];
+} elseif (isset($def["DEFAULT_LANG"])) {
+	$lang = $def["DEFAULT_LANG"];
 } else {
-	$lang='en';
+	$lang = 'en';
 }
 // If the session has a language: keep that
-if (isset($_SESSION["lang"])) $lang=$_SESSION["lang"];
-$_SESSION["lang"]=$lang;
+if (isset($_SESSION["lang"])) $lang = $_SESSION["lang"];
+$_SESSION["lang"] = $lang;
 
 // After version 4, the language files are loaded using the LanguageManager class, which implements a cascading translation system allowing user overrides without modifying the core files. The priority is as follows:
 require_once ABCD_CENTRAL_PATH . 'common/LanguageManager.php';
@@ -167,78 +174,78 @@ global $langManager;
 $langManager = new \ABCD\Common\LanguageManager(ABCD_CENTRAL_PATH, ABCD_CONTENT_PATH);
 
 // Default langue for the databases definition
-if (isset($def["DEFAULT_DBLANG"])){
-	$lang_db=$def["DEFAULT_DBLANG"];
+if (isset($def["DEFAULT_DBLANG"])) {
+	$lang_db = $def["DEFAULT_DBLANG"];
 } else {
-	$lang_db=$lang;
+	$lang_db = $lang;
 }
 
 
 // USED FOR ALL THE DATE FUNCTIONS. DD=DAYS, MM=MONTH, AA=YEAR. USE / AS SEPARATOR
-if (isset($def["DATE_FORMAT"])){
-	$config_date_format=$def["DATE_FORMAT"];
+if (isset($def["DATE_FORMAT"])) {
+	$config_date_format = $def["DATE_FORMAT"];
 } else {
-	$config_date_format="d/m/Y";
+	$config_date_format = "d/m/Y";
 }
 
 
 // Open the Central module in a new window for avoiding the use of the browse buttons
-if (isset($def["NEW_WINDOW"])=="Y"){
-	$open_new_window=$def["NEW_WINDOW"];  
+if (isset($def["NEW_WINDOW"]) == "Y") {
+	$open_new_window = $def["NEW_WINDOW"];
 } else {
-	$open_new_window="N";
+	$open_new_window = "N";
 }
 
 
-if (isset($def["UNICODE"]) and $def["UNICODE"]==1)
-	$meta_encoding="UTF-8";
+if (isset($def["UNICODE"]) and $def["UNICODE"] == 1)
+	$meta_encoding = "UTF-8";
 else
-	$meta_encoding="ISO-8859-1";
+	$meta_encoding = "ISO-8859-1";
 
 
 //allow change password
-if ((isset($def["REG_LOG"])) && ($def["REG_LOG"]=="N")) {
-	$log="N"; 
-	$def["REG_LOG"]=$log;	
+if ((isset($def["REG_LOG"])) && ($def["REG_LOG"] == "N")) {
+	$log = "N";
+	$def["REG_LOG"] = $log;
 } else {
-	$log="Y"; 
-	$def["REG_LOG"]=$log;
-}
-               
-
-
-if ((isset($def["CHANGE_PASSWORD"])) && ($def["CHANGE_PASSWORD"]=="N")) {
-	$change_password="N"; 
-	$def["CHANGE_PASSWORD"]=$change_password;	
-} else {
-	$change_password="Y"; 
-	$def["CHANGE_PASSWORD"]=$change_password;
-}
-if ((isset($def["CAPTCHA"])) && ($def["CAPTCHA"]=="N")) {
-	$setcaptcha="N"; 
-	$def["CAPTCHA"]=$setcaptcha;	
-} else {
-	$setcaptcha="Y"; 
-	$def["CAPTCHA"]=$setcaptcha;
+	$log = "Y";
+	$def["REG_LOG"] = $log;
 }
 
 
 
-if (file_exists(realpath(dirname(__FILE__)).DIRECTORY_SEPARATOR."config_extended.php")){
-    //Include config_extended.php that reads extra configuration parameters
- 	include (realpath(dirname(__FILE__)).DIRECTORY_SEPARATOR."config_extended.php");
+if ((isset($def["CHANGE_PASSWORD"])) && ($def["CHANGE_PASSWORD"] == "N")) {
+	$change_password = "N";
+	$def["CHANGE_PASSWORD"] = $change_password;
+} else {
+	$change_password = "Y";
+	$def["CHANGE_PASSWORD"] = $change_password;
+}
+if ((isset($def["CAPTCHA"])) && ($def["CAPTCHA"] == "N")) {
+	$setcaptcha = "N";
+	$def["CAPTCHA"] = $setcaptcha;
+} else {
+	$setcaptcha = "Y";
+	$def["CAPTCHA"] = $setcaptcha;
+}
+
+
+
+if (file_exists(realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . "config_extended.php")) {
+	//Include config_extended.php that reads extra configuration parameters
+	include(realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . "config_extended.php");
 }
 //en el config_extended.php se pueden cambiar los valores de $def["UNICODE"],$def[["CISIS_VERSION"]] 0 $def["UNICODE"]
 //se determina la versión del cisis; Si el parámetro no existe se asuma 16-60
 //echo "<pre>";echo print_r($def);echo "</pre>";
 
- if (isset($def["UNICODE"]) and $def["UNICODE"]==1){
-	$unicode="utf8";
-	$charset="UTF-8";
-}else{
-	$unicode="ansi";
-	$def["UNICODE"]=0;
-	$charset="ISO-8859-1";
+if (isset($def["UNICODE"]) and $def["UNICODE"] == 1) {
+	$unicode = "utf8";
+	$charset = "UTF-8";
+} else {
+	$unicode = "ansi";
+	$def["UNICODE"] = 0;
+	$charset = "ISO-8859-1";
 }
 // Send characterset to the server. Note that the browser gets it via the html header.
 // Send characterset to the server ONLY if not in update mode
@@ -247,31 +254,31 @@ if (!defined('ABCD_UPDATE_MODE')) {
 }
 if (session_status() != PHP_SESSION_NONE)  $_SESSION["meta_encoding"] = $meta_encoding;
 
-
-if (isset($def["CISIS_VERSION"]) and $def["CISIS_VERSION"]!="16-60" and $def["CISIS_VERSION"]!="" ){
-	$cisis_ver=$def["CISIS_VERSION"];
+if (isset($def["CISIS_VERSION"]) and $def["CISIS_VERSION"] != "16-60" and $def["CISIS_VERSION"] != "") {
+	$cisis_ver = $def["CISIS_VERSION"];
 }
 
-$cisis_path=$cgibin_path.$unicode;
-if ($cisis_ver!="")
-	$cisis_path.="/".$cisis_ver."/";   // path to directory with correct CISIS-executables
+$cisis_path = $cgibin_path . $unicode;
+if ($cisis_ver != "")
+	$cisis_path .= "/" . $cisis_ver . "/";   // path to directory with correct CISIS-executables
 else
-	$cisis_path.="/";
+	$cisis_path .= "/";
 
-$mx_path=$cisis_path.$mx_exec;             // path to mx-executable
-if ($postMethod == '1'){
-	$wxisUrl=$server_url."/cgi-bin/";
-	if ($unicode!="") $wxisUrl.="$unicode/";
-	if ($cisis_ver!="") $wxisUrl.=$cisis_ver."/";
-	$wxisUrl.=$wxis_exec;  // POST method used
-	$Wxis="";
-}else{
-	$wxisUrl="";
- 	$Wxis=$cgibin_path;
- 	if ($unicode!="") $Wxis.="$unicode/";
- 	if ($cisis_ver!="") $Wxis.=$cisis_ver."/";
- 	$Wxis.=$wxis_exec;   //GET method is used
+$mx_path = $cisis_path . $mx_exec;             // path to mx-executable
+if ($postMethod == '1') {
+	$wxisUrl = $server_url . "/cgi-bin_Windows/";
+	if ($unicode != "") $wxisUrl .= "$unicode/";
+	if ($cisis_ver != "") $wxisUrl .= $cisis_ver . "/";
+	$wxisUrl .= $wxis_exec;  // POST method used
+	$Wxis = "";
+} else {
+	$wxisUrl = "";
+	$Wxis = $cgibin_path;
+	if ($unicode != "") $Wxis .= "$unicode/";
+	if ($cisis_ver != "") $Wxis .= $cisis_ver . "/";
+	$Wxis .= $wxis_exec;   //GET method is used
 }
+
 
 // Sets the path to ABCD's own log folder.
 // Assuming that $db_path is already defined as the path to 'bases/'
@@ -289,7 +296,8 @@ $php_error_log = $log_folder . "php_error.log";
 ini_set('log_errors', 1);
 ini_set('error_log', $php_error_log);
 
-$FCKConfigurationsPath="/".$app_path."/dataentry/fckconfig.js";  // path to CKeditor configuration
+
+$FCKConfigurationsPath = "/" . $app_path . "/dataentry/fckconfig.js";  // path to CKeditor configuration
 //$FCKEditorPath="/site/bvs-mod/FCKeditor/";                       // path to CKEditor
 
 if ($use_ldap) {                   //LDAP parameters if used
@@ -305,23 +313,16 @@ if ($EmpWeb) {                     //EmpWeb parameters if used
 	$empwebserviceobjectsdb = "objetos";
 	$empwebserviceusersdb = "*";
 }
-$adm_login="";                     // emergency username for administrator
-$adm_password="";                  // emergency password for administrator
-
+$adm_login = "";                     // emergency username for administrator
+$adm_password = "";                  // emergency password for administrator
 
 // =========================================================================
 // PLUGIN SYSTEM BOOTSTRAP
 // =========================================================================
 
-// Ensure the CONTENT directory path is defined (adjust the realpath if your structure dictates otherwise)
-if (!defined('ABCD_CONTENT_PATH')) {
-	define('ABCD_CONTENT_PATH', realpath(__DIR__ . '/../content'));
-}
-
 // Load the hook system
 require_once __DIR__ . '/common/hooks.php';
-require_once __DIR__ . '/common/PluginBridge.php'; 
+require_once __DIR__ . '/common/PluginBridge.php'; // <--- ADICIONE ESTA LINHA AQUI!
 
 // Fire up all active plugins
 abcd_load_active_plugins();
-?>
