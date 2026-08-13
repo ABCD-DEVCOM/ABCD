@@ -123,7 +123,7 @@ $ActualDir = getcwd();
                     // =========================================================================
                     if ($sidebar === 'SL' || !$show_sidebar): ?>
                     <div class="row">
-                        <div class="col-12 px-4">
+                        <div class="col-12 px-4 mt-4">
                             <div id="searchBox" class="card bg-white p-4 mb-4 rounded-0 shadow-sm">
                                 <?php
                                                 switch ($search_form) {
