@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             . "];\n";
 
         if (file_put_contents($appConfigFile, $configContent) !== false) {
-            $message = "API settings updated successfully.";
+            $message = $msgstr['api_settings_updated'] ?? "API settings updated successfully.";
             $messageType = "success";
         }
     }
@@ -135,10 +135,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         if (file_put_contents($registryFile, json_encode($registry, JSON_PRETTY_PRINT))) {
             compileAuthCache($registry, $apiRootPath);
             $newlyGeneratedKey = $plainTextKey;
-            $message = "Key generated successfully!";
+            $message = $msgstr['api_key_generated'] ?? "Key generated successfully!";
             $messageType = "success";
         } else {
-            $message = "Error saving the new key.";
+            $message = $msgstr['api_key_gen_error'] ?? "Error saving the new key.";
             $messageType = "error";
         }
     }
@@ -153,10 +153,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
             if (file_put_contents($registryFile, json_encode($registry, JSON_PRETTY_PRINT))) {
                 compileAuthCache($registry, $apiRootPath);
-                $message = "API key successfully revoked and deleted.";
+                $message = $msgstr['api_key_revoked'] ?? "API key successfully revoked and deleted.";
                 $messageType = "success";
             } else {
-                $message = "Error updating the key registry file.";
+                $message = $msgstr['api_key_revoke_error'] ?? "Error updating the key registry file.";
                 $messageType = "error";
             }
         }
@@ -206,10 +206,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         $searchSaved = file_put_contents($searchConfigFile, $searchContent);
 
         if ($dbSaved !== false && $searchSaved !== false) {
-            $message = "Database settings and mappings updated successfully.";
+            $message = $msgstr['api_db_settings_updated'] ?? "Database settings and mappings updated successfully.";
             $messageType = "success";
         } else {
-            $message = "Error writing configuration files.";
+            $message = $msgstr['api_db_settings_error'] ?? "Error writing configuration files.";
             $messageType = "error";
         }
     }
@@ -271,7 +271,7 @@ include("../common/header.php");
 
     <div class="sectionInfo">
         <div class="breadcrumb">
-            <?php echo $msgstr["configure"] ?? 'Configure ABCD'; ?> / API REST Manager
+            <?php echo $msgstr["configure"] ?? 'Configure ABCD'; ?> / <?php echo $msgstr["api_manager"] ?? 'API REST Manager'; ?>
         </div>
         <div class="actions">
             <a href="conf_abcd.php" class="defaultButton backButton">
@@ -283,7 +283,7 @@ include("../common/header.php");
 
     <div class="middle form">
         <div class="formContent">
-            <h3><i class="fas fa-network-wired"></i> API REST Configuration</h3>
+            <h3><i class="fas fa-network-wired"></i> <?php echo $msgstr["api_config"] ?? 'API REST Configuration'; ?></h3>
 
             <?php if (!empty($message)): ?>
                 <div style="background-color: <?php echo $messageType === 'success' ? '#d4edda' : '#f8d7da'; ?>; 
@@ -295,8 +295,8 @@ include("../common/header.php");
 
             <?php if (!empty($newlyGeneratedKey)): ?>
                 <div style="background-color: #fff3cd; color: #856404; padding: 15px; border: 1px solid #ffeeba; margin-bottom: 20px; border-radius: 5px;">
-                    <h4 style="margin-top: 0; color: #856404;"><i class="fas fa-exclamation-triangle"></i> Important! Copy your API Key now</h4>
-                    <p>For security reasons, this key will <strong>never be shown again</strong>.</p>
+                    <h4 style="margin-top: 0; color: #856404;"><i class="fas fa-exclamation-triangle"></i> <?php echo $msgstr['api_copy_key_warning'] ?? 'Important! Copy your API Key now'; ?></h4>
+                    <p><?php echo $msgstr['api_copy_key_desc'] ?? 'For security reasons, this key will <strong>never be shown again</strong>.'; ?></p>
                     <code style="display: block; background: #fff; padding: 10px; font-size: 1.2em; border: 1px dashed #856404; text-align: center; margin-top: 10px;">
                         <?php echo htmlspecialchars($newlyGeneratedKey); ?>
                     </code>
@@ -305,91 +305,91 @@ include("../common/header.php");
 
             <!-- GENERAL SETTINGS TAB -->
             <fieldset style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
-                <legend style="font-weight: bold; padding: 0 5px;">General Settings</legend>
+                <legend style="font-weight: bold; padding: 0 5px;"><?php echo $msgstr['api_general_settings'] ?? 'General Settings'; ?></legend>
                 <form method="POST">
                     <input type="hidden" name="action" value="save_general">
                     <div style="margin-bottom: 15px;">
-                        <label style="display: block; font-weight: bold;">WXIS Host Address (w/ Port)</label>
+                        <label style="display: block; font-weight: bold;"><?php echo $msgstr['api_wxis_host'] ?? 'WXIS Host Address (w/ Port)'; ?></label>
                         <input type="text" name="wxis_host" value="<?php echo htmlspecialchars($currentConfig['wxis_host'] ?? '127.0.0.1'); ?>" style="width: 100%; max-width: 400px; padding: 8px;">
                     </div>
                     <div style="margin-bottom: 15px;">
-                        <label style="display: block; font-weight: bold;">API Root Physical Path</label>
+                        <label style="display: block; font-weight: bold;"><?php echo $msgstr['api_root_path'] ?? 'API Root Physical Path'; ?></label>
                         <input type="text" name="api_root_path" value="<?php echo htmlspecialchars($currentConfig['api_root_path'] ?? str_replace('\\', '/', $apiRootPath)); ?>" style="width: 100%; padding: 8px;">
                     </div>
-                    <button type="submit" class="bt bt-blue"><i class="fas fa-save"></i> Save General Settings</button>
+                    <button type="submit" class="bt bt-blue"><i class="fas fa-save"></i> <?php echo $msgstr['api_save_general'] ?? 'Save General Settings'; ?></button>
                 </form>
             </fieldset>
 
             <!-- ACCESS KEYS TAB -->
             <fieldset style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; background-color: #f9f9f9;">
-                <legend style="font-weight: bold; padding: 0 5px;">API Access Keys</legend>
+                <legend style="font-weight: bold; padding: 0 5px;"><?php echo $msgstr['api_access_keys'] ?? 'API Access Keys'; ?></legend>
                 <div style="background: #fff; padding: 15px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 20px;">
                     <form method="POST" style="display: flex; gap: 15px; align-items: flex-end;">
                         <input type="hidden" name="action" value="generate_key">
                         <div style="flex-grow: 1;">
-                            <label style="display: block; font-weight: bold; font-size: 13px;">Client / App Name</label>
+                            <label style="display: block; font-weight: bold; font-size: 13px;"><?php echo $msgstr['api_client_name'] ?? 'Client / App Name'; ?></label>
                             <input type="text" name="client_name" required style="width: 100%; padding: 8px;">
                         </div>
                         <div>
-                            <label style="display: block; font-weight: bold; font-size: 13px;">Scope</label>
+                            <label style="display: block; font-weight: bold; font-size: 13px;"><?php echo $msgstr['api_scope'] ?? 'Scope'; ?></label>
                             <select name="scope" style="padding: 8px; width: 150px;">
-                                <option value="read">Read Only</option>
-                                <option value="write">Read & Write</option>
+                                <option value="read"><?php echo $msgstr['api_scope_read'] ?? 'Read Only'; ?></option>
+                                <option value="write"><?php echo $msgstr['api_scope_write'] ?? 'Read & Write'; ?></option>
                             </select>
                         </div>
-                        <button type="submit" class="bt bt-green"><i class="fas fa-key"></i> Generate Key</button>
+                        <button type="submit" class="bt bt-green"><i class="fas fa-key"></i> <?php echo $msgstr['api_generate_key'] ?? 'Generate Key'; ?></button>
                     </form>
                 </div>
-            </fieldset>
 
-            <!-- KEYS TABLE -->
-            <table style="width: 100%; border-collapse: collapse; text-align: left; background: #fff;">
-                <thead>
-                    <tr style="background-color: #e2e8f0; border-bottom: 2px solid #cbd5e1;">
-                        <th style="padding: 10px;">Client Name</th>
-                        <th style="padding: 10px;">Created At</th>
-                        <th style="padding: 10px;">Scope</th>
-                        <th style="padding: 10px;">Status</th>
-                        <th style="padding: 10px; width: 80px; text-align: center;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (empty($registry)): ?>
-                        <tr>
-                            <td colspan="5" style="padding: 15px; text-align: center; color: #64748b;">No API keys generated yet.</td>
+                <!-- KEYS TABLE -->
+                <table style="width: 100%; border-collapse: collapse; text-align: left; background: #fff;">
+                    <thead>
+                        <tr style="background-color: #e2e8f0; border-bottom: 2px solid #cbd5e1;">
+                            <th style="padding: 10px;"><?php echo $msgstr['api_client_name'] ?? 'Client Name'; ?></th>
+                            <th style="padding: 10px;"><?php echo $msgstr['api_created_at'] ?? 'Created At'; ?></th>
+                            <th style="padding: 10px;"><?php echo $msgstr['api_scope'] ?? 'Scope'; ?></th>
+                            <th style="padding: 10px;"><?php echo $msgstr['api_status'] ?? 'Status'; ?></th>
+                            <th style="padding: 10px; width: 80px; text-align: center;"><?php echo $msgstr['api_actions'] ?? 'Actions'; ?></th>
                         </tr>
-                    <?php else: ?>
-                        <?php foreach ($registry as $hash => $data): ?>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 10px;"><strong><?php echo htmlspecialchars($data['client_name']); ?></strong></td>
-                                <td style="padding: 10px;"><?php echo htmlspecialchars($data['created_at']); ?></td>
-                                <td style="padding: 10px;">
-                                    <span style="background: #e2e8f0; padding: 3px 8px; border-radius: 10px; font-size: 12px;">
-                                        <?php echo htmlspecialchars($data['scope']); ?>
-                                    </span>
-                                </td>
-                                <td style="padding: 10px;">
-                                    <span style="color: green; font-weight: bold;">Active</span>
-                                </td>
-                                <td style="padding: 10px; text-align: center;">
-                                    <form method="POST" style="margin: 0;" onsubmit="return confirm('Are you sure you want to revoke this key? Any application using it will immediately lose access.');">
-                                        <input type="hidden" name="action" value="delete_key">
-                                        <input type="hidden" name="key_hash" value="<?php echo htmlspecialchars($hash); ?>">
-                                        <button type="submit" class="bt bt-red" title="Revoke Key" style="padding: 4px 8px;">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </form>
-                                </td>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($registry)): ?>
+                            <tr>
+                                <td colspan="5" style="padding: 15px; text-align: center; color: #64748b;"><?php echo $msgstr['api_no_keys'] ?? 'No API keys generated yet.'; ?></td>
                             </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                        <?php else: ?>
+                            <?php foreach ($registry as $hash => $data): ?>
+                                <tr style="border-bottom: 1px solid #ddd;">
+                                    <td style="padding: 10px;"><strong><?php echo htmlspecialchars($data['client_name']); ?></strong></td>
+                                    <td style="padding: 10px;"><?php echo htmlspecialchars($data['created_at']); ?></td>
+                                    <td style="padding: 10px;">
+                                        <span style="background: #e2e8f0; padding: 3px 8px; border-radius: 10px; font-size: 12px;">
+                                            <?php echo htmlspecialchars($data['scope'] === 'read' ? ($msgstr['api_scope_read'] ?? 'Read Only') : ($msgstr['api_scope_write'] ?? 'Read & Write')); ?>
+                                        </span>
+                                    </td>
+                                    <td style="padding: 10px;">
+                                        <span style="color: green; font-weight: bold;"><?php echo $msgstr['api_active'] ?? 'Active'; ?></span>
+                                    </td>
+                                    <td style="padding: 10px; text-align: center;">
+                                        <form method="POST" style="margin: 0;" onsubmit="return confirm('<?php echo addslashes($msgstr['api_revoke_confirm'] ?? 'Are you sure you want to revoke this key? Any application using it will immediately lose access.'); ?>');">
+                                            <input type="hidden" name="action" value="delete_key">
+                                            <input type="hidden" name="key_hash" value="<?php echo htmlspecialchars($hash); ?>">
+                                            <button type="submit" class="bt bt-red" title="<?php echo $msgstr['api_revoke_key'] ?? 'Revoke Key'; ?>" style="padding: 4px 8px;">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </fieldset>
 
             <!-- DATABASES AND MAPPING UNIFIED TAB -->
             <fieldset style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
-                <legend style="font-weight: bold; padding: 0 5px;">Database Exposure & Mappings</legend>
-                <p style="color: #555; margin-bottom: 15px;">Enable databases, set access levels, and map CISIS indexes. Click a database to expand its configuration.</p>
+                <legend style="font-weight: bold; padding: 0 5px;"><?php echo $msgstr['api_db_exposure'] ?? 'Database Exposure & Mappings'; ?></legend>
+                <p style="color: #555; margin-bottom: 15px;"><?php echo $msgstr['api_db_exposure_desc'] ?? 'Enable databases, set access levels, and map CISIS indexes. Click a database to expand its configuration.'; ?></p>
 
                 <form method="POST">
                     <input type="hidden" name="action" value="save_db_config">
@@ -419,28 +419,25 @@ include("../common/header.php");
 
                             <div class="abcd-accordion-content">
                                 <?php
-                                // Detect environment from dr_path.def
                                 $detectedEnv = detectCisisEnvironment($db_path, $dbCode);
-
-                                // If database is already saved in API config, use saved values, otherwise use detected
                                 $currentCisis = $databasesConfig[$dbCode]['cisis_version'] ?? $detectedEnv['cisis_version'];
                                 $currentEncoding = $databasesConfig[$dbCode]['source_encoding'] ?? $detectedEnv['source_encoding'];
                                 ?>
 
                                 <div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
                                     <div style="flex-grow: 1; min-width: 200px;">
-                                        <label style="font-weight:bold;">API Description</label>
+                                        <label style="font-weight:bold;"><?php echo $msgstr['api_db_desc'] ?? 'API Description'; ?></label>
                                         <input type="text" name="db_desc[<?php echo htmlspecialchars($dbCode); ?>]" value="<?php echo htmlspecialchars($currentDesc); ?>" style="width: 100%; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
                                     </div>
                                     <div style="width: 180px;">
-                                        <label style="font-weight:bold;">Access Level</label>
+                                        <label style="font-weight:bold;"><?php echo $msgstr['api_access_level'] ?? 'Access Level'; ?></label>
                                         <select name="access_level[<?php echo htmlspecialchars($dbCode); ?>]" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
-                                            <option value="public" <?php echo $currentAccess === 'public' ? 'selected' : ''; ?>>Public (No Key)</option>
-                                            <option value="restricted" <?php echo $currentAccess === 'restricted' ? 'selected' : ''; ?>>Restricted (Requires Key)</option>
+                                            <option value="public" <?php echo $currentAccess === 'public' ? 'selected' : ''; ?>><?php echo $msgstr['api_public'] ?? 'Public (No Key)'; ?></option>
+                                            <option value="restricted" <?php echo $currentAccess === 'restricted' ? 'selected' : ''; ?>><?php echo $msgstr['api_restricted'] ?? 'Restricted (Requires Key)'; ?></option>
                                         </select>
                                     </div>
                                     <div style="width: 140px;">
-                                        <label style="font-weight:bold;" title="Detected from dr_path.def">CISIS Env <i class="fas fa-magic" style="color:#aaa; font-size:10px;"></i></label>
+                                        <label style="font-weight:bold;" title="Detected from dr_path.def"><?php echo $msgstr['api_cisis_env'] ?? 'CISIS Env'; ?> <i class="fas fa-magic" style="color:#aaa; font-size:10px;"></i></label>
                                         <select name="cisis_version[<?php echo htmlspecialchars($dbCode); ?>]" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
                                             <?php
                                             $commonVersions = ['ansi/', 'utf8/', 'utf8/bigisis/', 'ansi/bigisis/'];
@@ -455,7 +452,7 @@ include("../common/header.php");
                                         </select>
                                     </div>
                                     <div style="width: 120px;">
-                                        <label style="font-weight:bold;">Encoding</label>
+                                        <label style="font-weight:bold;"><?php echo $msgstr['api_encoding'] ?? 'Encoding'; ?></label>
                                         <select name="source_encoding[<?php echo htmlspecialchars($dbCode); ?>]" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
                                             <option value="ISO-8859-1" <?php echo $currentEncoding === 'ISO-8859-1' ? 'selected' : ''; ?>>ISO-8859-1</option>
                                             <option value="UTF-8" <?php echo $currentEncoding === 'UTF-8' ? 'selected' : ''; ?>>UTF-8</option>
@@ -463,13 +460,13 @@ include("../common/header.php");
                                     </div>
                                 </div>
 
-                                <h5><i class="fas fa-search"></i> Search Index Mappings</h5>
+                                <h5><i class="fas fa-search"></i> <?php echo $msgstr['api_search_mappings'] ?? 'Search Index Mappings'; ?></h5>
                                 <table class="table striped mapping-table" style="width: 100%; margin-bottom: 10px;">
                                     <thead>
                                         <tr>
-                                            <th>API Parameter (e.g., author)</th>
-                                            <th>CISIS Prefix (e.g., AU_)</th>
-                                            <th style="width: 120px; text-align: center;">Actions</th>
+                                            <th><?php echo $msgstr['api_param_name'] ?? 'API Parameter (e.g., author)'; ?></th>
+                                            <th><?php echo $msgstr['api_cisis_prefix'] ?? 'CISIS Prefix (e.g., AU_)'; ?></th>
+                                            <th style="width: 120px; text-align: center;"><?php echo $msgstr['api_actions'] ?? 'Actions'; ?></th>
                                         </tr>
                                     </thead>
                                     <tbody id="mapping_body_<?php echo htmlspecialchars($dbCode); ?>">
@@ -487,8 +484,8 @@ include("../common/header.php");
                                         <?php else: ?>
                                             <!-- Initial Empty Row -->
                                             <tr>
-                                                <td><input type="text" name="mapping[<?php echo htmlspecialchars($dbCode); ?>][api_param][]" placeholder="New parameter..." style="width: 95%; padding: 5px;"></td>
-                                                <td><input type="text" name="mapping[<?php echo htmlspecialchars($dbCode); ?>][cisis_prefix][]" placeholder="Prefix..." style="width: 95%; padding: 5px;"></td>
+                                                <td><input type="text" name="mapping[<?php echo htmlspecialchars($dbCode); ?>][api_param][]" placeholder="<?php echo $msgstr['api_new_param'] ?? 'New parameter...'; ?>" style="width: 95%; padding: 5px;"></td>
+                                                <td><input type="text" name="mapping[<?php echo htmlspecialchars($dbCode); ?>][cisis_prefix][]" placeholder="<?php echo $msgstr['api_new_prefix'] ?? 'Prefix...'; ?>" style="width: 95%; padding: 5px;"></td>
                                                 <td style="text-align: center;">
                                                     <button type="button" class="bt bt-gray" onclick="duplicateRow(this)"><i class="far fa-copy"></i></button>
                                                     <button type="button" class="bt bt-red" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i></button>
@@ -498,14 +495,14 @@ include("../common/header.php");
                                     </tbody>
                                 </table>
                                 <button type="button" class="bt bt-gray" onclick="addMappingRow('mapping_body_<?php echo htmlspecialchars($dbCode); ?>', '<?php echo htmlspecialchars($dbCode); ?>')">
-                                    <i class="fas fa-plus"></i> Add Mapping Row
+                                    <i class="fas fa-plus"></i> <?php echo $msgstr['api_add_mapping'] ?? 'Add Mapping Row'; ?>
                                 </button>
                             </div>
                         </div>
                     <?php } ?>
 
                     <div style="margin-top: 20px;">
-                        <button type="submit" class="bt bt-blue"><i class="fas fa-save"></i> Save All Database Configurations</button>
+                        <button type="submit" class="bt bt-blue"><i class="fas fa-save"></i> <?php echo $msgstr['api_save_all_db'] ?? 'Save All Database Configurations'; ?></button>
                     </div>
                 </form>
             </fieldset>
@@ -535,8 +532,8 @@ include("../common/header.php");
             const tbody = document.getElementById(tbodyId);
             const tr = document.createElement("tr");
             tr.innerHTML = `
-                <td><input type="text" name="mapping[${dbKey}][api_param][]" placeholder="New parameter..." style="width: 95%; padding: 5px;"></td>
-                <td><input type="text" name="mapping[${dbKey}][cisis_prefix][]" placeholder="Prefix..." style="width: 95%; padding: 5px;"></td>
+                <td><input type="text" name="mapping[${dbKey}][api_param][]" placeholder="<?php echo $msgstr['api_new_param'] ?? 'New parameter...'; ?>" style="width: 95%; padding: 5px;"></td>
+                <td><input type="text" name="mapping[${dbKey}][cisis_prefix][]" placeholder="<?php echo $msgstr['api_new_prefix'] ?? 'Prefix...'; ?>" style="width: 95%; padding: 5px;"></td>
                 <td style="text-align: center;">
                     <button type="button" class="bt bt-gray" onclick="duplicateRow(this)"><i class="far fa-copy"></i></button>
                     <button type="button" class="bt bt-red" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i></button>
