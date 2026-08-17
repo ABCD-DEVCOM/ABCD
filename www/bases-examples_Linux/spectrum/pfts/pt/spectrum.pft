@@ -1,22 +1,47 @@
 '<style>
     /* --- ESTILO GERAL DA FICHA --- */
-    .museum-card {
+.museum-card {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         background: #fff;
-        max-width: 100%;
+        width: 1200px;
+        min-width: 100%; /* Força o contêiner pai do ABCD a expandir ao máximo */
+        box-sizing: border-box;
         margin: auto;
         color: #444;
     }
-
     /* --- CABEÇALHO HERO --- */
     .obj-header {
-        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        background: #52567a;
         color: white;
         padding: 20px;
         border-radius: 8px 8px 0 0;
         margin-bottom: 20px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        
+        /* ADIÇÕES DO FLEXBOX AQUI */
+        display: flex;
+        justify-content: space-between; 
+        align-items: center; 
     }
+    
+    /* NOVO: Container para os textos ficarem à esquerda */
+    .header-text {
+        flex: 1;
+        padding-right: 20px;
+    }
+
+    /* NOVO: Container para o logo ficar à direita */
+    .header-logo {
+        flex-shrink: 0;
+        width: 80px; /* Ajuste o tamanho do logo aqui se precisar */
+        display: flex;
+        justify-content: flex-end;
+    }
+    .header-logo svg {
+        width: 100%;
+        height: auto;
+    }
+
     .obj-tombo {
         background: rgba(255,255,255,0.2);
         padding: 4px 10px;
@@ -25,6 +50,7 @@
         font-weight: bold;
         text-transform: uppercase;
         letter-spacing: 1px;
+        display: inline-block;
     }
     .obj-title {
         margin: 10px 0 5px 0;
@@ -163,12 +189,58 @@
 '<div class="museum-card">'
 
     '<div class="obj-header">'
-        '<span class="obj-tombo"><i class="fas fa-barcode"></i> 'v002'</span>'
-        '<div class="obj-title">'v010'</div>'
-        if p(v050) then '<div class="obj-subtitle">'v050'</div>' fi
+        
+        '<!-- AGRUPAMENTO DOS TEXTOS À ESQUERDA -->'
+        '<div class="header-text">'
+            '<span class="obj-tombo"><i class="fas fa-barcode"></i> 'v002'</span>'
+            '<div class="obj-title">'v010'</div>'
+            if p(v050) then '<div class="obj-subtitle">'v050'</div>' fi
+        '</div>'
+
+        '<!-- AGRUPAMENTO DO LOGO À DIREITA -->'
+        '<div class="header-logo"><a href="https://abcd-devcom.github.io/spectrum/" target="_blank">'
+            '<!-- SVG Substituindo o Ícone -->'
+            '<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 167.85 200.93">'
+                '<defs>'
+                    '<style>'
+                        '.cls-1 {'
+                            'font-family: AgencyFB-Bold, "Agency FB";'
+                            'font-size: 113.59px;'
+                            'font-weight: 70;'
+                            'letter-spacing: .1em;'
+                        '}'
+                        '.cls-1,'
+                        '.cls-2,'
+                        '.cls-3 {'
+                            'fill: #ffffff;'
+                        '}'
+                        '.cls-2 {'
+                            'font-family: AgencyFB-Reg, "Agency FB";'
+                            'font-size: 28.96px;'
+                            'letter-spacing: .04em;'
+                        '}'
+                    '</style>'
+                '</defs>'
+                '<g id="Camada_1-2" data-name="Camada 1">'
+                    '<g>'
+                        '<polygon class="cls-3" points="83.82 0 2.41 39.59 165.18 39.59 83.82 0" />'
+                        '<rect class="cls-3" y="44.4" width="167.45" height="8.29" />'
+                        '<path class="cls-3" d="M0,157.69h167.85c0,5.54-4.49,10.03-10.03,10.03H10.03C4.49,167.72,0,163.22,0,157.69H0Z" />'
+                        '<rect class="cls-3" x="9.5" y="147.92" width="148.86" height="4.81" />'
+                        '<text class="cls-1" transform="translate(9.5 144.59) scale(.62 1)">'
+                            '<tspan x="0" y="0">ABCD</tspan>'
+                        '</text>'
+                        '<text class="cls-2" transform="translate(2.41 195.13) scale(1.53 1)">'
+                            '<tspan x="0" y="0">SPECTRUM</tspan>'
+                        '</text>'
+                    '</g>'
+                '</g>'
+            '</svg>'
+        '</a></div>'
+
     '</div>'
 
-    ''
+
     '<div class="museum-body">'
 
         ''
@@ -327,14 +399,14 @@
             '<table class="museum-table">'
             if p(v800) then '<tr><th>Localização Atual</th><td><strong>'v800+|<br>|,'</strong></td></tr>' fi
             if p(v810) then '<tr><th>Histórico de Locais</th><td>'v810+|<br>|,'</td></tr>' fi
-            if p(v820) then '<tr><th>Nomes de Arquivo</th><td>'v820+|<br>|,'</td></tr>' fi
+            if p(v820) then '<tr><th>Anexos</th><td>'v820+|<br>|,'</td></tr>' fi
+            if p(v821) then '<tr><th>Anexos públicos</th><td>'v821+|<br>|,'</td></tr>' fi
             if p(v870) then '<tr><th>Observações Gerais</th><td>'v870+|<br>|,'</td></tr>' fi
             if p(v890) then '<tr><th>Última Atualização</th><td>'v890' ('v880')</td></tr>' fi
             '</table>'
 
         '</div>' ''
 
-        ''
         if p(v820) then 
             '<div class="museum-sidebar">'
                 '<h3 class="section-title"><i class="far fa-images"></i> Mídia</h3>'
@@ -345,6 +417,18 @@
                 /)
             '</div>'
         fi
+
+        if p(v821) then 
+            '<div class="museum-sidebar">'
+                '<h3 class="section-title"><i class="far fa-images"></i> Mídia</h3>'
+                (
+                    '<a href="../common/show_image.php?image='v821'&base=spectrum" target="_blank" class="gallery-item">'
+                        '<img src="../common/show_image.php?image='v821'&base=spectrum" alt="Imagem associada ao registro">'
+                    '</a>'
+                /)
+            '</div>'
+        fi
+
 
     '</div>' ''
 
