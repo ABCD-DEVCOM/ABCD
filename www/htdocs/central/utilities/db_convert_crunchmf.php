@@ -24,7 +24,7 @@ include("../lang/admin.php");
 $base = $arrHttp["base"];
 $bd_path = $db_path . $base;
 $data_path = $bd_path . "/data";
-$full_base_path = $data_path . $base;
+$full_base_path = $data_path . '/' . $base;
 
 // Detect Current OS
 $is_windows = (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
