@@ -1,0 +1,9 @@
+(if p(v820) then 
+'<div class="image-container text-center">'
+    '<canvas class="protected-canvas img-fluid rounded" data-src="viewer/show_image.php?image='v820'&base=spectrum"></canvas>'
+    '<br>'
+    '<button type="button" class="btn btn-dark btn-sm mt-2 btn-fullscreen-canvas">'
+        '<i class="fas fa-expand"></i> Ver em Tela Cheia'
+    '</button>'
+'</div>'
+ fi )
