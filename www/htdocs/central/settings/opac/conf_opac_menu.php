@@ -59,7 +59,7 @@ $wiki_help = "OPAC-ABCD_Detalles_de_la_configuraci%C3%B3n#Men.C3.BA_de_configura
 
 		<button type="button" class="accordion" id="db_configuration"><i class="fas fa-database"></i> <?php echo $msgstr["db_configuration"] ?></button>
 		<div class="panel panel-menu">
-			<li><a href="javascript:EnviarForma('/central/settings/opac/databases.php')"><?php echo $msgstr["databases"]; ?></a></li>
+			<li><a href="javascript:EnviarForma('/central/settings/opac/conf_databases.php')"><?php echo $msgstr["databases"]; ?></a></li>
 
 
 			<?php
@@ -108,7 +108,7 @@ $wiki_help = "OPAC-ABCD_Detalles_de_la_configuraci%C3%B3n#Men.C3.BA_de_configura
 	<div class="panel panel-menu">
 		<li><a href="javascript:EnviarForma('/central/settings/opac/lenguajes.php')"><?php echo $msgstr["available_languages"]; ?></a></li>
 		<li><a href="javascript:EnviarForma('/central/settings/opac/db_langs.php')"><?php echo $msgstr["avail_db_lang"]; ?></a></li>
-		<!--<li><a href="javascript:SeleccionarProceso('databases.php','1')"><?php echo $msgstr["charset_db"]; ?></a></li>-->
+		<!--<li><a href="javascript:SeleccionarProceso('conf_databases.php','1')"><?php echo $msgstr["charset_db"]; ?></a></li>-->
 	</div>
 
 	<button type="button" class="accordion" id="loan_conf"><i class="fas fa-book-reader"></i> <?php echo $msgstr["loan_conf"] ?></button>
