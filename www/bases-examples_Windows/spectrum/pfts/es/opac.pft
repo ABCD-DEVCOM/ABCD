@@ -1,77 +1,366 @@
-'<div class="table-responsive">'
+/* 1. ESTILOS CSS (Identidad Visual Burdeos + Galería Responsiva + Inscripciones) */
+'<style>
+    :root {
+        --cor-inst: #9e1b32;
+        --cor-inst-hover: #7a1526;
+        --cor-inst-soft: #fbf2f4;
+    }
+    .text-inst { color: var(--cor-inst) !important; }
+    .bg-inst { background-color: var(--cor-inst) !important; color: white; }
+    
+    .btn-inst { 
+        background-color: var(--cor-inst); 
+        color: white; 
+        border: 1px solid var(--cor-inst);
+    }
+    .btn-inst:hover { 
+        background-color: var(--cor-inst-hover); 
+        color: white;
+    }
+    
+    .record-title {
+        font-size: 1.45rem;
+        font-weight: 700;
+        line-height: 1.3;
+        margin-bottom: 0.4rem;
+    }
+    
+    .meta-label {
+        font-weight: 600;
+        color: #666;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .meta-value {
+        font-size: 0.95rem;
+        color: #111;
+    }
 
-'<table class="table table-hover responsive-stack table-sm" id="resultado">'
-'<tbody style="font-family:arial;font-size:smaller;vertical-align:top" >'
-'<tr><th colspan=2>0 - Identificación del objeto</th>'/
-if p(v001) then '<tr><th style="width: 200px;">ID</th><td>'v001+|<br>|,'</td>' fi/
-if p(v002) then '<tr><th style="width: 200px;">002 - Número de Registro (Accesión)</th><td>'v002+|<br>|,'</td>' fi/
-if p(v010) then '<tr><th style="width: 200px;">010 - Título/Nombre del Objeto</th><td>'v010+|<br>|,'</td>' fi/
-if p(v020) then '<tr><th style="width: 200px;">020 - Clasificación (Categoría del Objeto)</th><td>'v020+|<br>|,'</td>' fi/
-if p(v030) then '<tr><th style="width: 200px;">030 - Número de Ítems</th><td>'v030+|<br>|,'</td>' fi/
-if p(v050) then '<tr><th style="width: 200px;">050 - Título/Denominación</th><td>'v050+|<br>|,'</td>' fi/
-if p(v060) then '<tr><th style="width: 200px;">060 - Categoría del Objeto / Nombre (Tipología)</th><td>'v060+|<br>|,'</td>' fi/
-if p(v070) then '<tr><th style="width: 200px;">070 - Código de Barras/RFID</th><td>'v070+|<br>|,'</td>' fi/
-'<tr><th colspan=2>1 - Descripción del Objeto</th>'/
-if p(v100) then '<tr><th style="width: 200px;">100 - Descripción</th><td>'v100+|<br>|,'</td>' fi/
-if p(v110) then '<tr><th style="width: 200px;">110 - Descripción Analítica</th><td>'v110+|<br>|,'</td>' fi/
-if p(v120) then '<tr><th style="width: 200px;">120 - Descripción Física</th><td>'v120+|<br>|,'</td>' fi/
-'<tr><th colspan=2>2 - Características Físicas</th>'/
-if p(v200) then '<tr><th style="width: 200px;">200 - Material de la Obra</th><td>'v200+|<br>|,'</td>' fi/
-if p(v210) then '<tr><th style="width: 200px;">210 - Material del soporte</th><td>'v210+|<br>|,'</td>' fi/
-if p(v220) then '<tr><th style="width: 200px;">220 - Técnica</th><td>'v220+|<br>|,'</td>' fi/
-if p(v230) then '<tr><th style="width: 200px;">230 - Dimensiones de la obra</th><td>'v230+|<br>|,'</td>' fi/
-if p(v240) then '<tr><th style="width: 200px;">240 - Dimensiones del soporte</th><td>'v240+|<br>|,'</td>' fi/
-if p(v250) then '<tr><th style="width: 200px;">250 - Peso</th><td>'v250+|<br>|,'</td>' fi/
-'<tr><th colspan=2>3 - Autoría y Producción</th>'/
-if p(v300) then '<tr><th style="width: 200px;">300 - Autor</th><td>'v300+|<br>|,'</td>' fi/
-if p(v310) then '<tr><th style="width: 200px;">310 - Fabricante</th><td>'v310+|<br>|,'</td>' fi/
-if p(v320) then '<tr><th style="width: 200px;">320 - Biografía o Historial del Autor/Fabricante</th><td>'v320+|<br>|,'</td>' fi/
-if p(v330) then '<tr><th style="width: 200px;">330 - Período de Creación</th><td>'v330+|<br>|,'</td>' fi/
-if p(v340) then '<tr><th style="width: 200px;">340 - Forma de confección o producción</th><td>'v340+|<br>|,'</td>' fi/
-'<tr><th colspan=2>4 - Procedencia y Adquisición</th>'/
-if p(v400) then '<tr><th style="width: 200px;">400 - Procedencia</th><td>'v400+|<br>|,'</td>' fi/
-if p(v410) then '<tr><th style="width: 200px;">410 - Fecha de Adquisición (fecha de ingreso)</th><td>'v410+|<br>|,'</td>' fi/
-if p(v420) then '<tr><th style="width: 200px;">420 - Valor de Adquisición</th><td>'v420+|<br>|,'</td>' fi/
-if p(v430) then '<tr><th style="width: 200px;">430 - Forma de ingreso</th><td>'v430+|<br>|,'</td>' fi/
-if p(v440) then '<tr><th style="width: 200px;">440 - Forma de ingreso (si es otra)</th><td>'v440+|<br>|,'</td>' fi/
-'<tr><th colspan=2>5 - Condición y Conservación</th>'/
-if p(v500) then '<tr><th style="width: 200px;">500 - Estado de Conservación</th><td>'v500+|<br>|,'</td>' fi/
-if p(v510) then '<tr><th style="width: 200px;">510 - Fecha de Evaluación</th><td>'v510+|<br>|,'</td>' fi/
-if p(v520) then '<tr><th style="width: 200px;">520 - Condición de acceso</th><td>'v520+|<br>|,'</td>' fi/
-if p(v530) then '<tr><th style="width: 200px;">530 - Descripción del Incidente</th><td>'v530+|<br>|,'</td>' fi/
-if p(v540) then '<tr><th style="width: 200px;">540 - Recomendación</th><td>'v540+|<br>|,'</td>' fi/
-if p(v550) then '<tr><th style="width: 200px;">550 - Prioridad</th><td>'v550+|<br>|,'</td>' fi/
-if p(v560) then '<tr><th style="width: 200px;">560 - Intervención anterior</th><td>'v560+|<br>|,'</td>' fi/
-'<tr><th colspan=2>6 - Conjuntos y Partes</th>'/
-if p(v600) then '<tr><th style="width: 200px;">600 - Conjunto</th><td>'v600+|<br>|,'</td>' fi/
-if p(v610) then '<tr><th style="width: 200px;">610 - Nº de Piezas</th><td>'v610+|<br>|,'</td>' fi/
-if p(v620) then '<tr><th style="width: 200px;">620 - Nº de Partes</th><td>'v620+|<br>|,'</td>' fi/
-'<tr><th colspan=2>7 - Inscripciones</th>'/
-if p(v700) then '<tr><th style="width: 200px;">700 - Posee Inscripción</th><td>'v700+|<br>|,'</td>' fi/
-if p(v710) then '<tr><th style="width: 200px;">710 - Cantidad de Inscripciones</th><td>'v710+|<br>|,'</td>' fi/
-if p(v720) then '<tr><th style="width: 200px;">720 - Tipos de Inscripción</th><td>'v720+|<br>|,'</td>' fi/
-if p(v730) then '<tr><th style="width: 200px;">730 - Ubicación de la inscripción</th><td>'v730+|<br>|,'</td>' fi/
-if p(v740) then '<tr><th style="width: 200px;">740 - Idioma de la inscripción</th><td>'v740+|<br>|,'</td>' fi/
-if p(v750) then '<tr><th style="width: 200px;">750 - Transcripción de la inscripción</th><td>'v750+|<br>|,'</td>' fi/
-if p(v760) then '<tr><th style="width: 200px;">760 - Observación de la inscripción</th><td>'v760+|<br>|,'</td>' fi/
-'<tr><th colspan=2>8 - Gestión y Control de Ubicación</th>'/
-if p(v800) then '<tr><th style="width: 200px;">800 - Ubicación Física actual</th><td>'v800+|<br>|,'</td>' fi/
-if p(v810) then '<tr><th style="width: 200px;">810 - Historial de Ubicaciones</th><td>'v810+|<br>|,'</td>' fi/
-if p(v820) then '<tr><th style="width: 200px;">820 - Número de las imágenes</th><td>'v820+|<br>|,'</td>' fi/
-if p(v830) then '<tr><th style="width: 200px;">830 - Historial del Objeto</th><td>'v830+|<br>|,'</td>' fi/
-if p(v840) then '<tr><th style="width: 200px;">840 - Fuente de Investigación</th><td>'v840+|<br>|,'</td>' fi/
-if p(v850) then '<tr><th style="width: 200px;">850 - Comodato (Préstamo)</th><td>'v850+|<br>|,'</td>' fi/
-if p(v860) then '<tr><th style="width: 200px;">860 - Seguro</th><td>'v860+|<br>|,'</td>' fi/
-if p(v870) then '<tr><th style="width: 200px;">870 - Observaciones Generales</th><td>'v870+|<br>|,'</td>' fi/
-if p(v880) then '<tr><th style="width: 200px;">880 - Nombre del Personal</th><td>'v880+|<br>|,'</td>' fi/
-if p(v890) then '<tr><th style="width: 200px;">890 - Fecha</th><td>'v890+|<br>|,'</td>' fi/
-'<tr><th colspan=2>9 - Gestión de Derechos</th>'/
-if p(v900) then '<tr><th style="width: 200px;">900 - Titular de los Derechos</th><td>'v900+|<br>|,'</td>' fi/
-if p(v910) then '<tr><th style="width: 200px;">910 - Tipo de Derecho 1</th><td>'v910+|<br>|,'</td>' fi/
-if p(v920) then '<tr><th style="width: 200px;">920 - Estado de los Derechos</th><td>'v920+|<br>|,'</td>' fi/
-if p(v930) then '<tr><th style="width: 200px;">930 - Tipo de Licencia</th><td>'v930+|<br>|,'</td>' fi/
-if p(v940) then '<tr><th style="width: 200px;">940 - Fecha de Vencimiento</th><td>'v940+|<br>|,'</td>' fi/
-if p(v950) then '<tr><th style="width: 200px;">950 - Fuente de Información</th><td>'v950+|<br>|,'</td>' fi/
-if p(v960) then '<tr><th style="width: 200px;">960 - Notas sobre los Derechos</th><td>'v960+|<br>|,'</td>' fi/
-'</table>'
-'</div>'
+    /* Galería de Miniaturas */
+    .thumb-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+        justify-content: center;
+    }
+    .thumb-gallery img {
+        width: 52px;
+        height: 52px;
+        object-fit: cover;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        cursor: pointer;
+        transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .thumb-gallery img:hover {
+        transform: scale(1.08);
+        border-color: var(--cor-inst);
+    }
+
+    /* Estilos Específicos para Inscripciones (Campo 720) */
+    .insc-card {
+        background-color: #fff;
+        border-left: 4px solid var(--cor-inst);
+        padding: 10px;
+        margin-bottom: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        border-radius: 0 4px 4px 0;
+    }
+    .insc-badge {
+        background-color: #eee;
+        color: #333;
+        font-weight: bold;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        margin-right: 8px;
+    }
+    .insc-local {
+        font-size: 0.85rem;
+        color: #555;
+        margin-right: 10px;
+    }
+    .insc-texto {
+        display: block;
+        margin-top: 5px;
+        font-family: "Courier New", monospace;
+        color: #111;
+        background-color: #f8f9fa;
+        padding: 6px;
+        border-radius: 3px;
+        border: 1px solid #eee;
+    }
+</style>'
+
+/* 2. INICIO DEL CONTENEDOR DEL REGISTRO */
+'<div class="row record-container mb-5 py-3 border-bottom" id="museu'mfn'">'
+
+    /* --- COLUMNA IZQUIERDA: DATOS DESCRIPTIVOS Y CURADURÍA (75%) --- */
+    '<div class="col-md-9">'
+        
+        /* ENCABEZADO DEL OBJETO */
+        '<div class="mb-3">'
+            '<div class="record-title text-inst">'
+                if p(v010) then v010 else 'Objeto sin Título' fi
+            '</div>'
+            
+            if p(v050) then 
+                '<h5 class="text-muted fw-normal mb-2">'v050'</h5>' 
+            fi
+
+            '<div class="d-flex flex-wrap gap-2 mb-3 align-items-center">'
+                if p(v002) then '<span class="badge bg-light text-dark border"><i class="fa fa-barcode"></i> Nº Registro: 'v002'</span>' fi
+                if p(v060) then '<span class="badge bg-inst"><i class="fa fa-tag me-1"></i>'v060'</span>' fi
+                if p(v020) then '<span class="badge bg-light text-dark border">'v020'</span>' fi
+                if p(v330) then '<span class="badge bg-light text-dark border"><i class="fa fa-clock-o"></i> 'v330'</span>' fi
+            '</div>'
+        '</div>'
+
+        /* DESCRIPCIÓN PRINCIPAL (RESUMIDA) */
+        if p(v100) then 
+            '<div class="card bg-light border-0 mb-3">'
+                '<div class="card-body py-3">'
+                    '<h6 class="card-title text-inst mb-2"><i class="fa fa-align-left me-1"></i> Descripción</h6>'
+                    '<p class="card-text text-secondary" style="font-size: 0.98rem; line-height: 1.6;">'
+                        v100+|<br>|
+                    '</p>'
+                '</div>'
+            '</div>'
+        fi
+
+        /* CONTEXTO HISTÓRICO / MEMORIA DEL OBJETO (CAMPO 830) */
+        if p(v830) then
+            '<div class="card border-0 mb-3" style="background-color: var(--cor-inst-soft);">'
+                '<div class="card-body py-2 px-3">'
+                    '<small class="text-uppercase fw-bold text-inst" style="font-size:0.75rem;"><i class="fa fa-info-circle me-1"></i> Historial y Contexto de la Pieza</small>'
+                    '<div class="text-dark small mt-1" style="line-height:1.5;">'v830'</div>'
+                '</div>'
+            '</div>'
+        fi
+
+        /* ACORDEÓN PARA DETALLES CURATORIALES */
+        '<div class="accordion accordion-flush" id="accordionSpectrum'mfn'">'
+            
+            /* GRUPO 1: CARACTERÍSTICAS FÍSICAS Y MATERIALES */
+            if p(v200) or p(v210) or p(v220) or p(v230) or p(v110) or p(v120) then
+            '<div class="accordion-item">'
+                '<h2 class="accordion-header" id="headingFisico'mfn'">'
+                    '<button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFisico'mfn'">'
+                        '<i class="fa fa-cube me-2 text-muted"></i> Características Físicas, Técnicas y Dimensiones'
+                    '</button>'
+                '</h2>'
+                '<div id="collapseFisico'mfn'" class="accordion-collapse collapse" data-bs-parent="#accordionSpectrum'mfn'">'
+                    '<div class="accordion-body">'
+                        '<div class="row">'
+                             if p(v200) then '<div class="col-md-6 mb-2"><span class="meta-label">Material:</span><br><span class="meta-value">'v200+|, |'</span></div>' fi
+                             if p(v210) then '<div class="col-md-6 mb-2"><span class="meta-label">Soporte:</span><br><span class="meta-value">'v210+|, |'</span></div>' fi
+                             if p(v220) then '<div class="col-md-6 mb-2"><span class="meta-label">Técnica:</span><br><span class="meta-value">'v220+|, |'</span></div>' fi
+                             
+                             /* Dimensiones Formateadas */
+                             if p(v230) then 
+                                '<div class="col-md-6 mb-2"><span class="meta-label">Dimensiones de la Obra:</span><br><span class="meta-value">'
+                                    if p(v230^a) then 'Alt: 'v230^a' cm ' fi
+                                    if p(v230^b) then 'x Anch: 'v230^b' cm ' fi
+                                    if p(v230^c) then 'x Prof: 'v230^c' cm ' fi
+                                    if p(v230^d) then 'x Diám: 'v230^d' cm ' fi
+                                    if a(v230^a) then v230 fi
+                                '</span></div>' 
+                             fi
+                             
+                             if p(v240) then '<div class="col-md-6 mb-2"><span class="meta-label">Dimensiones del Soporte:</span><br><span class="meta-value">'v240'</span></div>' fi
+                             if p(v250) then '<div class="col-md-6 mb-2"><span class="meta-label">Peso:</span><br><span class="meta-value">'v250' g</span></div>' fi
+                             if p(v110) then '<div class="col-12 mt-2 border-top pt-2"><span class="meta-label">Descripción Analítica / Funcional:</span><br><span class="text-muted small">'v110'</span></div>' fi
+                             if p(v120) then '<div class="col-12 mt-2 border-top pt-2"><span class="meta-label">Descripción Física Visual:</span><br><span class="text-muted small">'v120'</span></div>' fi
+                        '</div>'
+                    '</div>'
+                '</div>'
+            '</div>'
+            fi
+
+            /* GRUPO 2: AUTORÍA Y PRODUCCIÓN */
+            if p(v300) or p(v310) or p(v340) or p(v320) then
+            '<div class="accordion-item">'
+                '<h2 class="accordion-header" id="headingAutor'mfn'">'
+                    '<button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAutor'mfn'">'
+                        '<i class="fa fa-paint-brush me-2 text-muted"></i> Autoría, Creación y Origen'
+                    '</button>'
+                '</h2>'
+                '<div id="collapseAutor'mfn'" class="accordion-collapse collapse" data-bs-parent="#accordionSpectrum'mfn'">'
+                    '<div class="accordion-body">'
+                        if p(v300) then '<p class="mb-2"><strong>Autor / Artista:</strong> <span class="text-inst fw-bold">'v300+|<br>|'</span></p>' fi
+                        if p(v310) then '<p class="mb-2"><strong>Fabricante / Editor:</strong> 'v310'</p>' fi
+                        if p(v340) then '<p class="mb-2"><strong>Lugar / Forma de Producción:</strong> 'v340'</p>' fi
+                        if p(v320) then '<div class="alert alert-light mt-2 small border"><strong>Nota Biográfica / Historial de Producción:</strong><br>'v320'</div>' fi
+                    '</div>'
+                '</div>'
+            '</div>'
+            fi
+
+            /* GRUPO 3: HISTORIAL DE ADQUISICIÓN (DATOS PÚBLICOS) */
+            if p(v400) or p(v410) or p(v430) or p(v440) then
+            '<div class="accordion-item">'
+                '<h2 class="accordion-header" id="headingProc'mfn'">'
+                    '<button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProc'mfn'">'
+                        '<i class="fa fa-history me-2 text-muted"></i> Procedencia y Entrada en el Acervo'
+                    '</button>'
+                '</h2>'
+                '<div id="collapseProc'mfn'" class="accordion-collapse collapse" data-bs-parent="#accordionSpectrum'mfn'">'
+                    '<div class="accordion-body">'
+                        '<table class="table table-sm table-borderless small mb-0">'
+                             if p(v430) then '<tr><td width="30%" class="text-muted">Forma de Adquisición:</td><td><span class="badge bg-light text-dark border">'v430'</span></td></tr>' fi
+                             if p(v410) then '<tr><td class="text-muted">Fecha de Entrada:</td><td>'v410'</td></tr>' fi
+                             if p(v400) then '<tr><td class="text-muted">Origen / Procedencia:</td><td>'v400'</td></tr>' fi
+                             if p(v440) then '<tr><td class="text-muted">Historial de Procedencia:</td><td>'v440'</td></tr>' fi
+                        '</table>'
+                    '</div>'
+                '</div>'
+            '</div>'
+            fi
+            
+            /* GRUPO 4: INSCRIPCIONES Y MARCAS FÍSICAS */
+            if p(v700) or p(v720) then
+            '<div class="accordion-item">'
+                '<h2 class="accordion-header" id="headingInsc'mfn'">'
+                    '<button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInsc'mfn'">'
+                        '<i class="fa fa-pencil-square-o me-2 text-muted"></i> Inscripciones, Marcas y Firmas'
+                    '</button>'
+                '</h2>'
+                '<div id="collapseInsc'mfn'" class="accordion-collapse collapse" data-bs-parent="#accordionSpectrum'mfn'">'
+                    '<div class="accordion-body bg-light">'
+                         if p(v710) then '<div class="mb-2 small text-muted"><strong>Total de Inscripciones Identificadas:</strong> 'v710'</div>' fi
+                         
+                         /* Repetición del Grupo 720 */
+                         if p(v720) then 
+                            (
+                                '<div class="insc-card">'
+                                    if p(v720^a) then '<span class="insc-badge">'v720^a'</span>' fi
+                                    
+                                    '<span class="insc-local"><i class="fa fa-map-marker text-muted"></i> '
+                                        if v720^b = 'f.c.s.e.' then 'Frente - Esquina Superior Izquierda' fi
+                                        if v720^b = 'f.ac.c.'  then 'Frente - Arriba al Centro' fi
+                                        if v720^b = 'f.c.s.d.' then 'Frente - Esquina Superior Derecha' fi
+                                        if v720^b = 'f.c.e.'   then 'Frente - Centro Izquierda' fi
+                                        if v720^b = 'f.c.'     then 'Frente - Centro' fi
+                                        if v720^b = 'f.c.d.'   then 'Frente - Centro Derecha' fi
+                                        if v720^b = 'f.c.i.e.' then 'Frente - Esquina Inferior Izquierda' fi
+                                        if v720^b = 'f.ab.c.'  then 'Frente - Abajo al Centro' fi
+                                        if v720^b = 'f.c.i.d.' then 'Frente - Esquina Inferior Derecha' fi
+                                        if v720^b = 'm.ac.' then 'Marco - Arriba' fi
+                                        if v720^b = 'm.ab.' then 'Marco - Abajo' fi
+                                        if v720^b = 'm.e.'  then 'Marco - Izquierda' fi
+                                        if v720^b = 'm.d.'  then 'Marco - Derecha' fi
+                                        if v720^b = 'v.c.s.e'  then 'Reverso - Esquina Superior Izquierda' fi
+                                        if v720^b = 'v.ac.c.'  then 'Reverso - Arriba al Centro' fi
+                                        if v720^b = 'v.c.s.d'  then 'Reverso - Esquina Superior Derecha' fi
+                                        if v720^b = 'v.c.e.'   then 'Reverso - Centro Izquierda' fi
+                                        if v720^b = 'v.c.'     then 'Reverso - Centro' fi
+                                        if v720^b = 'v.c.d.'   then 'Reverso - Centro Derecha' fi
+                                        if v720^b = 'v.c.i.e.' then 'Reverso - Esquina Inferior Izquierda' fi
+                                        if v720^b = 'v.i.c'    then 'Reverso - Inferior Centro' fi
+                                        if v720^b = 'v.c.i.d'  then 'Reverso - Esquina Inferior Derecha' fi
+                                        if v720^b = 'chassi ac.' then 'Bastidor - Arriba' fi
+                                        if v720^b = 'chassi ab.' then 'Bastidor - Abajo' fi
+                                        if v720^b = 'chassi e.'  then 'Bastidor - Izquierda' fi
+                                        if v720^b = 'chassi d.'  then 'Bastidor - Derecha' fi
+                                        if v720^b = 'v.m.ac.' then 'Reverso - Marco - Arriba' fi
+                                        if v720^b = 'v.m.e.'  then 'Reverso - Marco - Izquierda' fi
+                                        if v720^b = 'v.m.d.'  then 'Reverso - Marco - Derecha' fi
+                                        if v720^b = 'v.m.ab.' then 'Reverso - Marco - Abajo' fi
+                                        if v720^b = 'f.f.'    then 'Cara Frontal' fi
+                                        if v720^b = 'f.p.'    then 'Cara Posterior' fi
+                                        if v720^b = 'f.s.'    then 'Cara Superior' fi
+                                        if v720^b = 'f.i.'    then 'Cara Inferior' fi
+                                        if v720^b = 'f.l.e.'  then 'Cara Lateral Izquierda' fi
+                                        if v720^b = 'f.l.d.'  then 'Cara Lateral Derecha' fi
+                                        if v720^b = 'b.f.f.'    then 'Base - Cara Frontal' fi
+                                        if v720^b = 'b.f.p.'    then 'Base - Cara Posterior' fi
+                                        if v720^b = 'b.f.s.'    then 'Base - Cara Superior' fi
+                                        if v720^b = 'b.f.i.'    then 'Base - Cara Inferior' fi
+                                        if v720^b = 'b.f.l.e.'  then 'Base - Cara Lateral Izquierda' fi
+                                        if v720^b = 'b.f.l.d.'  then 'Base - Cara Lateral Derecha' fi
+                                        if v720^b = 'int.f.f'   then 'Interno - Cara Frontal' fi
+                                        if v720^b = 'int.f.p'   then 'Interno - Cara Posterior' fi
+                                        if v720^b = 'int.f.s'   then 'Interno - Cara Superior' fi
+                                        if v720^b = 'int.f.i'   then 'Interno - Cara Inferior' fi
+                                        if v720^b = 'int.f.l.e' then 'Interno - Cara Lateral Izquierda' fi
+                                        if v720^b = 'int.f.l.d' then 'Interno - Cara Lateral Derecha' fi
+                                        if a(v720^b) then '' else if v720^b : '.' then '' else v720^b fi fi
+                                    '</span>'
+                                    
+                                    if p(v720^l) then '<small class="text-muted me-2">(Idioma: 'v720^l')</small>' fi
+                                    
+                                    if p(v720^t) then 
+                                        '<span class="insc-texto">“'v720^t'”</span>'
+                                    fi
+                                '</div>'
+                            )
+                         fi
+                    '</div>'
+                '</div>'
+            '</div>'
+            fi
+
+        '</div>' /* Fin Acordeón */
+
+    '</div>' /* Fin Columna Izquierda */
+
+
+    /* --- COLUMNA DERECHA: PROTAGONISMO VISUAL, CONJUNTOS Y DERECHOS (25%) --- */
+    '<div class="col-md-3 text-center">'
+
+        /* 1. DESTAQUE VISUAL (IMAGEN PRINCIPAL CON ENLACE PARA AMPLIAR) */
+        if p(v820) or p(v821) then 
+             '<div class="mb-3">'
+                '<div class="shadow-sm p-1 bg-white border rounded position-relative">'
+                    '<a href="/opac/viewer/show_image.php?image='if p(v820) then v820[1] else v821[1] fi'&base=spectrum" target="_blank" title="Clic para ampliar">'
+                        '<img src="/opac/viewer/show_image.php?image='if p(v820) then v820[1] else v821[1] fi'&base=spectrum" class="img-fluid rounded" alt="Imagen del Objeto">'
+                    '</a>'
+                '</div>'
+                
+                /* Tira de Miniaturas si hay más de una imagen */
+                if npost(['spectrum'],'REF_'v002) > 0 or p(v820[2]) then
+                    '<div class="thumb-gallery">'
+                        (
+                            if p(v820) then 
+                                '<a href="/opac/viewer/show_image.php?image='v820'&base=spectrum" target="_blank">'
+                                    '<img src="/opac/viewer/show_image.php?image='v820'&base=spectrum" alt="Vista de detalle">'
+                                '</a>'
+                            fi
+                        )
+                    '</div>'
+                fi
+             '</div>'
+        else
+             '<div class="mb-3 p-4 bg-light border rounded text-muted">'
+                '<i class="fa fa-camera-retro fa-3x"></i><br><small class="mt-1 d-block">Sin imagen disponible</small>'
+             '</div>'
+        fi
+
+        /* 2. CONJUNTO / RELACIÓN PARTE-TODO (CAMPO 600 / 610) */
+        if p(v600) or p(v610) then
+            '<div class="text-start card bg-light border-0 mb-3 p-2">'
+                '<small class="text-muted d-block text-uppercase fw-bold" style="font-size:0.7rem;"><i class="fa fa-sitemap me-1"></i> Conjunto / Colección</small>'
+                '<div class="fw-bold text-dark small mt-1">'
+                    if p(v610) then v610 else 'Parte de un conjunto' fi
+                    if p(v620) then ' ('v620' piezas)' fi
+                '</div>'
+            '</div>'
+        fi
+
+        /* 3. TÉRMINOS DE USO Y DERECHOS DE AUTOR (CAMPO 900 - 930) */
+        if p(v900) or p(v920) or p(v930) or p(v520) then
+            '<div class="text-start bg-light p-2 border rounded small">'
+                '<small class="text-uppercase text-muted fw-bold d-block mb-1" style="font-size:0.68rem;">Derechos y Acceso</small>'
+                if p(v920) then '<div><strong>Estado:</strong> 'v920'</div>' fi
+                if p(v900) then '<div><strong>Titular:</strong> 'v900'</div>' fi
+                if p(v930) then '<div><strong>Licencia:</strong> 'v930'</div>' fi
+                if p(v520) then '<div class="text-danger mt-1"><strong>Condición de Acceso:</strong> 'v520'</div>' fi
+            '</div>'
+        fi
+
+    '</div>' /* Fin Columna Derecha */
+
+'</div>' /* Fin Contenedor Row */
