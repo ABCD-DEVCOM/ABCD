@@ -105,13 +105,13 @@ function facetas()
                     }
 
                     $collapse_id = "collapseFacet_" . $base_atual . "_" . $facet_counter;
-                    
+
                     // Conta quantos tipos diferentes de filtros existem nesta faceta
                     $total_termos_faceta = count($ocorrencias);
 
                     // Constrói o HTML da faceta em memória
                     $html_facetas_base .= "<div class='faceta-box mb-2'>";
-                    
+
                     $html_facetas_base .= "<a class='d-flex justify-content-between align-items-center text-decoration-none pb-2 pt-2 border-bottom facet-toggle text-secondary' data-bs-toggle='collapse' href='#" . $collapse_id . "' role='button' aria-expanded='true' aria-controls='" . $collapse_id . "' style='font-size: 0.9rem;'>";
 
                     // Título da faceta (à esquerda). Adicionado text-truncate para prevenir quebra de linha se o título for gigante.
@@ -154,7 +154,7 @@ function facetas()
                 echo "<h6 class='mt-4 mb-2 p-2 bg-light border rounded text-dark fw-bold text-uppercase' style='font-size: 0.85rem; letter-spacing: 0.5px;'>";
                 echo "<i class='fas fa-database me-2 text-secondary'></i>" . $bd_list[$base_atual]['descripcion'];
                 echo "</h6>";
-                
+
                 // Imprime todas as facetas que foram guardadas em memória
                 echo $html_facetas_base;
             }
@@ -218,7 +218,7 @@ if (function_exists('PresentarExpresion')) {
             // =========================================================
 
             // O onclick="" usa o termo TÉCNICO ($termoRaw) para funcionar
-            echo "<button type='button' class='btn btn-outline-primary btn-sm mr-1 mb-1 termo' onclick='removerTermo(\"" . htmlspecialchars($termoRaw) . "\")'>";
+            echo "<button type='button' class='btn btn-outline-primary btn-sm mr-1 mb-1 termo' onclick='removerTermo(\"" . htmlspecialchars($termoRaw, ENT_QUOTES, 'UTF-8') . "\")'>";
 
             // O texto visível do botão usa o termo LIMPO ($termoDisplay)
             echo $termoDisplay;
@@ -242,9 +242,9 @@ if (function_exists('PresentarExpresion')) {
         <input type="hidden" name="Expresion" id="Expresion" value="<?php echo htmlspecialchars($expresion); ?>">
         <input type="hidden" name="Opcion" value="directa">
         <?php if (isset($_REQUEST['base'])) { ?>
-            <input type="hidden" name="base" id="base" value="<?php echo $_REQUEST['base']; ?>">
+            <input type="hidden" name="base" id="base" value="<?php echo htmlspecialchars($_REQUEST['base'], ENT_QUOTES, 'UTF-8'); ?>">
         <?php } ?>
-        <input type="hidden" name="lang" value="<?php echo $_REQUEST['lang']; ?>">
+        <input type="hidden" name="lang" value="<?php echo htmlspecialchars($_REQUEST['lang'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
         <?php if (isset($_REQUEST['indice_base'])) { ?>
             <input type="hidden" name="indice_base" value="<?php echo $_REQUEST['indice_base']; ?>">
         <?php } ?>

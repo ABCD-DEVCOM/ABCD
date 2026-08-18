@@ -1,7 +1,9 @@
 <form name="correo" action="controllers/control_mail.php" method="post" onSubmit='EnviarCorreo();return false'>
 <?php
-foreach ($_REQUEST as $var=>$value){
-	echo "<input type='hidden' name='$var' value='$value'>\n";
+foreach ($_REQUEST as $var => $value) {
+	if (is_string($value)) {
+		echo "<input type='hidden' name='" . htmlspecialchars($var, ENT_QUOTES, 'UTF-8') . "' value='" . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . "'>\n";
+	}
 }
 ?>
 
