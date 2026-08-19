@@ -27,7 +27,9 @@ if (!isset($titulo_pagina)) {
 				if (isset($_REQUEST["coleccion"]) && $_REQUEST["coleccion"] != "") {
 					$_REQUEST["coleccion"] = urldecode($_REQUEST["coleccion"]);
 					$cc = explode('|', $_REQUEST["coleccion"]);
-					echo " > <i>" . $cc[1] . "</i>";
+					if (isset($cc[1])) {
+						echo " > <i>" . htmlspecialchars($cc[1], ENT_QUOTES, 'UTF-8') . "</i>";
+					}
 				}
 			} else {
 				// Se a base não existe no array, exibe uma mensagem de erro
@@ -47,12 +49,12 @@ if (!isset($mostrar_libre) || $mostrar_libre != "N") {
 			<input type="hidden" name="page" value="startsearch">
 			<input type="hidden" name="target_db" id="target_db_input" value="">
 			<?php
-			if (isset($_REQUEST["db_path"])) echo "<input type=hidden name=db_path value=" . $_REQUEST["db_path"] . ">\n";
-			if (isset($lang)) echo "<input type=hidden name=lang value=" . $lang . ">\n";
-			if (isset($_REQUEST["Formato"])) echo "<input type=hidden name=indice_base value=" . $_REQUEST["Formato"] . ">\n";
-			if (isset($_REQUEST["indice_base"])) echo "<input type=hidden name=indice_base value=" . $_REQUEST["indice_base"] . ">\n";
-			if ($base != "") echo "<input id=base type=hidden name=base value=" . $base . ">\n";
-			if (isset($_REQUEST["modo"])) echo "<input type=hidden name=modo value=" . $_REQUEST["modo"] . ">\n";
+			if (isset($_REQUEST["db_path"])) echo "<input type=hidden name=db_path value=\"" . htmlspecialchars($_REQUEST["db_path"], ENT_QUOTES, 'UTF-8') . "\">\n";
+			if (isset($lang)) echo "<input type=hidden name=lang value=\"" . htmlspecialchars($lang, ENT_QUOTES, 'UTF-8') . "\">\n";
+			if (isset($_REQUEST["Formato"])) echo "<input type=hidden name=indice_base value=\"" . htmlspecialchars($_REQUEST["Formato"], ENT_QUOTES, 'UTF-8') . "\">\n";
+			if (isset($_REQUEST["indice_base"])) echo "<input type=hidden name=indice_base value=\"" . htmlspecialchars($_REQUEST["indice_base"], ENT_QUOTES, 'UTF-8') . "\">\n";
+			if ($base != "") echo "<input id=base type=hidden name=base value=\"" . htmlspecialchars($base, ENT_QUOTES, 'UTF-8') . "\">\n";
+			if (isset($_REQUEST["modo"])) echo "<input type=hidden name=modo value=\"" . htmlspecialchars($_REQUEST["modo"], ENT_QUOTES, 'UTF-8') . "\">\n";
 			if (isset($_REQUEST['Sub_Expresion'])) $_REQUEST['Sub_Expresion'] = urldecode(str_replace('~', '', $_REQUEST['Sub_Expresion']));
 			?>
 
@@ -62,7 +64,7 @@ if (!isset($mostrar_libre) || $mostrar_libre != "N") {
 					type="text"
 					name="Sub_Expresion"
 					id="termo-busca"
-					value="<?php if (isset($_REQUEST['Sub_Expresion'])) echo htmlentities($_REQUEST['Sub_Expresion']); ?>"
+					value="<?php if (isset($_REQUEST['Sub_Expresion'])) echo htmlspecialchars($_REQUEST['Sub_Expresion'], ENT_QUOTES, 'UTF-8'); ?>"
 					placeholder="<?php echo $msgstr["front_search"] ?>  ..."
 					autocomplete="off">
 

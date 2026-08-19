@@ -33,7 +33,7 @@ if (isset($_REQUEST["coleccion"]) and $_REQUEST["coleccion"] != "") {
 	$_REQUEST["coleccion"] = urldecode($_REQUEST["coleccion"]);
 	$col = explode('|', $_REQUEST["coleccion"]);
 	if (isset($col[1])) {
-		echo " <small class='text-muted'>(<strong><i>" . $col[1] . "</i></strong>)</small>";
+		echo " <small class='text-muted'>(<strong><i>" . htmlspecialchars($col[1], ENT_QUOTES, 'UTF-8') . "</i></strong>)</small>";
 	}
 }
 
