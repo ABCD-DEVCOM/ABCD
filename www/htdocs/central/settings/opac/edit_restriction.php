@@ -188,6 +188,10 @@ if ($base != "") {
 }
 
 ?>
+<script>
+    var idPage = "db_configuration";
+</script>
+
 <div class="middle form row m-0">
     <div class="formContent col-2 m-2 p-0">
         <?php include("conf_opac_menu.php"); ?>
