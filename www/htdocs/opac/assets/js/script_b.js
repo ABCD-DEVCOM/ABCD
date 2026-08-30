@@ -286,17 +286,64 @@ function EjecutarBusquedaDiccionario(Accion) {
 
 	switch (Accion) {
 		case 0: // Buscar Direto
-			form.Opcion.value = "buscar_diccionario";
+			// 1. Identifica o prefixo do campo e o operador lógico
+			var prefijo = form.prefijo ? form.prefijo.value : "";
+			var operador = "and";
+
+			if (form.alcance) {
+				if (form.alcance.length && form.alcance[0].type === 'radio') {
+					for (var r = 0; r < form.alcance.length; r++) {
+						if (form.alcance[r].checked) {
+							operador = form.alcance[r].value;
+							break;
+						}
+					}
+				} else if (form.alcance.value) {
+					operador = form.alcance.value;
+				}
+			}
+			if (!operador) operador = "and";
+
+			// 2. Quebra os múltiplos termos selecionados e constrói a expressão WXIS correta
+			var terminosArray = Seleccionados.match(/(?:[^\s"]+|"[^"]*")+/g);
+			var expresionFinal = "";
+
+			if (terminosArray && terminosArray.length > 0) {
+				for (var j = 0; j < terminosArray.length; j++) {
+					var termoLimpo = terminosArray[j].replace(/"/g, ''); // Remove aspas
+					var part = "(" + prefijo + termoLimpo + ")";
+
+					if (expresionFinal === "") {
+						expresionFinal = part;
+					} else {
+						expresionFinal += " " + operador + " " + part;
+					}
+				}
+			}
+
+			// 3. Prepara os dados invisíveis para o envio
+			form.Opcion.value = "directa";
 			form.Sub_Expresion.value = Seleccionados;
-			// Para busca direta, precisamos que a janela PAI navegue, não o iframe
-			// Se estiver em iframe:
+
+			// Garante que o input Expresion exista e receba a query mastigada (ex: (TW_ACADEMIA) and (TW_BRASIL))
+			if (!form.Expresion) {
+				var inputExp = document.createElement("input");
+				inputExp.type = "hidden";
+				inputExp.name = "Expresion";
+				form.appendChild(inputExp);
+			}
+			form.Expresion.value = expresionFinal;
+
+			// 4. Dispara a URL final na janela pai
 			if (window.parent && window.frameElement) {
-				var url = "buscar_integrada.php?Opcion=buscar_diccionario&base=" + form.base.value + "&Sub_Expresion=" + encodeURIComponent(Seleccionados);
-				if (form.ctx) url += "&ctx=" + form.ctx.value;
+				var url = "./?page=startsearch&Opcion=directa&base=" + encodeURIComponent(form.base.value) + "&Expresion=" + encodeURIComponent(expresionFinal);
+				if (form.ctx && form.ctx.value !== "") url += "&ctx=" + encodeURIComponent(form.ctx.value);
+				if (typeof OpacLang !== 'undefined') url += "&lang=" + encodeURIComponent(OpacLang);
+
 				window.parent.location.href = url;
 			} else {
-				// Se for popup
-				form.action = "buscar_integrada.php";
+				// Se for popup nativo (sem iframe)
+				form.action = "./";
 				form.submit();
 			}
 			break;
@@ -386,24 +433,31 @@ function ArmarExpresionBusqueda() {
 		var valor = inputs[i].value.trim();
 		var prefijo = selects[i] ? selects[i].value : ""; // Ex: TI_
 
-		// Só processa linhas que tenham algum valor digitado
 		if (valor !== "") {
+			// CORREÇÃO: Pega múltiplos termos separados por espaço (respeitando aspas)
+			var termosArray = valor.match(/(?:[^\s"]+|"[^"]*")+/g);
+			var subExpresion = "";
 
-			// Monta o termo: (PREFIXO_VALOR)
-			// Aspas são importantes para frases exatas, mas aqui vamos simplificar
-			// Se o prefixo for TW_ (Palavras soltas), geralmente não usa prefixo na string se for padrão
-			var termoMontado = "";
+			if (termosArray && termosArray.length > 0) {
+				for (var j = 0; j < termosArray.length; j++) {
+					var termoLimpo = termosArray[j].replace(/"/g, ''); // Remove aspas
+					var part = "(" + prefijo + termoLimpo + ")";
+					
+					// Une os termos do mesmo campo com AND
+					if (subExpresion === "") {
+						subExpresion = part;
+					} else {
+						subExpresion += " and " + part; 
+					}
+				}
+			}
 
-			// Lógica simples: (PREFIXO_VALOR)
-			// Remove aspas existentes para evitar duplicação e adiciona novas
-			valor = valor.replace(/"/g, '');
-			termoMontado = "(" + prefijo + valor + ")";
+			// Se houver mais de um termo no campo, envelopa tudo em parênteses
+			var termoMontado = termosArray.length > 1 ? "(" + subExpresion + ")" : subExpresion;
 
-			// Adiciona o operador se não for o primeiro termo
+			// Adiciona o operador que conecta com a linha anterior
 			if (ExpresionFinal !== "") {
 				var operador = "and"; // Default
-				// O operador do índice i conecta com o anterior (ou o i-1 conecta com o atual)
-				// Geralmente o select de operador está na linha anterior visualmente
 				if (i > 0 && opers[i - 1]) {
 					operador = opers[i - 1].value;
 				}
@@ -1216,8 +1270,6 @@ function removerTermo(termoRemover) {
 	if (!campoExp) return;
 
 	let expresion = campoExp.value;
-	const termosAtivosDiv = document.getElementById('termosAtivos');
-	const linkPaginaInicial = termosAtivosDiv ? termosAtivosDiv.dataset.linkInicial : 'index.php';
 
 	// Normaliza espaços
 	expresion = expresion.replace(/\s+/g, ' ').trim();
@@ -1247,31 +1299,53 @@ function removerTermo(termoRemover) {
 				let termo = t;
 				// Remove parênteses externos existentes para não duplicar
 				while (termo.startsWith('(') && termo.endsWith(')')) {
-					// Cuidado para não remover parênteses internos de termos complexos
-					// Simplificação: remove das pontas
 					termo = termo.substring(1, termo.length - 1);
 				}
-				// Adiciona um par de parênteses limpo
 				return `(${termo})`;
 			});
 
 		expresion = termos.join(' AND ');
 	}
 
-	// Atualiza o campo e redireciona
+	// Atualiza o campo no DOM
 	campoExp.value = expresion;
 
-	// Se a expressão ficou vazia (removeu o último termo), volta para o início
+	const urlParams = new URLSearchParams(window.location.search);
+	let finalUrl = new URL(window.location.origin + window.location.pathname);
+
+	// 1. Garante o parâmetro 'base' (lê do input hidden do form ou da URL atual)
+	let baseInput = document.getElementById('base');
+	let currentBase = baseInput ? baseInput.value : urlParams.get('base');
+	if (currentBase) {
+		finalUrl.searchParams.set('base', currentBase);
+	}
+
+	// 2. Garante o parâmetro 'ctx' (se usar multi-contexto)
+	if (typeof OpacContext !== 'undefined' && OpacContext !== "") {
+		finalUrl.searchParams.set('ctx', OpacContext);
+	} else if (urlParams.has('ctx')) {
+		finalUrl.searchParams.set('ctx', urlParams.get('ctx'));
+	}
+
+	// 3. Garante o idioma atual
+	if (typeof OpacLang !== 'undefined' && OpacLang !== "") {
+		finalUrl.searchParams.set('lang', OpacLang);
+	} else if (urlParams.has('lang')) {
+		finalUrl.searchParams.set('lang', urlParams.get('lang'));
+	}
+
+	// 4. Decide a rota final
 	if (expresion === "") {
-		window.location.href = linkPaginaInicial;
+		// Expressão vazia: Volta limpo para a Home preservando estritamente a Base
+		window.location.href = finalUrl.toString();
 	} else {
-		const url = new URL(window.location.href);
-		url.searchParams.set('Expresion', expresion);
-		url.searchParams.set('page', 'startsearch');
-		url.searchParams.set('Opcion', 'directa');
-		url.searchParams.set('desde', '1');
-		url.searchParams.set('pagina', '1');
-		window.location.href = url.toString();
+		// Continua a pesquisa com a expressão refinada
+		finalUrl.searchParams.set('Expresion', expresion);
+		finalUrl.searchParams.set('page', 'startsearch');
+		finalUrl.searchParams.set('Opcion', 'directa');
+		finalUrl.searchParams.set('desde', '1');
+		finalUrl.searchParams.set('pagina', '1');
+		window.location.href = finalUrl.toString();
 	}
 }
 

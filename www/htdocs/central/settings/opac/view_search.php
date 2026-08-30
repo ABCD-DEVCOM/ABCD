@@ -1,48 +1,43 @@
 <?php
 /*
 * @file        view_search.php
-* @author      Roger Craveiro Guilherme
-* @date        2025-10-06
 * @description Page for analyzing OPAC search logs.
+* @author      Refactored by Roger C. Guilherme
+* @date        2026-08-29
 *
 * CHANGE LOG:
-* 2025-10-06 rogercgui Reads logs sliced by year and month.
+* 2026-08-29 - Massive performance optimization: Streaming read (fopen), 
+*              bounded array retention for UI, and lazy geocoding (Top 10 only) to prevent server crashes.
+*              Adjusted UI grid for optimal visualization inside ABCD layout.
 */
 
-                                            include("conf_opac_top.php");
+include("conf_opac_top.php");
 $n_wiki_help = "abcd-modules/opac-abcd/opac-admin/tools/search-analytics";
 include "../../common/inc_div-helper.php";
 
-// --- INÍCIO DAS MODIFICAÇÕES ---
-
-// 1. Encontra todos os arquivos de log disponíveis e os ordena do mais recente para o mais antigo
 $log_dir = $db_path . "/opac_conf/logs/";
 $log_files = glob($log_dir . "opac_*.log");
 if ($log_files) {
-    rsort($log_files); // Ordena para que o mais novo fique no topo
+    rsort($log_files);
 } else {
     $log_files = [];
 }
 
-// 2. Determina qual arquivo de log carregar
 $arquivo_selecionado = "";
 if (isset($_GET['log_file']) && in_array($_GET['log_file'], $log_files)) {
-    // Carrega o arquivo selecionado pelo usuário
     $arquivo_selecionado = $_GET['log_file'];
 } elseif (!empty($log_files)) {
-    // Se nenhum for selecionado, carrega o mais recente como padrão
     $arquivo_selecionado = $log_files[0];
 }
 
-// --- FIM DAS MODIFICAÇÕES ---
-
+// Função de geolocalização com timeout rigoroso (2 segundos) para evitar travamento
 function geoLocalizacao($ip)
 {
-    $url = "http://ip-api.com/json/{$ip}?fields=status,message,lat,lon,city,regionName,country";
-    $resposta = @file_get_contents($url);
-    if ($resposta === FALSE) {
-        return false;
-    }
+    $ctx = stream_context_create(['http' => ['timeout' => 2]]);
+    $url = "http://ip-api.com/json/{$ip}?fields=status,lat,lon,city,regionName,country";
+    $resposta = @file_get_contents($url, false, $ctx);
+    if ($resposta === FALSE) return false;
+
     $dados = json_decode($resposta, true);
     if ($dados && $dados['status'] === 'success') {
         return [
@@ -54,299 +49,311 @@ function geoLocalizacao($ip)
     return false;
 }
 
-// Lendo o log SELECIONADO
-$linhas = !empty($arquivo_selecionado) && file_exists($arquivo_selecionado) ? file($arquivo_selecionado) : [];
-
+$linhas_processadas = 0;
 $registros = [];
 $contagem_termos = [];
-$contagem_cidades = [];
-$ips_unicos = [];
+$contagem_ips = []; // Contamos os IPs primeiro, geolocalizamos depois
+$limite_tabela = 2500; // Protege o navegador limitando as linhas da tabela
 
-foreach ($linhas as $linha) {
-    $linha = trim($linha);
-    if (empty($linha)) continue;
-
-    // DETECÇÃO DE FORMATO
-    if (strpos($linha, '|') !== false) {
-        // Novo formato: 2026-03-10 04:05:40|189.30.231.236|"Economic"
-        $dados = explode('|', $linha);
-        $datahora = trim($dados[0] ?? "");
-        $ip       = trim($dados[1] ?? "");
-        // Remove aspas do termo se existirem
-        $termo    = strtolower(trim($dados[2] ?? "", " \t\n\r\0\x0B\""));
-    } else {
-        // Formato antigo: separado por tabulação (\t)
-        $dados = explode("\t", $linha);
-        if (count($dados) < 3) continue; // Pula linhas malformadas
-        $datahora = $dados[0];
-        $ip       = $dados[1];
-        $termo    = strtolower(trim($dados[2]));
-    }
-
-    // A partir daqui, a lógica de geolocalização e contagem permanece a mesma
-    if ($ip != "") {
-        if (!isset($ips_unicos[$ip])) {
-            $geo = geoLocalizacao($ip);
-            $ips_unicos[$ip] = $geo ?: ['local' => 'Desconhecido', 'lat' => null, 'lon' => null];
-        }
-
-        $local = $ips_unicos[$ip]['local'];
-
-        if ($local !== 'Desconhecido') {
-            if (!isset($contagem_cidades[$local])) {
-                $contagem_cidades[$local] = 1;
-            } else {
-                $contagem_cidades[$local]++;
-            }
-        }
-
-        $registros[] = [
-            'datahora' => $datahora,
-            'ip' => $ip,
-            'local' => $local,
-            'termo' => htmlspecialchars($termo)
-        ];
-
-        if ($termo != '') {
-            if (!isset($contagem_termos[$termo])) {
-                $contagem_termos[$termo] = 1;
-            } else {
-                $contagem_termos[$termo]++;
-            }
-        }
-    }
+$handle = false;
+if (!empty($arquivo_selecionado) && file_exists($arquivo_selecionado)) {
+    $handle = @fopen($arquivo_selecionado, "r");
 }
 
-usort($registros, function ($a, $b) {
-    return strtotime($b['datahora']) - strtotime($a['datahora']);
-});
+if ($handle) {
+    while (($linha = fgets($handle)) !== false) {
+        $linha = trim($linha);
+        if (empty($linha)) continue;
 
+        if (strpos($linha, '|') !== false) {
+            $dados = explode('|', $linha);
+            $datahora = trim($dados[0] ?? "");
+            $ip       = trim($dados[1] ?? "");
+            $termo    = strtolower(trim($dados[2] ?? "", " \t\n\r\0\x0B\""));
+        } else {
+            $dados = explode("\t", $linha);
+            if (count($dados) < 3) continue;
+            $datahora = $dados[0];
+            $ip       = $dados[1];
+            $termo    = strtolower(trim($dados[2]));
+        }
+
+        if ($ip != "") {
+            // Conta os IPs (extremamente rápido em memória)
+            $contagem_ips[$ip] = ($contagem_ips[$ip] ?? 0) + 1;
+
+            // Mantém apenas os últimos N registros para a tabela
+            $registros[] = [
+                'datahora' => $datahora,
+                'ip' => $ip,
+                'termo' => htmlspecialchars($termo)
+            ];
+
+            if (count($registros) > $limite_tabela) {
+                array_shift($registros); // Remove o mais antigo do buffer
+            }
+
+            if ($termo != '') {
+                $contagem_termos[$termo] = ($contagem_termos[$termo] ?? 0) + 1;
+            }
+        }
+        $linhas_processadas++;
+    }
+    fclose($handle);
+}
+
+// Inverte para exibir os mais recentes no topo
+$registros = array_reverse($registros);
+
+// Processa Top 10 Termos
 arsort($contagem_termos);
 $top_termos = array_slice($contagem_termos, 0, 10, true);
 
-arsort($contagem_cidades);
-$top_cidades = array_slice($contagem_cidades, 0, 10, true);
+// Processa Top 10 IPs e faz Geolocalização APENAS para eles (salva o servidor)
+arsort($contagem_ips);
+$top_ips = array_slice($contagem_ips, 0, 10, true);
+
+$top_cidades = [];
+$marcadores_mapa = [];
+
+foreach ($top_ips as $ip => $qtd) {
+    $geo = geoLocalizacao($ip);
+    if ($geo) {
+        $local_nome = $geo['local'];
+        $top_cidades[$local_nome] = ($top_cidades[$local_nome] ?? 0) + $qtd;
+
+        $marcadores_mapa[] = [
+            'lat' => $geo['lat'],
+            'lon' => $geo['lon'],
+            'local' => htmlspecialchars($local_nome, ENT_QUOTES),
+            'ip' => $ip,
+            'qtd' => $qtd
+        ];
+    } else {
+        $top_cidades["IP Não Rastreado ($ip)"] = $qtd;
+    }
+}
+arsort($top_cidades);
 ?>
 <script>
-	var idPage = "general";
+    var idPage = "general";
 </script>
 <div class="middle form row m-0">
     <div class="formContent col-2 m-2 p-0">
         <?php include("conf_opac_menu.php"); ?>
     </div>
-    <div class="formContent col-9 m-2">
-        <div class="container">
-            <h3>
-                <?php echo $msgstr['cfg_Research_Analysis']; ?>
-                <?php if (!empty($arquivo_selecionado)): ?>
-                    <small style="font-size: 14px; color: #666;">(<?php echo basename($arquivo_selecionado); ?>)</small>
-                <?php endif; ?>
-            </h3>
+    <div class="formContent col-9 m-2" style="max-width: 100%; overflow-x: hidden;">
 
-            <div class="mb-3 p-3" style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px;">
-                <form method="GET" name="log_selection">
-                    <label for="log_file" class="form-label"><b><?php echo $msgstr['cfg_select_log_file']; ?></b></label>
-                    <select id="log_file" name="log_file" class="form-select" style="max-width: 300px; display: inline-block;" onchange="this.form.submit()">
-                        <?php if (empty($log_files)): ?>
-                            <option value=""><?php echo $msgstr['cfg_no_logs_found']; ?></option>
-                        <?php else: ?>
-                            <?php foreach ($log_files as $file): ?>
-                                <?php
-                                $display_name = basename($file, '.log');
-                                $parts = explode('_', $display_name);
-                                $date_part = end($parts);
-                                @list($ano, $mes) = explode('-', $date_part);
+        <h3>
+            <?php echo $msgstr['cfg_Research_Analysis']; ?>
+            <?php if (!empty($arquivo_selecionado)): ?>
+                <small style="font-size: 14px; color: #666;">(<?php echo basename($arquivo_selecionado); ?>)</small>
+            <?php endif; ?>
+        </h3>
 
-                                $meses = ["", $msgstr['january'], $msgstr['february'], $msgstr['march'], $msgstr['april'], $msgstr['may'], $msgstr['june'], $msgstr['july'], $msgstr['august'], $msgstr['september'], $msgstr['october'], $msgstr['november'], $msgstr['december']];
-                                $display_text = isset($meses[(int)$mes]) ? $meses[(int)$mes] . " / " . $ano : basename($file);
-                                ?>
-                                <option value="<?php echo htmlspecialchars($file); ?>" <?php echo ($file == $arquivo_selecionado) ? 'selected' : ''; ?>>
-                                    <?php echo $display_text; ?>
-                                </option>
+        <!-- Filtro Centralizado -->
+        <div style="background-color: var(--abcd-gray-100); border: 1px solid var(--abcd-gray-300); border-radius: 5px; padding: 15px; margin-bottom: 20px; text-align: center;">
+            <form method="GET" name="log_selection" style="margin: 0;">
+                <label for="log_file" style="font-weight: bold; margin-right: 10px;"><?php echo $msgstr['cfg_select_log_file']; ?></label>
+                <select id="log_file" name="log_file" class="textEntry" style="min-width: 300px; padding: 5px;" onchange="this.form.submit()">
+                    <?php if (empty($log_files)): ?>
+                        <option value=""><?php echo $msgstr['cfg_no_logs_found'] ?? 'Nenhum log encontrado'; ?></option>
+                    <?php else: ?>
+                        <?php foreach ($log_files as $file): ?>
+                            <?php
+                            $display_name = basename($file, '.log');
+                            $parts = explode('_', $display_name);
+                            $date_part = end($parts);
+                            @list($ano, $mes) = explode('-', $date_part);
+
+                            $meses = ["", $msgstr['january'] ?? "Jan", $msgstr['february'] ?? "Fev", $msgstr['march'] ?? "Mar", $msgstr['april'] ?? "Abr", $msgstr['may'] ?? "Mai", $msgstr['june'] ?? "Jun", $msgstr['july'] ?? "Jul", $msgstr['august'] ?? "Ago", $msgstr['september'] ?? "Set", $msgstr['october'] ?? "Out", $msgstr['november'] ?? "Nov", $msgstr['december'] ?? "Dez"];
+                            $display_text = isset($meses[(int)$mes]) ? $meses[(int)$mes] . " / " . $ano : basename($file);
+                            ?>
+                            <option value="<?php echo htmlspecialchars($file); ?>" <?php echo ($file == $arquivo_selecionado) ? 'selected' : ''; ?>>
+                                <?php echo $display_text; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </select>
+            </form>
+        </div>
+
+        <?php if ($linhas_processadas > 0): ?>
+
+            <!-- Quadros Lado a Lado para Top 10 -->
+            <div style="display: flex; gap: 20px; margin-bottom: 30px;">
+                <div style="flex: 1; min-width: 0;">
+                    <h5 style="border-bottom: 1px solid #ccc; padding-bottom: 5px;"><i class="fas fa-search"></i> <?php echo $msgstr['cfg_top10_terms'] ?? 'Top 10 Termos Buscados'; ?></h5>
+                    <table class="table striped" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th><?php echo $msgstr['cfg_search_term']; ?></th>
+                                <th style="width: 100px; text-align: center;"><?php echo $msgstr['cfg_quantity']; ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($top_termos as $termo => $qtd): ?>
+                                <tr>
+                                    <td style="word-break: break-all;"><strong><?php echo htmlspecialchars($termo); ?></strong></td>
+                                    <td style="text-align: center;"><?php echo $qtd; ?></td>
+                                </tr>
                             <?php endforeach; ?>
-                        <?php endif; ?>
-                    </select>
-                </form>
-            </div>
-
-            <?php if (!empty($linhas)): ?>
-
-                <div class="mb-3">
-                    <label for="filtroTermo" class="ms-4"><?php echo $msgstr['cfg_search_term']; ?></label>
-                    <input type="text" id="filtroTermo" class="form-control" style="max-width: 300px; display: inline-block;">
+                        </tbody>
+                    </table>
                 </div>
 
-                <h5><?php echo $msgstr['cfg_search_list'] ?></h5>
-                <table class="table striped w-8" id="tabelaLog">
+                <div style="flex: 1; min-width: 0;">
+                    <h5 style="border-bottom: 1px solid #ccc; padding-bottom: 5px;"><i class="fas fa-globe-americas"></i> <?php echo $msgstr['cfg_top10_cities'] ?? 'Top 10 Cidades'; ?></h5>
+                    <table class="table striped" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th><?php echo $msgstr['cfg_city'] ?? 'Ciudad'; ?></th>
+                                <th style="width: 100px; text-align: center;"><?php echo $msgstr['cfg_quantity']; ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($top_cidades as $cidade => $qtd): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($cidade); ?></td>
+                                    <td style="text-align: center;"><?php echo $qtd; ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Botão de Exportação -->
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h5><i class="fas fa-list"></i> <?php echo $msgstr['cfg_search_list'] ?? 'Lista de Búsqueda'; ?> <small>(Max: <?php echo $limite_tabela; ?>)</small></h5>
+                <button id="btnExportarCSV" class="bt bt-green"><i class="far fa-file-excel"></i> <?php echo $msgstr['export_csv'] ?? 'Exportar CSV'; ?></button>
+            </div>
+
+            <!-- Tabela Principal do DataTables -->
+            <div style="width: 100%; overflow-x: auto;">
+                <table class="table striped" id="tabelaLog" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th class="w-1"><?php echo $msgstr['cfg_date_hour']; ?></th>
-                            <th class="w-2"><?php echo $msgstr['cfg_ip']; ?></th>
-                            <th class="w-3"><?php echo $msgstr['cfg_location']; ?></th>
-                            <th class="w-3"><?php echo $msgstr['cfg_search_term']; ?></th>
+                            <th style="width: 180px;"><?php echo $msgstr['cfg_date_hour'] ?? 'Fecha/Hora'; ?></th>
+                            <th style="width: 120px;">IP</th>
+                            <th><?php echo $msgstr['cfg_search_term'] ?? 'Término de búsqueda'; ?></th>
                         </tr>
                     </thead>
-                    <tbody id="corpoTabela">
+                    <tbody>
                         <?php foreach ($registros as $registro): ?>
                             <tr>
                                 <td><?php echo $registro['datahora']; ?></td>
-                                <td><?php echo $registro['ip']; ?></td>
-                                <td><?php echo htmlspecialchars($ips_unicos[$registro['ip']]['local'] ?? 'Desconhecido'); ?></td>
-                                <td><?php echo $registro['termo']; ?></td>
+                                <td><a href="https://ipinfo.io/<?php echo $registro['ip']; ?>" target="_blank" title="Rastrear IP"><?php echo $registro['ip']; ?></a></td>
+                                <td style="word-break: break-all;"><?php echo $registro['termo']; ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+            </div>
 
-                <script>
-                    const dadosCSV = <?php echo json_encode($registros, JSON_UNESCAPED_UNICODE); ?>;
-                </script>
-
-                <div class="mt-3">
-                    <button id="btnExportarCSV" class="bt bt-blue"><i class="far fa-file-excel"></i> <?php echo $msgstr['export_csv']; ?></button>
-                </div>
-
-                <div class="row mt-5">
-                    <div class="col-md-6">
-                        <h5><?php echo $msgstr['cfg_top10_terms']; ?></h5>
-                        <table class="table striped w-8">
-                            <thead>
-                                <tr>
-                                    <th><?php echo $msgstr['cfg_search_term']; ?></th>
-                                    <th><?php echo $msgstr['cfg_quantity']; ?></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($top_termos as $termo => $qtd): ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($termo); ?></td>
-                                        <td><?php echo $qtd; ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="row mt-5">
-                    <div class="col-md-6">
-                        <h5><?php echo $msgstr['cfg_top10_cities']; ?></h5>
-                        <table class="table striped">
-                            <thead>
-                                <tr>
-                                    <th><?php echo $msgstr['cfg_city']; ?></th>
-                                    <th><?php echo $msgstr['cfg_quantity']; ?></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($top_cidades as $cidade => $qtd): ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($cidade); ?></td>
-                                        <td><?php echo $qtd; ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <h5 class="mt-5"><?php echo $msgstr['cfg_map']; ?></h5>
-                <div id="mapa" style="height: 500px;"></div>
-
-            <?php else: ?>
-                <div class="alert info">
-                    <?php echo empty($log_files) ? $msgstr['cfg_no_logs_found_msg'] : $msgstr['cfg_log_empty_msg']; ?>
-                </div>
+            <?php if (!empty($marcadores_mapa)): ?>
+                <h5 style="margin-top: 40px; border-bottom: 1px solid #ccc; padding-bottom: 5px;"><i class="fas fa-map-marker-alt"></i> <?php echo $msgstr['cfg_map'] ?? 'Mapa (Top IPs)'; ?></h5>
+                <div id="mapa" style="height: 400px; width: 100%; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 30px;"></div>
             <?php endif; ?>
 
-        </div>
+        <?php else: ?>
+            <div class="alert info" style="background-color: var(--abcd-blue); color: white; padding: 15px; border-radius: 4px;">
+                <i class="fas fa-info-circle"></i> <?php echo empty($log_files) ? ($msgstr['cfg_no_logs_found_msg'] ?? 'Nenhum arquivo de log disponível.') : ($msgstr['cfg_log_empty_msg'] ?? 'O log selecionado está vazio.'); ?>
+            </div>
+        <?php endif; ?>
+
     </div>
 </div>
 
 <?php include("../../common/footer.php"); ?>
 
+<!-- DataTables CSS e JS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
 <link rel="stylesheet" href="/assets/css/leaflet.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="/assets/js/leaflet.js"></script>
 
-<script>
-    // Inicialização do DataTables
-    $(document).ready(function() {
-        var tabela = $('#tabelaLog').DataTable({
-            "paging": true,
-            "pageLength": 25,
-            "lengthMenu": [
-                [10, 25, 50, -1],
-                [10, 25, 50, "Todos"]
-            ],
-            "info": true,
-            "searching": false, // Desabilitamos a busca nativa para usar a nossa
-            "language": {
-                "url": "/assets/js/datatable-<?php echo $lang; ?>.json"
-            }
-        });
+<!-- Estilo extra para o DataTables encaixar bem -->
+<style>
+    .dataTables_wrapper {
+        margin-bottom: 30px;
+        font-size: 0.9em;
+    }
 
-        // Filtro personalizado
-        $('#filtroTermo').on('keyup', function() {
-            tabela.search(this.value).draw();
-        });
+    .dataTables_filter {
+        margin-bottom: 10px;
+    }
+
+    .dataTables_filter input {
+        border: 1px solid #ccc;
+        padding: 4px;
+        border-radius: 3px;
+    }
+
+    table.dataTable.no-footer {
+        border-bottom: 1px solid #ddd;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        if ($('#tabelaLog').length) {
+            $('#tabelaLog').DataTable({
+                "paging": true,
+                "pageLength": 25,
+                "lengthMenu": [
+                    [25, 50, 100, 500],
+                    [25, 50, 100, 500]
+                ],
+                "info": true,
+                "searching": true,
+                "order": [
+                    [0, "desc"]
+                ], // Ordena por data decrescente
+                "language": {
+                    "url": "/assets/js/datatable-<?php echo $lang; ?>.json"
+                }
+            });
+        }
     });
 
-    // Inicialização do Mapa Leaflet
     document.addEventListener('DOMContentLoaded', function() {
-        <?php if (!empty($linhas)): ?>
+        <?php if (!empty($marcadores_mapa)): ?>
             const mapa = L.map('mapa').setView([-15, -47], 3);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap'
             }).addTo(mapa);
 
-            const marcadores = [
-                <?php foreach ($ips_unicos as $ip => $dados): ?>
-                    <?php if ($dados['lat'] !== null && $dados['lon'] !== null): ?> {
-                            lat: <?php echo $dados['lat']; ?>,
-                            lon: <?php echo $dados['lon']; ?>,
-                            local: "<?php echo htmlspecialchars($dados['local'], ENT_QUOTES); ?>",
-                            ip: "<?php echo $ip; ?>"
-                        },
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            ];
+            const marcadores = <?php echo json_encode($marcadores_mapa, JSON_UNESCAPED_UNICODE); ?>;
 
             marcadores.forEach(m => {
                 L.marker([m.lat, m.lon])
                     .addTo(mapa)
-                    .bindPopup(`<b>${m.local}</b><br>IP: ${m.ip}`);
+                    .bindPopup(`<b>${m.local}</b><br>IP: ${m.ip}<br>Acessos: ${m.qtd}`);
             });
         <?php endif; ?>
     });
 
-    // Script de Exportação para CSV
+    // CSV Simplificado
     document.getElementById('btnExportarCSV')?.addEventListener('click', function() {
-        let csv = 'Data/Hora;IP;Localização;Termo Pesquisado\n';
+        const tabela = document.getElementById('tabelaLog');
+        let csv = 'Data/Hora;IP;Termo Pesquisado\n';
 
-        dadosCSV.forEach(linha => {
-            const linhaCSV = [
-                `"${linha.datahora}"`,
-                `"${linha.ip}"`,
-                `"${linha.local}"`,
-                `"${linha.termo.replace(/"/g, '""')}"` // Lida com aspas no termo
-            ].join(';');
-            csv += linhaCSV + '\n';
-        });
-
-        const agora = new Date();
-        const pad = n => n.toString().padStart(2, '0');
-        const data = `${agora.getFullYear()}${pad(agora.getMonth()+1)}${pad(agora.getDate())}`;
-        const hora = `${pad(agora.getHours())}${pad(agora.getMinutes())}`;
-        const nomeArquivo = `opac_analytics_<?php echo basename($arquivo_selecionado, ".log"); ?>_${data}-${hora}.csv`;
+        for (let i = 1; i < tabela.rows.length; i++) {
+            let row = tabela.rows[i];
+            let data = row.cells[0].innerText;
+            let ip = row.cells[1].innerText;
+            let termo = row.cells[2].innerText.replace(/"/g, '""');
+            csv += `"${data}";"${ip}";"${termo}"\n`;
+        }
 
         const blob = new Blob(["\uFEFF" + csv], {
             type: 'text/csv;charset=utf-8;'
-        }); // Adiciona BOM para Excel
+        });
         const link = document.createElement('a');
         link.setAttribute('href', URL.createObjectURL(blob));
-        link.setAttribute('download', nomeArquivo);
+        link.setAttribute('download', 'opac_analytics_export.csv');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

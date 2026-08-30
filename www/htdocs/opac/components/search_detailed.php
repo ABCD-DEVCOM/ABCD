@@ -51,7 +51,7 @@ if (function_exists('DibujarFormaBusqueda')) {
 }
 ?>
 
-<form name="back" method="post" action="buscar_integrada.php">
+<form name="back" method="post" action="./" onSubmit="Javascript:return false">
 	<input type="hidden" name="page" value="startsearch">
 	<?php
 	// Loop que suporta Arrays e Strings (Correção do erro de trim)

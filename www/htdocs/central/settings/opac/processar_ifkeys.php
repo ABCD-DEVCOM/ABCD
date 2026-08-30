@@ -11,7 +11,6 @@
 */
 
 include("conf_opac_top.php");
-include("opac_functions.php");
 
 if (!isset($_SESSION["permiso"])) {
     header("Location: ../common/error_page.php");
