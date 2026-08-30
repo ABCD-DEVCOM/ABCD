@@ -1,29 +1,20 @@
 <?php
 /*
 * @file        edit_form-search.php
-* @author      Guilda Ascencio
-* @author      Roger Craveiro Guilherme
-* @date        2022-02-10
-* @description File to edit the free search form configuration
-*
+* @description File to edit the free/advanced search form configuration.
+* @author      Refactored by Roger C. Guilherme
+* @date        2026-08-29
+* 
 * CHANGE LOG:
- * 2023-03-05 rogercgui Adds the variable $actparfolder;
- * 2023-03-05 rogercgui Fixes bug in the absence of the file camposbusqueda.tab;
- * 2025-11-02 rogercgui Applies mb_detect_encoding to all file() calls to fix accent issues.
- * 2025-11-09 rogercgui Removes local file_get_contents_utf8 (moved to opac_functions.php)
- * 2025-11-09 rogercgui Standardizes help table inside an accordion
- * 2025-12-24 rogercgui Fixes save path for META base (uses opac_conf instead of META folder)
- */
-
+* 2026-08-29 Refactored table UI (no hidden rows, inline action buttons, DOM reindexing). 
+*            Added protection to disable row manipulation when configuring Free Search.
+*/
 include("conf_opac_top.php");
 $n_wiki_help = "abcd-modules/opac-abcd/opac-admin/databases/search-forms";
 include "../../common/inc_div-helper.php";
 
-// A função file_get_contents_utf8() foi movida para opac_functions.php (incluído via conf_opac_top.php)
-
+if (isset($_REQUEST["base"]) && $_REQUEST["base"] === "META") {
 ?>
-
-<?php if (isset($_REQUEST["base"]) && $_REQUEST["base"] == "META") {  ?>
 	<script>
 		var idPage = "metasearch";
 	</script>
@@ -33,54 +24,42 @@ include "../../common/inc_div-helper.php";
 	</script>
 <?php } ?>
 
-
 <div class="middle form row m-0">
 	<div class="formContent col-2 m-2 p-0">
 		<?php include("conf_opac_menu.php"); ?>
 	</div>
 	<div class="formContent col-9 m-2">
 		<?php include("menu_dbbar.php");  ?>
-		<?php if (isset($_REQUEST['o_conf']) && $_REQUEST['o_conf'] == "libre") { ?>
+
+		<?php if (isset($_REQUEST['o_conf']) && $_REQUEST['o_conf'] === "libre") { ?>
 			<h3><?php echo $msgstr["free_search"]; ?></h3>
 		<?php } else { ?>
 			<h3><?php echo $msgstr["buscar_a"]; ?></h3>
-
 		<?php } ?>
 
-
 		<?php
-		//foreach ($_REQUEST as $var=>$value) echo "$var=$value<br>";
-
-
 		$db_path = $_SESSION["db_path"];
-		$base = isset($_REQUEST["base"]) ? $_REQUEST["base"] : "";
-		$update_message = ""; // Variável para feedback
+		$base = $_REQUEST["base"] ?? "";
+		$update_message = "";
 
-		if (isset($_REQUEST["Opcion"]) and $_REQUEST["Opcion"] == "Guardar") {
-
-			// --- CORREÇÃO: Tratamento do caminho para META ---
-			if (isset($_REQUEST['base']) && $_REQUEST['base'] == "META") {
-				// Se for META, salva em opac_conf/lang/arquivo
+		if (isset($_REQUEST["Opcion"]) && $_REQUEST["Opcion"] === "Guardar") {
+			if (isset($_REQUEST['base']) && $_REQUEST['base'] === "META") {
 				$archivo_conf = $db_path . "opac_conf/$lang/" . $_REQUEST["file"];
 			} else {
-				// Se for base normal, salva em base/opac/lang/arquivo
 				$archivo_conf = $db_path . $_REQUEST['base'] . "/opac/$lang/" . $_REQUEST["file"];
 			}
-			// -------------------------------------------------
 
 			$cod_idioma = [];
 			$nom_idioma = [];
-
 			foreach ($_REQUEST as $var => $value) {
-				if (trim($value) != "") {
+				if (trim($value) !== "") {
 					$code = explode("_", $var);
-					if ($code[0] == "conf") {
-						if ($code[1] == "lc") {
+					if ($code[0] === "conf") {
+						if ($code[1] === "lc") {
 							if (!isset($cod_idioma[$code[2]])) {
 								$cod_idioma[$code[2]] = $value;
 							}
-						} else {
-
+						} elseif ($code[1] === "ln") {
 							if (!isset($nom_idioma[$code[2]])) {
 								$nom_idioma[$code[2]] = $value;
 							}
@@ -89,79 +68,68 @@ include "../../common/inc_div-helper.php";
 				}
 			}
 
-
 			$fout = fopen($archivo_conf, "w");
 			if ($fout) {
 				foreach ($cod_idioma as $key => $value) {
-					// Evita salvar linhas vazias se o usuário apagar
-					if (trim($value) == "" && trim($nom_idioma[$key]) == "") {
+					if (trim($value) === "" && (!isset($nom_idioma[$key]) || trim($nom_idioma[$key]) === "")) {
 						continue;
 					}
-					fwrite($fout, $value . "|" . $nom_idioma[$key] . "\n");
+					$name_val = $nom_idioma[$key] ?? "";
+					fwrite($fout, $value . "|" . $name_val . "\n");
 				}
 				fclose($fout);
-				$update_message = "<p class=\"color-green\"><strong>" . $archivo_conf . " " . $msgstr["updated"] . "</strong></p>";
+				$update_message = "<div class=\"alert success\"><strong>" . $archivo_conf . " " . $msgstr["updated"] . "</strong></div>";
 			} else {
-				$update_message = "<p class=\"color-red\"><strong>Error: Cannot open file for writing: " . $archivo_conf . "</strong></p>";
+				$update_message = "<div class=\"alert error\"><strong>Error: Cannot open file for writing: " . $archivo_conf . "</strong></div>";
 			}
 		}
 
-		// Exibe a mensagem de sucesso/erro AQUI, dentro do layout
 		if (!empty($update_message)) echo $update_message;
 
-
-		if (!isset($_REQUEST["Opcion"]) or $_REQUEST["Opcion"] != "Guardar") {
-
-			//DATABASES
+		if (!isset($_REQUEST["Opcion"]) || $_REQUEST["Opcion"] !== "Guardar") {
 			$archivo = $db_path . "opac_conf/" . $lang . "/bases.dat";
-
-			// --- CORREÇÃO DE ENCODING (TARGET 1) ---
 			$fp = file_get_contents_utf8($archivo);
 
-			if (isset($_REQUEST["base"]) && $_REQUEST["base"] == "META") {
+			if (isset($_REQUEST["base"]) && $_REQUEST["base"] === "META") {
 				Entrada("MetaSearch", $msgstr["metasearch"], $lang, $_REQUEST['o_conf'] . ".tab", "META");
 			} else {
-				if ($fp) { // Verifica se o arquivo foi lido
+				if ($fp) {
 					foreach ($fp as $value) {
-						if (trim($value) != "") {
+						if (trim($value) !== "") {
 							$x = explode('|', $value);
-							if ($_REQUEST["base"] != $x[0])  continue;
+							if ($_REQUEST["base"] !== $x[0]) continue;
 							Entrada(trim($x[0]), trim($x[1]), $lang, trim($x[0]) . "_" . $_REQUEST['o_conf'] . ".tab", $x[0]);
 						}
 					}
 				}
 			}
-
+		}
 		?>
 	</div>
-<?php
-		}
-
-?>
-</div>
 </div>
 
-
 <?php
-
 function Entrada($iD, $name, $lang, $file, $base)
 {
-	global $msgstr, $db_path, $archivo_conf;
+	global $msgstr, $db_path;
+
+	// Check if we are configuring Free Search
+	$is_free_search = (isset($_REQUEST['o_conf']) && $_REQUEST['o_conf'] === 'libre');
 
 	echo "<strong>" . htmlspecialchars($name);
-	if ($base != "" and $base != "META") echo " (" . htmlspecialchars($base) . ")";
+	if ($base !== "" && $base !== "META") echo " (" . htmlspecialchars($base) . ")";
 	echo "</strong>";
-	echo "<div  id='$iD' >\n";
+	echo "<div id='$iD'>\n";
 	echo "<div style=\"display: flex;\">";
-	$cuenta = 0;
-	$file_fieldsearch = $db_path . $base . "/pfts/" . $_REQUEST["lang"] . "/camposbusqueda.tab";
 
-	// --- CORREÇÃO DE ENCODING (TARGET 2) ---
+	$cuenta = 0;
+	$fp_campos = [];
+	$file_fieldsearch = $db_path . $base . "/pfts/" . $_REQUEST["lang"] . "/camposbusqueda.tab";
 	$fp_campos_base = file_get_contents_utf8($file_fieldsearch);
+
 	if ($fp_campos_base) {
 		$fp_campos[$base] = $fp_campos_base;
 	} else {
-		// Fallback para 'en' se o idioma atual não existir
 		$file_fieldsearch_en = $db_path . $base . "/pfts/en/camposbusqueda.tab";
 		$fp_campos_base_en = file_get_contents_utf8($file_fieldsearch_en);
 		if ($fp_campos_base_en) {
@@ -170,129 +138,111 @@ function Entrada($iD, $name, $lang, $file, $base)
 			$fp_campos[$base] = [];
 		}
 	}
-	// --- FIM CORREÇÃO ---
 
-	if ($base != "" and $base != "META") {
+	if ($base !== "" && $base !== "META") {
 		$cuenta = count($fp_campos[$base]);
-	}
-
-	if ($base != "" and $base == "META") {
-
-		// --- CORREÇÃO DE ENCODING (TARGET 3) ---
+	} else if ($base === "META") {
 		$file_bases_dat = $db_path . "opac_conf/" . $_REQUEST["lang"] . "/bases.dat";
 		$fpbases = file_get_contents_utf8($file_bases_dat);
-		// --- FIM CORREÇÃO ---
-
 		if ($fpbases) {
 			foreach ($fpbases as $value) {
 				$value = trim($value);
-				if ($value == "") continue;
-
+				if ($value === "") continue;
 				$v = explode('|', $value);
 				$b_0 = $v[0];
-
-				// --- CORREÇÃO DE ENCODING (TARGET 4) ---
 				$file_fieldsearch_meta = $db_path . $b_0 . "/pfts/" . $_REQUEST["lang"] . "/camposbusqueda.tab";
 				$fpbb = file_get_contents_utf8($file_fieldsearch_meta);
-				// --- FIM CORREÇÃO ---
-
 				if ($fpbb) {
 					foreach ($fpbb as $campos) {
-						if (trim($campos) != "") {
-							$fp_campos[$b_0][] = $campos;
-						}
+						if (trim($campos) !== "") $fp_campos[$b_0][] = $campos;
 					}
 				} else {
-					// Fallback para 'en' no META
 					$file_fieldsearch_meta_en = $db_path . $b_0 . "/pfts/en/camposbusqueda.tab";
 					$fpbb_en = file_get_contents_utf8($file_fieldsearch_meta_en);
 					if ($fpbb_en) {
 						foreach ($fpbb_en as $campos) {
-							if (trim($campos) != "") {
-								$fp_campos[$b_0][] = $campos;
-							}
+							if (trim($campos) !== "") $fp_campos[$b_0][] = $campos;
 						}
 					}
 				}
 			}
 		}
 		$cuenta = count($fp_campos);
-		//echo "<pre>";print_r($fp_campos);die;
 	}
 ?>
 
-
 	<div style="flex: 0 0 50%;">
-		<form name="<?php echo $iD; ?>Frm" method="post">
+		<form name="<?php echo $iD; ?>Frm" method="post" onsubmit="reindexTable(this)">
 			<input type="hidden" name="Opcion" value="Guardar">
 			<input type="hidden" name="base" value="<?php echo $base; ?>">
 			<input type="hidden" name="file" value="<?php echo $file; ?>">
 			<input type="hidden" name="lang" value="<?php echo $lang; ?>">
-
 			<?php
 			if (isset($_REQUEST["o_conf"])) {
-				echo "<input type=hidden name=o_conf value=" . $_REQUEST["o_conf"] . ">\n";
+				echo "<input type=\"hidden\" name=\"o_conf\" value=\"" . $_REQUEST["o_conf"] . "\">\n";
 			}
-
-			// Caminho do arquivo de config (libre.tab ou avanzada.tab)
-			if ($base != "" and $base != "META") {
+			if ($base !== "" && $base !== "META") {
 				$file_av = $db_path . $base . "/opac/$lang/$file";
 			} else {
 				$file_av = $db_path . "/opac_conf/$lang/$file";
 			}
+
 			echo "<strong>" . $file_av . "</strong><br>";
-
-			// --- CORREÇÃO DE ENCODING (TARGET 5) ---
 			$fp = file_get_contents_utf8($file_av);
-			// --- FIM CORREÇÃO ---
-
 			$ix = 0;
-			echo "<table id='search_table_" . $iD . "' cellpadding=5>\n";
-			echo "<thead><tr><th>" . $msgstr["ix_nombre"] . "</th><th>" . $msgstr["ix_pref"] . "</th><th></th></tr></thead>";
-			echo "<tbody id='tbody_search_" . $iD . "'>";
 
+			echo "<table id='search_table_" . $iD . "' class='table striped' cellpadding=5>\n";
+			echo "<thead><tr>";
+			echo "<th>" . ($msgstr["ix_nombre"] ?? "Name") . "</th>";
+			echo "<th>" . ($msgstr["ix_pref"] ?? "Prefix") . "</th>";
+
+			if (!$is_free_search) {
+				echo "<th style='text-align:center;'>" . ($msgstr["actions"] ?? "Actions") . "</th>";
+			}
+
+			echo "</tr></thead>";
+			echo "<tbody id='tbody_search_" . $iD . "'>";
 
 			if ($fp) {
 				foreach ($fp as $value) {
 					$value = trim($value);
-					if ($value != "") {
+					if ($value !== "") {
 						$l = explode('|', $value);
-						if (count($l) < 2) $l[1] = ""; // Garante que $l[1] exista
-
-						$ix = $ix + 1;
-
-						// --- CORREÇÃO: Adicionado htmlspecialchars ---
+						if (count($l) < 2) $l[1] = "";
+						$ix++;
 						echo "<tr>";
-						echo "<td><input type=text name=conf_lc_" . $ix . " size=30 value=\"" . htmlspecialchars(trim($l[0])) . "\"></td>";
-						echo "<td><input type=text name=conf_ln_" . $ix . " size=5 value=\"" . htmlspecialchars(trim($l[1])) . "\"></td>";
-						echo "<td><button type='button' class='bt bt-red' onclick='removeDynamicRow(this)'><i class='fas fa-trash'></i></button></td>";
+						echo "<td><input type='text' name='conf_lc_" . $ix . "' size='30' value='" . htmlspecialchars(trim($l[0])) . "'></td>";
+						echo "<td><input type='text' name='conf_ln_" . $ix . "' size='5' value='" . htmlspecialchars(trim($l[1])) . "'></td>";
+
+						if (!$is_free_search) {
+							echo "<td style=\"text-align: center; white-space: nowrap;\">";
+							echo "<button type='button' class='bt bt-gray' onclick='moveRow(this, -1)'><i class='fas fa-arrow-up'></i></button> ";
+							echo "<button type='button' class='bt bt-gray' onclick='moveRow(this, 1)'><i class='fas fa-arrow-down'></i></button> ";
+							echo "<button type='button' class='bt bt-blue' onclick='duplicateRow(this)'><i class='far fa-copy'></i></button> ";
+							echo "<button type='button' class='bt bt-red' onclick='deleteRow(this)'><i class='fas fa-trash-alt'></i></button>";
+							echo "</td>";
+						}
+
 						echo "</tr>";
 					}
 				}
 			}
-
-			// LINHA DE TEMPLATE OCULTA
-			echo "<tr id='template_row_" . $iD . "' style='display: none;'>";
-			echo "<td><input type=text name=conf_lc_ROW_PLACEHOLDER size=30 value=''></td>";
-			echo "<td><input type=text name=conf_ln_ROW_PLACEHOLDER size=5 value=''></td>";
-			echo "<td><button type='button' class='bt bt-red' onclick='removeDynamicRow(this)'><i class='fas fa-trash'></i></button></td>";
-			echo "</tr>";
-
 			echo "</tbody>";
+			echo "</table>\n";
+
+			if (!$is_free_search) {
 			?>
-			</table>
-			<div style="margin-top: 10px;">
-				<button type="button" class="bt-gray" onclick="addDynamicRow('tbody_search_<?php echo $iD; ?>', 'template_row_<?php echo $iD; ?>', 'ROW_PLACEHOLDER')"><?php echo $msgstr["cfg_add_line"]; ?></button>
-			</div>
-			<button type="submit" class="bt-green m-2"><?php echo $msgstr["save"]; ?></button>
+				<div style="margin-top: 10px;">
+					<button type="button" class="bt-gray" onclick="addRowSearch('tbody_search_<?php echo $iD; ?>')"><i class="fas fa-plus"></i> <?php echo $msgstr["cfg_add_line"] ?? "Add Line"; ?></button>
+				</div>
+			<?php } ?>
+
+			<button type="submit" class="bt-green m-2"><i class="fas fa-save"></i> <?php echo $msgstr["save"]; ?></button>
 		</form>
 	</div>
 
-
-	<div style="flex: 1; padding-left: 10px; width: 150px;">
-		<?php
-		if ($cuenta > 0) {
-		?>
+	<div style="flex: 1; padding-left: 20px; width: 150px;">
+		<?php if ($cuenta > 0) { ?>
 			<button type="button" class="accordion">
 				<i class="fas fa-question-circle"></i> <?php echo $msgstr["view_searchfields_help"]; ?>
 			</button>
@@ -300,37 +250,94 @@ function Entrada($iD, $name, $lang, $file, $base)
 				<div class="reference-box" style="max-height: 450px;">
 					<?php
 					foreach ($fp_campos as $key => $value_campos) {
+						echo "<strong>" . $key . "/" . $_REQUEST["lang"] . "/camposbusqueda.tab (central ABCD)</strong><br>";
 					?>
-						<strong><?php echo $key . "/" . $_REQUEST["lang"] . "/camposbusqueda.tab (central ABCD)</strong><br>"; ?>
-							<table class="table striped">
-								<thead>
-									<tr>
-										<th><?php echo $msgstr["ix_nombre"]; ?></th>
-										<th><?php echo $msgstr["ix_pref"]; ?></th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php
-									if (!empty($value_campos))
-										foreach ($value_campos as $value) {
-											// --- CORREÇÃO: Adicionado trim, verificação e htmlspecialchars ---
-											$value = trim($value);
-											if ($value == "") continue;
-											$v = explode('|', $value);
-											if (count($v) < 3) $v[2] = ""; // Garante que $v[2] exista
-											echo "<tr><td>" . htmlspecialchars(trim($v[0])) . "</td><td>" . htmlspecialchars(trim($v[2])) . "</td></tr>\n";
-										}
-									?>
-								</tbody>
-							</table>
-						<?php
-					} // Fim foreach $fp_campos
-						?>
+						<table class="table striped">
+							<thead>
+								<tr>
+									<th><?php echo $msgstr["ix_nombre"]; ?></th>
+									<th><?php echo $msgstr["ix_pref"]; ?></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php
+								if (!empty($value_campos)) {
+									foreach ($value_campos as $value) {
+										$value = trim($value);
+										if ($value === "") continue;
+										$v = explode('|', $value);
+										if (count($v) < 3) $v[2] = "";
+										echo "<tr><td>" . htmlspecialchars(trim($v[0])) . "</td><td>" . htmlspecialchars(trim($v[2])) . "</td></tr>\n";
+									}
+								}
+								?>
+							</tbody>
+						</table>
+					<?php } ?>
 				</div>
-			</div> <?php
-				} // Fim if $cuenta > 0
-			} // Fim da função Entrada
-			echo "</div>"; // Fim flex
-			echo "</div>\n"; // Fim div $iD
+			</div>
+		<?php } ?>
+	</div>
+	</div>
+	</div>
+<?php
+}
+?>
 
-			include("../../common/footer.php"); ?>
+<script>
+	function moveRow(btn, direction) {
+		var row = btn.closest("tr");
+		var tbody = row.parentNode;
+		if (direction === -1 && row.previousElementSibling) {
+			tbody.insertBefore(row, row.previousElementSibling);
+		} else if (direction === 1 && row.nextElementSibling) {
+			tbody.insertBefore(row.nextElementSibling, row);
+		}
+	}
+
+	function deleteRow(btn) {
+		if (confirm("<?php echo $msgstr['are_you_sure'] ?? 'Are you sure?'; ?>")) {
+			btn.closest("tr").remove();
+		}
+	}
+
+	function duplicateRow(btn) {
+		var row = btn.closest("tr");
+		var clone = row.cloneNode(true);
+		row.parentNode.insertBefore(clone, row.nextSibling);
+	}
+
+	function addRowSearch(tbodyId) {
+		var tbody = document.getElementById(tbodyId);
+		var tr = document.createElement("tr");
+
+		tr.innerHTML = `
+        <td><input type="text" name="conf_lc_0" size="30" value=""></td>
+        <td><input type="text" name="conf_ln_0" size="5" value=""></td>
+        <td style="text-align: center; white-space: nowrap;">
+            <button type="button" class="bt bt-gray" onclick="moveRow(this, -1)"><i class="fas fa-arrow-up"></i></button>
+            <button type="button" class="bt bt-gray" onclick="moveRow(this, 1)"><i class="fas fa-arrow-down"></i></button>
+            <button type="button" class="bt bt-blue" onclick="duplicateRow(this)"><i class="far fa-copy"></i></button>
+            <button type="button" class="bt bt-red" onclick="deleteRow(this)"><i class="fas fa-trash-alt"></i></button>
+        </td>
+    `;
+		tbody.appendChild(tr);
+	}
+
+	function reindexTable(form) {
+		var rows = form.querySelectorAll("tbody tr");
+		rows.forEach(function(row, index) {
+			var inputs = row.querySelectorAll("input[type='text']");
+			inputs.forEach(function(input) {
+				var name = input.getAttribute("name");
+				if (name && name.startsWith("conf_")) {
+					var parts = name.split("_");
+					parts[2] = index + 1;
+					input.setAttribute("name", parts.join("_"));
+				}
+			});
+		});
+	}
+</script>
+
+<?php include("../../common/footer.php"); ?>
