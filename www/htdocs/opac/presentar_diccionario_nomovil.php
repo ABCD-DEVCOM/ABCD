@@ -120,5 +120,5 @@ include("presentar_diccionario_inc.php");
    <?php }
      if (!isset($_REQUEST["criterios"]) or $_REQUEST["criterios"]!="S"){
    ?>
-	<!--<input  class="btn btn-success" type=button id=search-submit value=" <?php echo $msgstr["front_search"]?> " onclick="javascript:EjecutarBusquedaDiccionario(0,'')">-->
+	<input  class="btn btn-success" type=button id=search-submit value=" <?php echo $msgstr["front_search"]?> " onclick="javascript:EjecutarBusquedaDiccionario(0,'')">
    <?php } ?>
