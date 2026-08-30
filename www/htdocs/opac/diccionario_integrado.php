@@ -106,11 +106,8 @@ if (isset($_REQUEST["criterios"])) {
 	<div class="row">
 		<div class="col-12">
 			<h4>
-				<i class="fas fa-book"></i>
-				<?php echo $msgstr["front_diccio"]; ?>
-				<?php if (isset($_REQUEST["campo"])) echo " - " . $_REQUEST["campo"]; ?>
+				<?php if (isset($_REQUEST["campo"])) echo $_REQUEST["campo"]; ?>
 			</h4>
-			<hr>
 		</div>
 	</div>
 
