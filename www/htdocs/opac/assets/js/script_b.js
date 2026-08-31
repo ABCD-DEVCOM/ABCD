@@ -503,6 +503,34 @@ function PrepararExpresion() {
 	forma1.submit();
 }
 
+function PrepararExpresionExperta() {
+	var textarea = document.getElementById('expert_search_query');
+
+	if (!textarea || textarea.value.trim() === "") {
+		alert(msgstr["miss_se"] || "Digite uma expressão de busca booleana válida.");
+		return;
+	}
+
+	var forma1 = document.forms['forma1'];
+	if (!forma1 && document.getElementById('forma1')) {
+		forma1 = document.getElementById('forma1');
+	}
+
+	if (!forma1) {
+		alert("Erro crítico: Formulário de busca não encontrado.");
+		return;
+	}
+
+	// Injeta a string crua da textarea direto no campo Expresion
+	forma1.Expresion.value = textarea.value.trim();
+	forma1.Opcion.value = "directa"; // Garante que o WXIS leia a query literalmente
+
+	var mensagens = document.getElementById("mensajes");
+	if (mensagens) mensagens.innerHTML = "<img src='assets/img/loading.gif'>";
+
+	forma1.submit();
+}
+
 function CancelarDiccionario(retorno) {
 	// Apenas fecha o popup
 	window.close();

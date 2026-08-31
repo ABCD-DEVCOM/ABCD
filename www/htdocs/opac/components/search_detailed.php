@@ -20,12 +20,12 @@ echo "<div class='titulo-base-container mb-3'>";
 // Exibe o título da base ou "Todos os catálogos"
 if (!isset($_REQUEST["base"]) or $_REQUEST["base"] == "") {
 	$base = "";
-	echo "<span class='tituloBase h5'>" . $msgstr["front_todos_c"] . "</span>";
+	$print_title = $msgstr["front_todos_c"];
 } else {
 	// Verifica se a base existe na lista para evitar erros
 	$titulo_base = isset($bd_list[$_REQUEST["base"]]["titulo"]) ? $bd_list[$_REQUEST["base"]]["titulo"] : $_REQUEST["base"];
-	echo "<span class='tituloBase h5'>" . $titulo_base . "</span>";
 	$base = $_REQUEST["base"];
+	$print_title = $titulo_base;
 }
 
 // Exibe coleção se houver (Corrigido o <i></i>)
@@ -40,7 +40,7 @@ if (isset($_REQUEST["coleccion"]) and $_REQUEST["coleccion"] != "") {
 echo "</div>"; // Fecha container do título
 ?>
 
-<h4 class="mb-3"><?php echo $msgstr["front_buscar_a"]; ?></h4>
+<h4 class="mb-3"><?php echo $msgstr["buscar_d"]." (".$print_title.")"; ?></h4>
 
 <?php
 // Desenha o formulário principal de busca detalhada
@@ -76,5 +76,17 @@ if (function_exists('DibujarFormaBusqueda')) {
 	?>
 </form>
 
-</div>
+<hr class="my-5">
+
+<h5 class="mb-3 text-secondary"><i class="fas fa-terminal"></i> <?php echo $msgstr["buscar_a"]; ?></h5>
+<div class="row bg-light p-3 border rounded mx-0">
+	<div class="col-12 mb-2 p-0">
+		<label class="form-label text-muted small"><?php echo $msgstr["buscar_a_h"]; ?></label>
+		<textarea id="expert_search_query" class="form-control font-monospace" rows="3" placeholder='(TN_DECRETO) and (RE_JUNTA DEPARTAMENTAL)'></textarea>
+	</div>
+	<div class="col-12 col-md-4 px-0 mt-2">
+		<button type="button" class="btn btn-dark w-100" onclick="PrepararExpresionExperta()">
+			<i class="fas fa-search"></i> <?php echo $msgstr["buscar_a_exec"]; ?>
+		</button>
+	</div>
 </div>
