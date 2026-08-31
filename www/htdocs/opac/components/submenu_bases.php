@@ -54,7 +54,7 @@ if (!isset($mostrar_libre) or $mostrar_libre!="N"){
 	?>
 
 	<div class="form-search">
-			<button type="button" class="bt-blue" onclick="javascript:document.libre.action='avanzada.php';document.libre.submit();"/><?php echo $msgstr["front_buscar_a"]?></button>
+			<button type="button" class="bt-blue" onclick="javascript:document.libre.action='avanzada.php';document.libre.submit();"/><?php echo $msgstr["buscar_a"]?></button>
 	<?php
 	}
 

@@ -166,7 +166,7 @@ if (!isset($mostrar_libre) || $mostrar_libre != "N") {
 
 					if ($BusquedaAvanzada == "S") { ?>
 						<button type="button" class="btn btn-outline-secondary btn-sm flex-grow-1 flex-md-grow-0" onclick="javascript:document.detailed.submit();">
-							<i class="fas fa-sliders-h"></i> <?php echo $msgstr["front_buscar_a"] ?>
+							<i class="fas fa-sliders-h"></i> <?php echo $msgstr["buscar_a"] ?>
 						</button>
 					<?php } ?>
 				</div>

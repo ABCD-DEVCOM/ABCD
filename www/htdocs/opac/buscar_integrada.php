@@ -88,7 +88,8 @@ require_once $Web_Dir . 'includes/search/organized_search.php';
 
 // --- CAPTCHA VERIFICATION ---
 if (isset($opac_gdef['CAPTCHA']) && $opac_gdef['CAPTCHA'] === 'Y' && isset($opac_gdef['CAPTCHA_SECRET_KEY'])) {
-	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	// Verifica o POST, mas isenta requisições internas de UI (como a troca para a Busca Avançada)
+	if ($_SERVER["REQUEST_METHOD"] == "POST" && empty($_POST['search_form'])) {
 		if (!validarCaptchaCloudflare($opac_gdef['CAPTCHA_SECRET_KEY'])) {
 			echo "<h1>Validation Error</h1><p>The CAPTCHA verification failed. Please try again.</p>";
 			echo "<a href='javascript:history.back()'>Back</a>";
@@ -277,118 +278,175 @@ if ($total_registros > 0) {
 
 ?>
 
+<!-- INÍCIO DO COLLAPSE DOS RESULTADOS -->
+<div class="collapse show" id="collapseSearchResults">
 
-<div class="d-flex flex-wrap justify-content-between align-items-center">
+	<div class="d-flex flex-wrap justify-content-between align-items-center">
 
-	<div class="col-8 col-md-auto mb-2 mb-md-0">
-		<?php echo renderSortDropdown($msgstr); ?>
-	</div>
+		<div class="col-8 col-md-auto mb-2 mb-md-0">
+			<?php echo renderSortDropdown($msgstr); ?>
+		</div>
 
-	<div class="col-12 col-md-auto">
-		<?php NavegarPaginas($contador, $count, $desde); ?>
-	</div>
-</div>
-
-
-<form name="continuar" action="./" method="get">
-
-	<input type="hidden" name="page" value="startsearch">
-	<input type="hidden" name="integrada" value="">
-	<input type="hidden" name="existencias">
-	<input type="hidden" name="Campos" value="<?php if (isset($_REQUEST["Campos"])) echo htmlspecialchars(urldecode($_REQUEST["Campos"])); ?>">
-	<input type="hidden" name="Operadores" value="<?php if (isset($_REQUEST["Operadores"])) echo htmlspecialchars(urldecode($_REQUEST["Operadores"])); ?>">
-	<?php
-
-	if (isset($actual_context) && $actual_context != "") { ?>
-		<input type="hidden" name="ctx" value="<?php echo htmlspecialchars($actual_context); ?>">
-	<?php }
-
-	if (isset($_REQUEST["Sub_Expresion"])) echo '<input type="hidden" name="Sub_Expresion" value="' . htmlspecialchars(urldecode($_REQUEST["Sub_Expresion"])) . '">';
-	if (isset($_REQUEST["facetas"])) echo '<input type="hidden" name="facetas" value="' . htmlspecialchars(urldecode($_REQUEST["facetas"])) . '">';
-	echo '<input type="hidden" name="Expresion" value="' . htmlspecialchars($Expresion) . '">';
+		<div class="col-12 col-md-auto">
+			<?php NavegarPaginas($contador, $count, $desde); ?>
+		</div>
+	</div> <!--align-items-center-->
 
 
-	// --- PRESENTATION OF RESULTS ---
-	$formato_solicitado = isset($_REQUEST["Formato"]) ? $_REQUEST["Formato"] : null;
+	<form name="continuar" action="./" method="get">
+
+		<input type="hidden" name="page" value="startsearch">
+		<input type="hidden" name="integrada" value="">
+		<input type="hidden" name="existencias">
+		<input type="hidden" name="Campos" value="<?php if (isset($_REQUEST["Campos"])) echo htmlspecialchars(urldecode($_REQUEST["Campos"])); ?>">
+		<input type="hidden" name="Operadores" value="<?php if (isset($_REQUEST["Operadores"])) echo htmlspecialchars(urldecode($_REQUEST["Operadores"])); ?>">
+		<?php
+
+		if (isset($actual_context) && $actual_context != "") { ?>
+			<input type="hidden" name="ctx" value="<?php echo htmlspecialchars($actual_context); ?>">
+		<?php }
+
+		if (isset($_REQUEST["Sub_Expresion"])) echo '<input type="hidden" name="Sub_Expresion" value="' . htmlspecialchars(urldecode($_REQUEST["Sub_Expresion"])) . '">';
+		if (isset($_REQUEST["facetas"])) echo '<input type="hidden" name="facetas" value="' . htmlspecialchars(urldecode($_REQUEST["facetas"])) . '">';
+		echo '<input type="hidden" name="Expresion" value="' . htmlspecialchars($Expresion) . '">';
+
+
+		// --- PRESENTATION OF RESULTS ---
+		$formato_solicitado = isset($_REQUEST["Formato"]) ? $_REQUEST["Formato"] : null;
 
 
 
-	if ($total_registros > 0) {
+		if ($total_registros > 0) {
 
-		// Prevents errors if pagination (‘from’) exceeds the total due to bots
-		if (isset($resultados_pagina_atual[0]['base'])) {
-			$base_para_formato = $resultados_pagina_atual[0]['base'];
-		} else {
-			// Fallback seguro caso a página atual esteja vazia
-			$base_para_formato = isset($base) && $base != "" ? $base : key($bd_list);
-		}
-
-		list($select_formato, $Formato) = SelectFormato($base_para_formato, $db_path, $msgstr);
-
-		if (isset($GLOBALS['RELEVANCE_GATE_TRIGGERED']) && $GLOBALS['RELEVANCE_GATE_TRIGGERED'] > 0) {
-			// 1. Formata o número primeiro
-			$numero_formatado = number_format($GLOBALS['RELEVANCE_GATE_TRIGGERED'], 0, ',', '.');
-
-			// 2. Usa sprintf para injetar o número formatado no lugar do "%s"
-			$msg_aviso_teto = isset($msgstr["front_relevance_gate_warning"])
-				? sprintf($msgstr["front_relevance_gate_warning"], $numero_formatado)
-				: sprintf("Results sorted by MFN/Date due to high volume (%s records). Refine your search with keywords to enable relevance ranking.", $numero_formatado);
-
-			echo '<div class="alert alert-info mt-2" role="alert"><small><i class="fas fa-info-circle"></i> ' . $msg_aviso_teto . '</small></div>';
-		}		
-
-		echo '<div class="results-container" id="results">';
-
-		// ---- START OF RESTRICTION LOGIC ----
-
-		// Counters for the footer message
-		$registros_exibidos_na_pagina = 0;
-		$registros_ocultados_na_pagina = 0;
-
-		foreach ($resultados_pagina_atual as $ix => $registro) {
-
-			$GLOBALS['base'] = $registro['base'];
-
-			opac_load_restriction_settings();
-
-			$permission = opac_precheck_record($registro['base'], $registro['mfn']);
-
-			if ($permission == 'show') {
-				$base_atual = $registro['base'];
-				$formato_final = ($formato_solicitado !== null) ? $formato_solicitado : getDefaultFormatForBase($base_atual, $db_path, $lang);
-				ApresentarRegistroIndividual($registro['base'], $registro['mfn'], $desde + $ix, $formato_final, $Expresion, $registro['pontuacao']);
-
-				$registros_exibidos_na_pagina++;
-			} elseif ($permission == 'auth_message') {
-				// Show the 'restricted' card
-				ApresentarRegistroRestrito(); 
-				$registros_exibidos_na_pagina++;
-			} elseif ($permission == 'hidden') {
-				// It doesn't matter. It doesn't show, it doesn't count.
-				$registros_ocultados_na_pagina++;
+			// Prevents errors if pagination (‘from’) exceeds the total due to bots
+			if (isset($resultados_pagina_atual[0]['base'])) {
+				$base_para_formato = $resultados_pagina_atual[0]['base'];
+			} else {
+				// Fallback seguro caso a página atual esteja vazia
+				$base_para_formato = isset($base) && $base != "" ? $base : key($bd_list);
 			}
-		}
-		// ---- END OF RESTRICTION LOGIC ----
 
-		echo '</div>'; // End of #results
+			list($select_formato, $Formato) = SelectFormato($base_para_formato, $db_path, $msgstr);
 
-		if ($registros_ocultados_na_pagina > 0) {
-			$mensagem_rodape = $msgstr["front_restricted_hidden_info"] ?? "Some records may not be visible on this page due to restriction settings.";
-			echo '<div class="alert alert-info" role="alert"><small>' . $mensagem_rodape . '</small></div>';
+			if (isset($GLOBALS['RELEVANCE_GATE_TRIGGERED']) && $GLOBALS['RELEVANCE_GATE_TRIGGERED'] > 0) {
+				// 1. Formata o número primeiro
+				$numero_formatado = number_format($GLOBALS['RELEVANCE_GATE_TRIGGERED'], 0, ',', '.');
+
+				// 2. Usa sprintf para injetar o número formatado no lugar do "%s"
+				$msg_aviso_teto = isset($msgstr["front_relevance_gate_warning"])
+					? sprintf($msgstr["front_relevance_gate_warning"], $numero_formatado)
+					: sprintf("Results sorted by MFN/Date due to high volume (%s records). Refine your search with keywords to enable relevance ranking.", $numero_formatado);
+
+				echo '<div class="alert alert-info mt-2" role="alert"><small><i class="fas fa-info-circle"></i> ' . $msg_aviso_teto . '</small></div>';
+			}
+
+			echo '<div class="results-container" id="results">';
+
+			// ---- START OF RESTRICTION LOGIC ----
+
+			// Counters for the footer message
+			$registros_exibidos_na_pagina = 0;
+			$registros_ocultados_na_pagina = 0;
+
+			foreach ($resultados_pagina_atual as $ix => $registro) {
+
+				$GLOBALS['base'] = $registro['base'];
+
+				opac_load_restriction_settings();
+
+				$permission = opac_precheck_record($registro['base'], $registro['mfn']);
+
+				if ($permission == 'show') {
+					$base_atual = $registro['base'];
+					$formato_final = ($formato_solicitado !== null) ? $formato_solicitado : getDefaultFormatForBase($base_atual, $db_path, $lang);
+					ApresentarRegistroIndividual($registro['base'], $registro['mfn'], $desde + $ix, $formato_final, $Expresion, $registro['pontuacao']);
+
+					$registros_exibidos_na_pagina++;
+				} elseif ($permission == 'auth_message') {
+					// Show the 'restricted' card
+					ApresentarRegistroRestrito();
+					$registros_exibidos_na_pagina++;
+				} elseif ($permission == 'hidden') {
+					// It doesn't matter. It doesn't show, it doesn't count.
+					$registros_ocultados_na_pagina++;
+				}
+			}
+			// ---- END OF RESTRICTION LOGIC ----
+
+			echo '</div>'; // End of #results
+
+			if ($registros_ocultados_na_pagina > 0) {
+				$mensagem_rodape = $msgstr["front_restricted_hidden_info"] ?? "Some records may not be visible on this page due to restriction settings.";
+				echo '<div class="alert alert-info" role="alert"><small>' . $mensagem_rodape . '</small></div>';
+			}
+
+			// If the entire page was filtered (all were 'hidden')
+			if ($registros_exibidos_na_pagina == 0 && $registros_ocultados_na_pagina > 0) {
+				echo '<p class="text-center">' . ($msgstr["front_no_visible_records_page"] ?? "There are no records to display on this page.") . '</p>';
+			}
+		} else {
+			$base_para_formato = !empty($bd_list) ? key($bd_list) : "";
+			list($select_formato, $Formato) = SelectFormato($base_para_formato, $db_path, $msgstr);
+
+			// Abre a sanfona automaticamente se a busca retornar 0 resultados
+			echo "<script>
+						document.addEventListener('DOMContentLoaded', function() { 
+							var sf = document.getElementById('collapseSearchForm'); 
+							if(sf) sf.classList.add('show'); 
+						});
+					</script>";
 		}
 
-		// If the entire page was filtered (all were 'hidden')
-		if ($registros_exibidos_na_pagina == 0 && $registros_ocultados_na_pagina > 0) {
-			echo '<p class="text-center">' . ($msgstr["front_no_visible_records_page"] ?? "There are no records to display on this page.") . '</p>';
+		NavegarPaginas($contador, $count, $desde + 1, $select_formato);
+		?>
+	</form>
+
+</div> <!-- FIM DO COLLAPSE DOS RESULTADOS -->
+
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		var totalRegistros = <?php echo $total_registros; ?>;
+		var formEl = document.getElementById('collapseSearchForm');
+		var resultsEl = document.getElementById('collapseSearchResults');
+
+		// Detecta se o usuário clicou no botão "Búsqueda avanzada" (que dispara um POST na troca de forms)
+		var isSwitchingMode = <?php echo ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['search_form'])) ? 'true' : 'false'; ?>;
+
+		// Se a busca deu 0 ou o usuário acabou de trocar para a busca avançada, exibe o form e oculta os resultados
+		if (totalRegistros === 0 || isSwitchingMode) {
+			if (formEl) formEl.classList.add('show');
+			if (resultsEl) resultsEl.classList.remove('show');
 		}
-	} else {
-		$base_para_formato = !empty($bd_list) ? key($bd_list) : "";
-		list($select_formato, $Formato) = SelectFormato($base_para_formato, $db_path, $msgstr);
+	});
+
+	// Função que alterna perfeitamente entre exibir o Formulário ou exibir os Resultados
+	function toggleSearchPanels() {
+		var formEl = document.getElementById('collapseSearchForm');
+		var resultsEl = document.getElementById('collapseSearchResults');
+
+		if (!formEl || !resultsEl) return;
+
+		var isFormOpen = formEl.classList.contains('show');
+
+		if (isFormOpen) {
+			// Se o Form está aberto, esconde o Form e mostra os Resultados
+			new bootstrap.Collapse(formEl, {
+				toggle: false
+			}).hide();
+			new bootstrap.Collapse(resultsEl, {
+				toggle: false
+			}).show();
+		} else {
+			// Se o Form está fechado, mostra o Form e esconde os Resultados
+			new bootstrap.Collapse(formEl, {
+				toggle: false
+			}).show();
+			new bootstrap.Collapse(resultsEl, {
+				toggle: false
+			}).hide();
+		}
 	}
-
-	NavegarPaginas($contador, $count, $desde + 1, $select_formato);
-	?>
-</form>
+</script>
 
 <?php
 include_once 'components/total_bases_footer.php';

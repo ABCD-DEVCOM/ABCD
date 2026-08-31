@@ -117,15 +117,17 @@ $ActualDir = getcwd();
             ?>
 
             <div class="container-fluid"> <?php
-                    // =========================================================================
-                    // LAYOUT 1: FULL-WIDTH SEARCH (Layout 'SL' or 'N' / Home)
-                    // Occupies 100% of the width, staying above the sidebar
-                    // =========================================================================
-                    if ($sidebar === 'SL' || !$show_sidebar): ?>
+                                            // =========================================================================
+                                            // LAYOUT 1: FULL-WIDTH SEARCH (Layout 'SL' or 'N' / Home)
+                                            // Occupies 100% of the width, staying above the sidebar
+                                            // =========================================================================
+                                            if ($sidebar === 'SL' || !$show_sidebar): ?>
                     <div class="row">
                         <div class="col-12 px-4 mt-4">
-                            <div id="searchBox" class="card bg-white p-4 mb-4 rounded-0 shadow-sm">
-                                <?php
+                            <?php if ($is_search_page): ?><div class="collapse" id="collapseSearchForm"><?php endif; ?>
+
+                                <div id="searchBox" class="card bg-white p-4 mb-4 rounded-0 shadow-sm">
+                                    <?php
                                                 switch ($search_form) {
                                                     case 'free':
                                                         include("components/search_free.php");
@@ -139,8 +141,11 @@ $ActualDir = getcwd();
                                                         include("components/search_free.php");
                                                         break;
                                                 }
-                                ?>
-                            </div>
+                                    ?>
+                                </div>
+
+                                <?php if ($is_search_page): ?>
+                                </div><?php endif; ?>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -169,23 +174,28 @@ $ActualDir = getcwd();
                                 // Occupies only the space of the main column, following the loop
                                 // =========================================================================
                                 if ($sidebar === 'Y' && $show_sidebar): ?>
-                                    <div id="searchBox" class="card bg-white p-4 mb-4 rounded-0 shadow-sm">
-                                        <?php
-                                        switch ($search_form) {
-                                            case 'free':
-                                                include("components/search_free.php");
-                                                break;
-                                            case 'detailed':
-                                            case 'detalle':
-                                            case 'avanzada':
-                                                include("components/search_detailed.php");
-                                                break;
-                                            default:
-                                                include("components/search_free.php");
-                                                break;
-                                        }
-                                        ?>
-                                    </div>
+                                    <?php if ($is_search_page): ?><div class="collapse" id="collapseSearchForm"><?php endif; ?>
+
+                                        <div id="searchBox" class="card bg-white p-4 mb-4 rounded-0 shadow-sm">
+                                            <?php
+                                            switch ($search_form) {
+                                                case 'free':
+                                                    include("components/search_free.php");
+                                                    break;
+                                                case 'detailed':
+                                                case 'detalle':
+                                                case 'avanzada':
+                                                    include("components/search_detailed.php");
+                                                    break;
+                                                default:
+                                                    include("components/search_free.php");
+                                                    break;
+                                            }
+                                            ?>
+                                        </div>
+
+                                        <?php if ($is_search_page): ?>
+                                        </div><?php endif; ?>
                                 <?php endif; ?>
 
                                 <?php $_REQUEST["base"] = $actualbase ?? ''; ?>

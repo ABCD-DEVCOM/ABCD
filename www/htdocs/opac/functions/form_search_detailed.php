@@ -176,7 +176,7 @@ function DibujarFormaBusqueda($Diccio)
 			?>
 				<div class="row">
 					<div class="col-10 col-sm-3 px-1 my-2">
-						<select name="camp[]" class="form-select">
+						<select name="camp[]" class="form-select form-select-sm">
 
 							<?php
 							$asel = "";
@@ -191,13 +191,13 @@ function DibujarFormaBusqueda($Diccio)
 					</div>
 
 					<div class="col-2 col-sm-1 px-1 my-2">
-						<a class="btn btn-secondary" href="javascript:Diccionario(<?php echo $jx; ?>)">
+						<a class="btn btn-secondary btn-sm" href="javascript:Diccionario(<?php echo $jx; ?>)">
 							<i class="fas fa-book" alt="<?php echo $msgstr["front_indice"]; ?>" title="<?php echo $msgstr["front_indice"]; ?>"></i>
 						</a>
 					</div>
 
 					<div class="col-12 col-sm-6 px-1 my-2">
-						<?php echo '<input class="form-control" type="text" size="80" name="Sub_Expresiones[]"';
+						<?php echo '<input class="form-control form-control-sm" type="text" size="80" name="Sub_Expresiones[]"';
 						echo "value='";
 						if (isset($_REQUEST["Seleccionados"])) {
 							if ($_REQUEST["Diccio"] == $jx) {
@@ -218,7 +218,7 @@ function DibujarFormaBusqueda($Diccio)
 
 					<?php if ($jx < $Tope) { ?>
 						<div class="col-12 col-sm-2 px-1 my-2">
-							<select name="oper[]" id="oper_<?php echo $jx; ?>" size="1" class="form-select">
+							<select name="oper[]" id="oper_<?php echo $jx; ?>" size="1" class="form-select form-select-sm">
 								<option value="and" <?php if (!isset($OP[$jx]) or $OP[$jx] == "and" or $OP[$jx] == "") echo " selected"; ?>>AND</option>
 								<option value="or" <?php if (isset($OP[$jx]) and $OP[$jx] == "or") echo " selected"; ?>>OR</option>
 							</select>
