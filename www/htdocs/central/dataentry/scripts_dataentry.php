@@ -388,24 +388,20 @@ function CancelarActualizacion(){
 							case "select-one":
 								break;
 							case "select-multiple":
-								Ctrl = eval("document.forma1." + nombre);
-								for (ixsel = 0; ixsel < Ctrl.length; ixsel++) {
-									if (Ctrl.options[ixsel].selected) {
+								var Ctrl = campo;
+								var cleanNombre = nombre.replace("[]", "");
 
-										// Ignore options whose value is explicitly empty (placeholder)
+								for (var ixsel = 0; ixsel < Ctrl.length; ixsel++) {
+									if (Ctrl.options[ixsel].selected) {
 										if (Ctrl.options[ixsel].value === "") {
-											Ctrl.options[ixsel].selected = false;
 											continue;
 										}
 
-										// Improved validation for 'undefined'
-										if (typeof VC[nombre] === "undefined" || VC[nombre] == "undefined") {
-											VC[nombre] = "S";
-											ValorCapturado = nombre + "_" + Ctrl.options[ixsel].value;
-											Ctrl.options[ixsel].selected = false;
+										if (typeof VC[cleanNombre] === "undefined" || VC[cleanNombre] == "undefined") {
+											VC[cleanNombre] = "S";
+											ValorCapturado = cleanNombre + "_" + Ctrl.options[ixsel].value;
 										} else {
-											ValorCapturado = ValorCapturado + "\n" + nombre + "_" + Ctrl.options[ixsel].value;
-											Ctrl.options[ixsel].selected = false;
+											ValorCapturado = ValorCapturado + "\n" + cleanNombre + "_" + Ctrl.options[ixsel].value;
 										}
 									}
 								}
