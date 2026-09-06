@@ -128,7 +128,10 @@ class SelectRenderer {
                 }
             }
             $subc = rtrim($t[5]);
-            echo "<select name=tag$tag $TipoS id=tag$tag";
+            $TipoS = ($rep == 1) ? " multiple" : "";
+            $nameSuffix = ($rep == 1) ? "[]" : "";
+
+            echo "<select name=\"tag" . $tag . $nameSuffix . "\" $TipoS id=\"tag$tag\"";
             if ($lensel <> 0 and $TipoS == " multiple") {
                 if ($selected == true) $lensel--;
                 echo " size=$lensel";

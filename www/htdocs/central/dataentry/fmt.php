@@ -439,6 +439,14 @@ function ColocarMfn(){ //PutMFN
 
 function VariablesDeAmbiente($var,$value){ //EnvironmentalVariables
     global $arrHttp,$variables;
+
+	if (is_array($value)) {
+		$value = implode("\n", array_map('trim', $value));
+	} else {
+		$value = trim($value);
+	}
+
+
     if (substr($var,0,3)=="tag") {
 	$ixpos=strpos($var,"_");
 	if ($ixpos!=0) {
@@ -511,7 +519,11 @@ global $arrHttp,$valortag,$tm,$nr,$tl,$tym;
 $ValorCapturado="";
 $arrHttp=Array();
 foreach ($_REQUEST as $var => $value) {
-    if (trim($value)!="") VariablesDeAmbiente($var,$value);
+	if (is_array($value)) {
+		if (count($value) > 0) VariablesDeAmbiente($var, $value);
+	} else {
+		if (trim($value) != "") VariablesDeAmbiente($var, $value);
+	}
 }
 if (!isset($arrHttp["Expresion"]))     $arrHttp["Expresion"]="";
 
