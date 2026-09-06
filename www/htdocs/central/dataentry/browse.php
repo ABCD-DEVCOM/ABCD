@@ -1,8 +1,9 @@
-<?php 
+<?php
 /*
 20220715 fho4abcd Use $actparfolder as location for .par files + show message and errors while deleting records
 20220929 fho4abcd Remove encabezado in return (is sometimes undefined)
 20230210 fho4abcd Improve pop-up for new record icon
+20260906 rogercgui Overall robustness, security and readability improvements without changing intended functionality.
 */
 error_reporting(E_ALL);
 session_start();
@@ -28,43 +29,33 @@ $ABCD_base = $arrHttp['base'];
 $ABCD_cipar = $db_path.$actparfolder.$ABCD_base.".par";
 
 //$Formato
-$table_browser="tb".$ABCD_base."";
+$table_browser = "tb" . $ABCD_base;
+$arrHttp["headings"] = "";
+$Formato = "";
+$Formato_html = "";
 
-if (isset($arrHttp["pft"]) and trim($arrHttp["pft"])!=""){
-    $Formato=urlencode($arrHttp["pft"]);
-}else{
-    if (isset($table_browser) and $table_browser!="") {
-        $pft_name=explode('|',trim($table_browser));
-        $table_browser=$pft_name[0];
-        if (isset($pft_name[1]))
-            $arrHttp["tipof"]=trim($pft_name[1]);
-        else
-            $arrHttp["tipof"]="";
-        if (strpos($table_browser,'.pft')===false) $table_browser.=".pft";
-        $Formato=$db_path.$arrHttp["base"]."/pfts/".$ABCD_lang."/".$table_browser;
+if (isset($arrHttp["pft"]) && trim($arrHttp["pft"]) != "") {
+    $Formato = urlencode($arrHttp["pft"]);
+} else {
+    $pft_name = explode('|', trim($table_browser));
+    $table_browser = $pft_name[0] . (strpos($pft_name[0], '.pft') === false ? ".pft" : "");
 
-//To export to spreadsheet you must have a pft tbDABASE_html.pft
-        $Formato_html=$db_path.$arrHttp["base"]."/pfts/".$ABCD_lang."/tb".$ABCD_base."_html.pft";
-        if (!file_exists($Formato)){
-            $Formato=$db_path.$arrHttp["base"]."/pfts/".$ABCD_lang."/".$table_browser;
-        }
-        if (file_exists($Formato)) $Formato="@".$Formato;
-        if (file_exists($Formato_html)) $Formato_html="@".$Formato_html;
-// READ THE HEADINGS, IF ANY
-    //    if ($arrHttp["tipof"]!=""){
-            $head=$db_path.$arrHttp["base"]."/pfts/".$ABCD_lang."/tbtit.tab";
-            if (!file_exists($head)){
-                $head=$db_path.$arrHttp["base"]."/pfts/".$ABCD_lang."/tbtit.tab";
-            }
+    $arrHttp["tipof"] = isset($pft_name[1]) ? trim($pft_name[1]) : "";
+    $base_path = $db_path . $arrHttp["base"] . "/pfts/" . $ABCD_lang . "/";
 
-            if (file_exists($head)){
-                $fp=file($head);
-                $arrHttp["headings"]="";
-                foreach ($fp as $value) {
-                    $arrHttp["headings"].=trim($value)."\r";
-                }
-            }
-       // }
+    // Secure assignment of the Main Format and HTML
+    if (file_exists($base_path . $table_browser)) {
+        $Formato = "@" . $base_path . $table_browser;
+    }
+
+    if (file_exists($base_path . "tb" . $ABCD_base . "_html.pft")) {
+        $Formato_html = "@" . $base_path . "tb" . $ABCD_base . "_html.pft";
+    }
+
+    // Optimised reading without triggering warnings in PHP
+    $head = $base_path . "tbtit.tab";
+    if (file_exists($head)) {
+        $arrHttp["headings"] = implode("\r", file($head, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)) . "\r";
     }
 }
          
@@ -279,34 +270,45 @@ $archivo_field=$db_path.$ABCD_base."/pfts/".$ABCD_lang."/tb".$ABCD_base.".pft";
 
 
 //Function created to display the information of the columns
-function read_collumns($archivo_tit) {
-    global $ABCD_reverse;
+function read_collumns($archivo_tit)
+{
+    global $ABCD_reverse, $db_path, $ABCD_base, $ABCD_lang;
 
-    switch ($ABCD_reverse) {
-    case "On":
-         $class_order = '<i class="fas fa-sort-amount-down"></i>';
-        break;
-    case "Off":
-         $class_order = '<i class="fas fa-sort-amount-down-alt"></i>';
-        break;
-    }
+    $class_order = ($ABCD_reverse === "On") ? '<i class="fas fa-sort-amount-down"></i>' : '<i class="fas fa-sort-amount-down-alt"></i>';
+    echo "<tr><th>" . $class_order . "</th><th>MFN</th>";
 
-    if (!file_exists($archivo_tit)) $archivo_tit=$db_path.$ABCD_base."/pfts/".$ABCD_lang."/tbtit.tab";
-    if (!file_exists($archivo_tit)) $archivo_tit=$db_path.$ABCD_base."/pfts/".$ABCD_lang."/tb".$ABCD_base."_print.txt";
-    if (!file_exists($archivo_tit)) $archivo_tit=$db_path.$ABCD_base."/pfts/".$ABCD_lang."/tb".$ABCD_base."_print.txt";
-    $Pft_t=explode("/",$archivo_tit);
-    $Pft_tit=end($Pft_t);
-        echo "<tr><th>".$class_order."</th><th>MFN</th>";
-    if (file_exists($archivo_tit)){
-        $fp=file($archivo_tit);
-        foreach ($fp as $value){
-            $value=trim($value);
-            if (trim($value)!=""){
-                $t=explode('|',$value);
-                foreach ($t as $rot) echo "<th>".$rot."</th>";
+    $fallbacks = [
+        $archivo_tit,
+        $db_path . $ABCD_base . "/pfts/" . $ABCD_lang . "/tbtit.tab",
+        $db_path . $ABCD_base . "/pfts/" . $ABCD_lang . "/tb" . $ABCD_base . "_print.txt"
+    ];
+
+    $file_found = false;
+    foreach ($fallbacks as $file) {
+        if (!empty($file) && file_exists($file)) {
+            $fp = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            if ($fp !== false) {
+                foreach ($fp as $value) {
+                    $value = trim($value);
+                    if ($value !== "") {
+                        $t = explode('|', $value);
+                        foreach ($t as $rot) {
+                            // XSS sanitisation
+                            echo "<th>" . htmlspecialchars($rot, ENT_QUOTES, 'UTF-8') . "</th>";
+                        }
+                    }
+                }
+                $file_found = true;
+                break; // Stops at the first valid file
             }
         }
     }
+
+    // Degradação elegante se a base não possuir as tabelas de formato
+    if (!$file_found) {
+        echo "<th>Dados do Registro</th>";
+    }
+
     echo "<th class=\"action\"></th></tr>";
 }
 
