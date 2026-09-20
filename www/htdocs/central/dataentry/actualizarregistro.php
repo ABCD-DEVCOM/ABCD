@@ -272,20 +272,25 @@ function ActualizarRegistro($debugparameter=null){
     } // end foreach ($vars as $fdt
 
     // debug echo "<br>variables=";var_dump($variables);echo "<br>";
-    if (isset($arrHttp["check_select"])){
-        $dummy=array();
-        $dummy=explode("\n",$arrHttp["check_select"]);
-        foreach ($dummy as $value){
-            if (trim($value)!=""){
-                $ixD=strpos($value,"_");
-                if ($ixD>0){
-                    $parte1=substr($value,0,$ixD);
-                    $parte2=substr($value,$ixD+1);
-                    $k=trim(substr($parte1,3));
-                    $key=trim(substr($parte1,3));
-                    if (strlen($key)==1) $key="000".$key;
-                    if (strlen($key)==2) $key="00".$key;
-                    if (strlen($key)==3) $key="0".$key;
+    $tags_in_check_select = array(); // NEW: Array for tracking tags already processed by JS
+
+    if (isset($arrHttp["check_select"])) {
+        $dummy = array();
+        $dummy = explode("\n", $arrHttp["check_select"]);
+        foreach ($dummy as $value) {
+            if (trim($value) != "") {
+                $ixD = strpos($value, "_");
+                if ($ixD > 0) {
+                    $parte1 = substr($value, 0, $ixD);
+                    $parte2 = substr($value, $ixD + 1);
+                    $k = trim(substr($parte1, 3));
+                    $key = trim(substr($parte1, 3));
+
+                    $tags_in_check_select["tag" . $k] = true; // NOVO: Marca a tag como processada
+
+                    if (strlen($key) == 1) $key = "000" . $key;
+                    if (strlen($key) == 2) $key = "00" . $key;
+                    if (strlen($key) == 3) $key = "0" . $key;
                     //$parte2=stripslashes($parte2);
                     //	$parte2=str_replace("'","&acute;",$parte2);
                     unset($p2);
@@ -301,13 +306,19 @@ function ActualizarRegistro($debugparameter=null){
         // debug echo "<br>VC after check select=".$VC."<br>";
     } // end isset($arrHttp["check_select"]
 
-    if ($arrHttp["Opcion"]!="eliminar" and isset($variables)){
-        foreach ($variables as $key => $lin){
+    if ($arrHttp["Opcion"] != "eliminar" and isset($variables)) {
+        foreach ($variables as $key => $lin) {
+
+            // NEW: Prevents duplication by ignoring the tag if it has already been processed via the check_select route
+            if (isset($tags_in_check_select[$key])) {
+                continue;
+            }
+
             //Lines whose content is empty should not be deleted
             //because this means that you want to delete the field from the record
-            $key=trim(substr($key,3));
-            $k=$key;
-            $ixPos=strpos($key,"_");
+            $key = trim(substr($key, 3));
+            $k = $key;
+            $ixPos = strpos($key, "_");
             if (!$ixPos===false) {
                 $key=substr($key,0,$ixPos-1);
             }
