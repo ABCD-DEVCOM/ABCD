@@ -84,9 +84,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['plu
             $tempExtractPath = $pluginsDir . '/_temp_' . $slug . '_' . time();
             mkdir($tempExtractPath, 0775, true);
 
-            $zip->extractTo($tempExtractPath);
-            $zip->close();
-            @unlink($tempZip);
+            // Try forcing permission on the temporary folder before extracting
+            @chmod($tempExtractPath, 0777);
+
+            // Suppresses the warnings and checks whether the extraction has failed.
+            if (!@$zip->extractTo($tempExtractPath)) {
+                $zip->close();
+                @unlink($tempZip);
+                header("Location: plugins_manager.php?msg=error&detail=" . urlencode($msgstr['plugin_err_extract'] ?? "Erro de permissão no servidor Linux: O PHP não tem direitos de escrita para extrair os arquivos."));
+                exit;
+            }
 
             // 3. Treasure Hunt: Find the actual folder containing plugin.json
             $iterator = new RecursiveIteratorIterator(
