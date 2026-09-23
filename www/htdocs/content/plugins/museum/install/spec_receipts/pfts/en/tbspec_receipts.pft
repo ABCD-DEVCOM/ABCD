@@ -1,1 +1,0 @@
-f(mfn,1,0)'|'v1102'|'v1001'|'v1002'|',if p(v001) then v001 else ' ' fi,'|',if p(v010) then v010 else ' ' fi,'|',if p(v020) then v020 else ' ' fi,'|',if p(v030) then v030 else ' ' fi,'|',if p(v050) then (v050'<br>') else ' ' fi/

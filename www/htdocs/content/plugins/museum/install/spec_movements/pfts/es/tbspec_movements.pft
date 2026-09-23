@@ -1,1 +1,0 @@
-f(mfn,1,0)'|'v1102'|'v1001'|'v1002'|',if p(v10) then v10 else ' ' fi,'|',if p(v20) then v20 else ' ' fi,'|',if p(v30) then v30 else ' ' fi,'|',if p(v40) then v40 else ' ' fi,'|',if p(v70) then v70 else ' ' fi/
