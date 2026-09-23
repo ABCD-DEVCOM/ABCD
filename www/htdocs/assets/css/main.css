@@ -1839,14 +1839,6 @@ a.newButton img {
     background: url('../images/icon/ascii.png') no-repeat center;
 }
 
-a.importButton img {
-    background: url('../images/icon/defaultButton_import.png') no-repeat center;
-}
-
-a.pdfButton img {
-    background: url('../images/icon/defaultButton_pdf.png') no-repeat center;
-}
-
 a.cancelButton img {
     background: url('../images/icon/defaultButton_cancel.png') no-repeat center;
 }
@@ -1873,10 +1865,6 @@ a.indexButton img {
 
 a.checkButton img {
     background: url('../images/icon/clean.png') no-repeat center;
-}
-
-a.copiesdbaddButton img {
-    background: url('../images/icon/db_update.png') no-repeat center;
 }
 
 a.purchaseorderButton img {
@@ -2338,22 +2326,6 @@ body:first-of-type .homepage .mainBox .boxContent .searchTitles .stInput input.t
     background-color: var(--abcd-white);
 }
 
-/* Homepage - Ícones das seções (Legado) */
-.homepage .mainBox .titleSection .sectionIcon {
-    background: url('../images/database.png') no-repeat center;
-}
-
-.homepage .mainBox .dbSection .sectionIcon {
-    background: url('../images/database.png') no-repeat center;
-}
-
-.homepage .mainBox .searchSection .sectionIcon {
-    background: url('../images/search.png') no-repeat center;
-}
-
-.homepage .mainBox .helpSection .sectionIcon {
-    background: url('../images/icon/mainBox_helpSection.png') no-repeat center;
-}
 
 /* --- 8.2. Login Page --- */
 .login {
