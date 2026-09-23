@@ -1,3 +1,0 @@
-﻿</userCollection>
-</searchUsersByIdReturn>
-</searchUsersByIdResponse>
