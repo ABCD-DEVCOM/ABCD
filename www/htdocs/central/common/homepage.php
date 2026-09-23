@@ -8,8 +8,11 @@
 2022-01-23 rogercgui Option "CABCD" points to settings
 2022-06-13 fho4abcd Removed unused Modulo + html in correct order + clean code
 2022-06-30 fho4abcd Add backtoscript to explore databases folder
+2026-09-04 rogercgui Add hook for plugins to inject central_menu items
+2026-09-22 rogercgui Safe initialisation to prevent the ‘Undefined variable’ error in PHP 8.1+
 */
-//PARA ELIMINAR LAS VARIABLES DE SESSION DEL DIRTREE
+
+//TO REMOVE THE SESSION VARIABLES FROM DIRTREE
 unset($_SESSION["root_base"]);
 unset($_SESSION["dir_base"]);
 unset($_SESSION["Folder_Name"]);
@@ -58,7 +61,7 @@ foreach ($_SESSION["permiso"] as $key=>$value){
 	if (substr($key,0,5)=="CIRC_")  	$circulation="Y";
 	if (substr($key,0,4)=="ACQ_")  		$acquisitions="Y";
 }
-// Se determina el nombre de la página de ayuda a mostrar
+// The name of the help page to be displayed is determined by the current module. The default is cataloging.
 if (!isset($_SESSION["MODULO"])) {
 	if ($central=="Y" and $ixcentral>0) {
 		$arrHttp["modulo"]="catalog";
@@ -72,21 +75,31 @@ if (!isset($_SESSION["MODULO"])) {
 }else{
 	$arrHttp["modulo"]=$_SESSION["MODULO"];
 }
-switch ($arrHttp["modulo"]){
-	case "catalog":
-		$ayuda="homepage.html";
-		$module_name=$msgstr["catalogacion"];
-		$_SESSION["MODULO"]="catalog";
-		break;
-	case "acquisitions":
-		$ayuda="acquisitions/homepage.html";
-		$module_name=$msgstr["acquisitions"];
-		$_SESSION["MODULO"]="acquisitions";
-		break;
-	case "loan":
-		$ayuda="circulation/homepage.html";
-		$module_name=$msgstr["loantit"];
-		$_SESSION["MODULO"]="loan";
+// Safe initialisation to prevent the ‘Undefined variable’ error in PHP 8.1+
+$module_name = "";
+$ayuda = "homepage.html";
+
+switch ($arrHttp["modulo"]) {
+    case "catalog":
+        $ayuda = "homepage.html";
+        $module_name = $msgstr["catalogacion"];
+        $_SESSION["MODULO"] = "catalog";
+        break;
+    case "acquisitions":
+        $ayuda = "acquisitions/homepage.html";
+        $module_name = $msgstr["acquisitions"];
+        $_SESSION["MODULO"] = "acquisitions";
+        break;
+    case "loan":
+        $ayuda = "circulation/homepage.html";
+        $module_name = $msgstr["loantit"];
+        $_SESSION["MODULO"] = "loan";
+        break;
+    default:
+        // Fallback amigável para Plugins ou módulos de terceiros
+        $module_name = ucfirst(htmlspecialchars($arrHttp["modulo"], ENT_QUOTES, 'UTF-8'));
+        $_SESSION["MODULO"] = $arrHttp["modulo"];
+        break;
 }
 if (file_exists($db_path."logtrans/data/logtrans.mst")){
 	if ($_SESSION["MODULO"]!="loan" and $modulo_anterior=="loan"){
@@ -103,7 +116,6 @@ if (file_exists($db_path."logtrans/data/logtrans.mst")){
 }
 include("header.php");
 ?>
-<body>
 <script>
 function doReload(selectvalue){
     /* note that selectvalue has format <base>|adm|<base_prompt>*/
@@ -404,8 +416,6 @@ if ($dirtree==1 or $dirtree=="Y"){
 	}
 }
 // end function Administrador
-
-
 
 function MenuAcquisitionsAdministrator(){
 	include("menuacquisitions.php");

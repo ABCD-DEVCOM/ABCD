@@ -32,6 +32,7 @@ foreach ($arrHttp as $var=>$value) echo "$var=$value<br>";
 $lang=$_SESSION["lang"];
 include("../lang/admin.php");
 include("../lang/prestamo.php");
+include("../lang/opac.php");
 
 // Se localiza el número de inventario en la base de datos de objetos  de préstamo
 function LocalizarInventario(){
@@ -330,8 +331,7 @@ $f_dev=FechaDevolucion(1,"D","");
 
 $ValorCapturado="<10 0>".$arrHttp["usuario"]."</10><20 0>".$arrHttp["ctrl_num"]."</20><30 0>".date('Ymd')."</30><31 0>".date("H:i:s")."<32 0>web</32><40 0>".substr($f_dev,0,8)."</40>";
 $IsisScript=$xWxis."actualizar.xis";
-$query = "&base=reserve&cipar=$db_path"."par/reserve.par&login=abcd&Mfn=New&Opcion=crear&ValorCapturado=".$ValorCapturado;
-include("../common/wxis_llamar.php");
+$query = "&base=reserve&cipar=$db_path" . "par/reserve.par&path_db=$db_path&login=abcd&Mfn=New&Opcion=crear&ValorCapturado=" . $ValorCapturado;include("../common/wxis_llamar.php");
 foreach ($contenido as $linea){
 	if (substr($linea,0,4)=="MFN:") {
     	$arrHttp["Mfn"]=trim(substr($linea,4));
@@ -340,8 +340,11 @@ foreach ($contenido as $linea){
 	}
 }
 if (isset ($arrHttp["Mfn"])) {
-	print "<span class=titulo1><strong>Reserva realizada</strong></span>";
+	print "<span class=titulo1><strong>".$msgstr["reserve_success="]."</strong></span>";
 }
+
+
+
 echo "<br>";
 include("opac_reservas.php");
 echo $reserva_output;
