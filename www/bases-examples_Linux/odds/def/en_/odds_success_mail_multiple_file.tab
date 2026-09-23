@@ -1,2 +1,0 @@
-subject = Reference service - Reply to your request.
-<html><head><meta http-equiv=Content-Type content=text/html; charset=iso-8859-1> </head><BODY><p>Dear <b>|name|</b>.<br/>Your request dated |date| for the document |request_data| is available for |number_of_days| days at the following URL: |url|</p><br><p>Sincerely,<br> Library Administration<br><font color=red>Dept.</font><br><font color=#555555>ADDRESS:<br>Tel.:  Fax: <br>Address/Country</font><br><font color=green>WWW: http://abcd.netcat.be </font><br></p></BODY></html>

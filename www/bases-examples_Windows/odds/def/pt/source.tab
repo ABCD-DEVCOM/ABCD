@@ -1,9 +1,0 @@
-DOAJ|DOAJ
-EBSCO|EBSCO
-GoogleScholar|GoogleScholar
-Library|Library
-/* others_x - siempre graba el mismo valor en la base: 'others' */
-others_1|Example 1
-others_2|Example 2
-/* siempre la última opción es la que despliega un input de tipo texto para especificar el valor */
-others_3|others - please specify
