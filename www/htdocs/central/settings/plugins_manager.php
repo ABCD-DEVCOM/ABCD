@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Name: plugins_manager.php
  * Author: Roger C. Guilherme
@@ -11,6 +12,7 @@
  * 
  * changelog:
  * 20260701 rogercgui Initial creation of LanguageManager class.
+ * 20260922 rogercgui Added plugin installation from remote repository with ZIP extraction and manifest detection.
  * 
  * */
 
@@ -47,33 +49,155 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['plu
         $registry = json_decode(file_get_contents($registryFile), true) ?? [];
     }
 
-    if ($action === 'activate') {
-        $registry[$slug]['active'] = true;
-    } elseif ($action === 'deactivate') {
-        $registry[$slug]['active'] = false;
-    } elseif ($action === 'delete') {
-        unset($registry[$slug]);
-        // Safely delete the plugin directory
-        $pluginPath = $pluginsDir . '/' . $slug;
-        if (is_dir($pluginPath)) {
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($pluginPath, RecursiveDirectoryIterator::SKIP_DOTS),
-                RecursiveIteratorIterator::CHILD_FIRST
-            );
-            foreach ($iterator as $file) {
-                $file->isDir() ? rmdir($file->getPathname()) : unlink($file->getPathname());
-            }
-            rmdir($pluginPath);
+    if ($action === 'activate' || $action === 'deactivate') {
+        if (!isset($registry[$slug])) {
+            $registry[$slug] = [];
         }
-    }
+        $registry[$slug]['active'] = ($action === 'activate');
 
-    // Save updated registry
-    file_put_contents($registryFile, json_encode($registry, JSON_PRETTY_PRINT));
+        $saved = @file_put_contents($registryFile, json_encode($registry, JSON_PRETTY_PRINT));
 
-    // Redirect with safe query parameters instead of hardcoded English text
-    header("Location: plugins_manager.php?msg=success&slug=" . urlencode($slug));
-    exit;
-}
+        if ($saved === false) {
+            header("Location: plugins_manager.php?msg=error&detail=" . urlencode($msgstr['plugin_err_permission'] ?? "Permission error: PHP could not write to the plugins.json file."));
+            exit;
+        }
+
+        header("Location: plugins_manager.php?msg=success&slug=" . urlencode($slug));
+        exit;
+    } elseif ($action === 'install' && isset($_POST['download_url'])) {
+        $downloadUrl = $_POST['download_url'];
+        $tempZip = sys_get_temp_dir() . '/' . $slug . '_' . time() . '.zip';
+
+        // 1. Download the ZIP file
+        $context = stream_context_create(['http' => ['header' => 'User-Agent: ABCD-Plugin-Manager/1.0']]);
+        $zipData = @file_get_contents($downloadUrl, false, $context);
+
+        if ($zipData === false) {
+            header("Location: plugins_manager.php?msg=error&detail=" . urlencode($msgstr['plugin_err_download'] ?? "Download failed. Check your internet connection or the URL."));
+            exit;
+        }
+        file_put_contents($tempZip, $zipData);
+
+        // 2. Extract to a temporary environment
+        $zip = new ZipArchive;
+        if ($zip->open($tempZip) === TRUE) {
+            $tempExtractPath = $pluginsDir . '/_temp_' . $slug . '_' . time();
+            mkdir($tempExtractPath, 0775, true);
+
+            $zip->extractTo($tempExtractPath);
+            $zip->close();
+            @unlink($tempZip);
+
+            // 3. Treasure Hunt: Find the actual folder containing plugin.json
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($tempExtractPath, RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::SELF_FIRST
+            );
+
+            $manifestDir = null;
+            foreach ($iterator as $file) {
+                if (strtolower($file->getFilename()) === 'plugin.json') {
+                    $manifestDir = $file->getPath();
+                    break;
+                }
+            }
+
+            if ($manifestDir) {
+                $pluginPath = $pluginsDir . '/' . $slug;
+                if (!is_dir($pluginPath)) {
+                    mkdir($pluginPath, 0775, true);
+                }
+
+                // Move all files from the directory where the manifest was to the final folder
+                $items = array_diff(scandir($manifestDir), ['.', '..']);
+                foreach ($items as $item) {
+                    rename($manifestDir . '/' . $item, $pluginPath . '/' . $item);
+                }
+
+                // 4. Temporary folder cleanup
+                $cleaner = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($tempExtractPath, RecursiveDirectoryIterator::SKIP_DOTS),
+                    RecursiveIteratorIterator::CHILD_FIRST
+                );
+                foreach ($cleaner as $file) {
+                    $file->isDir() ? @rmdir($file->getPathname()) : @unlink($file->getPathname());
+                }
+                @rmdir($tempExtractPath);
+
+                header("Location: plugins_manager.php?msg=installed&slug=" . urlencode($slug));
+                exit;
+
+                // 5. Register the new plugin in the plugins.json file
+                $registry = file_exists($registryFile) ? (json_decode(file_get_contents($registryFile), true) ?? []) : [];
+                if (!isset($registry[$slug])) {
+                    $registry[$slug] = ['active' => false];
+                    file_put_contents($registryFile, json_encode($registry, JSON_PRETTY_PRINT));
+                }
+
+                header("Location: plugins_manager.php?msg=installed&slug=" . urlencode($slug));
+                exit;
+            } else {
+                // Clear extraction and abort if manifest was not found
+                $cleaner = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($tempExtractPath, RecursiveDirectoryIterator::SKIP_DOTS),
+                    RecursiveIteratorIterator::CHILD_FIRST
+                );
+                foreach ($cleaner as $file) {
+                    $file->isDir() ? @rmdir($file->getPathname()) : @unlink($file->getPathname());
+                }
+                @rmdir($tempExtractPath);
+
+                header("Location: plugins_manager.php?msg=error&detail=" . urlencode($msgstr['plugin_err_invalid_zip'] ?? "Invalid structure: plugin.json not found in the ZIP package."));
+                exit;
+            }
+        } else {
+            header("Location: plugins_manager.php?msg=error&detail=" . urlencode($msgstr['plugin_err_extract'] ?? "Failed to extract the ZIP."));
+            exit;
+        }
+    } elseif ($action === 'delete') {
+            // Remove from the register
+            unset($registry[$slug]);
+            
+            $pluginPath = $pluginsDir . '/' . $slug;
+            $deletionError = false;
+
+            if (is_dir($pluginPath)) {
+                $iterator = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($pluginPath, RecursiveDirectoryIterator::SKIP_DOTS),
+                    RecursiveIteratorIterator::CHILD_FIRST
+                );
+                
+                foreach ($iterator as $file) {
+                    $path = $file->getPathname();
+                    if ($file->isDir()) {
+                        @rmdir($path);
+                    } else {
+                        // Attempts to force write permission (useful on Windows) before deleting
+                        @chmod($path, 0777);
+                        if (!@unlink($path)) {
+                            $deletionError = true;
+                        }
+                    }
+                }
+                
+                if (!@rmdir($pluginPath)) {
+                    $deletionError = true;
+                }
+            }
+
+            // Save updated registry
+            file_put_contents($registryFile, json_encode($registry, JSON_PRETTY_PRINT));
+
+            if ($deletionError) {
+                header("Location: plugins_manager.php?msg=error&detail=" . urlencode($msgstr['plugin_err_delete'] ?? "Some files could not be deleted. Please check if they are open in Windows."));
+                exit;
+            } else {
+                header("Location: plugins_manager.php?msg=success&slug=" . urlencode($slug));
+                exit;
+            }
+        }
+    } // Fim do bloco if ($_SERVER['REQUEST_METHOD'] === 'POST' ...
+
 
 // 3. Scan for Installed Plugins (Discovery)
 $installedPlugins = [];
@@ -90,8 +214,59 @@ if (is_dir($pluginsDir)) {
     }
 }
 
+// 3.5 Obtain the Remote Catalog (abcd-community.org)
+$remoteCatalogUrl = 'https://abcd-community.org/api/plugins.json';
+$remotePlugins = [];
+
+// Use a short timeout (3 seconds) so that ABCD doesn't get stuck loading if the site is offline
+$ctx = stream_context_create(['http' => ['timeout' => 3]]);
+$catalogJson = @file_get_contents($remoteCatalogUrl, false, $ctx);
+
+if ($catalogJson) {
+    $catalogData = json_decode($catalogJson, true);
+    if (isset($catalogData['plugins']) && is_array($catalogData['plugins'])) {
+        $remotePlugins = $catalogData['plugins'];
+    }
+}
+
 // Load Registry to check active status
 $registry = file_exists($registryFile) ? json_decode(file_get_contents($registryFile), true) : [];
+
+// Define the current language based on the ABCD session
+$userLang = $_SESSION['lang'] ?? 'en';
+
+// Function to process simple strings or multilingual objects with charset correction
+function get_plugin_text($field, $lang)
+{
+    global $charset, $msgstr;
+
+    if (empty($field)) return $msgstr['plugin_no_desc'] ?? 'No description available.';
+
+    $text = '';
+
+    // 1. Extract the text
+    if (is_string($field)) {
+        $text = $field;
+    } elseif (is_array($field)) {
+        // Tries user language, falls back to English, or gets the first available
+        $text = $field[$lang] ?? $field['en'] ?? reset($field);
+    }
+
+    if ($text === '') return '';
+
+    // 2. Handle encoding
+    // ABCD defines $charset (e.g., 'UTF-8' or 'ISO-8859-1'). If it doesn't exist, assume UTF-8.
+    $target_charset = (isset($charset) && !empty($charset)) ? strtoupper(trim($charset)) : 'UTF-8';
+
+    // If ABCD is running in ISO-8859-1 (or another), converts the UTF-8 text from JSON
+    if ($target_charset !== 'UTF-8' && function_exists('mb_convert_encoding')) {
+        $text = mb_convert_encoding($text, $target_charset, 'UTF-8');
+    }
+
+    // 3. Return safely escaped, informing htmlspecialchars of the charset
+    // We use ENT_QUOTES to prevent HTML attribute breakage
+    return htmlspecialchars($text, ENT_QUOTES, $target_charset);
+}
 
 // 4. Render UI (ABCD Standard Layout)
 include("../common/header.php");
@@ -205,10 +380,82 @@ include("../common/header.php");
                     <?php endif; ?>
                 </tbody>
             </table>
+
+            <h3 style="margin-top: 40px;"><?php echo $msgstr['plugin_repository'] ?? 'ABCD Official Repository'; ?></h3>
+
+            <?php if (isset($_GET['msg']) && $_GET['msg'] === 'error'): ?>
+                <div style="background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
+                    <strong><?php echo $msgstr['plugin_error'] ?? 'Error'; ?>:</strong>
+                    <?php echo htmlspecialchars($_GET['detail']); ?>
+                </div>
+            <?php endif; ?>
+
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="background-color: #f8f9fa; border-bottom: 2px solid #ccc;">
+                        <th style="padding: 10px;"><?php echo $msgstr['plugin_name'] ?? 'Plugin Name'; ?></th>
+                        <th style="padding: 10px;"><?php echo $msgstr['plugin_desc'] ?? 'Description'; ?></th>
+                        <th style="padding: 10px;"><?php echo $msgstr['plugin_available_version'] ?? 'Available Version'; ?></th>
+                        <th style="padding: 10px;"><?php echo $msgstr['plugin_actions'] ?? 'Actions'; ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($remotePlugins)): ?>
+                        <tr>
+                            <td colspan="4" style="padding: 15px; text-align: center;"><?php echo $msgstr['plugin_repo_error'] ?? 'We were unable to connect to the repository, or there are no plugins available.'; ?></td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($remotePlugins as $remoteSlug => $remotePlugin): ?>
+                            <?php
+                            $isInstalled = array_key_exists($remoteSlug, $installedPlugins);
+                            $localVersion = $isInstalled ? ($installedPlugins[$remoteSlug]['version'] ?? '0.0.0') : null;
+                            $canUpdate = $isInstalled && version_compare($remotePlugin['version'], $localVersion, '>');
+                            ?>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 10px;">
+                                    <strong><?php echo get_plugin_text($remotePlugin['name'] ?? $remoteSlug, $userLang); ?></strong><br>
+                                    <small style="color: #666;"><?php echo ($msgstr['plugin_by'] ?? 'By') . ' ' . htmlspecialchars($remotePlugin['author'] ?? ($msgstr['plugin_community'] ?? 'Community')); ?></small>
+                                </td>
+                                <td style="padding: 10px;">
+                                    <?php echo get_plugin_text($remotePlugin['description'] ?? null, $userLang); ?>
+                                </td>
+                                <td style="padding: 10px;">
+                                    <?php echo htmlspecialchars($remotePlugin['version']); ?>
+                                    <?php if ($isInstalled && !$canUpdate): ?>
+                                        <br><span style="font-size: 11px; color: green;"><i class="fas fa-check-circle"></i> <?php echo $msgstr['plugin_updated'] ?? 'Updated'; ?></span>
+                                    <?php endif; ?>
+                                </td>
+                                <td style="padding: 10px;">
+                                    <?php if (!$isInstalled): ?>
+                                        <form method="POST" style="display:inline;" onsubmit="
+                                        var btn = this.querySelector('button'); btn.innerHTML = '<i class=\'fas fa-spinner fa-spin\'></i> <?php echo addslashes($msgstr['plugin_installing'] ?? 'Installing...'); ?>'; btn.classList.add('bt-gray'); btn.classList.remove('bt-blue'); btn.style.cursor = 'wait'; setTimeout(() => { btn.disabled = true; }, 50);">
+                                            <input type="hidden" name="action" value="install">
+                                            <input type="hidden" name="plugin_slug" value="<?php echo htmlspecialchars($remoteSlug); ?>">
+                                            <input type="hidden" name="download_url" value="<?php echo htmlspecialchars($remotePlugin['download_url']); ?>">
+                                            <button type="submit" class="bt bt-blue" style="font-size: 12px;">
+                                                <i class="fas fa-download"></i> <?php echo $msgstr['plugin_install_btn'] ?? 'Install'; ?>
+                                            </button>
+                                        </form>
+                                    <?php elseif ($canUpdate): ?>
+                                        <form method="POST" style="display:inline;" onsubmit="var btn = this.querySelector('button'); btn.innerHTML = '<i class=\'fas fa-spinner fa-spin\'></i> <?php echo addslashes($msgstr['plugin_updating'] ?? 'Updating...'); ?>'; btn.classList.add('bt-gray'); btn.classList.remove('bt-green'); btn.style.cursor = 'wait'; setTimeout(() => { btn.disabled = true; }, 50);">
+                                            <input type="hidden" name="action" value="install">
+                                            <input type="hidden" name="plugin_slug" value="<?php echo htmlspecialchars($remoteSlug); ?>">
+                                            <input type="hidden" name="download_url" value="<?php echo htmlspecialchars($remotePlugin['download_url']); ?>">
+                                            <button type="submit" class="bt bt-green" style="font-size: 12px;">
+                                                <i class="fas fa-sync"></i> <?php echo ($msgstr['plugin_update_to'] ?? 'Update to') . ' ' . htmlspecialchars($remotePlugin['version']); ?>
+                                            </button>
+                                        </form>
+                                    <?php else: ?>
+                                        <button class="bt bt-default" disabled style="opacity: 0.5; font-size: 12px;"><?php echo $msgstr['plugin_installed_btn'] ?? 'Installed'; ?></button>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+
         </div>
     </div>
 
     <?php include("../common/footer.php"); ?>
-</body>
-
-</html>
