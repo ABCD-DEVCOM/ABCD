@@ -12,7 +12,7 @@ function MenuFinalUser() {
                                 <tr>
                                     <td rowspan="4" width="150">
                                         <figure class="figure">
-                                        <img width="150" src="../viewer/show_image.php?image=images/<?php echo $_SESSION['user_photo']; ?>&base=users" class="figure-img img-fluid rounded" alt="...">
+                                        <img width="150" src="../viewer/show_image.php?image=/images/<?php echo $_SESSION['user_photo']; ?>&base=users" class="figure-img img-fluid rounded" alt="...">
                                         <figcaption class="figure-caption"><a href="#">Change pic</a></figcaption>
                                         </figure>
                                     </td>

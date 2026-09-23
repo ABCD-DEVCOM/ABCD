@@ -30,7 +30,7 @@ div.avatar {
 	width:150px;
 	height: 150px;
 	border: 8px solid #fff;
-	background-image: url(../common/show_image.php?image=images/'v620'&base=users);
+	background-image: url(/opac/viewer/show_image.php?image=/images/'v620'&base=users);
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
@@ -41,7 +41,7 @@ div.no-avatar {
 	width:150px;
 	height: 150px;
 	border: 8px solid #fff;
-	background-image: url(../common/show_image.php?image=/images/default-user-image.png&base=users);
+	background-image: url(/opac/viewer/show_image.php?image=/images/default-user-image.png&base=users);
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;

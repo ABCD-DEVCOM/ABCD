@@ -14,7 +14,7 @@ $Mfn=$arrHttp["Mfn"];
 	$ValorCapturado=urlencode($ValorCapturado);
 	$IsisScript=$xWxis."actualizar_registro.xis";
 	$Formato="";
-	$query = "&base=reserve&cipar=$db_path"."par/reserve.par&login=web&Mfn=".$Mfn."&ValorCapturado=".$ValorCapturado;
+$query = "&base=reserve&cipar=$db_path" . "par/reserve.par&path_db=$db_path&login=web&Mfn=" . $Mfn . "&ValorCapturado=" . $ValorCapturado;
 	include("../common/wxis_llamar.php");
 
 header("Location:$OpacHttp"."opac_statment_call.php?usuario=".$arrHttp["usuario"]."&vienede=ecta_web&db_path=$db_path&lang=$lang");
