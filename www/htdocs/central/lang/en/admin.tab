@@ -583,6 +583,7 @@ plugin_updating=Updating...
 plugin_update_to=Update to
 plugin_installed_btn=Installed
 plugin_available_version=Available Version
+plugin_more_info=More information
 api_settings_updated=API settings updated successfully.
 api_key_generated=Key generated successfully!
 api_key_gen_error=Error saving the new key.
