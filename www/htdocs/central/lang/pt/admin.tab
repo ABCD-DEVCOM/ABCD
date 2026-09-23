@@ -584,6 +584,7 @@ plugin_updating=A atualizar...
 plugin_update_to=Atualizar para
 plugin_installed_btn=Instalado
 plugin_available_version=Versão Disponível
+plugin_more_info=Mais informações
 api_settings_updated=Configurações da API atualizadas com sucesso.
 api_key_generated=Chave gerada com sucesso!
 api_key_gen_error=Erro ao salvar a nova chave.

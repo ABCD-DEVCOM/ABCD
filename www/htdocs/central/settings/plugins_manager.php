@@ -162,48 +162,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['plu
             exit;
         }
     } elseif ($action === 'delete') {
-            // Remove from the register
-            unset($registry[$slug]);
-            
-            $pluginPath = $pluginsDir . '/' . $slug;
-            $deletionError = false;
+        // Remove from the register
+        unset($registry[$slug]);
 
-            if (is_dir($pluginPath)) {
-                $iterator = new RecursiveIteratorIterator(
-                    new RecursiveDirectoryIterator($pluginPath, RecursiveDirectoryIterator::SKIP_DOTS),
-                    RecursiveIteratorIterator::CHILD_FIRST
-                );
-                
-                foreach ($iterator as $file) {
-                    $path = $file->getPathname();
-                    if ($file->isDir()) {
-                        @rmdir($path);
-                    } else {
-                        // Attempts to force write permission (useful on Windows) before deleting
-                        @chmod($path, 0777);
-                        if (!@unlink($path)) {
-                            $deletionError = true;
-                        }
+        $pluginPath = $pluginsDir . '/' . $slug;
+        $deletionError = false;
+
+        if (is_dir($pluginPath)) {
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($pluginPath, RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+
+            foreach ($iterator as $file) {
+                $path = $file->getPathname();
+                if ($file->isDir()) {
+                    @rmdir($path);
+                } else {
+                    // Attempts to force write permission (useful on Windows) before deleting
+                    @chmod($path, 0777);
+                    if (!@unlink($path)) {
+                        $deletionError = true;
                     }
                 }
-                
-                if (!@rmdir($pluginPath)) {
-                    $deletionError = true;
-                }
             }
 
-            // Save updated registry
-            file_put_contents($registryFile, json_encode($registry, JSON_PRETTY_PRINT));
-
-            if ($deletionError) {
-                header("Location: plugins_manager.php?msg=error&detail=" . urlencode($msgstr['plugin_err_delete'] ?? "Some files could not be deleted. Please check if they are open in Windows."));
-                exit;
-            } else {
-                header("Location: plugins_manager.php?msg=success&slug=" . urlencode($slug));
-                exit;
+            if (!@rmdir($pluginPath)) {
+                $deletionError = true;
             }
         }
-    } // Fim do bloco if ($_SERVER['REQUEST_METHOD'] === 'POST' ...
+
+        // Save updated registry
+        file_put_contents($registryFile, json_encode($registry, JSON_PRETTY_PRINT));
+
+        if ($deletionError) {
+            header("Location: plugins_manager.php?msg=error&detail=" . urlencode($msgstr['plugin_err_delete'] ?? "Some files could not be deleted. Please check if they are open in Windows."));
+            exit;
+        } else {
+            header("Location: plugins_manager.php?msg=success&slug=" . urlencode($slug));
+            exit;
+        }
+    }
+} // Fim do bloco if ($_SERVER['REQUEST_METHOD'] === 'POST' ...
 
 
 // 3. Scan for Installed Plugins (Discovery)
@@ -421,10 +421,28 @@ include("../common/header.php");
                             <tr style="border-bottom: 1px solid #ddd;">
                                 <td style="padding: 10px;">
                                     <strong><?php echo get_plugin_text($remotePlugin['name'] ?? $remoteSlug, $userLang); ?></strong><br>
-                                    <small style="color: #666;"><?php echo ($msgstr['plugin_by'] ?? 'By') . ' ' . htmlspecialchars($remotePlugin['author'] ?? ($msgstr['plugin_community'] ?? 'Community')); ?></small>
+                                    <small style="color: #666;">
+                                        <?php echo $msgstr['plugin_by'] ?? 'Por'; ?>
+                                        <?php
+                                        if (!empty($remotePlugin['author'])) {
+                                            echo get_plugin_text($remotePlugin['author'], $userLang);
+                                        } else {
+                                            // Ensures that the community’s default string also passes through the charset filter
+                                            echo get_plugin_text($msgstr['plugin_community'] ?? 'Comunidade', $userLang);
+                                        }
+                                        ?>
+                                    </small>
                                 </td>
                                 <td style="padding: 10px;">
                                     <?php echo get_plugin_text($remotePlugin['description'] ?? null, $userLang); ?>
+
+                                    <?php if (!empty($remotePlugin['url'])): ?>
+                                        <div style="margin-top: 8px;">
+                                            <a href="<?php echo htmlspecialchars($remotePlugin['url'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" style="font-size: 11px; color: #0984e3; text-decoration: none; font-weight: 500;">
+                                                <i class="fas fa-external-link-alt"></i> <?php echo $msgstr['plugin_more_info'] ?? 'More info'; ?>
+                                            </a>
+                                        </div>
+                                    <?php endif; ?>
                                 </td>
                                 <td style="padding: 10px;">
                                     <?php echo htmlspecialchars($remotePlugin['version']); ?>
