@@ -1,0 +1,27 @@
+'<b>Object Id: </b>'v1'<br>',
+'<b>Database: </b>'v10,'<br>',
+'<table border=1 cellspacing=5>'
+'<tr>'
+'<th>Inventario</th>
+<th>Biblioteca principal</th>
+<th>Biblioteca secundaria</th>
+<th>Tipo de objeto</th>
+<th>Volumen</th>
+<th>Tomo</th>
+<th>Fecha Dev.</th>'
+
+('<tr>',
+'<td valign=top>'v959^i,'</td>'/
+'<td valign=top>'v959^l,'</td>'/
+'<td valign=top>'v959^b,'</td>'/
+'<td valign=top>'v959^o,'</td>'/
+'<td valign=top>'v959^v,'</td>'/
+'<td valign=top>'v959^t,'</td>'
+'<td valign=top>',`<iframe  frameborder="0" scrolling="no" width=100 height=25
+           src="/opac/php/opac_ref.php?base=trans&cipar=trans.par&lang=`v5017[1]`
+          &Formato=v40&Expresion=TR_P_x12345"`'></iframe></td>'
+/)
+'</table>'
+'<hr>'/
+
+
