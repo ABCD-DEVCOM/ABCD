@@ -1,0 +1,240 @@
+'<table width=20><td valign=top>'
+@shortcut.pft
+'</td><td>'
+'<p><b>',
+if p(v900^o) then 'UBICACION: ' fi,if v900^o:'IB' then 'BIBLIOTECA IBAGUE' else if v900^o:'NV' then 'BIBLIOTECA NEIVA' else if v900^o:'BU' then 'ESCUELA DE TECNOLOGIAS' else if v900^o:'AU' then 'SALA AUDIOVISUALES' else if v900^o:'CP' then 'BIBLIOTECA CENTRAL. CIRCULACION Y PRESTAMO' else if v900^o:'SR' then 'BIBLIOTECA CENTRAL. SALA REFERENCIA' else if v900^o:'SE' then 'BIBLIOTECA CENTRAL. SALA ELECTRONICA' else if v900^o:'H' then 'BIBLIOTECA CENTRAL. SALA HEMEROTECA' else if v900^o:'ET' then 'PROGRAMA DE ELECTRONICA Y TELECOMUNICACIONES' else if v900^o:'BS' then 'BIBLIOTECA FACULTAD DE SISTEMAS' fi fi fi fi fi fi fi fi fi fi,,if s(v2,v4)='ab' then ' - ARTICULO DE REVISTA' else if s(v2,v4)='at' then ' - TESIS' else if s(v2,v4)='am' then ' - LIBRO' else if s(v2,v4)='fb' then ' - FOLLETO/BOLETIN' else if s(v2,v4)='mm' then ' - DISK/CD-ROM' else if s(v2,v4)='aa' then ' - ANALITICA DE MONOGRAFIA' fi fi,fi,FI,FI,FI'</b>'/  
+'<br>'f(mfn,1,0),'<br>'
+if a(v4000) then,
+	if p(v750) then 
+	   `<a href="javascript:VerExistencias('revis','kardex','CN_`v750`','NC_`replace(f(val(v750),4,0),' ','0')`')"><font color=darkred>Ver Existencias</a></font> &nbsp; `
+	fi,
+fi,
+'<table width=100% align=left class=registro>'/
+if p(v82) or s(v2,v4):'aa' then 
+	'<tr>' 
+		'<td width=20% valign=top><font face="arial narrow" size=-1>Topográfico:</font></td>'/
+        '<td valign=top>'
+          '<b>' v82^a" / "v82^b" / "v82^c," / "v82^d,v773^w,". "v773^a,". "v773^t, 
+		'</td>
+	</tr>'
+fi,
+
+   
+if p(v84) then 
+	'<tr>'
+		'<td valign=top><font face="arial narrow" size=-1>Topográfico:</font></td><td valign=top>'v84^a" / "v84^b" / "v84^c,, '</td>'/
+   '</tr>'/
+fi,
+  
+if a(v84) and a(v82) and p(v773) and s(v2,v4)<>'aa' then 
+	'<tr>'
+		'<td valign=top><font face="arial narrow" size=-1>Nombre revista:</font></td><td valign=top>'v773^t," "v773^g,, '</td>'/
+  '	</tr>'/
+fi,
+
+if p(v245) and s(v2,v4)='ab' then   
+      '<tr>'
+        '<td valign=top><font face="arial narrow" size=-1>Título Artículo:</font></td><td valign=top>'v245^a,v245^b,, 
+		'<br>'v773
+        '</td>'/
+      '</tr>'/
+		
+ else 
+    '<tr>'
+        '<td valign=top><font face="arial narrow" size=-1>Título:</font></td><td valign=top>'v245^a,v245^b, '</td>'/
+      '</tr>'/
+fi
+
+ 
+"<tr><td valign=top><font face='arial narrow' size=-1>Autor Personal</td>"d100,
+"<td valign=top bgcolor=white><font face=arial>"d100,
+|<a href="javascript:CRUZARD('AU_|v100^a|');">|v100^a,v100^d,"</a></td>"d100^a/
+"</tr>"d100/
+
+"<tr><td valign=top><font face='arial narrow' size=-1>Autor Corporativo</td>"d110,
+"<td valign=top width=430 bgcolor=white>"d110,
+|<a href="javascript:CRUZARD('AI_|v110^a|');">|,v110^a,v110^b,v110^n,v110^d,v110^c,"</a></td>"d110/
+"</tr>"d110/
+
+"<tr><td align=left valign=top width=140><font face='arial narrow' size=-1>Autor Princ. Confer.</td>"d111,
+"<td width=430 bgcolor=white><font face=arial>"d111,
+|<a href="javascript:CRUZARD('CF_|v111^a|');">|,v111^a,v111^n,v111^d,v111^c,v111^e,"</a></td>"d111,/
+"</tr>"d111/
+
+
+if p(v250) then 
+   '<tr>'
+         '<td valign=top><font face="arial narrow" size=-1>Edición:</font></td><td valign=top>'v250^a,'</td>'/
+   '</tr>'/
+fi 
+
+if p(v490) then 
+      '<tr>'
+        '<td valign=top><font face="arial narrow" size=-1>Serie:</font></td><td valign=top>',,v490^a,, '</td>'/
+      '</tr>'/
+fi,
+    
+if p(v20) then 
+	'<tr>'
+		'<td valign=top><font face="arial narrow" size=-1>ISBN:</font></td><td valign=top>',,v20^a,, '</td>'/
+    '</tr>'/
+fi,
+
+
+if p(v500) then 
+
+    '<tr>'
+        '<td valign=top><font face="arial narrow" size=-1>Notas:</font></td><td valign=top>',,v500^a,, '</td>'/
+      '</tr>'/
+fi
+       
+if p(v502) then 
+	'<tr>'
+		'<td valign=top><font face="arial narrow" size=-1>Nota Tesis:</font></td><td valign=top>',,v502^a,, '</td>'/
+      '</tr>'/
+fi
+
+if p(v505) then 
+	'<tr>'
+		'<td valign=top><font face="arial narrow" size=-1>Nota de Contenido:</font></td><td valign=top>',,v505^a, '</td>'/
+       '</tr>'/
+fi,
+
+if p(v22) then 
+       '<tr>'
+        	'<td valign=top><font face="arial narrow" size=-1>ISSN:</font></td><td valign=top>',v22^a, '</td>'/
+      '</tr>'/
+fi,
+  
+if p(v515^a) then 
+	'<tr>'
+		'<td valign=top><font face="arial narrow" size=-1>Disponible En:</font></td><td valign=top>',v515^a,'</td>'/
+	'</tr>'
+fi
+
+if p(v520) then 
+	'<tr>'
+		'<td valign=top colspan=2>'
+		
+				'<img src="../images/buttonp.gif" border=0 id=i'f(mfn,1,0)'R >',
+				'<span id="m'f(mfn,1,0)'R1" onClick="showhide(m'f(mfn,1,0)'R1R,i'f(mfn,1,0)'R)" style="cursor:pointer; text-decoration:underline; width=150 align=left">Resumen</span>'/
+		
+'<div id="m'f(mfn,1,0)'R1R" style="display:none;"><br> '(v520^a,if p(v520) then '<br>' fi)  '</div></td>'/
+  '</tr>'/
+fi,
+
+
+if p(v650) or p(v653) then 
+	'<tr>'
+		'<td valign=top width=140>Temas:</td>',
+		'<td valign=top bgcolor=white><font face=arial>'
+
+      	(if p(v650) then `<a href='javascript:CRUZARD("MA_","`v650^a,`","`mstname,`");'>`,v650^a,|-|v650^x,|-|v650^y,|-|v650^z '</a><br>'  fi)/
+		if p(v653) then 
+    	 	if p(v650) then '; &nbsp;  ' fi,
+     		(|<a href="javascript:CRUZARD('|v653^a|');">|,v653^a+|</a>; &nbsp;  |,) if p(v653) then '</a> ' fi /
+		fi,/
+  , 	'</td>'/ 
+   	'</tr>'/  
+fi, 
+ 
+
+if p(v651) then 
+	'<tr>'
+		'<td valign=top width=140>Descriptores geográficos:</td>',
+		'<td valign=top bgcolor=white><font face=arial>'
+
+      	(if p(v651) then `<a href='javascript:CRUZARD("DG_","`v651^a,`","`mstname,`");'>`,v651^a,|-|v651^x,|-|v651^y,|-|v651^z '</a><br>'  fi)/
+		
+  , 	'</td>'/ 
+   	'</tr>'/  
+fi, 
+
+"<tr><td valign=top width=140><font face='arial narrow' size=-1>Enlace Electrónico : </td>"d856,
+"<td width=430 bgcolor=white><font face=arial size=-1>"d856,
+(if p(v856^a) then '<a href=http://',v856^a' target=_blank>',v856^a,'</a><br>' else if p(v856^u) then '<a href=',v856^u' target=_blank>Ver texto completo</a><br>' fi fi )/
+,"</td>"d856/
+
+
+
+if p(v700) or p(v710) or p(v711) then 
+	'<tr>'
+		'<td valign=top><font face="arial narrow" size=-1>Otros autores:</font></td><td>',
+
+          if p(v700) then 
+               '<font face="arial" size=-1>',
+               (|<a href="javascript:CRUZARD('AU_','|v700^a|','|mstname|');">|,v700^a+|</a>; &nbsp;  |,) if p(v700) then '</a><br> ' fi /
+          fi,/
+
+         if p(v710) then 
+             (|<a href="javascript:CRUZARD('AI_|v710^a|');">|,v710^a+|</a>; &nbsp;  |,) if p(v710) then '</a><br> ' fi /
+         fi,/
+
+         if p(v711) then  
+            (|<a href="javascript:CRUZARD('CF_|v711^a|');">|,v711^a+|</a>; &nbsp;  |,) if p(v711) then '</a><br> ' fi /
+         fi,/
+	    '</td>'/
+     '</tr>' 
+fi/
+
+
+if p(v740) then 
+     
+   '<tr><td valign=top><font face="arial narrow" size=-1>Otros Títulos</font></td><td valign=top>'(v740^a,if p(v740) then '<br>' fi),'</td>'/
+   '</tr>'/
+fi/ 
+     
+
+
+ '</table>'/
+
+
+if p(v900^n) then 
+	'<br>'
+	'<br><br><img src="../images/buttonp.gif" border=0 id=i'f(mfn,1,0)'1 > &nbsp;',
+		`<span id="m`f(mfn,1,0)`x1" onClick="showhide(m`f(mfn,1,0)`o1,i`f(mfn,1,0)`1)" style="cursor:pointer; text-decoration:underline; width:150; align:left">Ubicación y copias disponibles</span>`/
+		'<DIV id="m'f(mfn,1,0)'o1" style="display:none"><p>'
+
+	'<table cellpading=0 cellspacing=3 width="90%" border=0 bgcolor=lightgrey valign=top>
+		<tr>
+			<td width=15% bgcolor=white>
+				<b><font color=darkblue face="arial narrow">Vol/Ejem
+			</td>
+			<td width=45% bgcolor=white>
+				<b><font color=darkblue face="arial narrow">ESTADO DEL DOCUMENTO
+			</td>
+			<td width=25%  bgcolor=white>
+				<font color=darkblue face="arial narrow"><b>UBICACION</b>
+			</TD>
+		</tr>'
+	(if npost(['trans'],|NI=|v900^n)>0 then 
+		'<tr>
+			<td valign=top bgcolor=white>',
+				 |v.|v900^m,| ej.|v900^l,v900^t,
+			'</td>'/,
+			'<td valign=top bgcolor=white>
+				<font color=darkred>'ref(['trans']l(['trans']|NI=|v900^n),if v800^o:'S' then 'PRESTADO EN SALA' else 'PRESTADO F. Devol.: 'v800^h fi),
+			'</td>'/
+			'<td valign=top bgcolor=white>'
+				if v900^o:'CP' then 'CIRCULACION Y P.' fi
+			'</td></tr>' ,
+ 	else
+		'<tr>
+			<td valign=top bgcolor=white>'
+				|v.|v900^m,| ej.|v900^l
+			'</td>'/
+			'<td valign=top bgcolor=white>'
+				if v900^k:'eserva' then '<font color=darkred><b> MATERIAL RESERVA' else 'DISPONIBLE </b>' fi,
+			'</td>'/
+			'<td valign=top bgcolor=white>'
+				if v900^o:'CP' then 'CIRCULACION Y P.' fi
+			'</td></tr>'/
+	fi/)
+	'</table>'
+
+	
+`<input type=button value="Reservar" onclick=Reservar("`v900^n[1]`","biblo","N")'>`
+	'</div>'/
+fi/
+'<BR><BR><BR><HR><BR>'/
+'</td></table>'
