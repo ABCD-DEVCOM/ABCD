@@ -21,6 +21,7 @@
 2023-06-01 fho4abcd Improve charset in header statement
 2024-06-01 fho4abcd Add captcha
 2026-08-08 rogercgui Added plugin system bootstrap
+2026-09-28 fho4abcd Copied missing lines from config.php
 */
 
 
@@ -89,7 +90,7 @@ $wxis_exec = "wxis" . $exe_ext;                // name and extension of wxis exe
 $mx_exec = "mx" . $exe_ext;                    // name and extension of mx executable
 $msg_path = $db_path;                        // path where the message-files are stored, typical the database-directory
 $img_path = $db_path;                        // legacy path to the folder where the uploaded images are to be stored (the database name will be added to this path)
-
+$cgibin_path=$ABCD_path."www/cgi-bin/";    // path to the basic directory for CISIS-utilities
 $xWxis = $ABCD_path . "www/htdocs/$app_path/dataentry/wxis/";    // path to the wxis scripts .xis for Central
 
 $unicode = "";
@@ -266,7 +267,7 @@ else
 
 $mx_path = $cisis_path . $mx_exec;             // path to mx-executable
 if ($postMethod == '1') {
-	$wxisUrl = $server_url . "/cgi-bin_Windows/";
+	$wxisUrl = $server_url . "/cgi-bin/";
 	if ($unicode != "") $wxisUrl .= "$unicode/";
 	if ($cisis_ver != "") $wxisUrl .= $cisis_ver . "/";
 	$wxisUrl .= $wxis_exec;  // POST method used
@@ -320,9 +321,15 @@ $adm_password = "";                  // emergency password for administrator
 // PLUGIN SYSTEM BOOTSTRAP
 // =========================================================================
 
+// Ensure the CONTENT directory path is defined (adjust the realpath if your structure dictates otherwise)
+if (!defined('ABCD_CONTENT_PATH')) {
+	define('ABCD_CONTENT_PATH', realpath(__DIR__ . '/../content'));
+}
+
 // Load the hook system
 require_once __DIR__ . '/common/hooks.php';
 require_once __DIR__ . '/common/PluginBridge.php'; // <--- ADICIONE ESTA LINHA AQUI!
 
 // Fire up all active plugins
 abcd_load_active_plugins();
+?>
