@@ -6,7 +6,7 @@
 20250402 fho4abcd Added standard breadcrumb & action div. Action buttons: moved to top, modified text, hover and color
 20250402 fho4abcd Added translations for js. Added standard helper and footer
 20260529 rogercgui Implement type IND for indicators, added historical fallback for older databases that still use ‘S’ for indicators, added comments and improved code readability
-
+20260923 fho4abcd Added script Ayuda (copied from scripts_dataentry). Can be extended for subfield help
 */
   session_start();
 if (!isset($_SESSION["permiso"])){
@@ -110,6 +110,15 @@ echo "trn_movesubfup=\"".$msgstr["movesubfup"]."\"\n";
 echo "trn_occsearch=\"".$msgstr["occsearch"]."\"\n";
 
 ?>
+function Ayuda(tag) {
+	tagx = String(tag)
+	if (tagx.length < 3) tagx = "0" + tagx
+	if (tagx.length < 3) tagx = "0" + tagx
+	url = "<?php echo "../documentacion/ayuda_db.php?base=" . $arrHttp["base"] ?>&campo=tag_" + tagx + ".html"
+	msgwin = window.open(url, "Ayuda", "status=yes,resizable=yes,toolbar=no,menu=no,scrollbars=yes,width=600,height=400,top=100,left=100")
+	msgwin.focus()
+}
+
 function RefrescarPicklist(tabla,Ctrl,valor){
 	ValorOpcion=valor
 	document.refrescarpicklist.picklist.value=tabla
