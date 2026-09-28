@@ -9,6 +9,7 @@
 20240403 fho4abcd Improved help& layout in copy from other database mode
 20250925 fho4abcd Show error if wrong extraction format is present in @autoridades.pft. Prevents wxis error on click.
 20250925 fho4abcd Escape < and > if present in value.
+20260928 fho4abcd Restore making the results unique + better handling of extraction format
 */
 /*
 ** Functionality:
@@ -75,6 +76,11 @@ foreach($fp as $value) {
             if (trim($f[13])!="")   $formato_e=$f[13]."'$$$'f(mfn,1,0)";
             else                    $formato_e="mhl,v".$f[1]."'$$$'f(mfn,1,0)";
         }
+        elseif (strlen(trim($f[14]))>0) {
+            // If there is a file (e.g. @autoridades.pft) still take the fdt extract value
+            // This is a plaster as a good value in the pft seems to corrupt the picklist output
+            $formato_e=trim($f[14]);
+        }
         else {
             $formato_e=$f[13];
         }
@@ -133,8 +139,9 @@ $query ="&base=".$base ."&cipar=$db_path".$actparfolder.$arrHttp["cipar"]."&Opci
 $query.="&prefijo=".urlencode($prefijo)."&pref=".$pref."&formato_e=".urlencode($Formato)."&bymfn=S";
 //echo $query;
 include("../common/wxis_llamar.php");
-// No need to make unique: Should be an exception. If there are duplicates they point to different records
 //foreach ($contenido as $var=>$value) echo "$var=$value<br>";
+// Unknown why to make unique: Should be an exception. But it is not. No clue why wxis_llamar does this
+$contenido=array_unique($contenido);
 
 ?>
 <script language=Javascript>
@@ -401,7 +408,7 @@ foreach ($contenido as $linea){
 		echo "</select>";
 		echo "<div style='color:red'>".$msgstr["fatal"].": ";
 		echo "Extraction format for ".$fdtfieldname." (".$fdttag.") in FDT<br> must contain <b>v".$fdttag,"'$$$'f(mfn,1,0)</b><br>";
-		echo "Update Extraction format in FDT or ".$formato_e."</div";
+		echo "Update Extraction format in FDT (safe) or ".$formato_e." (mind interaction with picklist!)</div";
 		die;
 	}
 	$opttitle=str_replace("'","&apos;",$f[0]);
