@@ -1,6 +1,7 @@
 <?php
 /* Modifications
 20240403 fho4abcd remove help from call to alfa, add scrollbars to alfa frame
+20260928 fho4abcd urlencode receives non-null parameter ($prefijo)
 */
 error_reporting(E_ALL);
 session_start();
@@ -77,7 +78,7 @@ if (isset($arrHttp["prefijo"])) $prefijo=$arrHttp["prefijo"];
 </head>
 <frameset cols=410,* border=yes>
 	<frame name=indice
-		src="alfa.php?<?php echo "capturar=S&base=".$arrHttp["base"]."&cipar=".$arrHttp["cipar"]."&prefijo=".urlencode($arrHttp["prefijo"])."&formato_e=".urlencode(stripslashes($arrHttp["formato_e"]))."&fc=".$arrHttp["fc"]?>"
+		src="alfa.php?<?php echo "capturar=S&base=".$arrHttp["base"]."&cipar=".$arrHttp["cipar"]."&prefijo=".urlencode($prefijo)."&formato_e=".urlencode(stripslashes($arrHttp["formato_e"]))."&fc=".$arrHttp["fc"]?>"
 		scrolling=yes frameborder=no  marginheight=0   MARGINWIDTH=0 >
 	<frame name=main src=""
 		scrolling=yes frameborder=yes marginheight=2   MARGINWIDTH=0 >
