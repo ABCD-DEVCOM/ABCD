@@ -14,6 +14,7 @@
  *  2023-03-12 rogercgui Created
  *  2026-02-11 rogercgui Added support for social media links in the footer.
  *  2026-02-15 rogercgui Added support for a customizable HTML description in the footer.
+ *  2026-09-29 rogercgui Added a hook for additional footer content if the function exists.
  * -------------------------------------------------------------------------
  */
 ?>
@@ -297,6 +298,12 @@ if (
 <script src="<?php echo $OpacHttp; ?>assets/js/slick.min.js?<?php echo time(); ?>"></script>
 <script src="<?php echo $OpacHttp; ?>assets/js/script_f.js?<?php echo time(); ?>"></script>
 
+<?php
+// Add hook for additional footer content if the function exists
+if (function_exists('abcd_run_hook')) {
+	echo abcd_run_hook('opac_footer_end', '');
+}
+?>
 </body>
 
 </html>

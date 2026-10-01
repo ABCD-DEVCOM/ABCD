@@ -12,21 +12,22 @@
  *  Changelog:
  *  -----------------------------------------------------------------------
  *  2025-10-22 rogercgui Created
+ *  2026-09-29 rogercgui Added a hook for additional topbar menu items if the function exists.
  * -------------------------------------------------------------------------
  */
 
 
 
 if ($restricted_opac == "Y") {
-  // Pega o nome do script atual (ex: "login.php")
+  // Get the name of the current script (e.g. 'login.php')
   $current_page = basename($_SERVER['PHP_SELF']);
 
-  // SÓ executa a verificação se a página atual NÃO for login.php
+  // It ONLY carries out the check if the current page is NOT login.php
   if ($current_page != "login.php" && (!isset($_SESSION['user_id']) || empty($_SESSION['user_id']))) {
 
     $RedirectUrl = $_SERVER['REQUEST_URI'];
 
-    // Use $Web_Dir (do config_opac.php), não $link_logo, para caminhos de arquivos
+    // Use $Web_Dir (from config_opac.php), not $link_logo, for file paths
     $login_page_url = $link_logo . "/login.php?RedirectUrl=" . urlencode($RedirectUrl);
 
     header("Location: " . $login_page_url);
@@ -49,7 +50,7 @@ if ($restricted_opac == "Y") {
     ?>
       <ul id="menu-wrapper" class="nav nav-pills">
         <?php
-        // Monta a URL nativa do OPAC para o botão Início, salvaguardando o modo estrito
+        // Set the native OPAC URL for the Home button, whilst maintaining strict mode
         $url_inicio = "";
         $params_inicio = [];
 
@@ -59,7 +60,7 @@ if ($restricted_opac == "Y") {
         } elseif (isset($_REQUEST['ctx']) && trim($_REQUEST['ctx']) !== '') {
           $params_inicio['ctx'] = trim($_REQUEST['ctx']);
         }
-        
+
         if (isset($_REQUEST['base']) && trim($_REQUEST['base']) !== '') {
           $params_inicio['base'] = trim($_REQUEST['base']);
         }
@@ -95,16 +96,19 @@ if ($restricted_opac == "Y") {
         ?>
 
         <?php
-        /* O BLOCO DE AUTENTICAÇÃO FOI REMOVIDO DAQUI
-        */
+        // Add hook for additional topbar menu items if the function exists
+        if (function_exists('abcd_run_hook')) {
+          echo abcd_run_hook('opac_topbar_menu', '');
+        }
         ?>
 
-      </ul> <?php darkMode(); ?>
+      </ul> 
+      
+      <?php darkMode(); ?>
       <?php fontSize() ?>
       <?php selectLang() ?>
 
       <?php
-      // --- INÍCIO DA LÓGICA DE AUTENTICAÇÃO (MOVIDA PARA CÁ) ---
 
       $servicos_online_ativos = false;
       if (
@@ -117,7 +121,7 @@ if ($restricted_opac == "Y") {
 
       if ($servicos_online_ativos) {
         if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
-          // --- USUÁRIO LOGADO ---
+          // --- LOGGED-IN USER ---
           $nome_completo = explode(",", $_SESSION['user_name']);
           $primeiro_nome = isset($nome_completo[1]) ? trim($nome_completo[1]) : $_SESSION['user_name'];
       ?>
@@ -129,7 +133,7 @@ if ($restricted_opac == "Y") {
           </a>
         <?php
         } else {
-          // --- USUÁRIO DESLOGADO (CHAMA O MODAL) ---
+          // --- LOGGED-OUT USER (TRIGGERS THE MODAL) ---
         ?>
           <a class="nav-link text-dark custom-top-link  mx-2" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
             <i class="fas fa-sign-in-alt"></i> <?php echo $msgstr['front_login']; ?>
@@ -137,7 +141,8 @@ if ($restricted_opac == "Y") {
     <?php
         }
       }
-      // --- FIM DA LÓGICA DE AUTENTICAÇÃO ---
+      // --- END OF AUTHENTICATION LOGIC ---
     } ?>
+
   </div>
 </header>
