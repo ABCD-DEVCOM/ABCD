@@ -19,6 +19,7 @@
  * 2025-09-05 rogercgui Improved meta tags for SEO.
  * 2025-09-22 rogercgui Added cache control headers to prevent caching issues.
  * 2025-10-01 rogercgui Added Dark Mode class to body based on cookie.
+ * 2026-09-29 rogercgui Added a hook for additional head content if the function exists.
  * -------------------------------------------------------------------------
  */
 
@@ -101,6 +102,12 @@ $ActualDir = getcwd();
     <?php echo $googleAnalyticsCode; ?>
     <?php echo $CustomStyle; ?>
 
+    <?php
+    // Add hook for additional head content if the function exists
+    if (function_exists('abcd_run_hook')) {
+        echo abcd_run_hook('opac_head_end', '');
+    }
+    ?>
 </head>
 
 <body class="<?php echo getDarkModeClass(); ?>">

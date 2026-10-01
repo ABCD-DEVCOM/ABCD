@@ -1,35 +1,73 @@
 <?php
 
-function removeacentos($trocaracentos)
+/**
+ * -------------------------------------------------------------------------
+ *  ABCD - Automação de Bibliotecas e Centros de Documentação
+ *  https://github.com/ABCD-DEVCOM/ABCD
+ * -------------------------------------------------------------------------
+ *  Script:   clear_diacritcs.php
+ *  Purpose:  Removes diacritical marks from text
+ *  Author:   Roger C. Guilherme
+ *
+ *  Changelog:
+ *  -----------------------------------------------------------------------
+ *  2026-09-29 rogercgui Removed diacritical marks from text to ensure proper handling of special characters in search queries and filters.
+ * -------------------------------------------------------------------------
+ */
+
+
+function removeacentos($texto)
 {
-$ACENTOS = array("À", "Á", "Â", "Ã", "à", "á", "â", "ã");
-$SEMACENTOS = array("A", "A", "A", "A", "A", "A", "A", "A");
-$trocaracentos = str_replace($ACENTOS, $SEMACENTOS, $trocaracentos);
+    $mapa = array(
+        'Á' => 'A',
+        'À' => 'A',
+        'Â' => 'A',
+        'Ã' => 'A',
+        'Ä' => 'A',
+        'É' => 'E',
+        'È' => 'E',
+        'Ê' => 'E',
+        'Ë' => 'E',
+        'Í' => 'I',
+        'Ì' => 'I',
+        'Î' => 'I',
+        'Ï' => 'I',
+        'Ó' => 'O',
+        'Ò' => 'O',
+        'Ô' => 'O',
+        'Õ' => 'O',
+        'Ö' => 'O',
+        'Ú' => 'U',
+        'Ù' => 'U',
+        'Û' => 'U',
+        'Ü' => 'U',
+        'Ç' => 'C',
+        'Ñ' => 'N',
+        'á' => 'a',
+        'à' => 'a',
+        'â' => 'a',
+        'ã' => 'a',
+        'ä' => 'a',
+        'é' => 'e',
+        'è' => 'e',
+        'ê' => 'e',
+        'ë' => 'e',
+        'í' => 'i',
+        'ì' => 'i',
+        'î' => 'i',
+        'ï' => 'i',
+        'ó' => 'o',
+        'ò' => 'o',
+        'ô' => 'o',
+        'õ' => 'o',
+        'ö' => 'o',
+        'ú' => 'u',
+        'ù' => 'u',
+        'û' => 'u',
+        'ü' => 'u',
+        'ç' => 'c',
+        'ñ' => 'n'
+    );
 
-$ACENTOS = array("È", "É", "Ê", "Ë", "è", "é", "ê", "ë");
-$SEMACENTOS = array("E", "E", "E", "E", "E", "E", "E", "E");
-$trocaracentos = str_replace($ACENTOS, $SEMACENTOS, $trocaracentos);
-
-$ACENTOS = array("Ì", "Í", "Î", "Ï", "ì", "í", "î", "ï");
-$SEMACENTOS = array("I", "I", "I", "I", "I", "I", "I", "I");
-$trocaracentos = str_replace($ACENTOS, $SEMACENTOS, $trocaracentos);
-
-$ACENTOS = array("Ò", "Ó", "Ô", "Ö", "Õ", "ò", "ó", "ô", "ö", "õ");
-$SEMACENTOS = array("O", "O", "O", "O", "O", "O", "O", "O", "O", "O");
-$trocaracentos = str_replace($ACENTOS, $SEMACENTOS, $trocaracentos);
-
-$ACENTOS = array("Ù", "Ú", "Û", "Ü", "ú", "ù", "ü", "û");
-$SEMACENTOS = array("U", "U", "U", "U", "U", "U", "U", "U");
-$trocaracentos = str_replace($ACENTOS, $SEMACENTOS, $trocaracentos);
-
-$ACENTOS = array("Ç", "ç", "ª", "º", "°", "'", "&", "@");
-$SEMACENTOS = array("C", "C", "A.", "O.", "O.", " ", "%26", "A");
-$trocaracentos = str_replace($ACENTOS, $SEMACENTOS, $trocaracentos);
-
-// Habilitar para deixar tudo maiúsculo
-//$MINUSCULAS = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","x","z","w","y");
-//$MAIUSCULAS = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","X","Z","W","Y");
-//$trocaracentos = str_replace($MINUSCULAS,$MAIUSCULAS, $trocaracentos);
-
-return $trocaracentos;
+    return strtr($texto, $mapa);
 }

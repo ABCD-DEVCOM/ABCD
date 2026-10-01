@@ -13,6 +13,7 @@
  * 2025-10-22 rogercgui Initial version
  * 2025-11-09 rogercgui Added detailed logging for debugging
  * 2025-11-11 rogercgui Fixed cache key to include requested format
+ * 2026-09-29 rogercgui Added a hook for additional action buttons if the function exists.
  * -------------------------------------------------------------------------
  */
 
@@ -304,7 +305,7 @@ try {
         $record_html_processed = $record_html_raw;
     }
 
-    // Formata a saída final em $response['recordHtml']
+    // Formats the final output in $response['recordHtml']
 
     if ($active_format == 'xml_dc' || $active_format == 'xml_marc') {
         if (strpos(trim($record_html_processed), '<?xml') !== 0) {
@@ -320,13 +321,17 @@ try {
     }
 
 
-    // 5. Gerar Botões de Ação
+    // Generate Action Buttons
 
     $toolButtons = new ToolButtons([]); // Instancia sem contexto específico, se não precisar
-    $response['actionButtonsHtml'] = $toolButtons->generateButtonsHtmlForRecord($db_path, $base, $lang, $mfn);
-    // NOTA: Pode ser necessário adaptar ShowFromTab ou criar um novo método
-    //       em ToolButtons que funcione com um MFN específico em vez de uma lista.
+    $botoes_nativos = $toolButtons->generateButtonsHtmlForRecord($db_path, $base, $lang, $mfn);
 
+    if (function_exists('abcd_run_hook')) {
+        // Passes the native buttons as a filter, allowing the plugin to add to or modify the HTML
+        $response['actionButtonsHtml'] = abcd_run_hook('opac_record_toolbar', $botoes_nativos);
+    } else {
+        $response['actionButtonsHtml'] = $botoes_nativos;
+    }
 
 } catch (Exception $e) {
     $response['error'] = "Erro interno no servidor: " . $e->getMessage();
@@ -345,9 +350,6 @@ header('Content-Type: application/json; charset=UTF-8');
 
 // Converte o array de resposta em JSON
 $json_response = json_encode($response);
-
-
-// Só gravamos em cache se a resposta NÃO for um erro.
 
 // (Não queremos cachear "Acesso Restrito" ou "Registro não encontrado")
 if (!isset($response['error'])) {
