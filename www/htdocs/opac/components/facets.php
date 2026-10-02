@@ -168,8 +168,7 @@ function facetas()
             }
 
             if (function_exists('abcd_run_hook')) {
-                // We pass the current search term to the plugin so that it knows what the user is looking for
-                echo abcd_run_hook('opac_sidebar_facets', $expresionOriginal);
+                echo abcd_run_hook('opac_sidebar_facets', '', $expresionOriginal);
             }
 
         }
