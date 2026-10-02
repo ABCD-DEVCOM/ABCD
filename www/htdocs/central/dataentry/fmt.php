@@ -31,7 +31,8 @@
  * 		  Translated some texts and added some comments
  * 2025-12-23 fho4abcd HTML5
  * 2026-09-28 rogercgui Fix for truncated UTF-8 characters (65533) in the dictionary. Now the last character is removed if it is 65533 and a $ is added to the end of the term. This is a workaround for the problem of truncated UTF-8 characters in the dictionary.
-*/
+ * 2026-10-02 rogercgui Change $arrHttp[“Opcion”] to correct the context of the GenerarDespliegue() function in menu_main.php
+ */
 
 
 session_start();
@@ -857,7 +858,7 @@ switch ($arrHttp["Opcion"]) {
 	$salida= LeerRegistroFormateado($arrHttp["Formato"]);
 	if ($arrHttp["Opcion"]!="actualizar" and $record_deleted=="Y") include "../common/inc_div-helper.php";
 	if ($record_deleted=="N") include("toolbar_record.php");
-	$arrHttp["Opcion"]=="ninguna";
+		$arrHttp["Opcion"] = "ninguna";
 	echo "<div class=\"middle form\">";
 	echo "<div class=\"formContent\">\n";
 	echo "<table><tr><td>\n";
