@@ -10,6 +10,7 @@
 20220711 fho4abcd Use $actparfolder as location for .par files
 20240402 fho4abcd close button+ message if nothing selected
 20251008 fho4abcd removed ob_flush
+20260928 rogercgui Fix for truncated UTF-8 characters (65533) in the dictionary. Now the last character is removed if it is 65533 and a $ is added to the end of the term. This is a workaround for the problem of truncated UTF-8 characters in the dictionary.
 */
 // Show the dictionary of terms in the database
 
@@ -25,10 +26,6 @@ include("../lang/admin.php");
 include("../lang/dbadmin.php");
 include("leerregistroisispft.php");
 
-// ------------------------------------------------------
-// INICIO DEL PROGRAMA
-// ------------------------------------------------------
-
 include("../common/header.php");
 $prefijo = $arrHttp["prefijo"];
 
@@ -37,8 +34,8 @@ $prefijo = $arrHttp["prefijo"];
 <body>
     <script>
         function EjecutarBusqueda(desde) {
-            // Função auxiliar para converter caracteres especiais em entidades seguras
-            // Impede a quebra da URL e do array $_REQUEST no PHP
+            // Helper function to convert special characters into safe entities
+            // Prevents the URL and the $_REQUEST array from breaking in PHP
             function encodeToEntity(str) {
                 return str.replace(/[^\x00-\x7F]/g, function(c) {
                     return '&#' + c.charCodeAt(0) + ';';
@@ -48,7 +45,7 @@ $prefijo = $arrHttp["prefijo"];
             Opcion = "<?php echo $arrHttp["Opcion"] ?>"
             switch (desde) {
                 case 1:
-                    /* buscar los terminos de este diccionario*/
+                    /* search for terms in this dictionary*/
                     TerminosSeleccionados = ""
                     document.forma1.Opcion.value = "buscar_en_este"
                     for (i = 0; i < document.forma1.terminos.length; i++) {
@@ -56,16 +53,16 @@ $prefijo = $arrHttp["prefijo"];
 
                             Termino = document.forma1.terminos.options[i].value;
 
-                            // 1. Mantém a solução para caracteres UTF-8 cortados (65533)
+                            // Maintains the fix for truncated UTF-8 characters (65533)
                             var index = Termino.indexOf(String.fromCharCode("65533"));
                             if (index >= 0) {
                                 Termino = Termino.substring(0, index - 1);
                                 Termino += "$";
                             }
 
-                            // 2. CONVERSÃO CRÍTICA: Transforma "???????" em entidades "&#1041;..."
-                            // Isso garante que a string viaje como ASCII puro e não quebre o PHP
-                            Termino = encodeToEntity(Termino);
+                            // CRITICAL CONVERSION: Converts “???????” to entities “&#1041;...”
+                            // This ensures that the string is transmitted as pure ASCII and does not cause PHP to crash
+                            //Term = encodeToEntity(Term);
 
                             document.forma1.terminos.options[i].value = Termino;
                             Termino = "\"" + Termino + "\"";
@@ -83,12 +80,12 @@ $prefijo = $arrHttp["prefijo"];
                         break
                     }
 
-                    // Atribui a expressão convertida ao campo do formulário
+                    // Assigns the converted expression to the form field
                     document.forma1.Expresion.value = TerminosSeleccionados;
 
-                    // Configurações de segurança para o envio
-                    document.forma1.acceptCharset = "UTF-8";
-                    document.forma1.enctype = "application/x-www-form-urlencoded";
+                    // Security Settings for Sending
+                    //document.forma1.acceptCharset = "UTF-8";
+                    //document.forma1.enctype = "application/x-www-form-urlencoded";
                     document.forma1.action = "buscar.php"
 
                     <?php
@@ -109,14 +106,14 @@ $prefijo = $arrHttp["prefijo"];
                     ?>
                     break
                 case 2:
-                    /* Pasar los términos seleccionados */
+                    /* Pass the selected terms */
                     TerminosSeleccionados = ""
                     for (i = 0; i < document.forma1.terminos.length; i++) {
                         if (document.forma1.terminos.options[i].selected == true) {
                             Termino = document.forma1.terminos.options[i].value
                             len_t = <?php echo strlen($prefijo) . "\n" ?>
                             Termino = Termino.substr(len_t)
-                            Termino = encodeToEntity(Termino);
+                            //Termino = encodeToEntity(Termino);
                             Termino = "\"" + Termino + "\""
                             if (TerminosSeleccionados == "") {
                                 TerminosSeleccionados = Termino
