@@ -1,55 +1,40 @@
 <?php
-/* Modifications
-2021-03-20 guilda Error when searching due to quoting
-2021-04-23 fho4abcd Line endings,body tag
-2021-06-10 fho4abcd Remove password argument
-2021-07-07 fho4abcd Improve leader reformat (was broken since update to OPAC)
-2021-07-22 fho4abcd Repair PHP errors due to previous (Improve leader format...)
-20220711 fho4abcd Use $actparfolder as location for .par files
-20221222 fho4abcd Translations+new style buttons for search dialog. Add div-helper
-20230106 fho4abcd Don't set arrHttp values to **INVALID** if they contain the string "script"+
-		  debug parameter for ActualizarRegistro +
-		  check existence of indexvalue in creation of wks values in case "reintentar"
-20230119 fho4abcd Remove scripts in saved display+improve html for saved display
-20230120 fh04abcd Improved html+remove edit scripts if display is not in edit mode+defaults for $tl and $nr
-20230130 fho4abcd Improve setting of browseby menu. Code for showing record value improved and extended for selected records
-20230210 fho4abcd Show backbutton of actualized record for non-dataentry cases (e.g. acces/users/...). Remove unused cases
-20230321 rogercgui Updates compatibility for PHP versions higher than 8xx: $tag=(int)trim(substr($linea,0,4))*(int)1;
-20240128 fho4abcd Show always the footer. Shows only one div-helper/toolbar in case an edit without a format is done
-20240425 fho4abcd Improve html
-20251201 rogercgui Sets default value to 1 if the value from is lost - corrects the format change after searching
-20251211 fho4abcd Code indented correctly and comments translated (diff is now useless but it reads much better)
-		  Improve html due to open form by scripts_dataentry.php
-		  Translated some texts and added some comments
-20251223 fho4abcd HTML5
-*/
 
 /**
  * @program:   ABCD - ABCD-Central - http://reddes.bvsaude.org/projects/abcd
- * @copyright:  Copyright (C) 2009 BIREME/PAHO/WHO - VLIR/UOS
  * @file:      fmt.php
- * @desc:      Search form for z3950 record importing
+ * @desc:      Format for displaying records
  * @author:    Guilda Ascencio
  * @since:     20091203
- * @version:   1.0
- *
- * == BEGIN LICENSE ==
- *
- *    This program is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU Lesser General Public License as
- *    published by the Free Software Foundation, either version 3 of the
- *    License, or (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * == END LICENSE ==
+ * 
+ * changes:
+ * 2021-03-20 guilda Error when searching due to quoting
+ * 2021-04-23 fho4abcd Line endings,body tag
+ * 2021-06-10 fho4abcd Remove password argument
+ * 2021-07-07 fho4abcd Improve leader reformat (was broken since update to OPAC)
+ * 2021-07-22 fho4abcd Repair PHP errors due to previous (Improve leader format...)
+ * 2022-07-11 fho4abcd Use $actparfolder as location for .par files
+ * 2022-12-22 fho4abcd Translations+new style buttons for search dialog. Add div-helper
+ * 2023-01-06 fho4abcd Don't set arrHttp values to **INVALID** if they contain the string "script"+
+ * 		  debug parameter for ActualizarRegistro +
+ * 		  check existence of indexvalue in creation of wks values in case "reintentar"
+ * 2023-01-19 fho4abcd Remove scripts in saved display+improve html for saved display
+ * 2023-01-20 fh04abcd Improved html+remove edit scripts if display is not in edit mode+defaults for $tl and $nr
+ * 2023-01-30 fho4abcd Improve setting of browseby menu. Code for showing record value improved and extended for selected records
+ * 2023-02-10 fho4abcd Show backbutton of actualized record for non-dataentry cases (e.g. acces/users/...). Remove unused cases
+ * 2023-03-21 rogercgui Updates compatibility for PHP versions higher than 8xx: $tag=(int)trim(substr($linea,0,4))*(int)1;
+ * 2024-01-28 fho4abcd Show always the footer. Shows only one div-helper/toolbar in case an edit without a format is done
+ * 2024-04-25 fho4abcd Improve html
+ * 2025-12-01 rogercgui Sets default value to 1 if the value from is lost - corrects the format change after searching
+ * 2025-12-11 fho4abcd Code indented correctly and comments translated (diff is now useless but it reads much better)
+ * 		  Improve html due to open form by scripts_dataentry.php
+ * 		  Translated some texts and added some comments
+ * 2025-12-23 fho4abcd HTML5
+ * 2026-09-28 rogercgui Fix for truncated UTF-8 characters (65533) in the dictionary. Now the last character is removed if it is 65533 and a $ is added to the end of the term. This is a workaround for the problem of truncated UTF-8 characters in the dictionary.
+ * 2026-10-02 rogercgui Change $arrHttp[“Opcion”] to correct the context of the GenerarDespliegue() function in menu_main.php
  */
+
+
 session_start();
 unset($_SESSION["REC_PASS"]);
 set_time_limit(0);
@@ -203,7 +188,7 @@ function CambiarFormatoRegistro(){  // ChangeRegisterFormat
 }
 
 function EjecutarBusqueda(){ //RunSearch
-    global $arrHttp,$db_path,$xWxis,$Wxis,$valortag,$tl,$nr,$Mfn,$wxisUrl,$lang_db,$msgstr,$registro,$Expresion,$Total_Search,$actparfolder;
+    global $arrHttp,$db_path,$xWxis,$Wxis,$valortag,$tl,$nr,$Mfn,$wxisUrl,$lang_db,$msgstr,$registro,$Expresion,$Total_Search,$actparfolder, $meta_encoding;
     // Sets default value to 1 if the value from is lost - corrects the format change after searching
     if (!isset($arrHttp["from"]) || trim($arrHttp["from"]) == "" || (int)$arrHttp["from"] < 1) {
 	$arrHttp["from"] = "1";
@@ -780,7 +765,8 @@ switch ($arrHttp["Opcion"]) {
 			$arrHttp["Opcion"] = "ninguna";
 
 			// PHP 8.1+: Safe extraction and protection against XSS in textarea
-			$safe_expression = isset($arrHttp["Expresion"]) ? htmlspecialchars((string)$arrHttp["Expresion"], ENT_QUOTES, 'UTF-8') : '';
+			$charset = (isset($meta_encoding) && $meta_encoding != '') ? $meta_encoding : 'UTF-8';
+			$safe_expression = isset($arrHttp["Expresion"]) ? htmlspecialchars((string)$arrHttp["Expresion"], ENT_QUOTES | ENT_SUBSTITUTE, $charset) : '';
 
 			echo "<div class=\"middle form\">\n";
 			echo "    <div class=\"formContent\">\n";
@@ -791,7 +777,7 @@ switch ($arrHttp["Opcion"]) {
 
 			InsertarEnlaces($arrHttp["base"]);
 
-			echo "            <h4>" . $msgstr["selected_records"] . ": " . htmlspecialchars((string)$resultado, ENT_QUOTES, 'UTF-8') . "</h4>\n";
+			echo "            <h4>" . $msgstr["selected_records"] . ": " . htmlspecialchars((string)$resultado, ENT_QUOTES | ENT_SUBSTITUTE, $charset) . "</h4>\n";
 
 			$arrHttp["Mfn"] = 1;
 			ColocarMfn();
@@ -872,7 +858,7 @@ switch ($arrHttp["Opcion"]) {
 	$salida= LeerRegistroFormateado($arrHttp["Formato"]);
 	if ($arrHttp["Opcion"]!="actualizar" and $record_deleted=="Y") include "../common/inc_div-helper.php";
 	if ($record_deleted=="N") include("toolbar_record.php");
-	$arrHttp["Opcion"]=="ninguna";
+		$arrHttp["Opcion"] = "ninguna";
 	echo "<div class=\"middle form\">";
 	echo "<div class=\"formContent\">\n";
 	echo "<table><tr><td>\n";

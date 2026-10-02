@@ -26,6 +26,7 @@
  * 2026-05-07 rogercgui Replace the structure in dhtmlX with a more standard HTML/CSS layout, improving readability and maintainability. This also includes the addition of FontAwesome icons for better visual cues on the buttons. The JavaScript functions are kept inline for simplicity, but could be further modularized if needed.
  * 2026-05-23 rogercgui Added critical fix to translate the %path_database% macro in dr_path.def to the actual system path, ensuring that folder creation works correctly regardless of the environment. This resolves a major issue where the newfolder.php script was creating directories in the wrong location due to an unresolved macro in the path definition.
  * 2026-05-28 rogercgui Added a critical fix to the onButtonClick function to prevent unintended side effects when programmatically changing the "browseby" selection. This ensures that updates to the selection made by the system (e.g., after a search) do not trigger the user's click action, which could lead to confusion or errors in navigation. The function now updates the selection without calling onButtonClick recursively, maintaining the integrity of the user experience.
+ * 2026-10-01 rogercgui Added a critical fix to the GenerarDespliegue() function to ensure that the correct context is maintained when updating the display format. The function now properly checks the current state of the application and only reloads the record if there is an active record (mfn > 0 or active search). This prevents unnecessary reloads and maintains the user's workflow, especially when switching formats in the middle of a session.
  */
 
 
@@ -453,7 +454,7 @@ if (file_exists($wksfile)) {
 				top.Formato = novoFormato;
 				/* Reload only if there is an active record (mfn > 0 or active search) */
 				if (top.mfn > 0 || top.Mfn_Search > 0) {
-					top.Menu('ver');
+					top.Menu('same');
 				}
 			} catch (e) {}
 		}
