@@ -1,4 +1,0 @@
-projects.*=%path_database%projects/data/projects.*
-projects.pft=%path_database%projects/pfts/en/projects.pft
-prologoact.pft=%path_database%/www/prologoact.pft
-epilogoact.pft=%path_database%/www/epilogoact.pft
