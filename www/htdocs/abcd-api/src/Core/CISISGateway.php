@@ -1,10 +1,19 @@
 <?php
 
+/**
+ * Name: CISISGateway.php
+ * Author: Roger C. Guilherme
+ * Description: Gateway class for interacting with the CISIS/WXIS system
+ * 
+ * Created on: 2026-08-15
+ */
+
 class CISISGateway
 {
     private $wxisHost;
     private $wxisActionBase;
     private $apiRootPath;
+    private $lastUrl;
 
     public function __construct($dbConfig, $appConfig)
     {
@@ -16,17 +25,33 @@ class CISISGateway
             . $appConfig['exe_extension'];
     }
 
-    public function getRecordByMfn($dbPath, $mfn, $mappingFile)
+    public function getRecordByMfn($dbPath, $mfn, $dcMappingFile, $format = 'dc')
     {
+        $metadataFormatMap = [
+            'dc'     => 'OAI_DC',
+            'native' => 'ISIS',
+        ];
+        $metadataFormat = $metadataFormatMap[$format] ?? 'OAI_DC';
+
         $params = [
             'database' => $dbPath,
             'expression' => $mfn,
-            'metadata_format' => 'isis2json',
-            'mapping_file' => $this->apiRootPath . '/resources/mappings/' . $mappingFile,
+            'metadata_format' => $metadataFormat,
         ];
 
+        // O formato "dc" depende de mapping_file (crosswalk .pft ou .i2x). "native" usa a tabela embutida no XIS.
+        if ($metadataFormat === 'OAI_DC') {
+            if (empty($dcMappingFile)) {
+                return null;
+            }
+            $params['mapping_file'] = $this->apiRootPath . '/resources/mappings/' . $dcMappingFile;
+        }
+
         $url = $this->buildWxisUrl('getrecord.xis', $params);
-        $responseXml = file_get_contents($url);
+        $this->lastUrl = $url;
+
+        $context = stream_context_create(['http' => ['timeout' => 10]]);
+        $responseXml = @file_get_contents($url, false, $context);
 
         if ($responseXml === false) {
             return null;
@@ -48,35 +73,35 @@ class CISISGateway
         ];
 
         $url = $this->buildWxisUrl('getidentifiers.xis', $params);
+        $this->lastUrl = $url;
 
-        // Create a stream context with a 10-second timeout to prevent server hanging
         $context = stream_context_create(['http' => ['timeout' => 10]]);
-
-        // The @ symbol suppresses the raw PHP HTML warning if the connection fails,
-        // preventing it from breaking the strict JSON response format.
         $responseText = @file_get_contents($url, false, $context);
 
         if ($responseText === false) {
-            // Optional: You can capture the exact error internally for debugging logs
-            // $error = error_get_last();
-            // error_log("WXIS Connection Error: " . ($error['message'] ?? 'Unknown error'));
-
             return null;
         }
 
-        // WXIS does not return an HTTP error code if the search result is empty, 
-        // so we just process and return the text response it provides.
         return $responseText;
+    }
+
+    public function getLastUrl()
+    {
+        return $this->lastUrl;
     }
 
     private function buildWxisUrl($isisScript, $params)
     {
         $protocol = "http://";
+        $host = preg_replace('/^https?:\/\//', '', $this->wxisHost);
         $scriptPath = $this->apiRootPath . '/resources/xis/' . $isisScript;
-        $request = $protocol . $this->wxisHost . $this->wxisActionBase . "?IsisScript=" . $scriptPath;
+
+        $request = $protocol . $host . $this->wxisActionBase . "?IsisScript=" . $scriptPath;
+
         foreach ($params as $key => $value) {
             $request .= "&" . urlencode($key) . "=" . urlencode($value);
         }
+
         return $request;
     }
 }
