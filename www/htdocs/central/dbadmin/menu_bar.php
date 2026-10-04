@@ -157,6 +157,11 @@ unset($_SESSION["Server_Path"]);
 				document.admin.cipar.value = base + ".par"
 				document.admin.action = "../utilities/addcopiesdatabase.php"
 				break;
+			case "sync_copies_to_loanobjects": //Marino Script
+				document.admin.base.value = base
+				document.admin.cipar.value = base + ".par"
+				document.admin.action = "../utilities/sync_copies_to_loanobjects.php"
+				break;
 			case "copiesocurrenciesreport": //Marcos Script
 				document.admin.base.value = base
 				document.admin.cipar.value = base + ".par"
@@ -346,6 +351,7 @@ unset($_SESSION["Server_Path"]);
 
 						<li><a href='Javascript:EnviarFormaMNT("addloanobj","<?php echo $msgstr["addLOfromDB_mx"] ?>")'><?php echo $msgstr["addLOfromDB_mx"] ?></a></li>
 						<li><a href='Javascript:EnviarFormaMNT("addloanobjectcopies","<?php echo $msgstr["addLOwithoCP_mx"] ?>")'><?php echo $msgstr["addLOwithoCP_mx"] ?></a></li>
+						<li><a href='Javascript:EnviarFormaMNT("sync_copies_to_loanobjects", "<?php echo $msgstr["sync_copies_to_lo"]; ?>")'><?php echo $msgstr["sync_copies_to_lo"]; ?></a></li>
 						<li><a href='Javascript:EnviarFormaMNT("addcopiesdatabase","<?php echo $msgstr["addCPfromDB_mx"] ?>")'><?php echo $msgstr["addCPfromDB_mx"] ?></a></li>
 						<li><a href='Javascript:EnviarFormaMNT("barcodesearch","<?php echo $msgstr["barcode_search"] ?>")'><?php echo $msgstr["barcode_search"] ?></a></li>
 						<!--<li><a href='Javascript:EnviarFormaMNT("barcodecheck","<?php echo "Barcode check" ?>")'><?php echo "Barcode check" ?></a></li>-->
