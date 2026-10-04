@@ -24,3 +24,4 @@ require_once __DIR__ . '/renderers/TableRenderer.php';
 require_once __DIR__ . '/renderers/UploadRenderer.php';
 require_once __DIR__ . '/renderers/GroupRenderer.php';
 require_once __DIR__ . '/renderers/TabRenderer.php';
+require_once __DIR__ . '/helpers/AutoIncrementHelper.php';
