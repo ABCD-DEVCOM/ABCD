@@ -1,8 +1,7 @@
 root=oai_dc
-
-001 dc:title
-002 dc:creator
-056 dc:description
-003 dc:subject
-007 dc:date
+1 dc:title
+2 dc:creator
+3 dc:subject
+7 dc:date
+56 dc:description
 111 dc:identifier

@@ -1,0 +1,16 @@
+'          <oai_dc:dc
+                  xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+                  xmlns:dc="http://purl.org/dc/elements/1.1/"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/
+                  http://www.openarchives.org/OAI/2.0/oai_dc.xsd">'/
+
+if p(v1) then ( '<dc:identifier><![CDATA[',v1,']]></dc:identifier>'/ ) fi,
+if p(v2) then ( '<dc:identifier><![CDATA[',v2,']]></dc:identifier>'/ ) fi,
+if p(v10) then ( '<dc:title><![CDATA[',v10,']]></dc:title>'/ ) fi,
+if p(v50) then ( '<dc:title><![CDATA[',v50,']]></dc:title>'/ ) fi,
+if p(v300) then ( '<dc:creator><![CDATA[',v300,']]></dc:creator>'/ ) fi,
+if p(v440) then ( '<dc:description><![CDATA[',v440,']]></dc:description>'/ ) fi,
+if p(v530) then ( '<dc:description><![CDATA[',v530,']]></dc:description>'/ ) fi,
+
+'          </oai_dc:dc>'/

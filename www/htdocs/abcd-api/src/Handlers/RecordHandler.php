@@ -1,8 +1,15 @@
 <?php
 
+/**
+ * Name: RecordHandler.php
+ * Author: Roger C. Guilherme
+ * Description: Handler for record-related API requests
+ * 
+ * Created on: 2026-08-15
+ */
+
 class RecordHandler
 {
-
     public static function handle($uriSegments, $configApp, $configDatabases)
     {
         $configSearch = require __DIR__ . '/../../config/search_config.php';
@@ -17,64 +24,77 @@ class RecordHandler
             json_response(['error' => "Database '{$databaseName}' not found."], 404);
         }
 
+        $allowedFormats = ['dc', 'native'];
+        $format = strtolower($_GET['format'] ?? 'dc');
+        if (!in_array($format, $allowedFormats, true)) {
+            json_response(['error' => 'Invalid format. Use one of: ' . implode(', ', $allowedFormats)], 400);
+        }
+
         $dbConfig = $configDatabases[$databaseName];
         $gateway = new CISISGateway($dbConfig, $configApp);
 
-        // If an MFN was passed in the URL, fetch a single record
         if ($mfn) {
-            self::getSingleRecord($mfn, $databaseName, $dbConfig, $gateway);
+            self::getSingleRecord($mfn, $databaseName, $dbConfig, $gateway, $format);
         } else {
-            // --- 1st CHANGE: Pass $databaseName to the method ---
-            self::searchRecords($databaseName, $dbConfig, $gateway, $configSearch);
+            self::searchRecords($databaseName, $dbConfig, $gateway, $configSearch, $format);
         }
     }
 
-    private static function getSingleRecord($mfn, $databaseName, $dbConfig, $gateway)
+    private static function getSingleRecord($mfn, $databaseName, $dbConfig, $gateway, $format)
     {
-        if (!preg_match('/^[A-Za-z0-9_-]+$/', $mfn)) {
+        if (!preg_match('/^\d+$/', $mfn)) {
             json_response(['error' => 'Invalid record identifier.'], 400);
         }
 
-        $recordXml = $gateway->getRecordByMfn($dbConfig['database_path'], $mfn, $dbConfig['mapping']);
+        // Backward compatibility and auto-discovery
+        $dcMapping = $dbConfig['formats']['dc'] ?? $dbConfig['mapping'] ?? null;
+        if ($format === 'dc' && empty($dcMapping)) {
+            json_response(['error' => "Format 'dc' is not available for database '{$databaseName}' yet. Please create a mapping in the Visual Data Mapper."], 404);
+        }
 
-        if (empty($recordXml)) {
+        $recordXml = $gateway->getRecordByMfn($dbConfig['database_path'], $mfn, $dcMapping, $format);
+
+        if (isset($_GET['debug']) && $_GET['debug'] == '1') {
+            die("<div style='background:#111; color:#0f0; padding:20px; font-family:monospace;'>" . 
+                "<h3>API DEBUG MODE</h3>" .
+                "<b>DB Path sent to WXIS:</b> " . $dbConfig['database_path'] . "<br><br>" .
+                "<b>WXIS Request URL:</b> <a href='" . $gateway->getLastUrl() . "' style='color:#0ff' target='_blank'>" . $gateway->getLastUrl() . "</a><br><br>" .
+                "<b>RAW WXIS Response:</b><br><pre>" . htmlspecialchars((string)$recordXml) . "</pre></div>");
+        }
+
+        if (empty(trim((string)$recordXml))) {
             json_response(['error' => "Record '{$mfn}' not found in database '{$databaseName}'."], 404);
         }
 
-        $recordJson = self::parseIsisXmlToJson($recordXml, $mfn);
+        if (strpos(trim((string)$recordXml), 'WXIS|fatal error|') === 0) {
+            json_response(['error' => "WXIS Engine Error: " . trim((string)$recordXml)], 500);
+        }
+
+        $recordJson = self::parseIsisXmlToJson($recordXml, $mfn, $format);
         json_response($recordJson);
     }
 
-    // --- 2nd CHANGE: Receive $databaseName as the first parameter ---
-    private static function searchRecords($databaseName, $dbConfig, $gateway, $configSearch)
+    private static function searchRecords($databaseName, $dbConfig, $gateway, $configSearch, $format)
     {
         $from = (int)($_GET['from'] ?? 0) + 1;
         $limit = max(1, min(100, (int)($_GET['limit'] ?? 10)));
         $query = $_GET['q'] ?? '$';
 
-        // --- ADVANCED SEARCH TRANSLATOR (FINAL AND CORRECT VERSION) ---
         $expression = '$';
         if ($query !== '$') {
             $cisisQuery = $query;
-            // Use the '$databaseName' key (e.g., 'marc') to fetch the configuration
             $searchableFields = $configSearch[$databaseName] ?? [];
 
-            // 1. Find and translate all 'field:value' patterns
             $cisisQuery = preg_replace_callback(
-                // The regex captures: field:value or field:"value with spaces"
                 '/(\w+):(".*?"|\S+)/',
                 function ($matches) use ($searchableFields) {
                     $field = strtolower($matches[1]);
                     $term = trim($matches[2], '"');
 
-                    // Check if the field (e.g., 'author') exists in our map
                     if (isset($searchableFields[$field])) {
                         $prefix = $searchableFields[$field];
-                        // Build the CISIS expression: e.g., (AU_FERREIRA)
                         return '(' . $prefix . strtoupper($term) . ')';
                     }
-
-                    // If the field is not mapped, return the original term for free search
                     return $matches[0];
                 },
                 $cisisQuery
@@ -83,31 +103,67 @@ class RecordHandler
             $operatorMap = [' AND ' => ' * ', ' OR '  => ' + ', ' NOT ' => ' ^ '];
             $expression = str_ireplace(array_keys($operatorMap), array_values($operatorMap), $cisisQuery);
         }
-        // --- END OF TRANSLATOR ---
 
-        // The rest of the function is correct and needs no changes.
-        $mfnListResponse = $gateway->search($dbConfig['database_path'], $expression, $from, $limit);
-
-        if ($mfnListResponse === null) {
-            json_response(['error' => 'An error occurred while communicating with the WXIS engine.'], 502);
+        $dcMapping = $dbConfig['formats']['dc'] ?? $dbConfig['mapping'] ?? null;
+        if ($format === 'dc' && empty($dcMapping)) {
+            json_response(['error' => "Format 'dc' is not available for database '{$databaseName}' yet. Please create a mapping in the Visual Data Mapper."], 404);
         }
 
+        $mfnListResponse = $gateway->search($dbConfig['database_path'], $expression, $from, $limit);
         $totalHits = 0;
         $mfns = [];
-        $parts = explode('|', rtrim($mfnListResponse, '|'));
-        if (count($parts) > 0 && strpos($parts[0], 'TOTAL=') === 0) {
-            $totalHits = (int)str_replace('TOTAL=', '', $parts[0]);
-            array_shift($parts);
+        $fallbackMode = false;
+
+        // Fallback for corrupted/missing dictionaries on global search
+        if ($mfnListResponse === null || strpos(trim((string)$mfnListResponse), 'WXIS|fatal error|') === 0 || strpos((string)$mfnListResponse, 'trmread/punt') !== false) {
+            if ($expression === '$') {
+                $fallbackMode = true;
+                for ($i = $from; $i < $from + $limit; $i++) {
+                    $mfns[] = (string)$i;
+                }
+            } else {
+                json_response([
+                    'error' => 'WXIS Engine Error: Inverted file (dictionary) might be missing or corrupted. Please generate the inverted file in ABCD Utilities.', 
+                    'raw_wxis_response' => trim((string)$mfnListResponse)
+                ], 500);
+            }
+        } else {
+            $parts = explode('|', rtrim($mfnListResponse, '|'));
+            if (count($parts) > 0 && strpos($parts[0], 'TOTAL=') === 0) {
+                $totalHits = (int)str_replace('TOTAL=', '', $parts[0]);
+                array_shift($parts);
+            }
+            $mfns = array_filter($parts);
         }
-        $mfns = array_filter($parts);
+
+        if (isset($_GET['debug']) && $_GET['debug'] == '1') {
+            die("<div style='background:#111; color:#0f0; padding:20px; font-family:monospace;'>" . 
+                "<h3>API DEBUG MODE</h3>" .
+                "<b>DB Path sent to WXIS:</b> " . $dbConfig['database_path'] . "<br><br>" .
+                "<b>WXIS Request URL:</b> <a href='" . $gateway->getLastUrl() . "' style='color:#0ff' target='_blank'>" . $gateway->getLastUrl() . "</a><br><br>" .
+                "<b>RAW WXIS Response:</b><br><pre>" . htmlspecialchars((string)$mfnListResponse) . "</pre></div>");
+        }
 
         $records = [];
         foreach ($mfns as $mfn) {
-            if (empty(trim($mfn))) continue;
-            $recordXml = $gateway->getRecordByMfn($dbConfig['database_path'], $mfn, $dbConfig['mapping']);
-            if (!empty($recordXml)) {
-                $records[] = self::parseIsisXmlToJson($recordXml, $mfn);
+            if (empty(trim((string)$mfn))) continue;
+            $recordXml = $gateway->getRecordByMfn($dbConfig['database_path'], $mfn, $dcMapping, $format);
+            
+            if (!empty(trim((string)$recordXml))) {
+                if (strpos(trim((string)$recordXml), 'WXIS|fatal error|') === 0) {
+                    $records[] = ['mfn' => $mfn, 'error' => trim((string)$recordXml)];
+                    continue;
+                }
+                
+                $parsedJson = self::parseIsisXmlToJson($recordXml, $mfn, $format);
+                if (isset($parsedJson['fields']) && count($parsedJson['fields']) > 0) {
+                    $records[] = $parsedJson;
+                }
             }
+        }
+
+        if ($fallbackMode) {
+            $totalHits = (count($records) < $limit) ? ($from + count($records) - 1) : -1;
         }
 
         $response = [
@@ -115,6 +171,7 @@ class RecordHandler
                 'total_hits' => $totalHits,
                 'limit' => $limit,
                 'from' => $from - 1,
+                'format' => $format,
                 'query_submitted' => $query,
                 'query_executed' => $expression,
             ],
@@ -124,65 +181,61 @@ class RecordHandler
         json_response($response);
     }
 
-    private static function parseIsisXmlToJson($xmlString, $mfn)
+    private static function parseIsisXmlToJson($xmlString, $mfn, $format)
     {
         libxml_use_internal_errors(true);
+        
+        // Remove known namespaces to prevent SimpleXML unbound prefix crashes
+        $cleanXml = preg_replace('/(<\/?)(\w+):([^>]+>)/', '$1$3', $xmlString);
 
-        // --- MAIN FIX ---
-        // Remove "dc:" and "oai_dc:" prefixes from XML to simplify it for the parser.
-        $xmlString = str_replace(['dc:', 'oai_dc:'], '', $xmlString);
-        // --- END OF FIX ---
-
-        $xml = simplexml_load_string($xmlString);
-
+        $xml = simplexml_load_string($cleanXml);
         if ($xml === false) {
-            return ['error' => 'Failed to process WXIS response.'];
+            $errors = libxml_get_errors();
+            $errorMsg = 'Failed to parse XML. ';
+            foreach ($errors as $error) {
+                $errorMsg .= trim($error->message) . ' | ';
+            }
+            libxml_clear_errors();
+            return ['mfn' => $mfn, 'error' => $errorMsg, 'raw_xml' => htmlspecialchars((string)$xmlString)];
         }
 
-        $metadata = [];
-        $metadata['mfn'] = $mfn;
+        $metadata = ['mfn' => $mfn, 'format' => $format, 'fields' => []];
 
-        $fields = [];
-        // Now that prefixes are removed, a simple children() works.
         foreach ($xml->children() as $field_node) {
             $tag = $field_node->getName();
-            $parsed_content = self::parseNode($field_node);
-            $fields[$tag][] = $parsed_content;
+            
+            // Tratamento especial para o formato "native" (isisxml style=1)
+            // Onde as tags vêm como <field tag="245">
+            if ($tag === 'field' && isset($field_node['tag'])) {
+                $tag = (string)$field_node['tag'];
+            }
+            
+            $metadata['fields'][$tag][] = self::parseNode($field_node);
         }
-        $metadata['fields'] = $fields;
 
         return $metadata;
     }
 
-
     private static function parseNode($node)
     {
         $children = $node->children();
-
         if (count($children) == 0) {
             return trim((string)$node);
         }
 
         $data = [];
-
-        // --- CORRECTED EXTRACTION LOGIC ---
         $fullText = (string)$node;
         $childrenText = '';
 
         foreach ($children as $child) {
             $child_tag = $child->getName();
             $child_value = trim((string)$child);
-            $childrenText .= $child_value; // Concatenate the children's text
+            $childrenText .= $child_value;
             $data[$child_tag] = $child_value;
         }
 
-        // Subtract children's text from full text to isolate indicators
         $indicators = trim(str_replace($childrenText, '', $fullText));
-
-        if (!empty($indicators)) {
-            $data['_'] = $indicators;
-        }
-        // --- END OF EXTRACTION LOGIC ---
+        if (!empty($indicators)) $data['_'] = $indicators;
 
         return $data;
     }

@@ -1,11 +1,10 @@
 root=oai_dc
-
-001 dc:identifier
-020 dc:identifier
-022 dc:identifier
-024 dc:identifier
-035 dc:identifier
-041 dc:language
+1 dc:identifier
+20 dc:identifier
+22 dc:identifier
+24 dc:identifier
+35 dc:identifier
+41 dc:language
 100 dc:creator
 110 dc:creator
 111 dc:creator
@@ -25,7 +24,6 @@ root=oai_dc
 611 dc:subject
 630 dc:subject
 650 dc:subject
-651 dc:coverage
 651 dc:subject
 653 dc:subject
 700 dc:creator
@@ -38,5 +36,3 @@ root=oai_dc
 785 dc:relation
 787 dc:relation
 980 dc:date
-980 dc:date
-

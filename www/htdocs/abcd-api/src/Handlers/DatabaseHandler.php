@@ -1,20 +1,27 @@
 <?php
 
-class DatabaseHandler {
-    
-    public static function handle($uriSegments, $configDatabases) {
-        // Remove o nome do recurso ('databases') para ver se há um ID/nome específico
+/**
+ * Name: DatabaseHandler.php
+ * Author: Roger C. Guilherme
+ * Description: Handler for database-related API requests
+ * 
+ * Created on: 2026-08-15
+ */
+
+class DatabaseHandler
+{
+    public static function handle($uriSegments, $configDatabases)
+    {
         array_shift($uriSegments);
         $databaseName = $uriSegments[0] ?? null;
-
         if ($databaseName) {
             self::getDatabaseByName($databaseName, $configDatabases);
         } else {
             self::getAllDatabases($configDatabases);
         }
     }
-
-    private static function getAllDatabases($configDatabases) {
+    private static function getAllDatabases($configDatabases)
+    {
         $response = [];
         foreach ($configDatabases as $key => $db) {
             $response[] = [
@@ -25,16 +32,22 @@ class DatabaseHandler {
         }
         json_response($response);
     }
-
-    private static function getDatabaseByName($name, $configDatabases) {
+    private static function getDatabaseByName($name, $configDatabases)
+    {
         if (isset($configDatabases[$name])) {
             $db = $configDatabases[$name];
-            // Não expomos o caminho completo do servidor na resposta
+
+            $availableFormats = ['native'];
+            if (!empty($db['formats']['dc']) || !empty($db['mapping'])) {
+                $availableFormats[] = 'dc';
+            }
+
             $response = [
                 'key' => $name,
                 'name' => $db['name'],
                 'description' => $db['description'],
-                'cisis_version' => $db['cisis_version']
+                'cisis_version' => $db['cisis_version'],
+                'available_formats' => $availableFormats,
             ];
             json_response($response);
         } else {
