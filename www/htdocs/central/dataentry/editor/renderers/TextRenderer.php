@@ -189,15 +189,11 @@ class TextRenderer {
                     if ($maxlength != 0)
                         echo "</a>";
                     if ($tipo == "AI") {
-                        $archivo = $db_path . $arrHttp["base"] . "/data/control_number.cn";
-                        if (!file_exists($archivo)) {
-                            $fp = fopen($archivo, "w");
-                            $res = fwrite($fp, "");
-                            fclose($fp);
-                        } else {
-                            $fp = file($archivo);
-                            $last_cn = implode("", $fp) + 1;
-                        }
+                        // Extract the desired length from the FDT (Column 10, index 9)
+                        $fieldLength = isset($t[9]) && is_numeric(explode('/', $t[9])[0]) ? (int)explode('/', $t[9])[0] : 0;
+
+                        // Get the safe preview of the next ID without locking it yet
+                        $last_cn = \ABCD\Common\AutoIncrementHelper::getNextValue($db_path, $arrHttp["base"], $fieldLength, false);
                         echo '<input type="' . $it . '" ' . $onfocus . ' name=tag' . $tag . ' id="tag' . $tag . '" size="' . $len . '"';
                         if ($maxlength > 0) {
                             echo ' maxlength="' . $maxlength . '" "';
