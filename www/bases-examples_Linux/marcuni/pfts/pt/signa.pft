@@ -1,8 +1,0 @@
-if a(v50) and a(v82) and a(v90) then 'S/C' else,
-
-    if p(v50) then v50^d".",v50^a,"."v50^b,"."v50^c else 
-       if p(v82) then v82^d"/",v82^a,"/"v82^b,"/"v82^c else 
-          if p(v90) then v90^d"/",v90^a,"/"v90^b,"/"v90^c 
-fi fi fi,
-
-fi

@@ -1,6 +1,0 @@
-'<table border=0 width=90%>'
-if p(v20) then '<tr><td width=20% valign=top><font face=arial size=2><b>ISBN</b></td><td valign=top><font face=arial size=2>'(if p(v20) then | |v20^a, if iocc<>nocc(v20) then '<br>' fi fi/),'</td>' fi/
-if p(v50) then '<tr><td width=20% valign=top><font face=arial size=2><b>LC Call No.</b></td><td valign=top><font face=arial size=2>'(if p(v50) then | |v50^1,| |v50^2,| |v50^a,| |v50^b,| |v50^c,| |v50^d,| |v50^e, if iocc<>nocc(v50) then '<br>' fi fi/),'</td>' fi/
-if p(v100) then '<tr><td width=20% valign=top><font face=arial size=2><b>Personal Name</b></td><td valign=top><font face=arial size=2>'(if p(v100) then | |v100^1,| |v100^2,| |v100^a,| |v100^d,| |v100^q,| |v100^e,| |v100^c,| |v100^n,| |v100^b, if iocc<>nocc(v100) then '<br>' fi fi/),'</td>' fi/
-if p(v245) then '<tr><td width=20% valign=top><font face=arial size=2><b>Title statement</b></td><td valign=top><font face=arial size=2>'(if p(v245) then | |v245^1,| |v245^2,| |v245^a,| |v245^b,| |v245^c,| |v245^h,| |v245^p, if iocc<>nocc(v245) then '<br>' fi fi/),'</td>' fi/
-'</table><p>'
