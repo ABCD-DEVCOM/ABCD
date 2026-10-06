@@ -1,6 +1,0 @@
-LDR|3000|Leader|0|0||||||||||||1||
-S|3005|Status do registro|0|0|||X||1|P|ldr_05.tab||||n|0||
-S|3006|Tipo de registro|0|0|||X||1|P|ldr_06.tab|||||0||
-S|3007|Nível Bibliográfico|0|0|||X||1|P|ldr_07.tab|||||0||
-S|3017|Nível de codificação|0|0|||X||1|P|ldr_17.tab||||4|0||
-S|3018|Forma da Cat. Descritiva|0|0|||X||1|P|ldr_18.tab||||a|0||

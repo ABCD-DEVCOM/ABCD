@@ -1,8 +1,0 @@
-/* change the date in ISO-format to start from in the following line
-if v980^d.8>20150500 then 
-'CN : ', v1/,
-'Title : 'v245^a/,
-'Main entry : 'v100^a/,
-REF->loanobjects(L->loanobjects('CN_MARC_'v1), 
-'Loanobjects barcodes: ' (v959^i+|; |) )
-fi

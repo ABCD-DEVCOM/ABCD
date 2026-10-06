@@ -1,9 +1,0 @@
-245:if a(v245) then '<b><font size=3 color=red>O campo 245 - Título principal - está faltando</font></b>' fi$$|$$true
-###
-100:if a(v100) and a(v110) and a(v111) then '<b><font size=3 color=red>Falta Entrada principal: campo 100, 110, 111 ou 130</font></b>' fi
-$$|$$false
-###
-8:if ss(1,6,v8)='aammdd' then '<b><font size=3 color=red>A data no campo fixo (008)=aammdd, alterar para a data de hoje no formato indicado</font></b>' fi$$|$$true
-###
-:
-###

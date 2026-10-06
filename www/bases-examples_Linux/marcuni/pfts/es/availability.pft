@@ -1,6 +1,0 @@
-'<div style=width:50>'
-
-if p(v1) then,
-'<input type="button" value="Disponibilidad" style="font-family: Verdana; font-size:8pt" onClick="javascript:checkAvaibility(',`'`,v1,`'`,')">',
-fi,
-'</div>'

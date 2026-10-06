@@ -1,6 +1,0 @@
-LDR|3000|Leader|0|0||||||||||||1|http://www.loc.gov/marc/bibliographic/bdleader.html|
-S|3005|Record status|0|0|||X||1|P|ldr_05.tab|||||0||
-S|3006|Type of record|0|0|||X||1|P|ldr_06.tab|||||0||
-S|3007|Bibliographic level|0|0|||X||1|P|ldr_07.tab|||||0||
-S|3017|Encoding level|0|0|||X||1|P|ldr_17.tab|||||0||
-S|3018|Descriptive cataloging form|0|0|||X||1|P|ldr_18.tab|||||0||

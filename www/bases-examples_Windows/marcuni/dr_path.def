@@ -1,5 +1,0 @@
-UNICODE=1
-ROOT=/ABCD/www/bases/marc/dr/
-tesaurus=agrovoc
-prefix_search_tesaurus=MA_
-DIRTREE_EXT=*.def,*.iso,*.png,*.gif,*.jpg,*.pdf,*.xrf,*.mst,*.n01,*.n02,*.l01,*.l02,*.cnt,*.ifp,*.fmt,*.fdt,*.pft,*.fst,*.tab,*.txt,*.par,*.html,*.zip,

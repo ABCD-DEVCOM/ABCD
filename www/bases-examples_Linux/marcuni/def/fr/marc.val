@@ -1,9 +1,0 @@
-245:if a(v245) then '<b><font size=3 color=red>Attention  !!! Le champ 245 - Titre  est vide</font></b>' fi$$|$$true
-###
-100:if a(v100) and a(v110) and a(v111) then '<b><font size=3 color=red>Attention !!! Les vedettes des champs 100, 110, 111 ou 130 ne sont pas données</font></b>' fi
-###
-8:if ss(1,6,v8)='aammjj' then '<b><font size=3 color=red>La date dans le champ fixe (008)=aammjj, changer la date du jour date
-</font></b>' fi$$|$$true
-###
-:
-###

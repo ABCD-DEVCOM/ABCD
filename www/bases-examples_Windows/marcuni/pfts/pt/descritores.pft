@@ -1,5 +1,0 @@
-,(if p(v76) then
-     ,'<a href="',getenv('SCRIPT_NAME')v5000^d[1],'wxis/?IsisScript=',v5000^s[1],'&lang=I&base=',v5003[1],'&nextAction=lnk&exprSearch=',s(mpu,v76,mpl),'&indexSearch=MA">',v76,'</a>',
-,if iocc<>nocc(v76) then '; ' fi,fi),
-
-
