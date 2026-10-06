@@ -9,7 +9,8 @@
 20220321 fho4abcd renamed barcode scripts
 20220926 fho4abcd add statistic configuration. top/down buttons
 20250902 rogercgui Fix links from statistics links
-20251216 Gemini Refactoring for balanced card layout & removal of IAH
+20251216 rogercgui Refactoring for balanced card layout & removal of IAH
+20261006 rogercgui Added check for missing FDT file and display warning message with link to check database definitions. Fixes issue where the cataloging module would not work properly if the FDT file was missing in both the current language and the system's default language.
 */
 
 session_start();
@@ -168,7 +169,7 @@ include("../common/header.php");
 <?php include("../common/inc_wait.php") ?>
 
 <?php
-// ENCABEZAMIENTO DE LA PÁGINA
+// PAGE HEADER
 if (isset($arrHttp["encabezado"])) {
 	include("../common/institutional_info.php");
 	$encabezado = "&encabezado=s";
@@ -188,20 +189,23 @@ if (isset($arrHttp["encabezado"])) {
 include "../common/inc_div-helper.php";
 
 $dir_fdt = $db_path . $selbase . "/def/" . $lang . "/";
+$dir_fdt_default = $db_path . $selbase . "/def/" . $lang_db . "/";
 $ldr = "";
+$fdt_file = "";
 
-// Verificação MARC/LDR
-if (is_dir($dir_fdt)) {
-	if (file_exists($dir_fdt . $selbase . ".fdt")) {
-		$fp = file($dir_fdt . $selbase . ".fdt");
-	} else {
-		$fp = file($db_path . $selbase . "/def/" . $lang_db . "/" . $selbase . ".fdt");
-	}
+// Safe MARC/LDR validation without generating warnings
+if (file_exists($dir_fdt . $selbase . ".fdt")) {
+	$fdt_file = $dir_fdt . $selbase . ".fdt";
+} elseif (file_exists($dir_fdt_default . $selbase . ".fdt")) {
+	$fdt_file = $dir_fdt_default . $selbase . ".fdt";
+}
 
+if ($fdt_file !== "") {
+	$fp = file($fdt_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 	if ($fp) {
 		foreach ($fp as $value) {
 			$value = trim($value);
-			if (trim($value) != "") {
+			if ($value != "") {
 				$fdt = explode('|', $value);
 				if (isset($fdt[0]) && $fdt[0] == "LDR") {
 					$ldr = "s";
@@ -222,6 +226,17 @@ if (is_dir($dir_fdt)) {
 			<input type=hidden name=format>
 			<input type=hidden name=base value=<?php echo $selbase; ?>>
 			<?php if (isset($arrHttp["encabezado"])) echo "<input type=hidden name=encabezado value=s>"; ?>
+
+			<?php if ($fdt_file === ""): ?>
+				<div style="background-color: #fff3cd; color: #856404; padding: 15px; margin-bottom: 20px; border: 1px solid #ffeeba; border-radius: 4px;">
+					<strong style="font-size: 1.1em;"><i class="fas fa-exclamation-triangle"></i> <?php echo $msgstr["warning"] ?? "Warning"; ?>:</strong><br>
+					<?php echo $msgstr["fdt_missing_1"] ?? "The definition file (FDT) for the database"; ?> <b><?php echo $selbase; ?></b> <?php echo $msgstr["fdt_missing_2"] ?? "was not found in the current language"; ?> (<b><?php echo $lang; ?></b>) <?php echo $msgstr["fdt_missing_3"] ?? "nor in the system's default language. The cataloging module's operation will be affected."; ?>
+					<br><br>
+					<button type="button" class="bt bt-yellow" onclick="Update('chk_dbdef')">
+						<i class="fas fa-stethoscope"></i> <?php echo $msgstr["chk_dbdef"] ?? "Check Database Definitions"; ?>
+					</button>
+				</div>
+			<?php endif; ?>
 
 			<div class="admin-grid">
 
