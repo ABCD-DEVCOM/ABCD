@@ -139,7 +139,7 @@ unset($_SESSION["Server_Path"]);
 			case "exportiso":
 				document.admin.base.value = base
 				document.admin.cipar.value = base + ".par"
-				document.admin.action = "../dataentry/exporta_txt.php"
+				document.admin.action = "../dataentry/exporta_iso.php"
 				document.admin.tipo.value = "iso"
 				break;
 			case "barcodesearch": //Marino barcode search
