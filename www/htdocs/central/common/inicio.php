@@ -17,6 +17,7 @@
 2026-03-11 fho4abcd Added ip check
 2026-03-12 fho4abcd Improved ip check
 2026-03-17 fho4abcd IP check shows message (was in function)
+2026-10-06 rogercgui Add check session status before starting a new session to avoid warnings in the log file. Fixes a bug where the script was trying to start a new session even if one was already active, causing a warning message to be logged.
 */
 global $Permiso, $arrHttp,$valortag,$nombre;
 $arrHttp=Array();
@@ -306,13 +307,16 @@ if (isset($arrHttp["login"])){
 	// Regenerate the session ID to cope session fixation attacks
 	// More info https://owasp.org/www-community/attacks/Session_fixation
 	// This is only one step in increasing security. More actions have to be added (sometime)
-	session_regenerate_id(true);
+	if (!isset($_SESSION['login'])) {
+		session_regenerate_id(true);
+	}
 
-        if (isset($arrHttp["lang"]) && $arrHttp["lang"]!="") {
-            $_SESSION["lang"]=$arrHttp["lang"];
-        } else {
-            $_SESSION["lang"]=$lang;
-        }
+	if (isset($arrHttp["lang"]) && $arrHttp["lang"]!="") {
+		$_SESSION["lang"]=$arrHttp["lang"];
+	} else {
+		$_SESSION["lang"]=$lang;
+	}
+
 	$_SESSION["login"]=$arrHttp["login"];
 	$_SESSION["nombre"]=$nombre;
 }

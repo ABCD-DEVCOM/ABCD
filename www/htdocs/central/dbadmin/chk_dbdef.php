@@ -486,12 +486,18 @@ function Analizar($tipo, $db_path, $base, $lang)
 	}
 }
 
-// Lógica de cópia e disparo do modal
-if (isset($_POST['source']) != "" and isset($_POST['destiny']) != "" and isset($_POST['folder'])) {
-	$src = $_POST['folder'] . $_POST['source'];
-	$dst = $_POST['folder'] . $_POST['destiny'];
-	$copied_count = copy_directory($src, $dst);
-	reload_dbdef($copied_count);
+// Logic of the modal's copy and trigger functions
+if (!empty($_POST['source']) && !empty($_POST['destiny']) && !empty($_POST['folder'])) {
+
+	// We remove any duplicate bars from the concatenated strings
+	$src = rtrim($_POST['folder'], '/\\') . $_POST['source'];
+	$dst = rtrim($_POST['folder'], '/\\') . $_POST['destiny'];
+
+	// We ensure that the source actually exists before attempting to scan it recursively
+	if (is_dir($src)) {
+		$copied_count = copy_directory($src, $dst);
+		reload_dbdef($copied_count);
+	}
 }
 
 function chmod_Recursive($path, $filemode)
@@ -518,7 +524,7 @@ function chmod_Recursive($path, $filemode)
 	return chmod($path, $filemode);
 }
 
-// Função reescrita para resolver bug de diretórios aninhados e retornar contagem
+// Function rewritten to resolve bug of nested directories and return count
 function copy_directory($src, $dst)
 {
 	$dir = @opendir($src);
@@ -543,7 +549,7 @@ function copy_directory($src, $dst)
 	return $count;
 }
 
-// Injeta o número real de arquivos copiados no HTML do Modal
+// Inserts the actual number of files copied into the modal’s HTML
 function reload_dbdef($count)
 {
 	global $arrHttp;
