@@ -328,7 +328,7 @@ if (!defined('ABCD_CONTENT_PATH')) {
 
 // Load the hook system
 require_once __DIR__ . '/common/hooks.php';
-require_once __DIR__ . '/common/PluginBridge.php'; // <--- ADICIONE ESTA LINHA AQUI!
+require_once __DIR__ . '/common/PluginBridge.php'; 
 
 // Fire up all active plugins
 abcd_load_active_plugins();
