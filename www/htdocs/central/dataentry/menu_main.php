@@ -938,10 +938,20 @@ if (file_exists($wksfile)) {
 						<i class="fas fa-question-circle"></i>
 					</button>
 
+					<?php
+					// Set the default action for ABCD's "Home" button. This can be overridden by plugins if needed.
+					$home_action = "top.Menu('home')";
+
+					// Allows plugins to modify the JavaScript action if the context requires it
+					if (function_exists('abcd_run_hook')) {
+						$home_action = abcd_run_hook('abcd_menu_home_action', $home_action);
+					}
+					?>
+
 					<!-- Home -->
 					<button type="button" class="btn-toolbar"
 						style="color:#005aa9;"
-						onclick="top.Menu('home')"
+						onclick="<?php echo $home_action; ?>"
 						title="<?php echo $msgstr["inicio"]; ?>">
 						<i class="fas fa-home"></i>
 					</button>
