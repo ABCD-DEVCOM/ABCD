@@ -359,6 +359,9 @@ include("../common/header.php");
 					if (in_type == "S" && fld_repeatable == "true") {
 						msg += displayRowfull + displayTagfull + "R=true + " + displayIn_type + " <?php echo $msgstr["invalidcombi"] ?>" + "<br>"
 					}
+					if (cell_type == "HASH" && fld_repeatable == "true") {
+						msg += displayRowfull + displayTagfull + " HASH <?php echo $msgstr["invalidcombi"] ?? 'não pode ser repetível'; ?>" + "<br>"
+					}
 					if (in_type == "M" && fld_repeatable == "false") {
 						msg += displayRowfull + displayTagfull + "R=false + " + displayIn_type + " <?php echo $msgstr["invalidcombi"] ?>" + "<br>"
 					}

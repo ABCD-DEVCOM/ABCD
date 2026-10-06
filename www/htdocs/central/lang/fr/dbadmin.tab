@@ -136,6 +136,7 @@ ft_od=Opérateur et date
 ft_oper=Opérateur (créé)
 ft_s=Sous-champs
 ft_t=Groupe
+ft_hash=Hash
 generateoutput=Générer sortie
 genfmt=Générer le bordereau de saisie de données
 genformat=Vous devez générer le format d'affichage - (tableau ou paragraphe)

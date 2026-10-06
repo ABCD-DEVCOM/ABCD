@@ -38,6 +38,10 @@ class TextRenderer {
             case "DC":
                 $t[7] = "DC";
                 break;
+            case "HASH":
+                $t[0] = "F";
+                $t[7] = "HASH";
+                break;
         }
         $tipo = rtrim($t[7]);
         if ($t[0] == "AI") {
@@ -67,18 +71,31 @@ class TextRenderer {
         }
         if ($rep == 1 and $numl == 0) $numl = 1;
         if ($numl == 0) $numl = 1;
-        $valortag[$tag] = rtrim($valortag[$tag]);
+        $valortag[$tag] = isset($valortag[$tag]) ? rtrim($valortag[$tag]) : "";
         $dummy = explode("\n", $valortag[$tag]);
         $occurs = count($dummy);
         if ($ver) {
             foreach ($dummy as $lin) {
                 if ($ksc > 0 and trim($delimsc) != "") $lin = DecodificaSubCampos($lin, $ksc, $subc, $delimsc);
-                if ($tipo != "I") echo $lin . "";
+                if ($tipo != "I") {
+                    if ($tipo == "HASH") {
+                        echo "<span style='font-family: monospace; word-break: break-all; color: #495057;'>" . htmlspecialchars($lin, ENT_QUOTES, 'UTF-8') . "</span>";
+                    } else {
+                        echo $lin . "";
+                    }
+                }
             }
         } else {
             $campo = rtrim($valortag[$tag]);
 
-            // FIX: Prepares the implicit subfield for legacy JavaScript (campos.php)
+            if (($tipo == "HASH") && trim($campo) == "") {
+                // Generate a random 64-character hex string (simulate SHA-256)
+                $campo = bin2hex(random_bytes(32));
+
+                // Update the global array so HashRenderer can read the newly generated value
+                $valortag[$tag] = $campo;
+            }
+
             // Temporarily injects "^_" so that editarocurrencias.js doesn't go blank.
             if (substr($subc, 0, 1) == '_') {
                 $linhas = explode("\n", $campo);
@@ -103,7 +120,7 @@ class TextRenderer {
             if ($tipo == "U") {
                 UploadRenderer::renderInput($tag, $campo, $numl, $cols, "", $maxlength);
             } else {
-                if (($numl > 1 or $rep == "1") and $tipo != "AI") {
+                if (($numl > 1 or $rep == "1") and $tipo != "AI" and $tipo != "HASH") {
                 if ($len == 0) $len = "100%";
                 if ($tipo == "RO" or $tipo == "SRO" or $tipo == "MRO")
                     $it = "text\" onfocus=blur()";
@@ -159,6 +176,10 @@ class TextRenderer {
                             $it = "text";
                             $onfocus = "onfocus=blur()";
                             break;
+                        case "HASH":
+                            $it = "text\" readonly style=\"box-sizing:border-box; padding: 6px; border: 1px solid #ccc; border-radius: 3px; font-family: monospace; font-size: 13px; flex-grow: 1; background-color: #e9ecef; color: #6c757d; cursor: not-allowed;\" title=\"Este hash é imutável e gerado criptograficamente pelo sistema.\"";
+                            $onfocus = "onfocus=blur()";
+                            break;
                         case "N":
                             $it = "text";
                             $onfocus = "onfocus=blur()";
@@ -179,13 +200,25 @@ class TextRenderer {
                     }
                     if ($maxlength != 0)
                         echo "<a style=\"text-decoration:none\" onMouseover=\"ddrivetip(document.forma1.tag" . $tag . ".value,'linen',300 )\"; onMouseout=\"hideddrivetip()\"; onclick=\"hideddrivetip()\">";
-                    if ($tipo != "AI") {
+                    
+                    if ($tipo == "HASH") {
+                        echo "<div style='display: flex; align-items: center; gap: 8px; width: 100%; max-width: 600px;'>";
+                        echo "<i class='fas fa-shield-alt' style='color: #28a745;' title='Hash de Segurança'></i>";
                         echo '<input type="' . $it . '" ' . $onfocus . ' name=tag' . $tag . ' id="tag' . $tag . '" size="' . $len . '"';
                         if ($maxlength > 0) {
-                            echo ' maxlength="' . $maxlength . '" "';
+                            echo ' maxlength="' . $maxlength . '" ';
+                        }
+                        echo ' value="' . $campo . '" ' . $arrow . '>';
+                        echo "<a href='javascript:void(0)' onclick='navigator.clipboard.writeText(document.getElementById(\"tag$tag\").value)' class='bt-fdt' title='Copiar Hash'><i class='far fa-copy'></i></a>";
+                        echo "</div>";
+                    } else if ($tipo != "AI") {
+                        echo '<input type="' . $it . '" ' . $onfocus . ' name=tag' . $tag . ' id="tag' . $tag . '" size="' . $len . '"';
+                        if ($maxlength > 0) {
+                            echo ' maxlength="' . $maxlength . '" ';
                         }
                         echo ' value="' . $campo . '" ' . $arrow . '>';
                     }
+
                     if ($maxlength != 0)
                         echo "</a>";
                     if ($tipo == "AI") {
@@ -196,7 +229,7 @@ class TextRenderer {
                         $last_cn = \ABCD\Common\AutoIncrementHelper::getNextValue($db_path, $arrHttp["base"], $fieldLength, false);
                         echo '<input type="' . $it . '" ' . $onfocus . ' name=tag' . $tag . ' id="tag' . $tag . '" size="' . $len . '"';
                         if ($maxlength > 0) {
-                            echo ' maxlength="' . $maxlength . '" "';
+                            echo ' maxlength="' . $maxlength . '" ';
                         }
                         echo ' placeholder="' . $last_cn . '" value="' . $campo . '" ' . $arrow . '>';
                         if (
@@ -260,6 +293,7 @@ class TextRenderer {
             if ($tipo == "SRO" or $tipo == "MRO") {
                 echo "<a href=\"javascript:Limpiar(document.forma1.tag$tag)\">borrar</a>";
             }
+
             if ($tipo != "I") echo "</td></tr>\n";
         }
     }

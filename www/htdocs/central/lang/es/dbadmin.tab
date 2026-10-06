@@ -156,6 +156,7 @@ ft_protect=Record password
 ft_protect_record=Protect record
 ft_s=Subcampo
 ft_t=Grupo
+ft_hash=Hash
 generateoutput=Generar salida
 genfmt=Generar hoja de entrada de datos
 genformat=Debe generar un formato de salida (tabla o párrafo)

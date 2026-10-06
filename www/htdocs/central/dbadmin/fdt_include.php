@@ -42,6 +42,7 @@
 	$field_type["T"]=$msgstr["ft_t"];		//Group
 	$field_type["L"]=$msgstr["ft_l"];		//Line
 	$field_type["H"]=$msgstr["ft_h"];		//Heading
+	$field_type["HASH"]=$msgstr["ft_hash"];		//Hash
 
 	$input_type=array();
 	$input_type["AI"]=$msgstr["ft_ai"];
