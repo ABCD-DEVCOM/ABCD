@@ -199,6 +199,7 @@ ft_protect_record=Proteger registro
 ft_s=Subcampos
 ft_sub=Subcampo
 ft_t=Grupo
+ft_hash=Hash
 generateoutput=Gerar saída
 genfmt=Gerar planilha de entrada de dados
 genformat=Você deve gerar o formato de exibição (tabela de parágrafo)

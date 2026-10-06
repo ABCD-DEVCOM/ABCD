@@ -286,6 +286,10 @@ function PrepararFormato()
 				$tipo = $t[0];
 				//This is for the changes that were made to the fdt regarding the field type and the input type
 				switch ($t[0]) {
+					case "HASH":
+						$t[0] = "F";
+						$t[7] = "HASH";
+						break;
 					case "OD":
 						$t[0] = "F";
 						$t[7] = "OD";
@@ -452,6 +456,9 @@ function PrepararFormato()
 							if (isset($t[15]))
 								if (!$ver and $valortag[$tag] == "") $valortag[$tag] = $t[15];
 							switch ($tipo_e) { // Switch on mix of field type/field type
+								case "HASH":
+									HashRenderer::render($vars[$ivars], $fondocelda, $titulo, $ver, $len, $tag, $ksc, $tipo, $delrep, $ayuda);
+									break;
 								case "M5":    // Date(MARC 005) DATE OF LAST UPDATE (FIELD 005 MARC)
 									$is_marc = "S";
 									if (!isset($default_values) or $default_values != "S") {    //CHECK IF EDITING DEFAULT VALUES
