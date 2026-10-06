@@ -109,6 +109,11 @@ include("../common/header.php");
 							<span><i class="fas fa-network-wired" style="font-size: 2em; margin: 0 10px 0 -30px; color: #27ae60;"></i><strong>API REST</strong></span>
 						</a>
 
+						<?php
+						// HOOK: Plugins can inject config_menu items here
+						echo abcd_run_hook('config_menu', '');
+						?>
+
 
 						<?php
 						$script_abcd_stats = 'abcd_stats.php';
