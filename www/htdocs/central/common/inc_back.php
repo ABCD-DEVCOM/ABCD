@@ -15,45 +15,52 @@ Usage     : <?php include "../common/inc_back.php" ?>
 **  $arrHttp["encabezado"]: Indicator to show the header. If not set no action
 */
 
-$inc_backtourl="";
-$inc_optionset=false;
-if (isset($backtoscript) AND $backtoscript!="" ) {
-    $inc_backtourl=$backtoscript;
+$inc_backtourl = "";
+$inc_optionset = false;
+if (isset($backtoscript) and $backtoscript != "") {
+    $inc_backtourl = $backtoscript;
 } else {
-    $inc_backtourl="/central/common/inicio.php";
+    $inc_backtourl = "/central/common/inicio.php";
 }
 // Determine if we have already url parameters in the "back" script
-$inc_optionset=true;
-if ( strpos($inc_backtourl,"?")===false) $inc_optionset=false;;
+$inc_optionset = true;
+if (strpos($inc_backtourl, "?") === false) $inc_optionset = false;;
 
-if (strpos($inc_backtourl, "base=")===false) {
-    if (isset($arrHttp["base"]) AND $arrHttp["base"]!="")  {
-        if (!$inc_optionset) $inc_backtourl.="?";
-        if ( $inc_optionset) $inc_backtourl.="&";
-        $inc_backtourl.="base=".$arrHttp["base"];
-        $inc_optionset=true;
+if (strpos($inc_backtourl, "base=") === false) {
+    if (isset($arrHttp["base"]) and $arrHttp["base"] != "") {
+        if (!$inc_optionset) $inc_backtourl .= "?";
+        if ($inc_optionset) $inc_backtourl .= "&";
+        $inc_backtourl .= "base=" . $arrHttp["base"];
+        $inc_optionset = true;
     }
 }
 if (isset($arrHttp["backtoscript_org"])) {
-    if (!$inc_optionset) $inc_backtourl.="?";
-    if ( $inc_optionset) $inc_backtourl.="&";
-    $inc_optionset=true;
-    $inc_backtourl.="backtoscript=".$arrHttp["backtoscript_org"];
+    if (!$inc_optionset) $inc_backtourl .= "?";
+    if ($inc_optionset) $inc_backtourl .= "&";
+    $inc_optionset = true;
+    $inc_backtourl .= "backtoscript=" . $arrHttp["backtoscript_org"];
 }
 
-if (strpos($inc_backtourl, "encabezado=")===false) {
-    if (isset($arrHttp["encabezado"]) AND $arrHttp["encabezado"]!="")  {
-        if (!$inc_optionset) $inc_backtourl.="?";
-        if ( $inc_optionset) $inc_backtourl.="&";
-        $inc_optionset=true;
-        $inc_backtourl.="encabezado=".$arrHttp["encabezado"];
+if (strpos($inc_backtourl, "encabezado=") === false) {
+    if (isset($arrHttp["encabezado"]) and $arrHttp["encabezado"] != "") {
+        if (!$inc_optionset) $inc_backtourl .= "?";
+        if ($inc_optionset) $inc_backtourl .= "&";
+        $inc_optionset = true;
+        $inc_backtourl .= "encabezado=" . $arrHttp["encabezado"];
     }
 }
 // Replace double quotes by single quotes for the href below
-$inc_backtourl=str_replace('"',"'",$inc_backtourl);
+$inc_backtourl = str_replace('"', "'", $inc_backtourl);
+
+// Interceptor de enrutamiento
+if (function_exists('abcd_run_hook')) {
+    $inc_backtourl = abcd_run_hook('abcd_nav_back_url', $inc_backtourl);
+}
+
 ?>
-<a href="<?php echo $inc_backtourl?>" class="button_browse" title='<?php echo $msgstr["regresar"]?>'>
-    <i class="fas fa-arrow-circle-left"></i>&nbsp;<?php echo $msgstr["regresar"]?></a>
+
+<a href="<?php echo $inc_backtourl ?>" class="button_browse" title='<?php echo $msgstr["regresar"] ?>'>
+    <i class="fas fa-arrow-circle-left"></i>&nbsp;<?php echo $msgstr["regresar"] ?></a>
 <?php
 unset($inc_backtourl);
 unset($inc_optionset);
