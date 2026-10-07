@@ -3,19 +3,39 @@
     .museum-card {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         background: #fff;
-        max-width: 100%;
+        width: 1200px;
+        min-width: 100%;
+        box-sizing: border-box;
         margin: auto;
         color: #444;
     }
-
     /* --- HERO HEADER --- */
     .obj-header {
-        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        background: #52567a;
         color: white;
         padding: 20px;
         border-radius: 8px 8px 0 0;
         margin-bottom: 20px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: space-between; 
+        align-items: center; 
+    }
+    /* NEW: Container for text on the left */
+    .header-text {
+        flex: 1;
+        padding-right: 20px;
+    }
+    /* NEW: Container for logo on the right */
+    .header-logo {
+        flex-shrink: 0;
+        width: 80px;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .header-logo svg {
+        width: 100%;
+        height: auto;
     }
     .obj-tombo {
         background: rgba(255,255,255,0.2);
@@ -25,6 +45,7 @@
         font-weight: bold;
         text-transform: uppercase;
         letter-spacing: 1px;
+        display: inline-block;
     }
     .obj-title {
         margin: 10px 0 5px 0;
@@ -162,12 +183,50 @@
 '<div class="museum-card">'
 
     '<div class="obj-header">'
-        '<span class="obj-tombo"><i class="fas fa-barcode"></i> 'v002'</span>'
-        '<div class="obj-title">'v010'</div>'
-        if p(v050) then '<div class="obj-subtitle">'v050'</div>' fi
+        
+        '<!-- TEXT GROUPING ON THE LEFT -->'
+        '<div class="header-text">'
+            '<span class="obj-tombo"><i class="fas fa-barcode"></i> 'v002'</span>'
+            '<div class="obj-title">'v010'</div>'
+            if p(v050) then '<div class="obj-subtitle">'v050'</div>' fi
+        '</div>'
+
+        '<!-- LOGO GROUPING ON THE RIGHT -->'
+        '<div class="header-logo"><a href="https://abcd-devcom.github.io/spectrum/" target="_blank">'
+            '<!-- SVG -->'
+            '<?xml version="1.0" encoding="UTF-8"?>
+                <svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 167.85 195.13">
+                <defs><style>.cls-1 {fill: #fff;}</style></defs>
+                <g id="Camada_1-2" data-name="Camada 1">
+                    <g>
+                    <polygon class="cls-1" points="83.82 0 2.41 39.59 165.18 39.59 83.82 0"/>
+                    <rect class="cls-1" y="44.4" width="167.45" height="8.29"/>
+                    <path class="cls-1" d="M0,157.69h167.85c0,5.54-4.49,10.03-10.03,10.03H10.03C4.49,167.72,0,163.22,0,157.69H0Z"/>
+                    <rect class="cls-1" x="9.5" y="147.92" width="148.86" height="4.81"/>
+                    <g>
+                        <path class="cls-1" d="M39.88,144.59h-7.95l-1.61-16.47h-10.04l-1.61,16.47h-7.91v-.22l10.38-86.69h8.43l10.31,86.91ZM29.19,116.97l-3.9-39.16-3.94,39.16h7.84Z"/>
+                        <path class="cls-1" d="M77.69,136.66c0,5.29-1.63,7.93-4.9,7.93h-21.41V57.79h21.27c3.17,0,4.76,2.66,4.76,7.99v22.35c0,2.96-.57,5.25-1.71,6.88-.16.22-1.55,1.65-4.18,4.27,2.72,2.7,4.16,4.18,4.32,4.44,1.23,1.74,1.85,4.12,1.85,7.16v25.79ZM69.43,89.74v-21.02h-10.04v25.46h6.17l3.87-4.44ZM69.64,133.66v-24.74l-3.94-4.22h-6.3v28.95h10.24Z"/>
+                        <path class="cls-1" d="M117.38,136.66c0,5.29-1.63,7.93-4.9,7.93h-16.71c-3.17,0-4.76-2.64-4.76-7.93v-70.88c0-5.32,1.59-7.99,4.76-7.99h16.71c3.27,0,4.9,2.66,4.9,7.99v20.3h-7.98v-17.14h-10.38v64.5h10.38v-18.25h7.98v21.46Z"/>
+                        <path class="cls-1" d="M157.42,128.23c0,5.1-.94,9.11-2.81,12.01-1.87,2.9-4.4,4.35-7.57,4.35h-16.34V57.79h16.34c3.17,0,5.7,1.47,7.57,4.41,1.87,2.94,2.81,6.96,2.81,12.06v53.97ZM149.37,126.06v-49.86c0-4.84-1.56-7.27-4.69-7.27h-5.96v64.5h5.75c3.27,0,4.9-2.46,4.9-7.38Z"/>
+                    </g>
+                    <g>
+                        <path class="cls-1" d="M18.31,193.56c0,.46-.22.84-.66,1.13-.44.29-1.01.44-1.72.44H7.4c-.71,0-1.29-.15-1.74-.44s-.68-.67-.68-1.13v-5.61h3.01v5.44h7.31v-5.27l-9.34-7.38c-.65-.51-.97-1.07-.97-1.68v-4.48c0-.46.23-.84.68-1.13.45-.29,1.03-.44,1.74-.44h8.52c.71,0,1.28.15,1.72.44.44.29.66.67.66,1.13v5.15h-3.01v-4.98h-7.31v4.67l9.39,7.38c.62.49.93,1.04.93,1.65v5.12Z"/>
+                        <path class="cls-1" d="M38.9,184.77c0,.46-.23.84-.68,1.14-.45.3-1.03.45-1.74.45h-7.98v8.78h-3.01v-22.13h10.99c.71,0,1.29.15,1.74.44.46.29.68.67.68,1.13v10.19ZM35.89,184.6v-9.85h-7.4v9.85h7.4Z"/>
+                        <path class="cls-1" d="M56.64,195.13h-11.12v-22.13h10.99v1.74h-7.98v8.26h7.27v1.77h-7.27v8.62h8.11v1.74Z"/>
+                        <path class="cls-1" d="M76.75,193.56c0,.46-.23.84-.69,1.13-.46.29-1.04.44-1.75.44h-8.72c-.71,0-1.28-.15-1.73-.44-.45-.29-.67-.67-.67-1.13v-18.99c0-.46.22-.84.67-1.13.45-.29,1.02-.44,1.73-.44h8.72c.71,0,1.29.15,1.75.44.46.29.69.67.69,1.13v5.15h-3.03v-4.98h-7.53v18.65h7.53v-5.44h3.03v5.61Z"/>
+                        <path class="cls-1" d="M95.53,174.74h-5.23v20.39h-3.01v-20.39h-5.28v-1.74h13.52v1.74Z"/>
+                        <path class="cls-1" d="M115.33,195.13h-3.16l-6.29-11.85.41-.4h5.37v-8.14h-7.72v20.39h-3.01v-22.13h11.33c.71,0,1.28.15,1.73.44.45.29.67.67.67,1.13v8.4c0,1.07-1.1,1.6-3.29,1.6-.22,0-.53,0-.95-.02-.42-.01-.72-.02-.91-.02,1.95,3.53,3.89,7.06,5.82,10.6Z"/>
+                        <path class="cls-1" d="M135.72,193.56c0,.46-.23.84-.68,1.13s-1.04.44-1.74.44h-9.21c-.71,0-1.28-.15-1.73-.44-.45-.29-.67-.67-.67-1.13v-20.56h3.01v20.39h8.03v-20.39h3.01v20.56Z"/>
+                        <path class="cls-1" d="M159.73,195.13h-2.83v-14.01c0-.2.1-.78.3-1.74l-5.54,13.67h-.61l-5.54-13.67c.2.97.3,1.55.3,1.74v14.01h-2.83v-22.13h2.79l5.5,14.39c.03.08.06.29.09.64,0-.14.03-.35.09-.64l5.49-14.39h2.79v22.13Z"/>
+                    </g>
+                    </g>
+                </g>
+                </svg>'
+        '</a></div>'
+
     '</div>'
 
-    ''
+
     '<div class="museum-body">'
 
         ''
@@ -177,7 +236,7 @@
             ' <table class="museum-table">'
                 if p(v001) then '<tr><th>Provisional/Old ID</th><td>'v001+|<br>|,'</td></tr>' fi
                 if p(v020) then '<tr><th>Classification</th><td>'v020+|<br>|,'</td></tr>' fi
-                if p(v060) then '<tr><th>Category / Type</th><td>'v060+|<br>|,'</td></tr>' fi
+                if p(v060) then '<tr><th>Category / Typology</th><td>'v060+|<br>|,'</td></tr>' fi
                 if p(v030) then '<tr><th>Number of Items</th><td>'v030+|<br>|,'</td></tr>' fi
                 if p(v070) then '<tr><th>Barcode/RFID</th><td>'v070+|<br>|,'</td></tr>' fi
             '</table>'
@@ -185,8 +244,8 @@
             if p(v100) or p(v110) or p(v120) then
                 '<h3 class="section-title"><i class="fas fa-eye"></i> Visual Description</h3>
                 <table class="museum-table">'
-                if p(v100) then '<tr><th>Summary Description</th><td>'v100+|<br>|,'</td></tr>' fi
-                if p(v110) then '<tr><th>Detailed Description</th><td>'v110+|<br>|,'</td></tr>' fi
+                if p(v100) then '<tr><th>Brief Description</th><td>'v100+|<br>|,'</td></tr>' fi
+                if p(v110) then '<tr><th>Analytical Description</th><td>'v110+|<br>|,'</td></tr>' fi
                 if p(v120) then '<tr><th>Physical Marks</th><td>'v120+|<br>|,'</td></tr>' fi
                 '</table>'
             fi
@@ -199,7 +258,7 @@
                 if p(v220) then '<tr><th>Technique</th><td>'v220+|<br>|,'</td></tr>' fi
                 
                 if p(v230) then 
-                    '<tr><th>Dimensions of the Object</th><td>'
+                    '<tr><th>Artwork Dimensions</th><td>'
                     if p(v230^a) then '<span class="dim-tag">H: <b>'v230^a'</b></span>' fi
                     if p(v230^b) then '<span class="dim-tag">W: <b>'v230^b'</b></span>' fi
                     if p(v230^c) then '<span class="dim-tag">D: <b>'v230^c'</b></span>' fi
@@ -208,18 +267,18 @@
                     '</td></tr>' 
                 fi
                 
-                if p(v240) then '<tr><th>Mount Dimensions</th><td>'v240+|<br>|,'</td></tr>' fi
+                if p(v240) then '<tr><th>Support Dimensions</th><td>'v240+|<br>|,'</td></tr>' fi
                 if p(v250) then '<tr><th>Weight</th><td>'v250+|<br>|,'</td></tr>' fi
                 '</table>'
             fi
 
             if p(v300) or p(v330) then
-                '<h3 class="section-title"><i class="fas fa-user-edit"></i> Creator and Production</h3>
+                '<h3 class="section-title"><i class="fas fa-user-edit"></i> Authorship and Production</h3>
                 <table class="museum-table">'
                 if p(v300) then '<tr><th>Author / Artist</th><td><strong>'v300+|<br>|,'</strong></td></tr>' fi
                 if p(v310) then '<tr><th>Manufacturer</th><td>'v310+|<br>|,'</td></tr>' fi
-                if p(v330) then '<tr><th>Date/Period of Creation</th><td><i class="far fa-calendar-alt"></i> 'v330+|<br>|,'</td></tr>' fi
-                if p(v340) then '<tr><th>Place of Production</th><td>'v340+|<br>|,'</td></tr>' fi
+                if p(v330) then '<tr><th>Period/Date of Creation</th><td><i class="far fa-calendar-alt"></i> 'v330+|<br>|,'</td></tr>' fi
+                if p(v340) then '<tr><th>Place/Form of Production</th><td>'v340+|<br>|,'</td></tr>' fi
                 if p(v320) then '<tr><th>Biographical Note</th><td>'v320+|<br>|,'</td></tr>' fi
                 '</table>'
             fi
@@ -228,8 +287,8 @@
                 '<h3 class="section-title"><i class="fas fa-box-open"></i> Provenance and Acquisition</h3>
                 <table class="museum-table">'
                 if p(v400) then '<tr><th>Provenance</th><td>'v400+|<br>|,'</td></tr>' fi
-                if p(v430) then '<tr><th>Acquisition Method</th><td>'v430+|<br>|,'</td></tr>' fi
-                if p(v410) then '<tr><th>Date of Entry</th><td>'v410+|<br>|,'</td></tr>' fi
+                if p(v430) then '<tr><th>Method of Acquisition</th><td>'v430+|<br>|,'</td></tr>' fi
+                if p(v410) then '<tr><th>Entry Date</th><td>'v410+|<br>|,'</td></tr>' fi
                 if p(v420) then '<tr><th>Value</th><td>'v420+|<br>|,'</td></tr>' fi
                 '</table>'
             fi
@@ -237,10 +296,10 @@
             if p(v500) or p(v530) then
                 '<h3 class="section-title"><i class="fas fa-stethoscope"></i> Conservation and Condition</h3>
                 <table class="museum-table">'
-                if p(v500) then '<tr><th>Condition</th><td>'v500+|<br>|,'</td></tr>' fi
-                if p(v530) then '<tr><th>Damage/Incidents</th><td>'v530+|<br>|,'</td></tr>' fi
+                if p(v500) then '<tr><th>State of Conservation</th><td>'v500+|<br>|,'</td></tr>' fi
+                if p(v530) then '<tr><th>Damages/Occurrences</th><td>'v530+|<br>|,'</td></tr>' fi
                 if p(v540) then '<tr><th>Recommendation</th><td>'v540+|<br>|,'</td></tr>' fi
-                if p(v510) then '<tr><th>Date of Assessment</th><td>'v510+|<br>|,'</td></tr>' fi
+                if p(v510) then '<tr><th>Evaluation Date</th><td>'v510+|<br>|,'</td></tr>' fi
                 if p(v550) then '<tr><th>Priority</th><td>'v550+|<br>|,'</td></tr>' fi
                 if p(v560) then '<tr><th>Previous Interventions</th><td>'v560+|<br>|,'</td></tr>' fi
                 '</table>'
@@ -296,20 +355,20 @@
                                 if v720^b = 'f.p.'   then 'Back Face' fi
                                 if v720^b = 'f.s.'   then 'Top Face' fi
                                 if v720^b = 'f.i.'   then 'Bottom Face' fi
-                                if v720^b = 'f.l.e.' then 'Left Side Face' fi
-                                if v720^b = 'f.l.d.' then 'Right Side Face' fi
+                                if v720^b = 'f.l.e.' then 'Left Lateral Face' fi
+                                if v720^b = 'f.l.d.' then 'Right Lateral Face' fi
                                 if v720^b = 'b.f.f.'   then 'Base - Front Face' fi
                                 if v720^b = 'b.f.p.'   then 'Base - Back Face' fi
                                 if v720^b = 'b.f.s.'   then 'Base - Top Face' fi
                                 if v720^b = 'b.f.i.'   then 'Base - Bottom Face' fi
-                                if v720^b = 'b.f.l.e.' then 'Base - Left Side Face' fi
-                                if v720^b = 'b.f.l.d.' then 'Base - Right Side Face' fi
+                                if v720^b = 'b.f.l.e.' then 'Base - Left Lateral Face' fi
+                                if v720^b = 'b.f.l.d.' then 'Base - Right Lateral Face' fi
                                 if v720^b = 'int.f.f'   then 'Internal - Front Face' fi
                                 if v720^b = 'int.f.p'   then 'Internal - Back Face' fi
                                 if v720^b = 'int.f.s'   then 'Internal - Top Face' fi
                                 if v720^b = 'int.f.i'   then 'Internal - Bottom Face' fi
-                                if v720^b = 'int.f.l.e' then 'Internal - Left Side Face' fi
-                                if v720^b = 'int.f.l.d' then 'Internal - Right Side Face' fi
+                                if v720^b = 'int.f.l.e' then 'Internal - Left Lateral Face' fi
+                                if v720^b = 'int.f.l.d' then 'Internal - Right Lateral Face' fi
                                 if a(v720^b) then '' else if v720^b : '.' then '' else v720^b fi fi
 
                                 '</span>
@@ -326,14 +385,14 @@
             '<table class="museum-table">'
             if p(v800) then '<tr><th>Current Location</th><td><strong>'v800+|<br>|,'</strong></td></tr>' fi
             if p(v810) then '<tr><th>Location History</th><td>'v810+|<br>|,'</td></tr>' fi
-            if p(v820) then '<tr><th>File Names</th><td>'v820+|<br>|,'</td></tr>' fi
-            if p(v870) then '<tr><th>General Comments</th><td>'v870+|<br>|,'</td></tr>' fi
-            if p(v890) then '<tr><th>Last Update</th><td>'v890' ('v880')</td></tr>' fi
+            if p(v820) then '<tr><th>Attachments</th><td>'v820+|<br>|,'</td></tr>' fi
+            if p(v821) then '<tr><th>Public Attachments</th><td>'v821+|<br>|,'</td></tr>' fi
+            if p(v870) then '<tr><th>General Remarks</th><td>'v870+|<br>|,'</td></tr>' fi
+            if p(v890) then '<tr><th>Last Update</th><td><small>'(v890'<br>')'</small></td></tr>' fi
             '</table>'
 
         '</div>' ''
 
-        ''
         if p(v820) then 
             '<div class="museum-sidebar">'
                 '<h3 class="section-title"><i class="far fa-images"></i> Media</h3>'
@@ -344,6 +403,18 @@
                 /)
             '</div>'
         fi
+
+        if p(v821) then 
+            '<div class="museum-sidebar">'
+                '<h3 class="section-title"><i class="far fa-images"></i> Media</h3>'
+                (
+                    '<a href="../common/show_image.php?image='v821'&base=spectrum" target="_blank" class="gallery-item">'
+                        '<img src="../common/show_image.php?image='v821'&base=spectrum" alt="Image associated with the record">'
+                    '</a>'
+                /)
+            '</div>'
+        fi
+
 
     '</div>' ''
 

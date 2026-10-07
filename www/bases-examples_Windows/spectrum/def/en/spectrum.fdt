@@ -1,87 +1,91 @@
 TAB||0 - Identification and Classification|0|0||||||||||||0||0|0|||
 F|001|001 ID (Inventory)|0|0|||AI||6|||||||1||0|0|||
-F|002|002 - Registry Number (Accession Number)|1|0|||X||30|||||||1||0|0|||
-F|010|010 - Object Name|0|0|||X|||||||||1||0|0|||
-F|020|020 - Classification (Taxonomy/Chenhall)|0|0|||X|||||||||1||0|0|||
+F|002|002 - Accession Number|1|0|||X||30|||||||1||0|0|||
+F|010|010 - Object Name|0|0|||X|||D|spectrum|TI_|v010|||1||0|0|||
+F|020|020 - Classification (Taxonomy/Chenhall)|0|0|||X|||D|spectrum|CLA_|v020|||1||0|0|||
 F|030|030 - Number of Items (Quantity)|0|0|||X|||||||||1||0|0|||
-F|050|050 - Specific Title (if any)|0|0|||X|||||||||0||0|0|||
-F|060|060 - Category / Type|0|0|||X|||||||||1||0|0|||
-F|070|070 - Barcode/RFID|0|0|||X|||||||||1||0|0|||
+F|050|050 - Specific Title (If any)|0|0|||X|||D|spectrum|TID_|v050|||0||0|0|||
+F|060|060 - Category / Typology|0|0|||X|||D|spectrum|TIP_|v060|||1||0|0|||
+F|070|070 - Barcode/RFID|0|0|||X|||D|spectrum|RFID_|v070|||1||0|0|||
 TAB||1 - Visual Description|0|0||||||||||||0||0|0|||
-F|100|100 - Summary Description|0|0|||X|3||||||||1||0|0|||
+F|100|100 - Brief Description|0|0|||X|3||||||||1||0|0|||
 F|110|110 - Detailed/Analytical Description|0|0|||X|9||||||||1||0|0|||
 F|120|120 - Physical Description (Marks/Inscriptions)|0|0|||X|3||||||||0||0|0|||
 TAB||2 - Physical Characteristics|0|0||||||||||||0||0|0|||
-F|200|200 - Material (Repetitive)|0|1|||X|||||||||1||0|0|||
-F|210|210 - Support material|0|1|||X|||||||||1||0|0|||
-F|220|220 - Technique (Repetitive)|0|1|||X|||||||||1||0|0|||
-F|230|230 - Dimensions (^aHeight ^bWidth ^cDepth ^dDiameter)|0|0|||X|||||||||1||0|0|||
-F|240|240 - Mount dimensions|0|0|||X|||||||||1||0|0|||
+F|200|200 - Material (Repeatable)|0|1|||X|||||||||1||0|0|||
+F|210|210 - Support Material|0|1|||X|||||||||1||0|0|||
+F|220|220 - Technique (Repeatable)|0|1|||X|||D|spectrum|TEC_|v220|||1||0|0|||
+T|230|230 - Dimensions|0|0|abcd||X|||||||||1||0|0|||
+S||Height|0|0|a||X|||||||||0||0|0|||
+S||Width|0|0|b||X|||||||||0||0|0|||
+S||Depth|0|0|c||X|||||||||0||0|0|||
+S||Diameter|0|0|d||X|||||||||0||0|0|||
+F|240|240 - Support Dimensions|0|0|||X|||||||||1||0|0|||
 F|250|250 - Weight|0|0|||X|||||||||1||0|0|||
-TAB||3 - Creator and Production|0|0||||||||||||0||0|0|||
-F|300|300 - Author/Artist (Repeated)|0|1|||X|||||||||1||0|0|||
-F|310|310 - Manufacturer/Publisher|0|0|||X|||||||||1||0|0|||
-F|320|320 - Author's Biography/Background|0|0|||X|3||||||||1||0|0|||
-F|330|330 - Date/Period of Creation (YYYY-MM-DD)|0|0|||X|||||||||1||0|0|||
-F|340|340 - Place of Production|0|0|||X|||||||||1||0|0|||
+TAB||3 - Authorship and Production|0|0||||||||||||0||0|0|||
+F|300|300 - Author/Artist (Repeatable)|0|1|||X|||D|spectrum|AU_|v300|||1||0|0|||
+F|310|310 - Manufacturer/Publisher|0|0|||X|||D|spectrum|MN_|v310|||1||0|0|||
+F|320|320 - Biography/Author History|0|0|||X|3||||||||1||0|0|||
+F|330|330 - Creation Date/Period (YYYY-MM-DD)|0|0|||X|||||||||1||0|0|||
+F|340|340 - Place of Production|0|0|||X|||D|spectrum|LOP_|v340|||1||0|0|||
 TAB||4 - Provenance and Acquisition|0|0||||||||||||0||0|0|||
-F|400|400 - Provenance (Donor/Seller)|0|0|||X|||||||||1||0|0|||
-F|410|410 - Date of Acquisition (YYYY-MM-DD)|0|0|||X|||||||||1||0|0|||
-F|420|420 - Acquisition Cost|0|0|||X|||||||||1||0|0|||
-F|430|430 - Method of Acquisition (Purchase/Donation)|0|0|||X|||||||||1||0|0|||
+F|400|400 - Provenance (Donor/Seller)|0|0|||X|||D|spectrum|PR_|v400|||1||0|0|||
+F|410|410 - Acquisition Date (YYYY-MM-DD)|0|0|||X|||||||||1||0|0|||
+F|420|420 - Acquisition Value|0|0|||X|||||||||1||0|0|||
+F|430|430 - Acquisition Method (Purchase/Donation)|0|0|||X|||||||||1||0|0|||
 F|440|440 - Provenance History|0|1|||X|3||||||||1||0|0|||
 TAB||5 - Conservation and Condition|0|0||||||||||||0||0|0|||
-F|500|500 - Condition (Repeated)|0|1|||XF|||||||||1||0|0|||
-F|510|510 - Date of Assessment|0|1|||X|||||||||1||0|0|||
-F|520|520 - Access conditions/Handling|0|0|||X|||||||||1||0|0|||
-F|530|530 - Description of Damage/Incidents|0|1|||X|||||||||1||0|0|||
+F|500|500 - Condition State (Repeatable)|0|1|||XF|||||||||1||0|0|||
+F|510|510 - Assessment Date|0|1|||X|||||||||1||0|0|||
+F|520|520 - Access/Handling Condition|0|0|||X|||||||||1||0|0|||
+F|530|530 - Damage/Occurrence Description|0|1|||X|||||||||1||0|0|||
 F|540|540 - Treatment/Recommendation|0|1|||X|||||||||1||0|0|||
 F|550|550 - Restoration Priority|0|0|||X|||||||||1||0|0|||
 F|560|560 - Previous Interventions|0|1|||X|||||||||1||0|0|||
-TAB||6 - Sets|0|0||||||||||||0||0|0|||
-F|600|600 - Is it a set?|0|0|||X|||||||||1||0|0|||
-F|610|610 - Name of the Set/Collection|0|0|||X|||||||||1||0|0|||
-F|620|620 - Number of parts in the set|0|0|||X|||||||||1||0|0|||
-F|630|630 - Part-Whole Relationship|0|1|||X|||||||||0||0|0|||
-TAB||7 - Registrations and Trademarks|0|0||||||||||||0||0|0|||
+TAB||6 - Groups and Sets|0|0||||||||||||0||0|0|||
+F|600|600 - Is it a group?|0|0|||X|||||||||1||0|0|||
+F|610|610 - Group/Collection Name|0|0|||X|||||||||1||0|0|||
+F|620|620 - Number of Pieces in Group|0|0|||X|||||||||1||0|0|||
+F|630|630 - Part-to-Whole Relationship|0|1|||X|||||||||0||0|0|||
+TAB||7 - Inscriptions and Marks|0|0||||||||||||0||0|0|||
 F|700|700 - Has Inscription? (Y/N)|0|0|||X|||||||||0||0|0|||
 F|710|710 - Number of Inscriptions|0|0|||X|||||||||0||0|0|||
-T|720|Inscriptions (Group)|0|1|ablt||TB|||||||||0||0|0|||
-S||Type (Signature, Label, Plate, etc.)|0|0|a||X|||||||||0||0|0|||
-S||Location (Front, Back...)|0|0|b||X|||||||||0||0|0|||
-S||Language of the transcript|0|0|l||X|||||||||0||0|0|||
-S||Transcript/Content (The written text)|0|0|t||X|||||||||0||0|0|||
-F|730|730 - Location of the inscription on the artefact|0|1|||XF|||||||||0||0|0|||
-F|740|740 - Content/Transcript|0|1|||X|||||||||0||0|0|||
-F|750|750 - Transcription of the inscription|0|0|||X|||||||||0||0|0|||
-F|760|760 - Note regarding the inscription|0|0|||X|||||||||0||0|0|||
+T|720|Inscriptions (Group)|0|1|ablt||TB|||D|spectrum|TIN_|720|||0||0|0|||
+S||Type (Signature, Label, Plaque...)|0|0|a||X|||||||||0||0|0|||
+S||Location (Front base, Back...)|0|0|b||X|||||||||0||0|0|||
+S||Transcription Language|0|0|l||X|||||||||0||0|0|||
+S||Transcription/Content (Written text)|0|0|t||X|||||||||0||0|0|||
+F|730|730 - Inscription Location on Piece|0|1|||X||50|D|spectrum|LOI_|v730|||0||0|0|||
+F|740|740 - Content/Transcription|0|1|||X|||||||||0||0|0|||
+F|750|750 - Inscription Transcription|0|0|||X|||||||||0||0|0|||
+F|760|760 - Inscription Observation|0|0|||X|||||||||0||0|0|||
 TAB||8 - Location and Movement|0|0|||X|||||||||0||0|0|||
 F|800|800 - Current Physical Location|0|1|||X|||||||||0||0|0|||
 F|810|810 - Movement History|0|1|||X|||||||||0||0|0|||
-F|820|820 - Appendices|0|1|||U|8|100|||||||0||0|0|||
-F|821|821 - Public annexes|0|1|||U|8|100|||||||0||0|0|||
-F|830|830 - Object History|0|0|||X|||||||||0||0|0|||
+F|820|820 - Attachments|0|1|||U|8|100|||||||0||0|0|||
+F|821|821 - Public Attachments|0|1|||U|8|100|||||||0||0|0|||
+F|830|830 - Piece History|0|0|||X|||||||||0||0|0|||
 F|840|840 - Research Source|0|0|||X|||||||||0||0|0|||
-F|850|850 - Borrower's Name|0|1|||X|||||||||0||0|0|||
-F|851|851 - Name of the Borrower|0|0|||X|||||||||0||0|0|||
-F|852|852 - Contact details for the Borrower|0|0|||X|||||||||0||0|0|||
-F|853|853 - Authorising Officer|0|0|||X|||||||||0||0|0|||
+F|850|850 - Loan Information|0|1|||X|||||||||0||0|0|||
+F|851|851 - Borrower Name|0|0|||X|||D|spectrum|NOC_|v851|||0||0|0|||
+F|852|852 - Borrower Contact|0|0|||X|||||||||0||0|0|||
+F|853|853 - Authorization Officer|0|0|||X|||||||||0||0|0|||
 F|860|860 - Insurance and Policies|0|1|||X|||||||||0||0|0|||
-F|861|861 - Date of Insurance Valuation|0|0|||X|||||||||0||0|0|||
+F|861|861 - Insurance Value Assessment Date|0|0|||ISO|||||||||0||0|0|||
 F|862|862 - Assessment Note|0|0|||X|||||||||0||0|0|||
-F|863|863 - Author of the Assessment Note|0|0|||X|||||||||0||0|0|||
-F|870|870 - General Comments|0|1|||X|||||||||0||0|0|||
-F|880|880 - Staff Name|0|0|||X|||||||||0||0|0|||
-F|890|890 - Record update date|0|0|||OD|5|6|||||||0||0|0|||
-F|891|891 - Person responsible for updating|0|0|||X|||||||||0||0|0|||
-F|892|892 - Name of the technician responsible for the post-move inspection|0|0|||X|||||||||0||0|0|||
-F|893|893 - Post-relocation review date|0|0|||X|||||||||0||0|0|||
-TAB||9 - Rights and Licences|0|0|||X|||||||||0||0|0|||
+F|863|863 - Assessment Note Author|0|0|||X|||||||||0||0|0|||
+F|870|870 - General Remarks|0|1|||X|||||||||0||0|0|||
+F|880|880 - Technician Name|0|0|||X|||||||||0||0|0|||
+F|890|890 - Record Update Date|0|1|||OD|5|6|||||||0||0|0|||
+F|891|891 - Update Officer|0|0|||X|||||||||0||0|0|||
+F|892|892 - Post-Move Review Technician Name|0|0|||X|||||||||0||0|0|||
+F|893|893 - Post-Move Review Date|0|0|||ISO||||||v893|||0||0|0|||
+TAB||9 - Rights and Licenses|0|0|||X|||||||||0||0|0|||
 F|900|900 - Copyright Holder|0|0|||X|||||||||0||0|0|||
 F|910|910 - Rights Type|0|0|||X|||||||||0||0|0|||
 F|920|920 - Status (Public Domain/Copyright)|0|0|||X|||||||||0||0|0|||
-F|930|930 - Licence (CC-BY, etc.)|0|0|||X|||||||||0||0|0|||
-F|940|940 - Expiry Date|0|0|||X|||||||||0||0|0|||
-F|950|950 - Source of information|0|0|||X|||||||||0||0|0|||
-F|960|960 - Notes on Rights|0|0|||X|||||||||0||0|0|||
+F|930|930 - Usage License (CC-BY, etc.)|0|0|||X|||D|spectrum|LIC_|v930|||1||0|0|||
+F|940|940 - Expiry Date|0|0|||ISO|||||||||0||0|0|||
+F|950|950 - Information Source|0|0|||X|||||||||0||0|0|||
+F|960|960 - Rights Notes|0|0|||X|||||||||0||0|0|||
 F|980|980 - System Log|0|0|||OD|5|6|||||||0||0|0|||

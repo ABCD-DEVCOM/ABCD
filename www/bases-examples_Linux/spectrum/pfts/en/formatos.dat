@@ -1,2 +1,4 @@
 spectrum|SPECTRUM - Museum Management Standard|T|VBAR|0|0
-opac|Visualização pública|T|VBAR|0|0
+opac_detail|Detailed public view|T|VBAR|0|0
+opac|Public view|T|VBAR|0|0
+attachments|See attachments|T|VBAR|0|0
