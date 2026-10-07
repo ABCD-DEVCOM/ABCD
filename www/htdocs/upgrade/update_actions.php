@@ -1,175 +1,200 @@
 <?php
 /*
 ** ABCD Migration Script
-** Executed automatically by update_manager.php v4.2+
-** 2025-12-08 fho4abcd Added error checks
+** Executed automatically by update_manager.php
 */
 
 if (!defined('ABCD_UPDATE_MODE')) die("Direct access not allowed.");
 
+global $dest, $PARTIAL_UPDATE_SOURCES, $msgstr;
+
+// --- PHP Compatibility Check (v4.0+) ---
+// Deve ser rodado antes de qualquer outra ação para evitar quebrar o sistema
+// caso o servidor esteja usando uma versão antiga.
+if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+    $msg_php_error_pt = "O ABCD v4 exige a versão PHP 8.1 ou superior para funcionar corretamente (sua versão atual é " . PHP_VERSION . "). Atualize seu servidor antes de prosseguir com a instalação.";
+    $msg_php_error_en = "ABCD v4 requires PHP 8.1 or higher to run properly (your current version is " . PHP_VERSION . "). Please update your server before proceeding with the installation.";
+
+    $display_msg = isset($msgstr["mig_php_version_error"]) ? $msgstr["mig_php_version_error"] : "{$msg_php_error_pt}<br><br>{$msg_php_error_en}";
+
+    die("
+    <div style='font-family: sans-serif; background: #dc3545; color: white; padding: 20px; max-width: 600px; margin: 50px auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);'>
+        <h2 style='margin-top: 0;'>Update Blocked</h2>
+        <p><strong>{$display_msg}</strong></p>
+    </div>");
+}
+
 // Ensure that the variable $dest exists, otherwise stop before giving a fatal error.
 if (!isset($dest) || !is_array($dest)) {
-    writeLog("ERROR: Variable \$dest not found in migration script.","error");
+    writeLog($msgstr["mig_err_dest"] ?? "ERROR: Variable \$dest not found in migration script.", "error");
     checkLastError();
     return;
 }
 
 // Auxiliary function for log (if available)
-function migrationLog($msg)
+function migrationLog(string $msg, string $type = "info"): void
 {
-    if (function_exists('writeLog')) writeLog("MIGRATION: " . $msg);
+    if (function_exists('writeLog')) writeLog("MIGRATION: " . $msg, $type);
 }
 
-migrationLog("Checking for structural changes...");
+migrationLog($msgstr["mig_checking"] ?? "Checking for structural changes...");
 
 // ==================================================================
-// NEW FOLDERS
+// CASE 1: NEW FILES AND FOLDERS (Added to partial update queue)
 // ==================================================================
-// If this version contains new folders that the old Update Manager does not recognise,
-// they will be added to its processing list here.
-// ------------------------------------------------------------------
-
-global $PARTIAL_UPDATE_SOURCES; // Important: access the global variable of the main script
-
-// Add the NO ZIP paths of the new folders here
 $new_sources = [
-    'www/htdocs/admin',
-    'www/htdocs/login.php'
+    'www/htdocs/content',
+    'www/htdocs/abcd-api',
+    'www/htdocs/plugins.php'
 ];
 
 foreach ($new_sources as $src) {
-    // Adds to the array so that Update Manager copies the files immediately afterwards.
-    $PARTIAL_UPDATE_SOURCES[] = $src;
-    migrationLog("Injecting new source folder into update queue: $src");
+    if (!in_array($src, $PARTIAL_UPDATE_SOURCES)) {
+        $PARTIAL_UPDATE_SOURCES[] = $src;
+        migrationLog(sprintf($msgstr["mig_injecting_src"] ?? "Injecting new source into update queue: %s", $src));
+    }
 }
 
-
 // ==================================================================
-// DELETING OBSOLETE FILES AND FOLDERS
+// CASE 2: DELETING OBSOLETE FILES AND FOLDERS
 // ==================================================================
-
-// A) Delete specific files (unlink)
-
 $files_to_delete = [
     $dest['htdocs'] . '/info.php'
 ];
 
 foreach ($files_to_delete as $file) {
     if (file_exists($file)) {
-        unlink($file);
-	checkLastError();
-        migrationLog("Deleted obsolete file: " . basename($file));
+        @unlink($file);
+        migrationLog(sprintf($msgstr["mig_deleted_file"] ?? "Deleted obsolete file: %s", basename($file)));
     }
 }
 
-// B) Delete entire FOLDERS (recursiveDelete)
 $folders_to_delete = [
-    $dest['htdocs'] . '/mysite',
-    $dest['htdocs'] . '/isisws',
-    $dest['htdocs'] . '/images'
+    $dest['htdocs'] . '/odds'
 ];
 
 foreach ($folders_to_delete as $folder) {
     if (is_dir($folder)) {
-        // recursiveDelete is a native function of update_manager.php.
         recursiveDelete($folder);
-	checkLastError();
-        migrationLog("Deleted obsolete directory tree: " . basename($folder));
+        migrationLog(sprintf($msgstr["mig_deleted_dir"] ?? "Deleted obsolete directory tree: %s", basename($folder)));
+    }
+}
+
+
+// ==================================================================
+// CASE 3: SMART INJECTION OF NEW BASES (Spectrum only)
+// ==================================================================
+global $source_root, $os_in_gitname;
+migrationLog($msgstr["mig_checking_bases"] ?? "Checking for missing files in bases directory...");
+
+$bases_src_dir = $source_root . '/www/bases-examples_' . $os_in_gitname;
+$bases_dst_dir = rtrim($dest['bases'], '/\\');
+
+$safeCopyNewFiles = function (string $src, string $dst) use (&$safeCopyNewFiles): void {
+    if (!is_dir($dst)) {
+        @mkdir($dst, 0755, true);
+    }
+    $iterator = new DirectoryIterator($src);
+    foreach ($iterator as $item) {
+        if ($item->isDot()) continue;
+        $srcPath = $item->getPathname();
+        $dstPath = $dst . '/' . $item->getFilename();
+
+        if ($item->isDir()) {
+            $safeCopyNewFiles($srcPath, $dstPath);
+        } elseif (!file_exists($dstPath)) {
+            @copy($srcPath, $dstPath);
+        }
+    }
+};
+
+// Inject 'spectrum' database
+$spectrum_src = $bases_src_dir . '/spectrum';
+$spectrum_dst = $bases_dst_dir . '/spectrum';
+if (is_dir($spectrum_src)) {
+    $safeCopyNewFiles($spectrum_src, $spectrum_dst);
+    migrationLog($msgstr["mig_spectrum_copied"] ?? "Spectrum database structure injected safely.");
+}
+
+// Inject spectrum.par
+$par_src = $bases_src_dir . '/par/spectrum.par';
+$par_dst = $bases_dst_dir . '/par/spectrum.par';
+if (file_exists($par_src) && !file_exists($par_dst)) {
+    @copy($par_src, $par_dst);
+}
+
+// Update bases.dat safely
+$bases_dat_path = $bases_dst_dir . '/bases.dat';
+if (file_exists($bases_dat_path)) {
+    $bases_content = file($bases_dat_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $has_spectrum = false;
+    $insert_index = -1;
+
+    foreach ($bases_content as $index => $line) {
+        $parts = explode('|', trim($line));
+        $base_name = strtolower(trim($parts[0]));
+        if ($base_name === 'spectrum') {
+            $has_spectrum = true;
+            break;
+        }
+        // Identify where system modules start to inject Spectrum right above them
+        if (in_array($base_name, ['acces', 'users', 'logtrans', 'providers'])) {
+            if ($insert_index === -1) {
+                $insert_index = $index;
+            }
+        }
+    }
+
+    if (!$has_spectrum) {
+        $new_line = "spectrum|SPECTRUM - Museum Management Standard";
+        if ($insert_index !== -1) {
+            array_splice($bases_content, $insert_index, 0, $new_line);
+        } else {
+            $bases_content[] = $new_line;
+        }
+        @file_put_contents($bases_dat_path, implode(PHP_EOL, $bases_content) . PHP_EOL);
+        migrationLog($msgstr["mig_bases_dat_updated"] ?? "Updated bases.dat with spectrum entry.");
     }
 }
 
 // ==================================================================
-// MIGRATE 'uploads' TO 'content/uploads' (v4.0+)
+// CASE 4: SMART CONFIG.PHP UPDATE (v4.0+)
 // ==================================================================
-// Moving the user uploads folder into the new 'content' directory
-
-$old_uploads_dir = $dest['htdocs'] . '/uploads';
-$new_content_dir = $dest['htdocs'] . '/content';
-$new_uploads_dir = $new_content_dir . '/uploads';
-
-// Check if the old uploads folder exists in the root
-if (is_dir($old_uploads_dir)) {
-    migrationLog("Migrating 'uploads' directory to 'content/uploads'...");
-
-    // Ensure the new content directory exists
-    if (!is_dir($new_content_dir)) {
-        mkdir($new_content_dir, 0755, true);
-        checkLastError();
-        migrationLog("Created new 'content' directory.");
-    }
-
-    // Copy all contents using the built-in function from update_manager.php
-    recursiveCopy($old_uploads_dir, $new_uploads_dir);
-    checkLastError();
-
-    // Delete the old uploads directory to clean up the root
-    recursiveDelete($old_uploads_dir);
-    checkLastError();
-
-    migrationLog("Migration of 'uploads' completed successfully.");
-} else {
-    migrationLog("No old 'uploads' directory found to migrate. Skipping.");
-}
-
-// ==================================================================
-// ADD NEW FOLDERS TO PARTIAL UPDATE (Optional but recommended)
-// ==================================================================
-// Ensure that the new 'content' directory is recognized in future updates 
-// if it needs to bring factory default files inside it.
-if (!in_array('www/htdocs/content', $PARTIAL_UPDATE_SOURCES)) {
-    $PARTIAL_UPDATE_SOURCES[] = 'www/htdocs/content';
-}
-
-checkLastError(); // Ensure that errors in this script are shown with correct stacktrace
-migrationLog("Migration tasks completed.");
-
-// ==================================================================
-// SMART CONFIG.PHP UPDATE (v4.0+)
-// ==================================================================
-// Migrates user-specific paths from old config.php into the new 
-// config.php.template, ensuring new v4.0+ constants are preserved.
-
 $old_config_path = $dest['htdocs'] . '/central/config.php';
 $template_path   = $dest['htdocs'] . '/central/config.php.template';
 
 if (file_exists($old_config_path) && file_exists($template_path)) {
-    migrationLog("Starting smart migration of config.php...");
+    migrationLog($msgstr["mig_config_start"] ?? "Starting smart migration of config.php...");
 
     $old_content      = file_get_contents($old_config_path);
     $template_content = file_get_contents($template_path);
 
-    // Regex pattern to capture everything from $protocol to the end of $ABCD_scripts_path
-    $pattern = '/(\$protocol\s*=\s*.*?\$ABCD_scripts_path\s*=\s*.*?;)/s';
+    // Captura estritamente o bloco OS-dependent e a definição do $xWxis
+    $pattern = '/(\/\/\s*Set operation system depending variables.*?\$xWxis\s*=\s*.*?;)/s';
 
-    // 1. Extract the user's custom settings from the old config
     if (preg_match($pattern, $old_content, $matches)) {
         $user_custom_settings = $matches[1];
 
-        // 2. Inject the extracted settings into the new template
-        // IMPORTANTE: O uso do preg_replace_callback impede que o PHP "engula" as barras invertidas 
-        // e os escapes do Windows (ex: "\\") durante a injeção do texto.
         $new_config_content = preg_replace_callback($pattern, function ($m) use ($user_custom_settings) {
             return $user_custom_settings;
         }, $template_content);
 
         if ($new_config_content !== null && $new_config_content !== $template_content) {
-
-            // 3. Create a safety backup of the old config
             $backup_name = $old_config_path . '.bak_v3_' . date('Ymd_His');
-            copy($old_config_path, $backup_name);
-            checkLastError();
-            migrationLog("Backed up old config.php to " . basename($backup_name));
+            @copy($old_config_path, $backup_name);
+            migrationLog(sprintf($msgstr["mig_config_backup"] ?? "Backed up old config.php to %s", basename($backup_name)));
 
-            // 4. Overwrite config.php with the merged content
-            file_put_contents($old_config_path, $new_config_content);
-            checkLastError();
-            migrationLog("Successfully updated config.php with user settings and v4.0+ variables.");
+            @file_put_contents($old_config_path, $new_config_content);
+            migrationLog($msgstr["mig_config_success"] ?? "Successfully updated config.php with user settings and v4.0+ variables.");
         } else {
-            migrationLog("ERROR/WARNING: Failed to inject user settings into config.php.template. Regex replacement failed or matched nothing in the template.");
+            migrationLog($msgstr["mig_config_err_regex"] ?? "Failed to inject user settings into config.php.template.", "error");
         }
     } else {
-        migrationLog("WARNING: Could not locate the expected user settings block in the old config.php. Manual update required.");
+        migrationLog($msgstr["mig_config_err_match"] ?? "Could not locate the expected user settings block in the old config.php.", "warning");
     }
 } else {
-    migrationLog("Skipping config.php update: Old config or template not found.");
+    migrationLog($msgstr["mig_config_skip"] ?? "Skipping config.php update: Old config or template not found.");
 }
+
+checkLastError();
+migrationLog($msgstr["mig_completed"] ?? "Migration tasks completed.");
