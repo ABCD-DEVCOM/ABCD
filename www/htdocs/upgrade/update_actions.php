@@ -1,7 +1,7 @@
 <?php
 /*
 ** ABCD Migration Script
-** Executed automatically by update_manager.php
+** Executed automatically by update_manager.php v4.2+
 */
 
 if (!defined('ABCD_UPDATE_MODE')) die("Direct access not allowed.");
@@ -37,26 +37,31 @@ function migrationLog(string $msg, string $type = "info"): void
     if (function_exists('writeLog')) writeLog("MIGRATION: " . $msg, $type);
 }
 
-migrationLog($msgstr["mig_checking"] ?? "Checking for structural changes...");
-
-// ==================================================================
-// CASE 1: NEW FILES AND FOLDERS (Added to partial update queue)
-// ==================================================================
-$new_sources = [
-    'www/htdocs/content',
-    'www/htdocs/abcd-api',
-    'www/htdocs/plugins.php'
-];
-
-foreach ($new_sources as $src) {
-    if (!in_array($src, $PARTIAL_UPDATE_SOURCES)) {
-        $PARTIAL_UPDATE_SOURCES[] = $src;
-        migrationLog(sprintf($msgstr["mig_injecting_src"] ?? "Injecting new source into update queue: %s", $src));
+// Advanced robust delete for folders (recursive)
+function robustDelete(string $dir): void
+{
+    if (!file_exists($dir)) return;
+    if (is_dir($dir)) {
+        $objects = scandir($dir);
+        foreach ($objects as $object) {
+            if ($object != "." && $object != "..") {
+                if (is_dir($dir . DIRECTORY_SEPARATOR . $object) && !is_link($dir . "/" . $object)) {
+                    robustDelete($dir . DIRECTORY_SEPARATOR . $object);
+                } else {
+                    @unlink($dir . DIRECTORY_SEPARATOR . $object);
+                }
+            }
+        }
+        @rmdir($dir);
+    } else {
+        @unlink($dir);
     }
 }
 
+migrationLog($msgstr["mig_checking"] ?? "Checking for structural changes...");
+
 // ==================================================================
-// CASE 2: DELETING OBSOLETE FILES AND FOLDERS
+// CASE 1: DELETING OBSOLETE FILES AND FOLDERS
 // ==================================================================
 $files_to_delete = [
     $dest['htdocs'] . '/info.php'
@@ -75,14 +80,14 @@ $folders_to_delete = [
 
 foreach ($folders_to_delete as $folder) {
     if (is_dir($folder)) {
-        recursiveDelete($folder);
+        robustDelete($folder);
         migrationLog(sprintf($msgstr["mig_deleted_dir"] ?? "Deleted obsolete directory tree: %s", basename($folder)));
     }
 }
 
 
 // ==================================================================
-// CASE 3: SMART INJECTION OF NEW BASES (Spectrum only)
+// CASE 2: SMART INJECTION OF NEW BASES (Spectrum only)
 // ==================================================================
 global $source_root, $os_in_gitname;
 migrationLog($msgstr["mig_checking_bases"] ?? "Checking for missing files in bases directory...");
@@ -116,13 +121,6 @@ if (is_dir($spectrum_src)) {
     migrationLog($msgstr["mig_spectrum_copied"] ?? "Spectrum database structure injected safely.");
 }
 
-// Inject spectrum.par
-$par_src = $bases_src_dir . '/par/spectrum.par';
-$par_dst = $bases_dst_dir . '/par/spectrum.par';
-if (file_exists($par_src) && !file_exists($par_dst)) {
-    @copy($par_src, $par_dst);
-}
-
 // Update bases.dat safely
 $bases_dat_path = $bases_dst_dir . '/bases.dat';
 if (file_exists($bases_dat_path)) {
@@ -154,6 +152,30 @@ if (file_exists($bases_dat_path)) {
         }
         @file_put_contents($bases_dat_path, implode(PHP_EOL, $bases_content) . PHP_EOL);
         migrationLog($msgstr["mig_bases_dat_updated"] ?? "Updated bases.dat with spectrum entry.");
+    }
+}
+
+// ==================================================================
+// CASE 3: MIGRATE NEW CORE FOLDERS EXPLICITLY (plugins, abcd-api, content)
+// ==================================================================
+// Instead of relying on the Update Manager loop, we force copy them here 
+// to ensure they are available before the config.php update runs.
+$explicit_copies = [
+    'www/htdocs/content'   => $dest['htdocs'] . '/content',
+    'www/htdocs/abcd-api'  => $dest['htdocs'] . '/abcd-api',
+    'www/htdocs/plugins.php' => $dest['htdocs'] . '/plugins.php'
+];
+
+foreach ($explicit_copies as $src_rel => $dst_abs) {
+    $full_src = $source_root . '/' . $src_rel;
+    if (file_exists($full_src)) {
+        if (is_dir($full_src)) {
+            recursiveCopy($full_src, $dst_abs);
+            migrationLog(sprintf($msgstr["mig_injecting_src"] ?? "Injected new source folder: %s", basename($dst_abs)));
+        } else {
+            @copy($full_src, $dst_abs);
+            migrationLog(sprintf($msgstr["mig_injecting_src"] ?? "Injected new source file: %s", basename($dst_abs)));
+        }
     }
 }
 
