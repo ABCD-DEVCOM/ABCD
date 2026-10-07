@@ -6,3 +6,6 @@ Tipo (Assinatura, Etiqueta, Placa...)|720|TIN_|
 Localização (Base frente, Verso...)|720|LIN_|
 Transcrição/Conteúdo (O texto escrito)|720|TRI_|
 Material/Técnica da inscrição|720|TCI_|
+Data de atualização do registro|890|DTA_|
+Data de revisão pós-mudança|893|DTR_|
+Data de Expiração|940|DTX_|
