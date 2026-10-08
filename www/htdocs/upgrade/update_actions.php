@@ -66,7 +66,7 @@ $safeCopyNewFiles = function (string $src, string $dst) use (&$safeCopyNewFiles)
 // content/ is the user's vault and is handled in CASE 1b (never deleted/overwritten).
 $new_sources = [
     'www/htdocs/abcd-api',
-    'www/htdocs/plugins.php'
+    'www/htdocs/plugin.php'
 ];
 
 foreach ($new_sources as $src) {
@@ -252,7 +252,7 @@ if (!file_exists($old_config_path)) {
             && is_file($final_htdocs . '/version.php')
             && file_get_contents($final_htdocs . '/version.php') === $final_version_src;
 
-        foreach (['/central/common/LanguageManager.php', '/central/common/hooks.php', '/central/common/PluginBridge.php', '/plugins.php', '/abcd-api'] as $required) {
+        foreach (['/central/common/LanguageManager.php', '/central/common/hooks.php', '/central/common/PluginBridge.php', '/plugin.php', '/abcd-api'] as $required) {
             if (!file_exists($final_htdocs . $required)) $ok = false;
         }
 
