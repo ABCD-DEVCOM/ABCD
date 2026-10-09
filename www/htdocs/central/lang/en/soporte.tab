@@ -145,6 +145,7 @@ cnv_separador=Missing Record separator
 cnv_tab=Conversion Table
 cnv_tit=Conversion tables from TXT to CDS/Isis
 cnv_txt=TXT file
+cnv_json=JSON file
 cnv_validar=Labels Validation
 cnv_dispcnvtab=Show conversion table
 col_folder_no_actions=No action for target COLLECTION folder

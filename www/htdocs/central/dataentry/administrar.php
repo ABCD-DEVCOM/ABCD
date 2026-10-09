@@ -53,6 +53,9 @@ include("../common/header.php");
 					case "exptxt":
 						self.location = "carga_txt_cnv.php?base=" + top.base + "&accion=export&tipo=txt&lang=<?php echo $_SESSION["lang"] ?>" + seleccionados
 						break
+					case "expjson":
+						self.location = "exporta_json.php?base=" + top.base + "&cipar=" + top.base + ".par&accion=export&tipo=json&lang=<?php echo $_SESSION["lang"] ?>" + seleccionados
+						break
 					case "expiso":
 						self.location = "exporta_iso.php?base=" + top.base + "&cipar=" + top.base + ".par&tipo=iso&lang=<?php echo $_SESSION["lang"] ?>" + seleccionados
 						break
@@ -312,6 +315,9 @@ include("../common/header.php");
 								</a>
 								<a href='javascript:Activar("exptxt")' class="bt bt-blue mb-2">
 									<i class="fas fa-file-alt"></i> <?php echo $msgstr["cnv_txt"] ?>
+								</a>
+								<a href='javascript:Activar("expjson")' class="bt bt-blue mb-2">
+									<i class="fa-regular fa-file-lines"></i> <?php echo $msgstr["cnv_json"] ?>
 								</a>
 							</div>
 							<div class="spacer">&#160;</div>

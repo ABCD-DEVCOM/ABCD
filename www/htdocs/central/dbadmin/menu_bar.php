@@ -142,6 +142,12 @@ unset($_SESSION["Server_Path"]);
 				document.admin.action = "../dataentry/exporta_iso.php"
 				document.admin.tipo.value = "iso"
 				break;
+			case "exportjson":
+				document.admin.base.value = base
+				document.admin.cipar.value = base + ".par"
+				document.admin.action = "../dataentry/exporta_json.php"
+				document.admin.tipo.value = "json"
+				break;
 			case "barcodesearch": //Marino barcode search
 				document.admin.base.value = base
 				document.admin.cipar.value = base + ".par"
@@ -314,6 +320,7 @@ unset($_SESSION["Server_Path"]);
 		<li><a href="#"><?php echo $msgstr["cnv_export"] . "/" . $msgstr["cnv_import"] ?></a>
 			<ul>
 				<li><a href='Javascript:EnviarFormaMNT("exportiso","<?php echo $msgstr["cnv_export"] . " " . $msgstr["cnv_iso"] ?>")'><?php echo $msgstr["cnv_export"] . " " . $msgstr["cnv_iso"] ?></a></li>
+				<li><a href='Javascript:EnviarFormaMNT("exportjson","<?php echo $msgstr["export_json_title"] ?? ''; ?>")'><?php echo $msgstr["export_json_title"] ?? ''; ?></a></li>
 				<li><a href='Javascript:EnviarFormaMNT("importiso","<?php echo $msgstr["cnv_import"] . " ISO " . $msgstr["archivo"] ?>")'><?php echo $msgstr["cnv_import"] . " ISO " . $msgstr["archivo"] ?></a></li>
 				<li><a href='Javascript:EnviarFormaMNT("matchisofdt","<?php echo $msgstr["matchisofdt"] ?>")'><?php echo $msgstr["matchisofdt"] ?></a></li>
 				<li><a href='Javascript:EnviarFormaMNT("uploadfile","<?php echo $msgstr["uploadfile"] ?>")'><?php echo $msgstr["uploadfile"] ?></a></li>

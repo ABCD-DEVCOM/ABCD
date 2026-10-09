@@ -1,0 +1,46 @@
+<IsisScript name="export_batch">
+    <section name="export">
+        <field action="replace" tag="1">
+            <pft>'5000 app_path'/'6001 database'/'6002 expression'/'6003 from'/'6004 count'/'6005 cipar'/'6006 metadata_format'/'7000 mapping_file'/</pft>
+        </field>
+        <cgitable><pft>v1</pft></cgitable>
+        <field action="cgi" tag="prefix">tag</field>
+
+        <display><pft>'<?xml version="1.0" encoding="utf-8"?>'/,'<wxis_dump>'/</pft></display>
+
+        <flow action="jump"><pft>if p(v6002) and v6002 <> '$' then 'SEARCH' else 'MFNRANGE' fi</pft></flow>
+
+        <label>SEARCH</label>
+        <do task="search">
+            <parm name="cipar"><pft>cat(v6005)</pft></parm>
+            <parm name="db"><pft>v6001</pft></parm>
+            <parm name="expression"><pft>v6002</pft></parm>
+            <parm name="from"><pft>v6003</pft></parm>
+            <parm name="count"><pft>v6004</pft></parm>
+            <!-- SEMPRE NATIVO! O PHP cuida do mapeamento Dublin Core -->
+            <parm name="isisxml style">1</parm>
+            <parm name="isisxml table"><pft>'style=1'/</pft></parm>
+            <loop>
+                <display><isisxml>*</isisxml></display>
+            </loop>
+        </do>
+        <flow action="jump">END</flow>
+
+        <label>MFNRANGE</label>
+        <do task="mfnrange">
+            <parm name="cipar"><pft>cat(v6005)</pft></parm>
+            <parm name="db"><pft>v6001</pft></parm>
+            <parm name="from"><pft>v6003</pft></parm>
+            <parm name="count"><pft>v6004</pft></parm>
+            <!-- SEMPRE NATIVO! O PHP cuida do mapeamento Dublin Core -->
+            <parm name="isisxml style">1</parm>
+            <parm name="isisxml table"><pft>'style=1'/</pft></parm>
+            <loop>
+                <display><isisxml>*</isisxml></display>
+            </loop>
+        </do>
+
+        <label>END</label>
+        <display><pft>'</wxis_dump>'/</pft></display>
+    </section>
+</IsisScript>
