@@ -65,6 +65,7 @@ cnv_separador=Debe indicar el separador de registros
 cnv_tab=Tabla de conversión
 cnv_tit=Tablas de conversión
 cnv_txt=Archivo TXT
+cnv_json=Archivo JSON
 cnv_validar=Validar rótulos
 cnv_ver=Ver rótulos definidos
 conf_import=Iniciar la importación

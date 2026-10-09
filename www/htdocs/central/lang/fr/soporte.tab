@@ -66,6 +66,7 @@ cnv_separador=Séparateur d'enregistrements manquant
 cnv_tab=Table de conversion
 cnv_tit=Tables de conversion de TXT vers CDS/ISIS
 cnv_txt=Fichier TXT
+cnv_json=Fichier JSON
 cnv_validar=Validation des libellés
 cnv_ver=Afficher les libellés définis
 conf_import=Lancer l'importation
