@@ -10,6 +10,7 @@
 
 global $arrHttp;
 set_time_limit(0);
+ignore_user_abort(true);
 ini_set('memory_limit', '512M');
 
 session_start();
@@ -139,6 +140,10 @@ function StreamXMLtoJSON($xmlFile, $jsonFile, $format, $encoding, $mappingFile =
     $inRecord = false;
     $recordXml = '';
 
+    $done = 0;
+    $total = (isset($GLOBALS['arrHttp']['Mfn']) && trim($GLOBALS['arrHttp']['Mfn']) != "")
+        ? (int)$GLOBALS['arrHttp']['to'] - (int)$GLOBALS['arrHttp']['Mfn'] + 1 : 0;
+
     // =========================================================================
     // EXTRACTION BLOC PAR BLOC
     // =========================================================================
@@ -243,6 +248,13 @@ function StreamXMLtoJSON($xmlFile, $jsonFile, $format, $encoding, $mappingFile =
                 fwrite($out, $jsonStr);
 
                 $first = false;
+
+                $done++;
+                if ($done % 500 === 0) {
+                    echo "<script>SetProgress($done,$total);</script>";
+                    @ob_flush();
+                    flush();
+                }
             }
         }
     }
@@ -296,7 +308,13 @@ function ExportarBatchJSON($fullpath)
 
     $command = escapeshellarg($wxis_cli) . " IsisScript=" . escapeshellarg($scriptPath) . " > " . escapeshellarg($tempXmlFile) . " 2>&1";
 
+    echo '<script>SetStatus("Gerando XML com o WXIS...");</script>';
+    @ob_flush();
+    flush();
+
     exec($command, $output, $status);
+
+    @unlink($parTmp);
 
     if ($status == 0 && file_exists($tempXmlFile)) {
 
@@ -305,13 +323,18 @@ function ExportarBatchJSON($fullpath)
             echo "<h3><font color='red'><br>" . ($msgstr["processfailed"] ?? 'Process failed') . "</font></h3>";
             echo "<div><b>WXIS Error (No XML generated):</b></div>";
             echo "<pre style='background:#f4f4f4; padding:10px; border:1px solid #ccc;'>" . htmlspecialchars($wxisError) . "</pre>";
-            // @unlink($tempXmlFile);
+            @unlink($tempXmlFile);
             return 1;
         }
 
         $mapping_file = isset($arrHttp["mapping_file"]) ? $arrHttp["mapping_file"] : null;
+
+        echo '<script>SetStatus("Convertendo para JSON...");</script>';
+        @ob_flush();
+        flush();
+
         $success = StreamXMLtoJSON($tempXmlFile, $fullpath, $arrHttp["format"], $encoding, $mapping_file);
-        // @unlink($tempXmlFile);
+        @unlink($tempXmlFile);
 
         if ($success) {
     ?>
@@ -333,13 +356,14 @@ function ExportarBatchJSON($fullpath)
         echo ("<h3><font color='red'><br>" . ($msgstr["processfailed"] ?? 'Process failed') . "</font></h3>");
         echo "<b>Command Executed:</b><br> <pre>" . htmlspecialchars($command) . "</pre><br>";
         echo "<b>Error Output:</b><br> <font color='red'>" . implode("<br>", $output) . "</font>";
-        //@unlink($tempXmlFile);
+        @unlink($tempXmlFile);
         return 1;
     }
     return 0;
 }
 
 include("../common/header.php");
+include("../common/inc_wait.php");
 ?>
 
 <body>
@@ -348,9 +372,46 @@ include("../common/header.php");
             document.download.submit()
         }
 
+        function ShowWait() {
+            var p = document.getElementById('preloader');
+            if (p) p.style.display = 'flex';
+        }
+
+        function HideSpinner() {
+            var p = document.getElementById('preloader');
+            if (p) p.style.display = 'none';
+        }
+
+        function HideWait() {
+            HideSpinner();
+            var s = document.getElementById('export_status');
+            if (s) s.style.display = 'none';
+        }
+
+        function SetStatus(msg) {
+            var m = document.getElementById('export_msg');
+            if (m) m.textContent = msg;
+        }
+
+        function SetProgress(done, total) {
+            HideSpinner(); // a partir daqui a barra assume
+            var wrap = document.getElementById('export_bar_wrap');
+            var bar = document.getElementById('export_bar');
+            var m = document.getElementById('export_msg');
+            wrap.style.display = 'block';
+            if (total > 0) {
+                bar.classList.remove('indet');
+                bar.style.width = Math.min(100, Math.round(done * 100 / total)) + '%';
+                m.textContent = done.toLocaleString() + ' / ' + total.toLocaleString();
+            } else {
+                bar.classList.add('indet'); // por pesquisa o total é desconhecido
+                m.textContent = done.toLocaleString();
+            }
+        }
+
         function Confirmar() {
             document.continuar.confirmar.value = "OK";
-            document.getElementById('preloader').style.visibility = 'visible';
+            ShowWait();
             document.continuar.submit()
         }
 
@@ -382,7 +443,10 @@ include("../common/header.php");
     <div class="sectionInfo">
         <div class="breadcrumb"><?php echo $msgstr["export_json_title"] ?? ''; ?></div>
         <div class="actions">
-            <?php if ($arrHttp["Accion"] != "P") include "../common/inc_back.php"; ?>
+            <?php if (($arrHttp["Accion"] ?? "") != "P") { ?>
+                <a href="javascript:Regresar()" class="button_browse" title="<?php echo $msgstr["back"] ?? 'Voltar'; ?>">
+                    <i class="fas fa-arrow-circle-left"></i>&nbsp;<?php echo $msgstr["back"] ?? 'Voltar'; ?></a>
+            <?php } ?>
         </div>
         <div class="spacer">&#160;</div>
     </div>
@@ -420,19 +484,48 @@ include("../common/header.php");
                 die;
             }
 
-            if (!isset($arrHttp["confirmar"]) or (isset($arrHttp["confirmar"]) and $arrHttp["confirmar"] != "OK")) {
+            $confirmado = isset($arrHttp["confirmar"]) && $arrHttp["confirmar"] == "OK";
+            if (file_exists($fullpath) && !$confirmado) {
                 Confirmar();
             } else {
                 $errors = DeleteFile($fullpath, 0);
                 if ($errors > 0) {
-                    echo "<div><font color=red><b>" . ($msgstr["export_json_aborted"] ?? '') . "</b></font></div>";
-                    echo "<div><h2><font color=red><b>" . sprintf(($msgstr["export_json_not_modified"] ?? ''), $fullpath) . "</b></font></h2></div>";
-                    echo "<a href='javascript:Regresar()'> " . ($msgstr["cancelar"] ?? '') . "</a>";
+                    ?>
+                    <div>
+                        <font color="red"><b><?php echo $msgstr["export_json_aborted"] ?? ''; ?></b></font>
+                    </div>
+                    <div>
+                        <h2><font color="red"><b><?php echo sprintf($msgstr["export_json_not_modified"] ?? '', $fullpath); ?></b></font></h2>
+                    </div>
+                    <a href="javascript:Regresar()"> <?php echo $msgstr["cancelar"] ?? ''; ?></a>
+                    <?php
                     die;
                 }
+                ?>
+                
+                <style>
+                    #export_status { position: relative; z-index: 99999; }
+                    #export_bar.indet { width: 30% !important; animation: exportSlide 1.2s ease-in-out infinite alternate; }
+                    @keyframes exportSlide { from { margin-left: 0; } to { margin-left: 70%; } }
+                </style>
 
+                <div id="export_status" style="margin: 20px auto; text-align: center;">
+                    <div id="export_msg"><?php echo $msgstr["export_json_wait"] ?? ''; ?></div>
+                    <div id="export_bar_wrap" style="display: none; width: 60%; margin: 8px auto; height: 10px; border-radius: 4px; background: var(--abcd-gray-200);">
+                        <div id="export_bar" style="height: 10px; width: 0; border-radius: 4px; background: var(--abcd-blue-600, #0d6efd);"></div>
+                    </div>
+                </div>
+
+                <script>ShowWait();</script>
+
+                <?php
+                @ob_flush();
+                flush();
                 ExportarBatchJSON($fullpath);
-            ?>
+                ?>
+
+                <script>HideWait();</script>
+
         </div>
     </div>
     <form name=download action="../utilities/download.php">
