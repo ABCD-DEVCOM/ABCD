@@ -23,8 +23,8 @@ include("../lang/dbadmin.php");
 include("../lang/soporte.php");
 
 // =========================================================================
-// INTERCETADOR DE DOWNLOAD
-// Força o download do ficheiro JSON se o parâmetro 'download_json' existir
+// DOWNLOAD INTERCEPTOR
+// Forces the JSON file to be downloaded if the “download_json” parameter exists
 // =========================================================================
 if (isset($_GET['download_json']) && !empty($_GET['download_json'])) {
 	$filename = basename($_GET['download_json']); // basename() evita Directory Traversal
@@ -43,9 +43,27 @@ if (isset($_GET['download_json']) && !empty($_GET['download_json'])) {
 	}
 }
 
-$backtoscript = "../dataentry/menu_mantenimiento.php";
+// =========================================================================
+// DELETE INTERCEPTOR
+// Deletes the JSON file if the "delete_json" parameter exists
+// =========================================================================
+if (isset($_GET['delete_json']) && !empty($_GET['delete_json'])) {
+	$filename = basename($_GET['delete_json']); // basename() evita Directory Traversal
+	$file_to_delete = $db_path . "wrk/" . $filename;
+
+	if (file_exists($file_to_delete)) {
+		@unlink($file_to_delete);
+	}
+
+	// Redirects back to the same page, updating the table
+	header("Location: exporta_json.php?cipar=" . urlencode($arrHttp["base"]) . "&base=" . urlencode($arrHttp["base"]));
+	exit;
+}
+
+$backtoscript = "../dataentry/administrar.php";
 $inframe = 1;
 if (isset($arrHttp["backtoscript"])) $backtoscript = $arrHttp["backtoscript"];
+
 if (isset($arrHttp["inframe"]))      $inframe = $arrHttp["inframe"];
 
 if (!isset($arrHttp["Opcion"])) $arrHttp["Opcion"] = "";
@@ -333,14 +351,7 @@ include("../common/header.php");
 									<a href="../settings/api_mapper.php?base=<?php echo $base; ?>" class="bt bt-blue" style="margin-top: 5px; font-size: 11px;"><i class="fas fa-external-link-alt"></i> <?php echo $msgstr["export_json_open_mapper"] ?? ''; ?></a>
 								</div>
 							<?php endif; ?>
-
-							<div class="params-label"><?php echo $msgstr["folder_name"] ?? ''; ?></div>
-							<div class="params-field">
-								<input type="text" name="storein" size="25" value="/wrk" class="textEntry">
-								<a href="javascript:Explorar()" class="bt bt-gray" title="<?php echo $msgstr["explore"] ?? ''; ?>">
-									<i class="fas fa-folder-open"></i> <?php echo $msgstr["explore"] ?? ''; ?>
-								</a>
-							</div>
+							<input type="hidden" name="storein" size="25" value="/wrk" >
 
 							<div class="params-label"><?php echo $msgstr["export_json_filename"] ?? ''; ?></div>
 							<div class="params-field">
@@ -355,46 +366,69 @@ include("../common/header.php");
 
 				<?php
 				// =========================================================================
-				// LISTAGEM DE ARQUIVOS JSON GERADOS NA PASTA WRK
+				// LIST OF JSON FILES GENERATED IN THE WRK FOLDER
 				// =========================================================================
 				$wrk_dir = $db_path . "wrk";
 				if (is_dir($wrk_dir)) {
 					$files = glob($wrk_dir . "/*.json");
 					if ($files && count($files) > 0) {
-						// Ordena os ficheiros pela data de modificação (mais recentes primeiro)
+						// Sort the files by modification date (most recent first)
 						usort($files, function ($a, $b) {
 							return filemtime($b) - filemtime($a);
 						});
+				?>
+						<div class="export-layout mt-4">
+							<div class="export-header">
+								<?php echo $msgstr["export_json_generated_files"] ?? 'Arquivos JSON gerados (Pasta WRK)'; ?>
+							</div>
+							<table style="width:100%; border-collapse: collapse; margin-top: 10px; text-align: left;">
+								<tr style="background-color: var(--abcd-gray-200); color: var(--abcd-gray-800);">
+									<th style="padding:10px; border-bottom: 1px solid #ccc;">
+										<?php echo $msgstr["archivo"] ?? 'Arquivo'; ?>
+									</th>
+									<th style="padding:10px; text-align:center; border-bottom: 1px solid #ccc;">
+										<?php echo $msgstr["file_date"] ?? 'Data de Criação'; ?>
+									</th>
+									<th style="padding:10px; text-align:right; border-bottom: 1px solid #ccc;">
+										<?php echo $msgstr["file_size"] ?? 'Tamanho'; ?>
+									</th>
+									<th style="padding:10px; text-align:center; border-bottom: 1px solid #ccc;">
+										<?php echo $msgstr["actions"] ?? 'Ações'; ?>
+									</th>
+								</tr>
 
-						echo "<div class=\"export-layout mt-4\">";
-						echo "<div class=\"export-header\">" . ($msgstr["export_json_generated_files"] ?? 'Arquivos JSON gerados (Pasta WRK)') . "</div>";
-						echo "<table style=\"width:100%; border-collapse: collapse; margin-top: 10px; text-align: left;\">";
-						echo "<tr style=\"background-color: var(--abcd-gray-200); color: var(--abcd-gray-800);\">";
-						echo "<th style=\"padding:10px; border-bottom: 1px solid #ccc;\">" . ($msgstr["archivo"] ?? 'Arquivo') . "</th>";
-						echo "<th style=\"padding:10px; text-align:center; border-bottom: 1px solid #ccc;\">" . ($msgstr["file_date"] ?? 'Data de Criação') . "</th>";
-						echo "<th style=\"padding:10px; text-align:right; border-bottom: 1px solid #ccc;\">" . ($msgstr["file_size"] ?? 'Tamanho') . "</th>";
-						echo "<th style=\"padding:10px; text-align:center; border-bottom: 1px solid #ccc;\">" . ($msgstr["download"] ?? 'Download') . "</th>";
-						echo "</tr>";
+								<?php
+								foreach ($files as $file) {
+									$filename = basename($file);
+									$filedate = date("d/m/Y H:i:s", filemtime($file));
+									$filesize = number_format(filesize($file) / 1024, 2) . " KB";
 
-						foreach ($files as $file) {
-							$filename = basename($file);
-							$filedate = date("d/m/Y H:i:s", filemtime($file));
-							$filesize = number_format(filesize($file) / 1024, 2) . " KB";
+									// Action URLs
+									$download_url = "?download_json=" . urlencode($filename) . "&base=" . urlencode($arrHttp["base"]);
+									$delete_url = "?delete_json=" . urlencode($filename) . "&base=" . urlencode($arrHttp["base"]);
+								?>
 
-							// A URL de download passa o ficheiro e a base (necessária pro header.php na recarga)
-							$download_url = "?download_json=" . urlencode($filename) . "&base=" . urlencode($arrHttp["base"]);
+									<tr style="border-bottom: 1px solid #eee;" onmouseover="this.style.backgroundColor='#f9f9f9'" onmouseout="this.style.backgroundColor=''">
+										<td style="padding:8px;"><strong><?php echo $filename; ?></strong></td>
+										<td style="padding:8px; text-align:center;"><?php echo $filedate; ?></td>
+										<td style="padding:8px; text-align:right;"><?php echo $filesize; ?></td>
+										<td style="padding:8px; text-align:center;">
+											<a href="<?php echo $download_url; ?>" class="bt bt-green" title="<?php echo $msgstr['download'] ?? 'Baixar'; ?>">
+												<i class="fas fa-download"></i>
+											</a>&nbsp;
+											<a href="<?php echo $delete_url; ?>" class="bt bt-red" title="<?php echo $msgstr['eliminar'] ?? 'Excluir'; ?>" onclick="return confirm('<?php echo $msgstr['cnv_deltab'] ?? 'Deseja excluir este arquivo?'; ?>');">
+												<i class="fas fa-trash"></i>
+											</a>
+										</td>
+									</tr>
 
-							echo "<tr style=\"border-bottom: 1px solid #eee;\" onmouseover=\"this.style.backgroundColor='#f9f9f9'\" onmouseout=\"this.style.backgroundColor=''\">";
-							echo "<td style=\"padding:8px;\"><strong>$filename</strong></td>";
-							echo "<td style=\"padding:8px; text-align:center;\">$filedate</td>";
-							echo "<td style=\"padding:8px; text-align:right;\">$filesize</td>";
-							echo "<td style=\"padding:8px; text-align:center;\">";
-							echo "<a href=\"$download_url\" class=\"bt bt-green\" title=\"" . ($msgstr["download"] ?? 'Baixar') . "\"><i class=\"fas fa-download\"></i></a>";
-							echo "</td>";
-							echo "</tr>";
-						}
-						echo "</table>";
-						echo "</div>";
+								<?php
+								} // End of the foreach loop
+								?>
+
+							</table>
+						</div>
+				<?php
 					}
 				}
 				?>

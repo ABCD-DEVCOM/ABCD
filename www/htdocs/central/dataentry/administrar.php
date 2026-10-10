@@ -54,7 +54,7 @@ include("../common/header.php");
 						self.location = "carga_txt_cnv.php?base=" + top.base + "&accion=export&tipo=txt&lang=<?php echo $_SESSION["lang"] ?>" + seleccionados
 						break
 					case "expjson":
-						self.location = "exporta_json.php?base=" + top.base + "&cipar=" + top.base + ".par&accion=export&tipo=json&lang=<?php echo $_SESSION["lang"] ?>" + seleccionados
+						self.location = "exporta_json.php?base=" + top.base + "&cipar=" + top.base + ".par&accion=export&tipo=json&lang=<?php echo $_SESSION["lang"] ?>&backtoscript=../dataentry/administrar.php&inframe=1" + seleccionados
 						break
 					case "expiso":
 						self.location = "exporta_iso.php?base=" + top.base + "&cipar=" + top.base + ".par&tipo=iso&lang=<?php echo $_SESSION["lang"] ?>" + seleccionados
