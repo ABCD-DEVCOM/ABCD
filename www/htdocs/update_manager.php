@@ -134,16 +134,22 @@ function sendJsonResponse(string $status, int|float $percent, string $message, m
         'percent' => $percent,
         'message' => $message,
         'debug'   => $debug
-    ]);
+    ], JSON_INVALID_UTF8_SUBSTITUTE);
     exit;
 }
 
 function writeLog(string $message, string $type = 'INFO'): string
 {
     global $log_file;
+    // Language files may bring ANSI (Windows-1252) text and HTML entities such as &apos;.
+    // Normalize to plain UTF-8 text first, so it is neither shown as "N�O" nor double-escaped ("&amp;apos;").
+    if (function_exists('mb_check_encoding') && !mb_check_encoding($message, 'UTF-8')) {
+        $message = mb_convert_encoding($message, 'UTF-8', 'Windows-1252');
+    }
+    $message = html_entity_decode($message, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     $timestamp = date('H:i:s');
     file_put_contents($log_file, "[$timestamp] [$type] " . $message . PHP_EOL, FILE_APPEND);
-    $retval = htmlspecialchars($message);
+    $retval = htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     if ($type == 'warning' || $type == 'WARNING') {
         $retval = "<span style='color:#ffc107'>" . $retval . "</span>";
     } elseif ($type == 'error' || $type == 'ERROR') {
@@ -724,14 +730,22 @@ if (isset($_POST['ajax_action'])) {
                     }
 
                     $_SESSION['install_index'] = $startIndex + 1;
-                    $percent = 80 + round((($startIndex + 1) / $totalSources) * 20);
+                    $percent = min(99, 80 + round((($startIndex + 1) / $totalSources) * 20));
                     sendJsonResponse('continue', $percent, implode("<br>", $logs));
                 } else {
-                    restoreConfigs();
+                    // Removing the temporary files can take minutes (thousands of files): announce it in a
+                    // first response, so the user sees the update is still working, and do it in the next one.
+                    if (empty($_SESSION['cleanup_announced'])) {
+                        restoreConfigs();
+                        $_SESSION['cleanup_announced'] = true;
+                        $logs[] = writeLog($msgstr["upd_cleaning"] ?? "Finalizing: removing temporary files (this may take a few minutes)...");
+                        sendJsonResponse('continue', 99, implode("<br>", $logs));
+                    }
                     ini_set('display_errors', 1);
                     recursiveDelete($temp_dir);
                     unset($_SESSION['install_index']);
                     unset($_SESSION['partial_sources']);
+                    unset($_SESSION['cleanup_announced']);
                     $logs[] = writeLog($msgstr["upd_done"] ?? "Update completed successfully!");
                     sendJsonResponse('done', 100, implode("<br>", $logs));
                 }
@@ -898,7 +912,16 @@ include("central/common/institutional_info.php");
                 <div class="info-version">
                     <p><?php echo $msgstr["upd_curr_ver"] ?? "Current Version:"; ?> <strong><?php echo LOCAL_VERSION; ?></strong></p>
                     <p><?php echo $msgstr["upd_latest_ver"] ?? "Latest Version:"; ?> <strong><?php echo $remote_ver; ?></strong></p>
-                    <?php if (!empty($body_txt)) echo "<pre style='background:#222; padding:10px; white-space: pre-wrap;'>" . htmlspecialchars($body_txt) . "</pre>"; ?>
+                    <?php if (!empty($body_txt)) {
+                        // The page charset comes from header.php (may be ISO-8859-1 on ANSI installs), while the
+                        // GitHub text is UTF-8. Non-ASCII chars are sent as numeric entities (&#128640;), which
+                        // browsers read as Unicode in any page charset: emojis and diacritics display correctly.
+                        $body_html = htmlspecialchars($body_txt, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                        if (function_exists('mb_encode_numericentity')) {
+                            $body_html = mb_encode_numericentity($body_html, [0x80, 0x10FFFF, 0, 0x1FFFFF], 'UTF-8');
+                        }
+                        echo "<pre style='background:#222; padding:10px; white-space: pre-wrap;'>" . $body_html . "</pre>";
+                    } ?>
                 </div>
 
                 <div class="options">
@@ -974,7 +997,7 @@ include("central/common/institutional_info.php");
         formData.append('ajax_action', action);
         formData.append('update_type', type);
 
-        const req = await fetch('', {
+        const req = await fetchWithTicker('', {
             method: 'POST',
             body: formData
         });
@@ -993,6 +1016,22 @@ include("central/common/institutional_info.php");
         return res;
     }
 
+    // Shows the elapsed seconds next to the percentage while a slow step is running (so it does not look frozen)
+    async function fetchWithTicker(url, options) {
+        const pText = document.getElementById('pText');
+        const base = pText.innerHTML;
+        const t0 = Date.now();
+        const timer = setInterval(() => {
+            const secs = Math.floor((Date.now() - t0) / 1000);
+            if (secs >= 4) pText.innerHTML = base + ' &middot; ' + secs + 's';
+        }, 1000);
+        try {
+            return await fetch(url, options);
+        } finally {
+            clearInterval(timer);
+        }
+    }
+
     async function runLoop(action, type) {
         appendLog(`>> <?php echo $msgstr['upd_action'] ?? 'Action:'; ?> ${action.toUpperCase()} <?php echo $msgstr['upd_batch_proc'] ?? '(Batch Processing)...'; ?>`);
         let finished = false;
@@ -1001,7 +1040,7 @@ include("central/common/institutional_info.php");
             formData.append('ajax_action', action);
             formData.append('update_type', type);
 
-            const req = await fetch('', {
+            const req = await fetchWithTicker('', {
                 method: 'POST',
                 body: formData
             });
