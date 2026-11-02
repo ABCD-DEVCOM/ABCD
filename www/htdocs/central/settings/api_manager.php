@@ -5,6 +5,11 @@
  * Author: Roger C. Guilherme
  * Created: 2026-08-10
  * Description: ABCD REST API Manager
+ * 
+ * changes:
+ * 2026-08-10 rogercgui -  Initial version.
+ * 2026-11-01 rogercgui - Added support for .i2x and _dc.pft mapping files, improved database configuration handling, 
+ *                        and enhanced security for API key management, enforce mapping extension whitelist and prevent CloudAV false positive
  */
 
 session_start();
@@ -128,16 +133,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     }
 
     if ($_POST['action'] === 'save_mapping_file') {
-        $fileName = preg_replace('/[^a-zA-Z0-9_\-\.]/', '', trim($_POST['file_name']));
+        $rawName = trim($_POST['file_name'] ?? '');
+        $cleanName = preg_replace('/[^a-zA-Z0-9_\-\.]/', '', basename($rawName));
+        $ext = strtolower(pathinfo($cleanName, PATHINFO_EXTENSION));
         $fileContent = $_POST['file_content'] ?? '';
-        if ($fileName) {
-            if (file_put_contents($mappingsDir . $fileName, $fileContent) !== false) {
-                $message = "File {$fileName} saved successfully.";
+
+        if ($cleanName && in_array($ext, ['i2x', 'pft'], true)) {
+            if (file_put_contents($mappingsDir . $cleanName, $fileContent) !== false) {
+                $message = "File {$cleanName} saved successfully.";
                 $messageType = "success";
             } else {
-                $message = "Error writing to {$fileName}. Check folder permissions.";
+                $message = "Error writing to {$cleanName}. Check folder permissions.";
                 $messageType = "error";
             }
+        } else {
+            $message = "Invalid file extension. Only .i2x and .pft are allowed.";
+            $messageType = "error";
         }
     }
 
