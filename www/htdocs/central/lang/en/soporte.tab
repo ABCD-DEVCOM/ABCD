@@ -424,3 +424,13 @@ copyfrom=Copy template from language
 process_ok=Copy Completed!
 files_copied=Total files copied:
 actualizar=Refresh page
+txtimp_header=First row = column names (CSV / spreadsheet),
+txtimp_header_hint=In this mode the &quot;label&quot; column of the table must contain the column name used in the first row of the spreadsheet or CSV. Columns with the same name are loaded as repeated occurrences of the same field.,
+txtimp_file=Load from file (CSV / TSV / TXT),
+txtimp_enc=Encoding,
+txtimp_enc_auto=Automatic,
+txtimp_lines=lines,
+txtimp_hdr_read=Header read,
+txtimp_delim =delimiter,
+txtimp_cols_ignored=Columns ignored (not in the conversion table),
+txtimp_nomatch=None of the header columns matches the labels of the conversion table

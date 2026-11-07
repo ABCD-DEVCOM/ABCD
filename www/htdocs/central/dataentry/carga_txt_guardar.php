@@ -40,7 +40,9 @@ if (!$fp){
 	die;
 }
 $value=explode('!!',$arrHttp["tablacnv"]);
-if (isset($arrHttp["delimited"]) and $arrHttp["delimited"]=="on")
+if (isset($arrHttp["headermode"]) and $arrHttp["headermode"]=="on")
+	fwrite($fp,"[HEADER]\n");
+elseif (isset($arrHttp["delimited"]) and $arrHttp["delimited"]=="on")
 	fwrite($fp,"[TABS]\n");
 else
 	fwrite($fp,$arrHttp["separador"]."\n");

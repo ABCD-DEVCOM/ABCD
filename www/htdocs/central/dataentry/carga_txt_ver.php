@@ -15,6 +15,7 @@ $lang=$_SESSION["lang"];
 
 include("../lang/admin.php");
 include("../lang/soporte.php");
+include("carga_txt_hdr.php");
 
 
 
@@ -132,7 +133,9 @@ foreach ($fp as $value){
 	}
 }
 echo "<tr><td colspan=8 bgcolor=linen>";
-if ($separador!='[TABS]')
+if ($separador=='[HEADER]')
+	echo "<input type=checkbox checked>".$msgstr["txtimp_header"]."</td></tr>";
+elseif ($separador!='[TABS]')
 	 echo $msgstr["cnv_sep"].": $separador</td></tr>";
 else
 	echo "<input type=checkbox checked>".$msgstr["delimited_tab"]."</td></tr>";

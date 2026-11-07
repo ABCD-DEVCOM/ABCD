@@ -125,3 +125,13 @@ copyfrom=Copiar modelo a partir del idioma
 process_ok=¡Copia Completada!
 files_copied=Total de archivos copiados:
 actualizar=Actualizar página
+txtimp_header= Primera fila = nombres de las columnas (CSV / planilla),
+txtimp_header_hint= En este modo, la columna "rótulo" de la tabla debe contener el nombre de la columna usado en la primera fila de la planilla o del CSV. Las columnas con el mismo nombre se cargan como ocurrencias repetidas del mismo campo.,
+txtimp_file=Cargar desde archivo (CSV / TSV / TXT),
+txtimp_enc=Codificación,
+txtimp_enc_auto=Automática,
+txtimp_lines=líneas,
+txtimp_hdr_read=Encabezado leído,
+txtimp_delim=delimitador,
+txtimp_cols_ignored=Columnas ignoradas (no constan en la tabla de conversión),
+txtimp_nomatch=Ninguna columna del encabezado coincide con los rótulos de la tabla de conversión
