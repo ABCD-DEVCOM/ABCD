@@ -62,7 +62,6 @@
                  	</pft>
              	</parm>
 				<parm name="buffersize">200000</parm>
-                <parm name=MAX_TMP_STRING>200000</parm>
                 <field action=define tag=1002>Isis_Total</field>
                 <loop></loop>
                 <display><pft>'TOTAL: ',V1002</pft></display>

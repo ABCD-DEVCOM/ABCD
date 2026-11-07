@@ -115,7 +115,6 @@
 				<parm name=from><pft>v2000</pft></parm>
 				<parm name=to><pft>v2000</pft></parm>
 				<parm name="buffersize">200000</parm>
-                <parm name=MAX_TMP_STRING>200000</parm>
 				<field action=define tag=1002>Isis_Total</field>
             	<field action=define tag=1102>Isis_Status</field>
 				<field action=define tag=1199>Isis_RecordStatus</field>
@@ -163,7 +162,6 @@
             		<parm name=lockid><pft>v9060</pft></parm>
 					<parm name="fst"><pft>cat(v5001'.fst')</pft></parm>
 					<parm name="buffersize">200000</parm>
-                    <parm name=MAX_TMP_STRING>200000</parm>
             		<field action=define tag=1101>Isis_Lock</field>
             		<field action=define tag=1102>Isis_Status</field>
             		<field action=define tag=1103>Isis_RecordStatus</field>

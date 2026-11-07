@@ -20,7 +20,6 @@
 			<parm name="expire">3600</parm>
        		<parm name=lockid><pft>v9060</pft></parm>
 			<parm name="buffersize">800000</parm>
-   			<parm name=MAX_TMP_STRING>800000</parm>
        		<field action=define tag=1002>Isis_Total</field>
        		<field action=define tag=1101>Isis_Lock</field>
        		<field action=define tag=1102>Isis_Status</field>

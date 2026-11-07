@@ -22,7 +22,6 @@
 	    <label>ACTUALIZAR</label>
 		<do task="update">
 			<parm name="buffersize">800000</parm>
-   			<parm name=MAX_TMP_STRING>800000</parm>
 			<parm name="db"><pft>v5001</pft></parm>
 			<parm name="mfn"><pft>v2000</pft></parm>
 			<parm name=lockid><pft>v9060</pft></parm>

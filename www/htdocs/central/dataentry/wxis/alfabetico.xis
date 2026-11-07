@@ -29,7 +29,6 @@
             <parm name=posting><pft>if a(v2027) then '180' else v2027 fi</pft></parm>
 			<parm name=posttag></parm>
 			<parm name="buffersize">200000</parm>
-            <parm name=MAX_TMP_STRING>200000</parm>
 		    <field action=define tag=3>Isis_Posting</field>
 			<field action=define tag=2021>Isis_Key</field>
 

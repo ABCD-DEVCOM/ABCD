@@ -31,7 +31,6 @@
 			<parm name=lockid><pft>v9060</pft></parm>
 			<parm name="fst"><pft>cat(v5001'.fst')</pft></parm>
 			<parm name="buffersize">200000</parm>
-	        <parm name=MAX_TMP_STRING>200000</parm>
 			<field action=define tag=1101>Isis_Lock</field>
 			<field action=define tag=1102>Isis_Status</field>
 			<update>
@@ -52,7 +51,6 @@
 				<parm name="fst"><pft>cat('reserve.fst')</pft></parm>
     			<parm name="mfn"><pft>v4100</pft></parm>
 				<parm name="buffersize">200000</parm>
-                <parm name=MAX_TMP_STRING>200000</parm>
                 <parm name=lockid><pft>v9060</pft></parm>
     			<field action=define tag=1101>Isis_Lock</field>
 				<field action=define tag=1102>Isis_Status</field>
@@ -73,7 +71,6 @@
 				<parm name="fst"><pft>cat('logtrans.fst')</pft></parm>
     			<parm name="mfn">New</parm>
 				<parm name="buffersize">200000</parm>
-                <parm name=MAX_TMP_STRING>200000</parm>
                 <parm name=lockid><pft>v9060</pft></parm>
     			<field action=define tag=1101>Isis_Lock</field>
 				<field action=define tag=1102>Isis_Status</field>
@@ -94,7 +91,6 @@
 				<parm name="fst"><pft>cat('logtrans.fst')</pft></parm>
     			<parm name="mfn">New</parm>
 				<parm name="buffersize">200000</parm>
-                <parm name=MAX_TMP_STRING>200000</parm>
                 <parm name=lockid><pft>v9060</pft></parm>
     			<field action=define tag=1101>Isis_Lock</field>
 				<field action=define tag=1102>Isis_Status</field>
