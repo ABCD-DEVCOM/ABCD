@@ -31,7 +31,6 @@
                  	</pft>
              	</parm>
 				<parm name="buffersize">200000</parm>
-                <parm name=MAX_TMP_STRING>200000</parm>
                 <field action=define tag=1002>Isis_Total</field>
                 <parm name=from>1</parm>
                 <parm name="db"><pft>v5001</pft></parm>

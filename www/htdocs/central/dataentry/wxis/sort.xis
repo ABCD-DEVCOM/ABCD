@@ -77,7 +77,6 @@
            		<parm name=from><pft>v2000</pft></parm>
 				<parm name=to><pft>v2001</pft></parm>
 				<parm name="buffersize">200000</parm>
-                <parm name=MAX_TMP_STRING>200000</parm>
                 <loop>
                     <field action=cgi tag=3035>sortkey</field>
 			 		<list action=load type=sort>

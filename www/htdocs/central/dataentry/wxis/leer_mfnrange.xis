@@ -28,7 +28,6 @@
 				<parm name=from><pft>v2000</pft></parm>
 				<parm name=to><pft>v2001</pft></parm>
 				<parm name="buffersize">400000</parm>
-                <parm name=MAX_TMP_STRING>400000</parm>
                 <field action=define tag=1001>Isis_Current</field>
 				<field action=define tag=1002>Isis_Total</field>
             	<field action=define tag=1091>Isis_Status</field>

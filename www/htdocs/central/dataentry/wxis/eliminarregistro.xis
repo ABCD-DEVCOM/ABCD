@@ -44,7 +44,6 @@
 				<parm name="fst"><pft>cat('logtrans.fst')</pft></parm>
     			<parm name="mfn">New</parm>
 				<parm name="buffersize">200000</parm>
-                <parm name=MAX_TMP_STRING>200000</parm>
                 <parm name=lockid><pft>v9060</pft></parm>
     			<field action=define tag=1101>Isis_Lock</field>
 				<field action=define tag=1102>Isis_Status</field>

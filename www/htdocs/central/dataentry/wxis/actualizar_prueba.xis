@@ -3,7 +3,6 @@
 
  <section>
  	<parm name="buffersize">500000</parm>
-  	<parm name=MAX_TMP_STRING>400000</parm>
     <field action=cgi tag=5015>cipar</field>
   	<field action=cgi tag=5001>base</field>
     <field action=cgi tag=9001>Opcion</field>

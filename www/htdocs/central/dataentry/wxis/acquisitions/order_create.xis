@@ -59,7 +59,6 @@
 <!--	<do task=mfnrange>
     	<parm name=db><pft>'suggestions'</pft></parm>
     	<parm name="buffersize">200000</parm>
-        <parm name=MAX_TMP_STRING>200000</parm>
     	<field action=define tag=1002>Isis_Total</field>
         <field action=define tag=1102>Isis_Status</field>
     	<field action=define tag=1199>Isis_RecordStatus</field>
