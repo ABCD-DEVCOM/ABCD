@@ -79,8 +79,8 @@ class RecordHandler
         $from = (int)($_GET['from'] ?? 0) + 1;
         $limit = max(1, min(100, (int)($_GET['limit'] ?? 10)));
         $query = $_GET['q'] ?? '$';
-
         $expression = '$';
+
         if ($query !== '$') {
             $cisisQuery = $query;
             $searchableFields = $configSearch[$databaseName] ?? [];
@@ -93,7 +93,44 @@ class RecordHandler
 
                     if (isset($searchableFields[$field])) {
                         $prefix = $searchableFields[$field];
-                        return '(' . $prefix . strtoupper($term) . ')';
+
+                        // Quebra a frase em palavras individuais
+                        $words = preg_split('/\s+/', $term);
+                        $cisisTerms = [];
+                        $booleans = ['AND', 'OR', 'NOT', '+', '*', '^'];
+
+                        foreach ($words as $word) {
+                            $wordTrim = trim($word);
+                            if (empty($wordTrim)) continue;
+
+                            $wordUpper = strtoupper($wordTrim);
+
+                            // Preserva operadores booleanos ou prefixos inseridos manualmente (ex: TW_Curricular)
+                            if (in_array($wordUpper, $booleans)) {
+                                $cisisTerms[] = $wordUpper;
+                            } else if (preg_match('/^[A-Z0-9_]+_/', $wordUpper)) {
+                                $cisisTerms[] = $wordUpper;
+                            } else {
+                                // Aplica o prefixo a cada termo solto
+                                $cisisTerms[] = $prefix . $wordUpper;
+                            }
+                        }
+
+                        // Remonta a query injetando o operador AND (*) entre palavras adjacentes
+                        $finalTerms = [];
+                        for ($i = 0; $i < count($cisisTerms); $i++) {
+                            $finalTerms[] = $cisisTerms[$i];
+                            // Adiciona '*' se o termo atual e o próximo não forem operadores booleanos
+                            if ($i < count($cisisTerms) - 1) {
+                                $current = $cisisTerms[$i];
+                                $next = $cisisTerms[$i + 1];
+                                if (!in_array($current, $booleans) && !in_array($next, $booleans)) {
+                                    $finalTerms[] = '*';
+                                }
+                            }
+                        }
+
+                        return '(' . implode(' ', $finalTerms) . ')';
                     }
                     return $matches[0];
                 },
@@ -105,6 +142,7 @@ class RecordHandler
         }
 
         $dcMapping = $dbConfig['formats']['dc'] ?? $dbConfig['mapping'] ?? null;
+
         if ($format === 'dc' && empty($dcMapping)) {
             json_response(['error' => "Format 'dc' is not available for database '{$databaseName}' yet. Please create a mapping in the Visual Data Mapper."], 404);
         }
@@ -123,7 +161,7 @@ class RecordHandler
                 }
             } else {
                 json_response([
-                    'error' => 'WXIS Engine Error: Inverted file (dictionary) might be missing or corrupted. Please generate the inverted file in ABCD Utilities.', 
+                    'error' => 'WXIS Engine Error: Inverted file (dictionary) might be missing or corrupted. Please generate the inverted file in ABCD Utilities.',
                     'raw_wxis_response' => trim((string)$mfnListResponse)
                 ], 500);
             }
@@ -137,7 +175,7 @@ class RecordHandler
         }
 
         if (isset($_GET['debug']) && $_GET['debug'] == '1') {
-            die("<div style='background:#111; color:#0f0; padding:20px; font-family:monospace;'>" . 
+            die("<div style='background:#111; color:#0f0; padding:20px; font-family:monospace;'>" .
                 "<h3>API DEBUG MODE</h3>" .
                 "<b>DB Path sent to WXIS:</b> " . $dbConfig['database_path'] . "<br><br>" .
                 "<b>WXIS Request URL:</b> <a href='" . $gateway->getLastUrl() . "' style='color:#0ff' target='_blank'>" . $gateway->getLastUrl() . "</a><br><br>" .
@@ -147,14 +185,15 @@ class RecordHandler
         $records = [];
         foreach ($mfns as $mfn) {
             if (empty(trim((string)$mfn))) continue;
+
             $recordXml = $gateway->getRecordByMfn($dbConfig['database_path'], $mfn, $dcMapping, $format);
-            
+
             if (!empty(trim((string)$recordXml))) {
                 if (strpos(trim((string)$recordXml), 'WXIS|fatal error|') === 0) {
                     $records[] = ['mfn' => $mfn, 'error' => trim((string)$recordXml)];
                     continue;
                 }
-                
+
                 $parsedJson = self::parseIsisXmlToJson($recordXml, $mfn, $format);
                 if (isset($parsedJson['fields']) && count($parsedJson['fields']) > 0) {
                     $records[] = $parsedJson;
@@ -180,7 +219,7 @@ class RecordHandler
 
         json_response($response);
     }
-
+    
     private static function parseIsisXmlToJson($xmlString, $mfn, $format)
     {
         libxml_use_internal_errors(true);
