@@ -20,6 +20,7 @@ $lang=$_SESSION["lang"];
 
 include("../lang/admin.php");
 include("../lang/soporte.php");
+include("carga_txt_hdr.php");
 $backtoscript="../dataentry/administrar.php"; // The default return script
 if ( isset($arrHttp["backtoscript"])) $backtoscript=$arrHttp["backtoscript"];
 if (!isset($arrHttp["accion"])) $arrHttp["accion"]="";
@@ -71,7 +72,7 @@ function GuardarTabla(){
 	for (i=0;i<document.explora.rotulo.length;i++){
 
 		rot=Trim(document.explora.rotulo[i].value)
-		if (!document.explora.delimited.checked){
+		if (!document.explora.delimited.checked && !document.explora.headermode.checked){
 			if (rot!=""){
 				if (rot.substr(0,2)!='$$'){
 					alert("<?php echo $msgstr["cnv_inicior"]?>")
@@ -91,7 +92,7 @@ function GuardarTabla(){
 				Tabla+="!!"+linea
 			}
 		}
-		if (Trim(document.explora.separador.value)=="" && !document.explora.delimited.checked){
+		if (Trim(document.explora.separador.value)=="" && !document.explora.delimited.checked && !document.explora.headermode.checked){
 			alert ("<?php echo $msgstr["cnv_separador"]?>")
 			return
 		}
@@ -200,6 +201,7 @@ $tc=array();
 $rep="";
 $separador="";
 $delimited="";
+$headermode="";
 $tit=$msgstr["nueva"];
 if (isset($arrHttp["proceso"])){
 	switch ($arrHttp["proceso"]){
@@ -211,6 +213,10 @@ if (isset($arrHttp["proceso"])){
 				if ($rep==""){
 					if ($value=='[TABS]'){
 						$delimited=$value;
+						$separador="";
+						$rep="S";
+					}elseif ($value=='[HEADER]'){
+						$headermode=$value;
 						$separador="";
 						$rep="S";
 					}else{
@@ -259,7 +265,9 @@ if (!file_exists($fpDb_fdt)) {
 $fp=file($fpDb_fdt);
 
 ?>
-<input type=checkbox name=delimited <?php if ($delimited=="[TABS]") echo "checked";?>>&nbsp;<?php echo $msgstr["delimited_tab"];?>
+<input type=checkbox name=delimited <?php if ($delimited=="[TABS]") echo "checked";?> onclick="if(this.checked) document.explora.headermode.checked=false">&nbsp;<?php echo $msgstr["delimited_tab"];?>
+&nbsp; &nbsp;<input type=checkbox name=headermode <?php if ($headermode=="[HEADER]") echo "checked";?> onclick="if(this.checked) document.explora.delimited.checked=false">&nbsp;<?php echo $msgstr["txtimp_header"];?>
+<div style="font-size:0.85em;color:#555;margin:4px 0 8px 0"><?php echo $msgstr["txtimp_header_hint"];?></div>
 <table border=0 bgcolor=#cccccc cellpadding=3 cellspacing=1 >
     <tr><td><?php echo $msgstr["campo"]?></td>
         <td><?php echo $msgstr["tag"]?></td>

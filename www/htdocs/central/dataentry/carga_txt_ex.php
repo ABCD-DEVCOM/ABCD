@@ -2,6 +2,14 @@
 /*
 20220715 fho4abcd Use $actparfolder as location for .par files
 20260321 rogercgui UI improvements and a buffer fix for imports with a single record (a PHP buffer issue where output is only sent to the browser once it reaches 4KB, which meant that small imports did not display anything until the end of the process). The script now forces the header and progress bar to be sent after every record, ensuring visual feedback even for small imports.
+20261102 Conversion tables with a header row ("[HEADER]" mode) and loading the text from a file.
+Included by carga_txt.php, carga_txt_cnv.php, carga_txt_ver.php and carga_txt_ex.php.
+1. Default texts. They are used only when the language files do not define the same key,
+   so they can be moved to lang/<lang>/admin.php (or soporte.php) at any time.
+2. Functions that read a CSV/TSV text whose first row holds the column names.
+Format of the .cnv file in this mode (first line = [HEADER]; the "
+label" is the column name):
+[HEADER]
 */
 
 
@@ -17,6 +25,7 @@ $lang = $_SESSION["lang"];
 
 include("../lang/admin.php");
 include("../lang/soporte.php");
+include("carga_txt_hdr.php");
 
 // -------------------------------------------------------------------------
 // BUFFER OPTIMISATION (CORRECTION FOR 1 RECORD)
@@ -220,6 +229,18 @@ function RefreshDB(){
 
 			$rotulo = LeerTablaCnv();
 
+			if ($separator == '[HEADER]') {
+				// Header-row mode: the first row of the text holds the column names.
+				// Every element of $variables is already the array tag => values that ProcesarBD() expects.
+				$header_info = array();
+				$variables = TxtImp_ReadHeaderTable($value, $rotulo, $header_info);
+				TxtImp_PrintInfo($header_info);
+				if ($header_info["matched"] == 0) {
+					echo "<h4 style='color:red'>" . $msgstr["txtimp_nomatch"] . "</h4>";
+					include "../common/footer.php";
+					die;
+				}
+			} else {
 			if ($separator != '[TABS]') {
 				$variables = explode($separator, $value);
 			} else {
@@ -232,6 +253,7 @@ function RefreshDB(){
 				return trim($v) !== "";
 			});
 			// -----------------------------------------------
+			}
 
 			$total_rows = count($variables);
 			$current_line = 0;
@@ -255,7 +277,9 @@ function RefreshDB(){
 				$current_line++;
 				$noLocalizados = "";
 
-				if ($separator == '[TABS]') {
+				if ($separator == '[HEADER]') {
+					$output = $record;
+				} elseif ($separator == '[TABS]') {
 					$output = Delimited($rotulo, $record);
 				} else {
 					$output = Rotulos2Tags($rotulo, $record, $separator);

@@ -376,3 +376,13 @@ export_json_generated_files=Arquivos JSON gerados (Pasta WRK)
 file_date=Data de Criação
 file_size=Tamanho
 download=Baixar
+txtimp_header=Primeira linha = nomes das colunas (CSV / planilha)
+txtimp_header_hint=Neste modo, a coluna "rótulo" da tabela deve conter o nome da coluna usado na primeira linha da planilha ou do CSV. Colunas com o mesmo nome são carregadas como ocorrências repetidas do mesmo campo.
+txtimp_file=Carregar de arquivo (CSV / TSV / TXT),
+txtimp_enc=Codificação,
+txtimp_enc_auto= Automática,
+txtimp_lines=linhas,
+txtimp_hdr_read=Cabeçalho lido,
+txtimp_delim=delimitador,
+txtimp_cols_ignored=Colunas ignoradas (não constam na tabela de conversão),
+txtimp_nomatch=Nenhuma coluna do cabeçalho corresponde aos rótulos da tabela de conversão

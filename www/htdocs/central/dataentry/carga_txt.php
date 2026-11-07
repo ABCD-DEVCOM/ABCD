@@ -1,6 +1,8 @@
 <?php
 /*
 20220106 fho4abcd recreated accidentally deleted file. Included files for helper and back, improve html, add footer
+20261107 Added support for conversion tables with a header row ("[HEADER]" mode) and loading the text from a file.
+20261107 rogercgui Added upload support for conversion tables with a header row ("[HEADER]" mode) and loading the text from a file.
 */
 session_start();
 if (!isset($_SESSION["permiso"])){
@@ -12,6 +14,7 @@ $lang=$_SESSION["lang"];
 
 include("../lang/admin.php");
 include("../lang/soporte.php");
+include("carga_txt_hdr.php");
 
 include("../common/header.php");
 //foreach ($arrHttp as $var => $value) echo "$var = $value<br>";
@@ -51,6 +54,30 @@ function Actualizar(){
 	document.FCKfrm.submit()
 	msgwin.focus()
 }
+function CarregarArquivo(inp){
+	if (!inp.files || inp.files.length==0) return
+	var f=inp.files[0]
+	var enc=document.getElementById("txtenc").value
+	var rd=new FileReader()
+	rd.onload=function(e){
+		var t=e.target.result
+		if (enc=="auto" && t.indexOf("\uFFFD")!=-1){
+			// not valid UTF-8: read it again as ANSI (Windows-1252)
+			var rd2=new FileReader()
+			rd2.onload=function(e2){ PonerTexto(e2.target.result,f.name) }
+			rd2.readAsText(f,"windows-1252")
+			return
+		}
+		PonerTexto(t,f.name)
+	}
+	rd.readAsText(f,(enc=="auto")?"UTF-8":enc)
+}
+function PonerTexto(t,nombre){
+	if (t.charCodeAt(0)==0xFEFF) t=t.substring(1)
+	document.FCKfrm.bdd.value=t
+	var n=t.replace(/\s+$/,"").split("\n").length
+	document.getElementById("txtinfo").textContent=nombre+" - "+n+" "+document.getElementById("txtlbl").textContent
+}
 function EditConversion(){
     document.FCKfrm.action="../dataentry/carga_txt_cnv.php"
 	document.FCKfrm.submit()
@@ -77,6 +104,17 @@ function EditConversion(){
     <input type=hidden name=cipar value="<?php echo $arrHttp["base"]?>.par">
     <input type=hidden name=accion value="import">
     <input type=hidden name=tipo value="txt">
+    <div style="margin-bottom:10px">
+        <?php echo $msgstr["txtimp_file"]?>:
+        <input type="file" id="txtfile" accept=".csv,.tsv,.txt,text/plain,text/csv,text/tab-separated-values" onchange="CarregarArquivo(this)">
+        &nbsp; <?php echo $msgstr["txtimp_enc"]?>:
+        <select id="txtenc" onchange="if(document.getElementById('txtfile').files.length) CarregarArquivo(document.getElementById('txtfile'))">
+            <option value="auto"><?php echo $msgstr["txtimp_enc_auto"]?></option>
+            <option value="UTF-8">UTF-8</option>
+            <option value="windows-1252">ANSI (Windows-1252)</option>
+        </select>
+        &nbsp; <span id="txtinfo"></span><span id="txtlbl" style="display:none"><?php echo $msgstr["txtimp_lines"]?></span>
+    </div>
     <textarea rows=10 cols=150 name=bdd value=""></textarea><br><br>
 
     <a href="javascript:LeerTxt()" class="bt bt-gray" title='<?php echo $msgstr["cnv_dispcnvtab"]?>'>
