@@ -661,3 +661,7 @@ api_data_output_format=Formato de Salida de Datos
 api_data_output_format_desc=Defina qué campos de esta base de datos se exportarán y serán visibles en la respuesta JSON de la API.
 api_open_visual_mapper=Abrir Mapeador Visual de Campos
 sync_copies_to_lo=Sincronizar Copias a Objetos de Préstamo
+plugin_req_version=Requiere ABCD
+plugin_incompatible=Incompatible
+plugin_untested_version=Este plugin no ha sido probado con tu versión de ABCD
+plugin_err_incompatible=Este plugin es incompatible con tu versión de ABCD. Requerido:

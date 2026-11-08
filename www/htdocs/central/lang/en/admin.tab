@@ -661,3 +661,7 @@ api_data_output_format=Data Output Format
 api_data_output_format_desc=Define which fields from this database will be exported and visible in the API JSON response.
 api_open_visual_mapper=Open Visual Field Mapper
 sync_copies_to_lo=Sync Copies to Loan Objects
+plugin_req_version=Requires ABCD
+plugin_incompatible=Incompatible
+plugin_untested_version=Untested with your version of ABCD
+plugin_err_incompatible=This plugin is incompatible with your ABCD version. Required:
