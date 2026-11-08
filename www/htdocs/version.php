@@ -2,5 +2,5 @@
 // This file defines the current version of the software.
 // It is the only place that needs to be changed with each new version.
 
-define('ABCD_VERSION', 'v4.0.2');
-define('DATE_VERSION', '2026-10-24');
+define('ABCD_VERSION', 'v4.1.0');
+define('DATE_VERSION', '2026-11-08');
