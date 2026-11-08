@@ -81,7 +81,7 @@ $PARTIAL_UPDATE_SOURCES[] = 'www/htdocs/upgrade/update_actions.php';
 $PARTIAL_UPDATE_SOURCES[] = 'www/htdocs/central';
 $PARTIAL_UPDATE_SOURCES[] = 'www/htdocs/assets';
 $PARTIAL_UPDATE_SOURCES[] = 'www/htdocs/opac';
-$PARTIAL_UPDATE_SOURCES[] = 'www/bases-examples_Windows/lang';
+$PARTIAL_UPDATE_SOURCES[] = 'www/htdocs/abcd-api/src/Handlers/RecordHandler.php';
 
 // ABCD installation root directory (HTDOCS)
 $root_dir = __DIR__;
