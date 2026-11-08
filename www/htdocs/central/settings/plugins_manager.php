@@ -6,15 +6,15 @@
  * Created: 2026-07-01
  * Description: ABCD Plugin Manager
  * This file handles the management of plugins, including activation, deactivation, and deletion.
- * 
- * * @package ABCD_Core_Settings
- * @requires PHP 8.1+
- * 
+ *
+ * @package ABCD_Core_Settings
+ * @requires PHP 8.3+
+ *
  * changelog:
  * 20260701 rogercgui Initial creation of LanguageManager class.
  * 20260922 rogercgui Added plugin installation from remote repository with ZIP extraction and manifest detection.
- * 
- * */
+ * 20261107 rogercgui Added ABCD core version compatibility checker and untested version warning.
+ */
 
 session_start();
 if (!isset($_SESSION["permiso"])) {
@@ -25,12 +25,32 @@ if (!isset($_SESSION["permiso"])) {
 require_once("../config.php");
 require_once("../common/get_post.php");
 
+/**
+ * Normalizes a version string (e.g., "v4.0.2" or ">= 4.1.0" becomes "4.0.2" / "4.1.0")
+ */
+function normalize_abcd_version(?string $version): string
+{
+    if ($version === null || trim($version) === '') {
+        return '';
+    }
+    return preg_replace('/[^0-9\.]/', '', $version);
+}
+
+// 1. Load ABCD Version from root htdocs/version.php
+$htdocsRoot = dirname(rtrim(ABCD_CONTENT_PATH, '/\\'));
+$versionFile = $htdocsRoot . DIRECTORY_SEPARATOR . 'version.php';
+if (file_exists($versionFile)) {
+    require_once($versionFile);
+}
+$rawAbcdVersion = defined('ABCD_VERSION') ? ABCD_VERSION : '4.0.0';
+$currentAbcdVersion = normalize_abcd_version($rawAbcdVersion) ?: '4.0.0';
+
 // Load languages to populate $msgstr array
 $lang = $_SESSION["lang"] ?? "en";
 @include("../lang/admin.php");
 
-// 1. Define Core Paths
-$pluginsDir = ABCD_CONTENT_PATH . '/plugins';
+// 1.5 Define Core Paths
+$pluginsDir = rtrim(ABCD_CONTENT_PATH, '/\\') . '/plugins';
 $registryFile = $pluginsDir . '/plugins.json';
 
 // Ensure plugins directory exists
@@ -38,7 +58,22 @@ if (!is_dir($pluginsDir)) {
     mkdir($pluginsDir, 0775, true);
 }
 
-// 2. Handle POST Actions (Activate, Deactivate, Delete)
+// 2. Scan for Installed Plugins (Discovery) - Loaded before POST to validate activation compatibility
+$installedPlugins = [];
+if (is_dir($pluginsDir)) {
+    $scannedDirs = array_diff(scandir($pluginsDir), ['.', '..']);
+    foreach ($scannedDirs as $dir) {
+        $manifestPath = $pluginsDir . '/' . $dir . '/plugin.json';
+        if (is_dir($pluginsDir . '/' . $dir) && file_exists($manifestPath)) {
+            $manifest = json_decode(file_get_contents($manifestPath), true);
+            if ($manifest && isset($manifest['slug'])) {
+                $installedPlugins[$manifest['slug']] = $manifest;
+            }
+        }
+    }
+}
+
+// 3. Handle POST Actions (Activate, Deactivate, Install, Delete)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['plugin_slug'])) {
     $action = $_POST['action'];
     $slug = preg_replace('/[^a-zA-Z0-9_\-]/', '', $_POST['plugin_slug']);
@@ -50,6 +85,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['plu
     }
 
     if ($action === 'activate' || $action === 'deactivate') {
+        // Server-side version check before activating
+        if ($action === 'activate' && isset($installedPlugins[$slug])) {
+            $reqVer = normalize_abcd_version($installedPlugins[$slug]['requires'] ?? '');
+            if ($reqVer !== '' && version_compare($currentAbcdVersion, $reqVer, '<')) {
+                $errDetail = ($msgstr['plugin_err_incompatible'] ?? 'This plugin is incompatible with your ABCD version. Required:') . ' ' . $reqVer . '+';
+                header("Location: plugins_manager.php?msg=error&detail=" . urlencode($errDetail));
+                exit;
+            }
+        }
+
         if (!isset($registry[$slug])) {
             $registry[$slug] = [];
         }
@@ -65,6 +110,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['plu
         header("Location: plugins_manager.php?msg=success&slug=" . urlencode($slug));
         exit;
     } elseif ($action === 'install' && isset($_POST['download_url'])) {
+        // Optional server-side check if required_version was passed via POST
+        $postReqVer = normalize_abcd_version($_POST['requires_version'] ?? '');
+        if ($postReqVer !== '' && version_compare($currentAbcdVersion, $postReqVer, '<')) {
+            $errDetail = ($msgstr['plugin_err_incompatible'] ?? 'This plugin is incompatible with your ABCD version. Required:') . ' ' . $postReqVer . '+';
+            header("Location: plugins_manager.php?msg=error&detail=" . urlencode($errDetail));
+            exit;
+        }
+
         $downloadUrl = $_POST['download_url'];
         $tempZip = sys_get_temp_dir() . '/' . $slug . '_' . time() . '.zip';
 
@@ -87,13 +140,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['plu
             // Try forcing permission on the temporary folder before extracting
             @chmod($tempExtractPath, 0777);
 
-            // Suppresses the warnings and checks whether the extraction has failed.
+            // Suppresses the warnings and checks whether the extraction has failed
             if (!@$zip->extractTo($tempExtractPath)) {
                 $zip->close();
                 @unlink($tempZip);
-                header("Location: plugins_manager.php?msg=error&detail=" . urlencode($msgstr['plugin_err_extract'] ?? "Erro de permissão no servidor Linux: O PHP não tem direitos de escrita para extrair os arquivos."));
+                header("Location: plugins_manager.php?msg=error&detail=" . urlencode($msgstr['plugin_err_extract'] ?? "Permission error on server: PHP does not have write permissions to extract the files."));
                 exit;
             }
+            $zip->close();
+            @unlink($tempZip);
 
             // 3. Treasure Hunt: Find the actual folder containing plugin.json
             $iterator = new RecursiveIteratorIterator(
@@ -110,6 +165,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['plu
             }
 
             if ($manifestDir) {
+                // Verify version compatibility inside the extracted plugin.json before moving
+                $extractedManifest = json_decode(file_get_contents($manifestDir . '/plugin.json'), true);
+                $extractedReqVer = normalize_abcd_version($extractedManifest['requires'] ?? '');
+
+                if ($extractedReqVer !== '' && version_compare($currentAbcdVersion, $extractedReqVer, '<')) {
+                    $cleaner = new RecursiveIteratorIterator(
+                        new RecursiveDirectoryIterator($tempExtractPath, RecursiveDirectoryIterator::SKIP_DOTS),
+                        RecursiveIteratorIterator::CHILD_FIRST
+                    );
+                    foreach ($cleaner as $file) {
+                        $file->isDir() ? @rmdir($file->getPathname()) : @unlink($file->getPathname());
+                    }
+                    @rmdir($tempExtractPath);
+
+                    $errDetail = ($msgstr['plugin_err_incompatible'] ?? 'This plugin is incompatible with your ABCD version. Required:') . ' ' . $extractedReqVer . '+';
+                    header("Location: plugins_manager.php?msg=error&detail=" . urlencode($errDetail));
+                    exit;
+                }
+
                 $pluginPath = $pluginsDir . '/' . $slug;
                 if (!is_dir($pluginPath)) {
                     mkdir($pluginPath, 0775, true);
@@ -131,14 +205,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['plu
                 }
                 @rmdir($tempExtractPath);
 
-                header("Location: plugins_manager.php?msg=installed&slug=" . urlencode($slug));
-                exit;
-
                 // 5. Register the new plugin in the plugins.json file
                 $registry = file_exists($registryFile) ? (json_decode(file_get_contents($registryFile), true) ?? []) : [];
                 if (!isset($registry[$slug])) {
                     $registry[$slug] = ['active' => false];
-                    file_put_contents($registryFile, json_encode($registry, JSON_PRETTY_PRINT));
+                    @file_put_contents($registryFile, json_encode($registry, JSON_PRETTY_PRINT));
                 }
 
                 header("Location: plugins_manager.php?msg=installed&slug=" . urlencode($slug));
@@ -158,6 +229,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['plu
                 exit;
             }
         } else {
+            @unlink($tempZip);
             header("Location: plugins_manager.php?msg=error&detail=" . urlencode($msgstr['plugin_err_extract'] ?? "Failed to extract the ZIP."));
             exit;
         }
@@ -203,25 +275,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['plu
             exit;
         }
     }
-} // Fim do bloco if ($_SERVER['REQUEST_METHOD'] === 'POST' ...
-
-
-// 3. Scan for Installed Plugins (Discovery)
-$installedPlugins = [];
-if (is_dir($pluginsDir)) {
-    $scannedDirs = array_diff(scandir($pluginsDir), ['.', '..']);
-    foreach ($scannedDirs as $dir) {
-        $manifestPath = $pluginsDir . '/' . $dir . '/plugin.json';
-        if (is_dir($pluginsDir . '/' . $dir) && file_exists($manifestPath)) {
-            $manifest = json_decode(file_get_contents($manifestPath), true);
-            if ($manifest && isset($manifest['slug'])) {
-                $installedPlugins[$manifest['slug']] = $manifest;
-            }
-        }
-    }
 }
 
-// 3.5 Obtain the Remote Catalog (abcd-community.org)
+// 4. Obtain the Remote Catalog (abcd-community.org)
 $remoteCatalogUrl = 'https://abcd-community.org/api/plugins.json';
 $remotePlugins = [];
 
@@ -242,7 +298,9 @@ $registry = file_exists($registryFile) ? json_decode(file_get_contents($registry
 // Define the current language based on the ABCD session
 $userLang = $_SESSION['lang'] ?? 'en';
 
-// Function to process simple strings or multilingual objects with charset correction
+/**
+ * Function to process simple strings or multilingual objects with charset correction
+ */
 function get_plugin_text($field, $lang)
 {
     global $charset, $msgstr;
@@ -271,11 +329,10 @@ function get_plugin_text($field, $lang)
     }
 
     // 3. Return safely escaped, informing htmlspecialchars of the charset
-    // We use ENT_QUOTES to prevent HTML attribute breakage
     return htmlspecialchars($text, ENT_QUOTES, $target_charset);
 }
 
-// 4. Render UI (ABCD Standard Layout)
+// 5. Render UI (ABCD Standard Layout)
 include("../common/header.php");
 ?>
 
@@ -298,12 +355,17 @@ include("../common/header.php");
 
     <div class="middle form">
         <div class="formContent">
-            <h3><?php echo $msgstr['plugin_installed'] ?? 'Installed Plugins'; ?></h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0;"><?php echo $msgstr['plugin_installed'] ?? 'Installed Plugins'; ?></h3>
+                <span style="font-size: 12px; color: #555; background: #e9ecef; padding: 4px 10px; border-radius: 4px;">
+                    <strong>ABCD:</strong> v<?php echo htmlspecialchars($currentAbcdVersion); ?>
+                </span>
+            </div>
 
             <?php if (isset($_GET['msg']) && $_GET['msg'] === 'success'): ?>
                 <div style="background-color: #d4edda; color: #155724; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
                     <strong><?php echo $msgstr['plugin_success'] ?? 'Success'; ?>:</strong>
-                    <?php echo ($msgstr['plugin_action_success'] ?? 'Action completed successfully for') . " '" . htmlspecialchars($_GET['slug']) . "'."; ?>
+                    <?php echo ($msgstr['plugin_action_success'] ?? 'Action completed successfully for') . " '" . htmlspecialchars($_GET['slug'] ?? '') . "'."; ?>
                 </div>
             <?php endif; ?>
 
@@ -312,12 +374,21 @@ include("../common/header.php");
                     <i class="fas fa-plus"></i> <?php echo $msgstr['plugin_add_new'] ?? 'Add New Plugin'; ?>
                 </a>
             </div>
+
             <?php if (isset($_GET['msg']) && $_GET['msg'] === 'installed'): ?>
                 <div style="background-color: #d4edda; color: #155724; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
                     <strong><?php echo $msgstr['plugin_success'] ?? 'Success'; ?>:</strong>
-                    <?php echo ($msgstr['plugin_installed_success'] ?? 'Plugin installed successfully! You can now activate it.') ?>
+                    <?php echo ($msgstr['plugin_installed_success'] ?? 'Plugin installed successfully! You can now activate it.'); ?>
                 </div>
             <?php endif; ?>
+
+            <?php if (isset($_GET['msg']) && $_GET['msg'] === 'error'): ?>
+                <div style="background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
+                    <strong><?php echo $msgstr['plugin_error'] ?? 'Error'; ?>:</strong>
+                    <?php echo htmlspecialchars($_GET['detail'] ?? ''); ?>
+                </div>
+            <?php endif; ?>
+
             <table style="width: 100%; border-collapse: collapse; text-align: left;">
                 <thead>
                     <tr style="background-color: #f1f1f1; border-bottom: 2px solid #ccc;">
@@ -338,14 +409,25 @@ include("../common/header.php");
                             <?php
                             $isActive = isset($registry[$slug]['active']) && $registry[$slug]['active'] === true;
                             $rowColor = $isActive ? '#f0fdf4' : '#ffffff';
+
+                            $hasRequiresField = isset($plugin['requires']) && trim((string)$plugin['requires']) !== '';
+                            $requiresVersion = $hasRequiresField ? normalize_abcd_version((string)$plugin['requires']) : '';
+                            $isCompatible = !$hasRequiresField || version_compare($currentAbcdVersion, $requiresVersion, '>=');
                             ?>
                             <tr style="border-bottom: 1px solid #ddd; background-color: <?php echo $rowColor; ?>;">
                                 <td style="padding: 10px;">
-                                    <strong><?php echo $plugin['name'] ?? ($msgstr['plugin_unknown'] ?? 'Unknown'); ?></strong><br>
-                                    <small style="color: #666;">(<?php echo $slug; ?>)</small>
+                                    <strong><?php echo get_plugin_text($plugin['name'] ?? ($msgstr['plugin_unknown'] ?? 'Unknown'), $userLang); ?></strong><br>
+                                    <small style="color: #666;">(<?php echo htmlspecialchars($slug); ?>)</small>
                                 </td>
-                                <td style="padding: 10px;"><?php echo $plugin['description'] ?? ''; ?></td>
-                                <td style="padding: 10px;"><?php echo $plugin['version'] ?? '1.0'; ?></td>
+                                <td style="padding: 10px;">
+                                    <?php echo get_plugin_text($plugin['description'] ?? '', $userLang); ?>
+                                </td>
+                                <td style="padding: 10px;">
+                                    <?php echo htmlspecialchars($plugin['version'] ?? '1.0'); ?>
+                                    <?php if ($hasRequiresField): ?>
+                                        <br><small style="color: #666;"><?php echo ($msgstr['plugin_req_version'] ?? 'Requires ABCD') . ' ' . htmlspecialchars($requiresVersion) . '+'; ?></small>
+                                    <?php endif; ?>
+                                </td>
                                 <td style="padding: 10px;">
                                     <?php if ($isActive): ?>
                                         <span style="color: green; font-weight: bold;"><?php echo $msgstr['plugin_active'] ?? 'Active'; ?></span>
@@ -354,6 +436,18 @@ include("../common/header.php");
                                     <?php endif; ?>
                                 </td>
                                 <td style="padding: 10px;">
+                                    <?php if (!$isCompatible): ?>
+                                        <div style="color: #e74c3c; font-size: 11px; margin-bottom: 5px; font-weight: bold;">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <?php echo ($msgstr['plugin_req_version'] ?? 'Requires ABCD') . ' ' . htmlspecialchars($requiresVersion) . '+'; ?>
+                                        </div>
+                                    <?php elseif (!$hasRequiresField): ?>
+                                        <div style="color: #b7791f; font-size: 11px; margin-bottom: 5px;">
+                                            <i class="fas fa-info-circle"></i>
+                                            <?php echo $msgstr['plugin_untested_version'] ?? 'Untested with your version of ABCD'; ?>
+                                        </div>
+                                    <?php endif; ?>
+
                                     <?php if ($isActive && !empty($plugin['settings_page'])): ?>
                                         <a href="plugin_admin.php?plugin=<?php echo urlencode($slug); ?>" class="bt bt-default" style="color: #0984e3; margin-right: 5px;">
                                             <i class="fas fa-cog"></i> <?php echo $msgstr['plugin_settings'] ?? 'Settings'; ?>
@@ -361,22 +455,26 @@ include("../common/header.php");
                                     <?php endif; ?>
 
                                     <form method="POST" style="display:inline;" onsubmit="return confirm('<?php echo htmlspecialchars(addslashes($msgstr['plugin_confirm_status'] ?? 'Are you sure you want to change the status?')); ?>');">
-                                        <input type="hidden" name="plugin_slug" value="<?php echo $slug; ?>">
+                                        <input type="hidden" name="plugin_slug" value="<?php echo htmlspecialchars($slug); ?>">
                                         <?php if ($isActive): ?>
                                             <button type="submit" name="action" value="deactivate" class="bt bt-default" style="color: orange;">
                                                 <i class="fas fa-pause"></i> <?php echo $msgstr['plugin_deactivate'] ?? 'Deactivate'; ?>
                                             </button>
-                                        <?php else: ?>
+                                        <?php elseif ($isCompatible): ?>
                                             <button type="submit" name="action" value="activate" class="bt bt-blue">
                                                 <i class="fas fa-play"></i> <?php echo $msgstr['plugin_activate'] ?? 'Activate'; ?>
+                                            </button>
+                                        <?php else: ?>
+                                            <button type="button" class="bt bt-default" disabled style="opacity: 0.5; cursor: not-allowed;">
+                                                <i class="fas fa-ban"></i> <?php echo $msgstr['plugin_incompatible'] ?? 'Incompatible'; ?>
                                             </button>
                                         <?php endif; ?>
                                     </form>
 
                                     <?php if (!$isActive): ?>
-                                        <form method="POST" style="display:inline;" onsubmit="return confirm('<?php echo addslashes($msgstr['plugin_confirm_delete'] ?? 'WARNING: This will completely delete the plugin files. Proceed?'); ?>');">
-                                            <input type="hidden" name="plugin_slug" value="<?php echo $slug; ?>">
-                                            <button type="submit" name="action" value="delete" class="bt bt-red" style=" margin-left: 5px;">
+                                        <form method="POST" style="display:inline;" onsubmit="return confirm('<?php echo htmlspecialchars(addslashes($msgstr['plugin_confirm_delete'] ?? 'WARNING: This will completely delete the plugin files. Proceed?')); ?>');">
+                                            <input type="hidden" name="plugin_slug" value="<?php echo htmlspecialchars($slug); ?>">
+                                            <button type="submit" name="action" value="delete" class="bt bt-red" style="margin-left: 5px;">
                                                 <i class="fas fa-trash"></i> <?php echo $msgstr['plugin_delete'] ?? 'Delete'; ?>
                                             </button>
                                         </form>
@@ -389,13 +487,6 @@ include("../common/header.php");
             </table>
 
             <h3 style="margin-top: 40px;"><?php echo $msgstr['plugin_repository'] ?? 'ABCD Official Repository'; ?></h3>
-
-            <?php if (isset($_GET['msg']) && $_GET['msg'] === 'error'): ?>
-                <div style="background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 15px; border-radius: 4px;">
-                    <strong><?php echo $msgstr['plugin_error'] ?? 'Error'; ?>:</strong>
-                    <?php echo htmlspecialchars($_GET['detail']); ?>
-                </div>
-            <?php endif; ?>
 
             <table style="width: 100%; border-collapse: collapse; text-align: left;">
                 <thead>
@@ -417,18 +508,21 @@ include("../common/header.php");
                             $isInstalled = array_key_exists($remoteSlug, $installedPlugins);
                             $localVersion = $isInstalled ? ($installedPlugins[$remoteSlug]['version'] ?? '0.0.0') : null;
                             $canUpdate = $isInstalled && version_compare($remotePlugin['version'], $localVersion, '>');
+
+                            $hasRemoteRequires = isset($remotePlugin['requires']) && trim((string)$remotePlugin['requires']) !== '';
+                            $remoteRequiresVersion = $hasRemoteRequires ? normalize_abcd_version((string)$remotePlugin['requires']) : '';
+                            $isRemoteCompatible = !$hasRemoteRequires || version_compare($currentAbcdVersion, $remoteRequiresVersion, '>=');
                             ?>
                             <tr style="border-bottom: 1px solid #ddd;">
                                 <td style="padding: 10px;">
                                     <strong><?php echo get_plugin_text($remotePlugin['name'] ?? $remoteSlug, $userLang); ?></strong><br>
                                     <small style="color: #666;">
-                                        <?php echo $msgstr['plugin_by'] ?? 'Por'; ?>
+                                        <?php echo $msgstr['plugin_by'] ?? 'By'; ?>
                                         <?php
                                         if (!empty($remotePlugin['author'])) {
                                             echo get_plugin_text($remotePlugin['author'], $userLang);
                                         } else {
-                                            // Ensures that the community’s default string also passes through the charset filter
-                                            echo get_plugin_text($msgstr['plugin_community'] ?? 'Comunidade', $userLang);
+                                            echo get_plugin_text($msgstr['plugin_community'] ?? 'Community', $userLang);
                                         }
                                         ?>
                                     </small>
@@ -446,32 +540,53 @@ include("../common/header.php");
                                 </td>
                                 <td style="padding: 10px;">
                                     <?php echo htmlspecialchars($remotePlugin['version']); ?>
+                                    <?php if ($hasRemoteRequires): ?>
+                                        <br><small style="color: #666;"><?php echo ($msgstr['plugin_req_version'] ?? 'Requires ABCD') . ' ' . htmlspecialchars($remoteRequiresVersion) . '+'; ?></small>
+                                    <?php endif; ?>
                                     <?php if ($isInstalled && !$canUpdate): ?>
                                         <br><span style="font-size: 11px; color: green;"><i class="fas fa-check-circle"></i> <?php echo $msgstr['plugin_updated'] ?? 'Updated'; ?></span>
                                     <?php endif; ?>
                                 </td>
                                 <td style="padding: 10px;">
-                                    <?php if (!$isInstalled): ?>
-                                        <form method="POST" style="display:inline;" onsubmit="
-                                        var btn = this.querySelector('button'); btn.innerHTML = '<i class=\'fas fa-spinner fa-spin\'></i> <?php echo addslashes($msgstr['plugin_installing'] ?? 'Installing...'); ?>'; btn.classList.add('bt-gray'); btn.classList.remove('bt-blue'); btn.style.cursor = 'wait'; setTimeout(() => { btn.disabled = true; }, 50);">
-                                            <input type="hidden" name="action" value="install">
-                                            <input type="hidden" name="plugin_slug" value="<?php echo htmlspecialchars($remoteSlug); ?>">
-                                            <input type="hidden" name="download_url" value="<?php echo htmlspecialchars($remotePlugin['download_url']); ?>">
-                                            <button type="submit" class="bt bt-blue" style="font-size: 12px;">
-                                                <i class="fas fa-download"></i> <?php echo $msgstr['plugin_install_btn'] ?? 'Install'; ?>
-                                            </button>
-                                        </form>
-                                    <?php elseif ($canUpdate): ?>
-                                        <form method="POST" style="display:inline;" onsubmit="var btn = this.querySelector('button'); btn.innerHTML = '<i class=\'fas fa-spinner fa-spin\'></i> <?php echo addslashes($msgstr['plugin_updating'] ?? 'Updating...'); ?>'; btn.classList.add('bt-gray'); btn.classList.remove('bt-green'); btn.style.cursor = 'wait'; setTimeout(() => { btn.disabled = true; }, 50);">
-                                            <input type="hidden" name="action" value="install">
-                                            <input type="hidden" name="plugin_slug" value="<?php echo htmlspecialchars($remoteSlug); ?>">
-                                            <input type="hidden" name="download_url" value="<?php echo htmlspecialchars($remotePlugin['download_url']); ?>">
-                                            <button type="submit" class="bt bt-green" style="font-size: 12px;">
-                                                <i class="fas fa-sync"></i> <?php echo ($msgstr['plugin_update_to'] ?? 'Update to') . ' ' . htmlspecialchars($remotePlugin['version']); ?>
-                                            </button>
-                                        </form>
+                                    <?php if (!$isRemoteCompatible): ?>
+                                        <div style="color: #e74c3c; font-size: 11px; margin-bottom: 5px; font-weight: bold;">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <?php echo ($msgstr['plugin_req_version'] ?? 'Requires ABCD') . ' ' . htmlspecialchars($remoteRequiresVersion) . '+'; ?>
+                                        </div>
+                                        <button type="button" class="bt bt-default" disabled style="opacity: 0.5; font-size: 12px; cursor: not-allowed;">
+                                            <i class="fas fa-ban"></i> <?php echo $msgstr['plugin_incompatible'] ?? 'Incompatible'; ?>
+                                        </button>
                                     <?php else: ?>
-                                        <button class="bt bt-default" disabled style="opacity: 0.5; font-size: 12px;"><?php echo $msgstr['plugin_installed_btn'] ?? 'Installed'; ?></button>
+                                        <?php if (!$hasRemoteRequires): ?>
+                                            <div style="color: #b7791f; font-size: 11px; margin-bottom: 5px;">
+                                                <i class="fas fa-info-circle"></i>
+                                                <?php echo $msgstr['plugin_untested_version'] ?? 'Untested with your version of ABCD'; ?>
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <?php if (!$isInstalled): ?>
+                                            <form method="POST" style="display:inline;" onsubmit="var btn = this.querySelector('button'); btn.innerHTML = '<i class=\'fas fa-spinner fa-spin\'></i> <?php echo addslashes($msgstr['plugin_installing'] ?? 'Installing...'); ?>'; btn.classList.add('bt-gray'); btn.classList.remove('bt-blue'); btn.style.cursor = 'wait'; setTimeout(() => { btn.disabled = true; }, 50);">
+                                                <input type="hidden" name="action" value="install">
+                                                <input type="hidden" name="plugin_slug" value="<?php echo htmlspecialchars($remoteSlug); ?>">
+                                                <input type="hidden" name="download_url" value="<?php echo htmlspecialchars($remotePlugin['download_url']); ?>">
+                                                <input type="hidden" name="requires_version" value="<?php echo htmlspecialchars($remoteRequiresVersion); ?>">
+                                                <button type="submit" class="bt bt-blue" style="font-size: 12px;">
+                                                    <i class="fas fa-download"></i> <?php echo $msgstr['plugin_install_btn'] ?? 'Install'; ?>
+                                                </button>
+                                            </form>
+                                        <?php elseif ($canUpdate): ?>
+                                            <form method="POST" style="display:inline;" onsubmit="var btn = this.querySelector('button'); btn.innerHTML = '<i class=\'fas fa-spinner fa-spin\'></i> <?php echo addslashes($msgstr['plugin_updating'] ?? 'Updating...'); ?>'; btn.classList.add('bt-gray'); btn.classList.remove('bt-green'); btn.style.cursor = 'wait'; setTimeout(() => { btn.disabled = true; }, 50);">
+                                                <input type="hidden" name="action" value="install">
+                                                <input type="hidden" name="plugin_slug" value="<?php echo htmlspecialchars($remoteSlug); ?>">
+                                                <input type="hidden" name="download_url" value="<?php echo htmlspecialchars($remotePlugin['download_url']); ?>">
+                                                <input type="hidden" name="requires_version" value="<?php echo htmlspecialchars($remoteRequiresVersion); ?>">
+                                                <button type="submit" class="bt bt-green" style="font-size: 12px;">
+                                                    <i class="fas fa-sync"></i> <?php echo ($msgstr['plugin_update_to'] ?? 'Update to') . ' ' . htmlspecialchars($remotePlugin['version']); ?>
+                                                </button>
+                                            </form>
+                                        <?php else: ?>
+                                            <button type="button" class="bt bt-default" disabled style="opacity: 0.5; font-size: 12px;"><?php echo $msgstr['plugin_installed_btn'] ?? 'Installed'; ?></button>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </td>
                             </tr>
