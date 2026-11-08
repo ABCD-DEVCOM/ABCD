@@ -614,6 +614,7 @@ if (file_exists($wksfile)) {
 						onkeypress="if(event.keyCode==13||event.which==13){top.Menu('ira');return false;}">
 				</div>
 
+
 				<?php
 				$camposbusqueda_file = $db_path_db . "pfts/" . $lang_sess . "/camposbusqueda.tab";
 				if (!file_exists($camposbusqueda_file)) {
@@ -669,6 +670,7 @@ if (file_exists($wksfile)) {
 							onfocus="FocoEn('blibre')"
 							title="<?php echo $msgstr["m_enterterms"]; ?>"
 							onkeypress="if(event.keyCode==13||event.which==13){BuscarPalabras();return false;}">
+						<?php if (function_exists('abcd_run_hook')) echo abcd_run_hook('dataentry_toolbar_search', ''); ?>
 					</div>
 				<?php endif; /* camposbusqueda.tab */ ?>
 
@@ -1024,6 +1026,7 @@ if (file_exists($wksfile)) {
 		<input type=hidden name=desde value=dataentry><input type=hidden name=prologo value=prologoact>
 	</form>
 
+	<?php if (function_exists('abcd_run_hook')) echo abcd_run_hook('dataentry_footer', ''); ?>
 </body>
 
 </html>
