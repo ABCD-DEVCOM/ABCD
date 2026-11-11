@@ -32,6 +32,7 @@
  * 2025-12-23 fho4abcd HTML5
  * 2026-09-28 rogercgui Fix for truncated UTF-8 characters (65533) in the dictionary. Now the last character is removed if it is 65533 and a $ is added to the end of the term. This is a workaround for the problem of truncated UTF-8 characters in the dictionary.
  * 2026-10-02 rogercgui Change $arrHttp[“Opcion”] to correct the context of the GenerarDespliegue() function in menu_main.php
+ * 2026-11-11 fho4abcd Improve call to fst_leer: better button, effect is now pop-up
  */
 
 
@@ -95,14 +96,22 @@ include("../common/header.php");
 ?>
 <body>
 <script src=../dataentry/js/selectbox.js></script>
+<script>
+    function showfst(){
+		msgwin=window.open("","FST","status=yes,resizable=yes,toolbar=no,menu=no,scrollbars=yes,height=500,width=700")
+		msgwin.focus()
+    }
+</script>
 <?php
 
 // ---------------- functions ----------------
 function InsertarEnlaces($base){
     global $msgstr;
+    $phptarget="../dbadmin/fst_leer.php"."?base=".$base;
     // Insert link to display the fst
-    ?>&nbsp; &nbsp; <a class='bt bt-blue' href="../dbadmin/fst_leer.php?base='<?php echo $base;?>'"
-    title="<?php echo $msgstr['show'].' '.$msgstr['fst'];?>" target=_blank>FST</a>
+    ?>
+    <a href="<?php echo $phptarget;?>" class="bt bt-blue" target=FST  onclick=showfst()
+        title="<?php echo $msgstr["fst"]." +.." ?>"><?php echo "FST" ?></a>
     <?php
 }
 
