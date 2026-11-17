@@ -7,6 +7,7 @@
 2025-12-23 fho4abcd HTML5
 2026-05-05 rogercgui Centralized the display of the base name, charset and maxmfn, and the treatment of errors and warnings, in a single block of code, to improve readability and maintainability.
 2026-11-16 fho4abcd Improved html code, removed duplicate check for fdt
+2026-11-17 fho4abcd Removed linebreak from MAXMFN
 */
 session_start();
 if (!isset($_SESSION["permiso"])) {
@@ -78,7 +79,7 @@ include("../common/header.php");
 
         // Get info about the current database from the database
         include("../common/inc_get-dbinfo.php");
-
+        $LOC_MAXMFN=preg_replace( "/\r|\n/", "",$arrHttp["MAXMFN"]);
         $i = -1;
 
         //The available output formats are read
@@ -213,7 +214,7 @@ include("../common/header.php");
             <!-- Main information-->
             <div style='margin-bottom: 15px;'>
                 <span class='badge'><i class='fas fa-code'></i>&nbsp;<?php echo $charset;?></span>
-                <span><?php echo $msgstr["maxmfn"] . ": ";?><strong style='color: var(--abcd-red); font-size: 1.2rem;'><?php echo $arrHttp["MAXMFN"];?></strong></span>
+                <span><?php echo $msgstr["maxmfn"] . ": ";?><strong style='color: var(--abcd-red); font-size: 1.2rem;'><?php echo $LOC_MAXMFN;?></strong></span>
             </div>
             <?php
             // Treatment of Alerts and Errors (maintained with the native .alert class)
@@ -252,7 +253,7 @@ include("../common/header.php");
         </div>
         <!-- What is the function of next script? Was present in abcd1.4. Required for navigation-->
         <script>
-        top.maxmfn=<?php echo $arrHttp["MAXMFN"];?>
+        top.maxmfn='<?php echo $LOC_MAXMFN;?>'
         top.mfn=0
         top.wks=''
         top.Formato=''
