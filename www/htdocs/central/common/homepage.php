@@ -10,7 +10,10 @@
 2022-06-30 fho4abcd Add backtoscript to explore databases folder
 2026-09-04 rogercgui Add hook for plugins to inject central_menu items
 2026-09-22 rogercgui Safe initialisation to prevent the ‘Undefined variable’ error in PHP 8.1+
+2026-11-15 fho4abcd Add missing body tag, unset unused session variable
 */
+//foreach ($_SESSION as $var => $value) echo "$var = $value<br>";
+//foreach ($arrHttp as $var=>$value) echo "$var = $value<br>";
 
 //TO REMOVE THE SESSION VARIABLES FROM DIRTREE
 unset($_SESSION["root_base"]);
@@ -31,6 +34,7 @@ unset($_SESSION["Maxfoldersize"]);
 unset($_SESSION["Last_Level_Node"]);
 unset($_SESSION["Total_Time"]);
 unset($_SESSION["Server_Path"]);
+unset($_SESSION["6_letters_code"]);
 $Permiso=$_SESSION["permiso"];
 $modulo_anterior="";
 if (isset($_SESSION["MODULO"]))
@@ -116,6 +120,7 @@ if (file_exists($db_path."logtrans/data/logtrans.mst")){
 }
 include("header.php");
 ?>
+<body>
 <script>
 function doReload(selectvalue){
     /* note that selectvalue has format <base>|adm|<base_prompt>*/
