@@ -657,3 +657,5 @@ cfg_relevance_gate_enabled=Activer la limite de performance de pertinence (Relev
 cfg_relevance_max_scored=Quantité maximale d'enregistrements notés par pertinence
 cfg_relevance_cache_enabled=Activer le cache du résultat trié
 cfg_relevance_cache_ttl=Durée de vie du cache (en secondes)
+img_access_denied=Accès refusé.
+img_file_not_found=Fichier introuvable !
