@@ -610,3 +610,5 @@ cfg_relevance_gate_enabled=Habilitar límite de rendimiento de relevancia (Relev
 cfg_relevance_max_scored=Cantidad máxima de registros puntuados por relevancia
 cfg_relevance_cache_enabled=Habilitar caché del resultado ordenado
 cfg_relevance_cache_ttl=Tiempo de vida del caché (en segundos)
+img_access_denied=Acceso denegado.
+img_file_not_found=¡Archivo no encontrado!
