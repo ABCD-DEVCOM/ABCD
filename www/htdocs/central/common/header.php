@@ -6,6 +6,7 @@
 		Note that everything was and is cached
 		Note that a timestamp on css files does not prevent caching of included files
 2026-03-20 fho4abcd. Add client IP check. Fires normally only in case of a hack
+2026-11-15 fho4abcd. Improved links for stylesheets
 */
 if (isset($charset))
 	$content_charset = $charset;
@@ -47,10 +48,10 @@ echo abcd_run_hook('abcd_header_end', '');
 	<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/favicon-180x180.png">
 
 	<!-- Stylesheets -->
-	<link rel="stylesheet" rev="stylesheet" href="/assets/css/template.css" type="text/css" media="screen">
+	<link rel="stylesheet" href="/assets/css/template.css" type="text/css" media="screen">
 
 	<!--FontAwesome-->
-	<link href="/assets/css/all.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="/assets/css/all.min.css" type="text/css" media="screen">
 
 	<?php
 	include("css_settings.php");

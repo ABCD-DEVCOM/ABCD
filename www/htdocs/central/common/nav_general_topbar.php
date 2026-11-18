@@ -9,6 +9,7 @@
  * 2026-03-05 fho4abcd: Initial creation of the topbar navigation
  * 20260906 rogercgui - Added support for user dropdown with profile and logout options
  * 20260907 rogercgui - Added Priority+ overflow handling for module buttons
+ * 20261117 fho4abcd  - Correct html for lists + target=_top for logout button (does not work with href=#)
  */
 
 
@@ -137,20 +138,16 @@ foreach (array_keys($module_registry) as $registered_slug) {
                 <li>
                     <a href="#" style="text-decoration: none;" class="bt-dropdown-item"><i class="fas fa-user dropdown-icon"></i>
                         <?php echo htmlspecialchars($name ?? '', ENT_QUOTES, $sys_charset); ?>
-                        <small> (<?php echo htmlspecialchars($profile ?? '', ENT_QUOTES, $sys_charset); ?>)</small>
+                        <small>&nbsp;(<?php echo htmlspecialchars($profile ?? '', ENT_QUOTES, $sys_charset); ?>)</small>
                     </a>
                 </li>
                 <li><a href="/central/common/change_password.php" class="bt-dropdown-item"><i class="fas fa-key dropdown-icon"></i> <?php echo htmlspecialchars($msgstr["change_password"] ?? 'Change Password', ENT_QUOTES, $sys_charset); ?></a></li>
                 <li class="dropdown-divider"></li>
-                <a href="#" onclick="window.location.href='/central/common/logout.php'; return false;" class="bt-dropdown-item" title="<?php echo htmlspecialchars($msgstr["logout"] ?? 'Logout', ENT_QUOTES, $sys_charset); ?>">
-                    <i class="fas fa-sign-out-alt"></i> <?php echo htmlspecialchars($msgstr["logout"] ?? 'Logout', ENT_QUOTES, $sys_charset); ?>
+                <a href="/central/common/logout.php" target=_top class="bt-dropdown-item" title="<?php echo htmlspecialchars($msgstr["logout"] ?? 'Logout', ENT_QUOTES, $sys_charset); ?>">
+                    <i class="fas fa-sign-out-alt"></i>&nbsp;<?php echo htmlspecialchars($msgstr["logout"] ?? 'Logout', ENT_QUOTES, $sys_charset); ?>
                 </a>
+           </ul>
         </li>
-    </ul>
-    </li>
-    <?php if (!isset($module_odds)): ?>
-
-    <?php endif; ?>
     </ul>
 </nav>
 
