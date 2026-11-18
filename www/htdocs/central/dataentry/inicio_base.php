@@ -8,6 +8,7 @@
 2026-05-05 rogercgui Centralized the display of the base name, charset and maxmfn, and the treatment of errors and warnings, in a single block of code, to improve readability and maintainability.
 2026-11-16 fho4abcd Improved html code, removed duplicate check for fdt
 2026-11-17 fho4abcd Removed linebreak from MAXMFN
+2026-11-18 fho4abcd Linebreak removal moved to inc_get-dbinfo.php
 */
 session_start();
 if (!isset($_SESSION["permiso"])) {
@@ -79,7 +80,7 @@ include("../common/header.php");
 
         // Get info about the current database from the database
         include("../common/inc_get-dbinfo.php");
-        $LOC_MAXMFN=preg_replace( "/\r|\n/", "",$arrHttp["MAXMFN"]);
+        $LOC_MAXMFN=$arrHttp["MAXMFN"];
         $i = -1;
 
         //The available output formats are read

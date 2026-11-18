@@ -4,6 +4,7 @@
 20210319 fho4abcd Print error if par/<dbname>.par is missing (to understand the error thrown by wxis_llamar.php
 20210322 fho4abcd Comment
 20220711 fho4abcd Use $actparfolder as location for .par files
+20261118 fho4abcd Trim returned value, improve comment
 */
 /*
 ** Execute function get_dbinfo
@@ -14,9 +15,10 @@
 **             The info is requested by wxis_llamar.php (Opcion=status)
 ** Returns   : All info is returned in $arrHttp
 **             - $arrHttp["MAXMFN"]             (always, default=0)
-**             - $arrHttp["BD"]                 (if applicable)
-**             - $arrHttp["IF"]                 (if applicable)
-**             - $arrHttp["EXCLUSIVEWRITELOCK"] (if applicable)
+**             - $arrHttp["BD"]                 (if applicable) => Y= database does exist
+**             - $arrHttp["IF"]                 (if applicable) => Y= inverted file does exist
+**             - $arrHttp["DENTRYLOCK"]         (if applicable) => 0= ??
+**             - $arrHttp["EXCLUSIVEWRITELOCK"] (if applicable) => 0= not exclusive write locked
 ** Globals   : This function uses wxis_llamar.php (with many globals)
 **   $arrHttp: I/O specifies at least the current database
 **   $xWxis  : I   path to the wxis scripts .xis for Central
@@ -50,7 +52,10 @@ function get_dbinfo () {
             if ($dbinfo_ix>0) {
                 if (trim($dbinfo_linea)!=""){
                     $dbinfo_a=explode(":",$dbinfo_linea);
-                    if (isset($dbinfo_a[1])) $arrHttp[$dbinfo_a[0]]=$dbinfo_a[1];
+                    if (isset($dbinfo_a[1])) {
+                        $dbinfo_a[1]=trim($dbinfo_a[1]);
+                        $arrHttp[$dbinfo_a[0]]=$dbinfo_a[1];
+                    }
                 }
             }
         }
