@@ -1,0 +1,71 @@
+version: '3.4'
+
+services:
+  abcd:
+    build:
+      context: .
+      dockerfile: ./docker/abcd/Dockerfile
+    image: abcd:latest
+    restart: always
+    hostname: abcd.abcd
+    container_name: abcd.abcd
+    expose:
+    - "80"
+    ports:
+    - "80:80"
+    volumes:
+    - ./www/bases-examples_Linux:/var/opt/ABCD/bases/
+    - ./docker/logs:/var/opt/ABCD/bases/log
+    networks:
+      abcd:
+        ipv4_address: 172.18.18.2
+    extra_hosts:
+    - "empweb:172.18.18.3"
+#  empweb:
+#    build:
+#      context: .
+#      dockerfile: ./docker/empweb/Dockerfile
+#    image: empweb:latest
+#    restart: always
+#    hostname: empweb.abcd
+#    container_name: empweb.abcd
+#    expose:
+#    - "8080"
+#    volumes:
+#    - ./docker/logs:/opt/ABCD/empweb/logs
+#    networks:
+#      abcd:
+#        ipv4_address: 172.18.18.3
+#    extra_hosts:
+#    - "abcd:172.18.18.2"
+#    - "mysql:172.18.18.4"
+#    depends_on:
+#    - "mysql"
+#    links:
+#    - "mysql"
+#  mysql:
+#    #image: mariadb:5.5.64
+#    image: mysql:5
+#    restart: always
+#    hostname: mysql.abcd
+#    container_name: mysql.abcd
+#    expose:
+#    - "3306"
+#    volumes:
+#    - ./docker/mysql/data:/var/lib/mysql:rw
+#    - ./docker/mysql/restore:/docker-entrypoint-initdb.d:ro
+#    environment:
+#      MYSQL_ROOT_PASSWORD: empweb
+#      MYSQL_DATABASE: transa
+#    networks:
+#      abcd:
+#        ipv4_address: 172.18.18.4
+
+networks:
+  abcd:
+    external:
+      name: abcd
+#    ipam:
+#      driver: default
+#      config:
+#        - subnet: 172.18.18.0/24
