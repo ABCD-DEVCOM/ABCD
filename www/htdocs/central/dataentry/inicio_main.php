@@ -301,7 +301,8 @@ include "../common/header.php";
 		}
 
 
-		function Menu(Opcion) {
+		// skipUnsavedCheck: true when the user already chose "discard" in the unsaved-changes dialog
+		function Menu(Opcion, skipUnsavedCheck) {
 			if (toolbarEnabled == "N") {
 				alert("<?php echo $msgstr["cancelcopy"] ?>")
 				return
@@ -313,6 +314,14 @@ include "../common/header.php";
 
 			// This allows Home and Config to work and prevents them from crashing!
 			if (lock_db == "Y" && Opcion != "home" && Opcion != "administrar") return;
+
+			// Cancel edit: if the form has unsaved changes, ask before discarding them.
+			// The form page (js/unsaved_changes.js) shows the dialog and returns true.
+			if (Opcion == "cancelar" && !skipUnsavedCheck) {
+				try {
+					if (top.main.ABCD_promptUnsavedChanges()) return
+				} catch (e) {}
+			}
 			switch (Opcion) {
 				case "cancelar":
 				case "actualizar":

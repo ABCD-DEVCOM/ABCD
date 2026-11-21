@@ -39,6 +39,29 @@ if (!isset($_SESSION["permiso"])) {
 <script src="../ckeditor/ckeditor.js"></script>
 <script src="../ckeditor/config.js"></script>
 <script src="../dataentry/js/textcounter.js"></script>
+<?php
+// Unsaved-changes guard for the record form (see js/unsaved_changes.js).
+// forceDirty: the form is shown again after a validation error, its values were never saved.
+$abcd_unsaved_msg = array(
+	"title"   => $msgstr["unsaved_title"] ?? "Unsaved changes",
+	"text"    => $msgstr["unsaved_text"] ?? "This record has unsaved changes. What do you want to do?",
+	"save"    => $msgstr["unsaved_save"] ?? "Save changes",
+	"discard" => $msgstr["unsaved_discard"] ?? "Discard changes",
+	"keep"    => $msgstr["unsaved_keep"] ?? "Keep editing"
+);
+// json_encode() needs UTF-8; the non-ASCII characters are escaped, so the page charset does not matter
+if (isset($charset) and strtoupper($charset) != "UTF-8")
+	foreach ($abcd_unsaved_msg as $k => $v) $abcd_unsaved_msg[$k] = mb_convert_encoding($v, "UTF-8", $charset);
+$abcd_unsaved_cfg = array(
+	"forceDirty"   => (isset($reintentar) and $reintentar == "S"),
+	"saveFunction" => isset($default_values) ? "EnviarValoresPorDefecto" : "EnviarForma",
+	"msg"          => $abcd_unsaved_msg
+);
+?>
+<script>
+	window.ABCD_unsavedConfig = <?php echo json_encode($abcd_unsaved_cfg, JSON_INVALID_UTF8_SUBSTITUTE | JSON_HEX_TAG | JSON_HEX_AMP); ?>;
+</script>
+<script src="../dataentry/js/unsaved_changes.js"></script>
 
 <?php
 global $Expresion;
