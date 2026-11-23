@@ -56,7 +56,6 @@ copyingmsg=Copying messages to
 copysearch=copy search expression
 cp_folder=Copy to folder
 cp_name=Name of the copy
-cp_reorganize=Reorganize the database
 createcopies=Create copies
 created=Created
 cwritefile=Cannot write to file

@@ -2,6 +2,7 @@
 /*
 20211104 fho4abcd Replace vmx_fullinv.php by fullinv.php. Remove obsolete comment
 20211215 fho4abcd Backbutton & helper by included file
+20261123 fho4abcd Removed preloaded+prevent copy of target to target+improve html and user messages
 */
 session_start();
 set_time_limit(0);
@@ -18,68 +19,97 @@ $lang=$_SESSION["lang"];
 include("../lang/admin.php");
 include("../lang/dbadmin.php");
 include("../lang/soporte.php");
+include("../common/inc_check_referrer.php");
 
 include("../common/header.php");
+?>
+<body>
+<?php
 include("../common/institutional_info.php");
+include("inc_def_cprest.php");
 $backtoscript="../dbadmin/menu_mantenimiento.php"; // The default return script
-
+if (isset($_SESSION["permiso"]["CENTRAL_DBUTILS"]) or  isset($_SESSION["permiso"]["CENTRAL_ALL"])
+	or isset($_SESSION["permiso"][$db."_CENTRAL_DBUTILS"]) or isset($_SESSION["permiso"][$db."_CENTRAL_ALL"])){
+}else{
+	echo $msgstr["invalidright"];
+	die;
+}
 ///////////////////////////////////////////////
 function Confirmar(){
 global $msgstr,$arrHttp;
-	echo "<input type=hidden name=confirmar>";
-	echo "<h4>".$msgstr["db_restore"]."</h4>";
-	echo "<h4>".$arrHttp["copyname"]." => ".$arrHttp["base"]."<h4>";
-	echo "<input class='bt-green' type=button name=continuar value=\"".$msgstr["continuar"]."\" onclick=Confirmar()>";
-	echo "&nbsp; &nbsp;<input type=button name=cancelar value=\"".$msgstr["cancelar"]."\" onclick=Regresar()>";
-	echo "</body></html>";
-    die;
+	?>
+	<input type=hidden name=confirmar>
+	<h4><?php echo $msgstr["db_restore"]?></h4>
+	<h4><?php echo $arrHttp["copyname"]." => ".$arrHttp["base"];?></h4>
+	<input class='bt-green' type=button name=continuar value="<?php echo $msgstr["continuar"];?>" onclick=Confirmar()>
+	&nbsp; &nbsp;
+	<input class='bt-red' type=button name=cancelar value="<?php echo $msgstr["cancelar"];?>" onclick=Regresar()>
+	<?php
 }
 
 Function Explorar(){
-global $msgstr, $arrHttp;
+global $msgstr, $arrHttp, $def_cprest_folder, $def_cprest_folder_sel, $db_path;
 ?>
-	<form name="upload" method="post" onsubmit="EnviarFormaUpload();return false;">
-	<label><?php echo $msgstr["mx_folder"];?>
-	<input type="text" name="storein" size="30" onclick="javascript:blur()"> 
-    <input type=hidden name=base value=<?php echo $arrHttp["base"]?>>
-
-	<?php
-	/*
-	foreach ($_REQUEST as $var=>$value){
-		echo "<input type=hidden name=$var value=\"$value\">\n";
-	}*/
-	?>
-	
-	<a class="bt bt-blue" href="javascript:Explorar()"> <?php echo $msgstr["explore"];?></a>
-	<input class="bt-green" type="submit" value="<?php echo $msgstr["procesar"];?>">
-	</form>
+	<h3><?php echo $msgstr["resdb_desc"]." : ".$arrHttp["base"].".mst + ".$arrHttp["base"].".xrf";?></h3>
+	<form name="upload" method="post" >
+	<input type=hidden name=base value=<?php echo $arrHttp["base"]?>>
+	<table>
+	<tr>
+		<td><label><?php echo $msgstr["mx_folder"]." ".$msgstr["resdb_with"];?></label></td>
+		<td><input type="text" name="storein" size="30" value=<?php echo $def_cprest_folder?> onclick="javascript:blur()"></td>
+				<?php
+				if ($def_cprest_folder_sel==true) {
+					?>
+					<td><a class="bt bt-blue" href="javascript:Explorar()"> <?php echo $msgstr["explore"];?></a></td>
+					<?php
+				} else {
+					?>
+					<td><?php echo $msgstr["db_noselect"];?></td>
+					<?php
+				}
+				?>
+	</table>
+	<input class="bt-blue" type="submit" value="<?php echo $msgstr["continuar"];?>">
+ 	</form>
+	</div>
+	</div>
 
 <?php 
-    die;
+	include("../common/footer.php");
+	die;
 }
 
 function ShowDatabases($storein,$db_path){
-global $msgstr;
+global $msgstr,$arrHttp;
 	$Dir=$db_path.$storein;
 	$handle = opendir($Dir);
 	$ix=0;
 	echo "<table bgcolor=#cccccc border=0 cellpadding=8>";
 	while (false !== ($file = readdir($handle))) {
-	   	if ($file != "." && $file != "..") {
-	   		$f=$file;
-	   		$file=$Dir."/".$file;
-	   		if(is_file($file) and pathinfo ( $file , PATHINFO_EXTENSION)=="mst" ){
-	   			$ix=$ix+1;
-	   			$ixpos=strpos($f,".");
-	   			if ($ixpos>0){
-	   				$fmst=substr($f,0,$ixpos);
-		            $dateFormat = "D d M Y g:i A";
+		if ($file != "." && $file != "..") {
+			$f=$file;
+			$file=$Dir."/".$file;
+			$basefile=$arrHttp["base"];
+			if(is_file($file) and pathinfo ( $file , PATHINFO_EXTENSION)=="mst" ){
+				$ix=$ix+1;
+				$ixpos=strpos($f,".");
+				if ($ixpos>0){
+					$fmst=substr($f,0,$ixpos);
+					$dateFormat = "D d M Y g:i A";
 					$ctime = filectime($file);
-        	        echo "<tr><td bgcolor=white><input type=radio name=db_sel value='".$fmst."'> $f</td>";
-            	    echo "<td bgcolor=white>".date($dateFormat, $ctime) . "</td>";
-                	echo "<td bgcolor=white>".number_format(filesize($file))."</td></tr>";
-                }
-	   		}
+					/*
+					** Disable selection of the target database by a wrong group name and disabled attribute
+					** Can occur if the copies are in the same folder as the target database
+					*/
+					if ($basefile==pathinfo ( $file , PATHINFO_FILENAME)){
+						echo "<tr><td ><input type=radio name=db_selnone disabled value='".$fmst."'> $f</td>";
+					}else{
+						echo "<tr bgcolor=white><td><input type=radio name=db_sel value='".$fmst."'> $f</td>";
+					}
+					echo "<td>".date($dateFormat, $ctime) . "</td>";
+					echo "<td>".number_format(filesize($file))."</td></tr>";
+				}
+ 	   		}
 		}
 	}
 	echo "</table>";
@@ -91,16 +121,13 @@ global $msgstr;
 	}
 	closedir($handle);
 	echo "<br><input class='bt-green' type=submit value=".$msgstr["procesar"].">\n";
-	echo "</form></body></html>";
-	die;
 }
 ?>
-<body>
 <script language="javascript" src="../dataentry/js/lr_trim.js"></script>
 <script>
 function Explorar(){
 	msgwin=window.open("../dataentry/dirs_explorer.php?desde=dbcp&Opcion=explorar&base=<?php echo $db_path?>&mx=s&tag=document.forma1.dbfolder","explorar","width=400,height=600,top=0,left=0,resizable,scrollbars,menu")
-    msgwin.focus()
+	msgwin.focus()
 }
 
 
@@ -114,7 +141,6 @@ function Limpiar(){
 
 function Confirmar(){
 	document.continuar.confirmar.value="OK";
-	document.getElementById('loading').style.display='block';
 	document.continuar.submit()
 }
 
@@ -138,22 +164,19 @@ function Regresar(){
 }
 
 function FullInv(){
-	document.getElementById('loading').style.display='block';
 	document.continuar.action="fullinv.php";
 	document.continuar.submit()
 }
 </script>
 
 
-<div id="loading">
-  <img id="loading-image" src="../dataentry/img/preloader.gif" alt="Loading..." />
-</div>
 <div class="sectionInfo">
 	<div class="breadcrumb">
 	<?php echo $msgstr["db_restore"]; if (isset($arrHttp["base"])) echo ": ".$arrHttp["base"];?>
 	</div>
 	<div class="actions">
-    <?php include "../common/inc_back.php";?>
+	<?php include "../common/inc_back.php";?>
+	<?php include "../common/inc_home.php";?>
 	</div>
 	<div class="spacer">&#160;</div>
 </div>
@@ -163,7 +186,7 @@ function FullInv(){
 <?php
 if (!isset($mx_path)){
 	echo $msgstr["mis_mx_path"];
-    die;
+	die;
 }
 
 if (file_exists($db_path.$arrHttp["base"]."/protect_status.def")){
@@ -179,7 +202,6 @@ if (file_exists($db_path.$arrHttp["base"]."/protect_status.def")){
 
 if (!isset($arrHttp["storein"])){
 	Explorar();
-
 }else{
 	echo "<form name=continuar method=post onsubmit=\"EnviarForma();return false;\">";
 
@@ -188,42 +210,39 @@ if (!isset($arrHttp["storein"])){
 			echo "<input type=hidden name=$var value=\"$value\">\n";
 	}
 	if (isset($arrHttp["storein"]) and !isset($arrHttp["copyname"])){
+		echo "<h4>".$msgstr["resdb_select"]." ".$arrHttp["base"]."</h4>";
 		ShowDatabases($arrHttp["storein"],$db_path);
-        echo "</form></body></html>";
+		echo "</form></div></div>";
+		include("../common/footer.php");
 		die;
 	}
 }
 
 if (!isset($arrHttp["confirmar"]) or $arrHttp["confirmar"]!="OK"){
 	Confirmar();
+	echo "</form></div></div>";
+	include("../common/footer.php");
+	die;
 }
 
 $err="";
 $from=$db_path.$arrHttp["storein"]."/".$arrHttp["copyname"];
 $to=$db_path.$arrHttp["base"]."/data/".$arrHttp["base"];
+echo $from.".mst => ".$to.".mst";
 $res=copy($from.".mst",$to.".mst");
-if ($res==1){
-	echo $from.".mst => ".$to.".mst <strong>".$msgstr["copied"]."</strong><br>";
+if ($res==true){
+	echo " <strong>".$msgstr["copied"]."</strong><br>";
+	echo $from.".xrf => ".$to.".xrf";
 	$res=copy($from.".xrf",$to.".xrf");
-	if ($res==1){
-		echo $from.".xrf => ".$to.".xrf  <strong>".$msgstr["copied"]."</strong><P>";
+	if ($res==true){
+		echo " <strong>".$msgstr["copied"]."</strong>";
+		echo "<br><br>";
+		echo "<a class='bt bt-green' href=javascript:FullInv()>".$msgstr["mnt_gli"]."</a>";
 	}else
-		$err="Y";
+		echo " <strong style=background-color:red;>"." => ".$msgstr["not_copied"]."</strong><br>";
 }else{
-	$err="Y";
+	echo " <strong style=background-color:red;>"." => ".$msgstr["not_copied"]."</strong><br>";
 }
-if ($err==""){
-	echo "<h4>".$msgstr["copied"]."</h4>";
-	echo "<input type=hidden name=encabezado value=Y>\n";
-	echo "<a class='bt bt-green' href=javascript:FullInv()>".$msgstr["mnt_gli"]."</a>";
-}else{
-	echo "<h4>".$msgstr["not_copied"]."</h4>";
-}
-?>
-</form>
-</div>
-</div>
-</center>
-<?php
+echo "</form></div></div>";
 include("../common/footer.php");
 ?>
