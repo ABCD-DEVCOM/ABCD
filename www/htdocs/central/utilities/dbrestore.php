@@ -3,6 +3,7 @@
 20211104 fho4abcd Replace vmx_fullinv.php by fullinv.php. Remove obsolete comment
 20211215 fho4abcd Backbutton & helper by included file
 20261123 fho4abcd Removed preloaded+prevent copy of target to target+improve html and user messages
+20261124 fho4abcd Improved button Inverted file generation
 */
 session_start();
 set_time_limit(0);
@@ -237,7 +238,7 @@ if ($res==true){
 	if ($res==true){
 		echo " <strong>".$msgstr["copied"]."</strong>";
 		echo "<br><br>";
-		echo "<a class='bt bt-green' href=javascript:FullInv()>".$msgstr["mnt_gli"]."</a>";
+		echo "<a class='bt bt-green mb-2' href=fullinv.php?base=".$arrHttp["base"]."&inframe=0&backtoscript=".$backtoscript.">"."<i class='fas fa-database'></i> ". $msgstr["mnt_gli"]."</a>";
 	}else
 		echo " <strong style=background-color:red;>"." => ".$msgstr["not_copied"]."</strong><br>";
 }else{

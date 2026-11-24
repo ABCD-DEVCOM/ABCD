@@ -1,6 +1,7 @@
 <?php
 /* Modifications
 ** 20261123 fho4abcd Created
+** 20261124 fho4abcd Make it work for browser functions "View Page/Frame Source"
 */
 /* Description
 ** Deny access if HTTP_REFERER is not set
@@ -10,22 +11,24 @@
 */
 function Check_Referrer(){
 	global $_SERVER, $_SESSION;
-	echo "<!DOCTYPE html>";
 	$err_pref="<p style='color:red'>*** ";
 	if ( !isset($_SERVER["HTTP_REFERER"]) ) {
+		echo "<!DOCTYPE html>";
 		echo $err_pref."Direct attempts forbidden. Launch only by ABCD/OPAC</p>";
 		die;
 	}
 	/*
 	** Check referer
 	** It is assumed that this file is launched from a limited number of root URL's
+	** View Page Source or View Frame source is a special case
 	*/
 	$http_host=$_SERVER["HTTP_HOST"];
 	$http_referrer=$_SERVER["HTTP_REFERER"];
+	$refer_is_view_source=str_ends_with($http_referrer,$http_host."/");
 	$refer_is_central=strstr($http_referrer,$http_host."/central/");
 	$refer_is_opac=strstr($http_referrer,$http_host."/opac/");
-	if ( $refer_is_central === false && $refer_is_opac === false ) {
-		echo $err_pref."Unknown referer: ". $http_referrer."</p>";
+	if ( $refer_is_central === false && $refer_is_opac === false  && $refer_is_view_source === false ) {
+		echo $err_pref."Unknown referrer: ". $http_referrer."</p>";
 		die;
 	}
 	/*
@@ -40,5 +43,7 @@ function Check_Referrer(){
 		}
 	}
 }
+//foreach ($_SERVER as $var=>$value)  echo "$var=$value<br>";// for HTTP_REFERER
+//foreach ($_SESSION as $var=>$value)  echo "$var=$value<br>";
 Check_Referrer();
 ?>
