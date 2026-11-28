@@ -2,6 +2,7 @@
 /* Modifications
 20211216 fho4abcd Backbutton & helper by included file. Improve html
 20261119 fho4abcd Remove preloader gif. Improved user interface. Correct html
+20261128 fho4abcd Improved messages from reorganize command
 */
 /**
  * @program:	ABCD - ABCD-Central - http://reddes.bvsaude.org/projects/abcd
@@ -142,13 +143,27 @@ if ($arrHttp["cpreorg"]=="cpreo"){
 	** Following options are accepted but give never any output here: "tell=1", "log=<file.log>"
 	** Option "clean" cannot be tested as ABCD performs already a trim on save record
 	*/
-	$commandline=$mxcp_path." ".$from." create=".$to;
-	echo "<font face='courier new'>Command line: ".$commandline."</font><br> ";
+	$commandline=$mxcp_path." ".$from." create=".$to." 2>&1";
+	echo "<font face='courier new'>".$msgstr["commandline"].": ".$commandline."</font><br> ";
 	$res=exec($commandline,$contenido,$resultado);
-	foreach ($contenido as $var=>$value)  echo "$var=$value<br>";
+    echo "<br>\n";
+	foreach ($contenido as $var=>$value) {
+        /*
+        ** $contenido is an array. No need to print $var
+        ** Seems only to give any output in case of gross errors
+        */
+        if (trim($value)!="") echo "$value<br>";
+    }
 	if ($resultado==0){
-		echo "<p>".$from.".mst ".$msgstr["reorganized"]."</p>";
+		echo "<p>".$from.".mst <b>".$msgstr["reorganized"]."</b></p>";
 	}else{
+        /*
+        ** In case of errors an unusable but processable mst and xrf may be present
+        ** They should be deleted to avoid further problems
+        */
+        if (file_exists($to.".mst")) unlink($to.".mst");
+        if (file_exists($to.".xrf")) unlink($to.".xrf");
+        echo "<p style='color:red'><b>".$msgstr["cpdb_noreorgcopy"]."</b></p><br>";
 		$err="Y";
 	}
 }else{
