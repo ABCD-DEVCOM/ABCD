@@ -388,6 +388,26 @@ global $db_path,$Wxis,$wxisUrl,$xWxis,$pr_loan,$pft_storobj,$recibo_arr,$recibo_
 		$recibo_arr[]=$recibo;
 		//ImprimirRecibo($recibo);
 	}
+	// HOOK (event): a new loan was written to the trans database
+	if (function_exists('abcd_do_action')) {
+		abcd_do_action('circulation_loan_created', [
+			'user_code'      => $usuario,
+			'user_type'      => $usrtype,
+			'inventory'      => trim($inventario),
+			'control_number' => $item_data[0] ?? '',
+			'database'       => $item_data[1] ?? '',
+			'object_type'    => $item_data[5] ?? '',
+			'call_number'    => $signatura,
+			'title'          => $objeto[0] ?? '',
+			'loan_date'      => $diap,
+			'loan_time'      => $horap,
+			'due_date'       => $diad,
+			'due_time'       => $horad,
+			'reservation_mfn'=> ($codusuario_reserva != "" and $codusuario_reserva == $usuario) ? $mfn_reserva : '',
+			'library'        => $_SESSION["library"] ?? '',
+			'operator'       => $login,
+		]);
+	}
 	$fechas=array($diad,$horad);
 	return $fechas;
 }

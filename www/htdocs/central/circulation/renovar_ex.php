@@ -371,6 +371,7 @@ foreach ($items as $num_inv){
 			if ($renewed=="S"){
 	// Se pasa la fecha de prestamo y devolucion anteriores al campo 200
 				$f_ant="^a".$fecha_p."^b".$hora_p."^c".$fecha_d."^d".$hora_p."^e".$_SESSION["login"];
+				$previous_due_date=$fecha_d;
 	//se calcula la nueva fecha de devolucion
 
 				$fecha_pres=date("Ymd h:i:s A");
@@ -415,6 +416,25 @@ foreach ($items as $num_inv){
                     if ($ValorCapturado!="") $query.="&logtrans=".$ValorCapturado;
 				}
 				include ("../common/wxis_llamar.php");
+
+				// HOOK (event): a loan was renewed
+				if (function_exists('abcd_do_action')) {
+					abcd_do_action('circulation_loan_renewed', [
+						'mfn'               => $Mfn,
+						'user_code'         => $cod_usuario,
+						'user_type'         => $tipo_usuario,
+						'inventory'         => trim($inventario),
+						'control_number'    => $num_ctrl,
+						'database'          => $catalog_db,
+						'object_type'       => $tipo_objeto,
+						'renewal_date'      => $fecha_pres,
+						'previous_due_date' => $previous_due_date,
+						'due_date'          => $fecha_d,
+						'renewals_before'   => $no_renova,
+						'source'            => $arrHttp["vienede"] ?? 'ABCD',
+						'operator'          => $_SESSION["login"] ?? '',
+					]);
+				}
 			}
 		}
 	}

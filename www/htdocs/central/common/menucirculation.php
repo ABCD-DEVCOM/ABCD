@@ -174,6 +174,10 @@ if (isset($_SESSION["permiso"]["CENTRAL_ALL"]) or isset($_SESSION["permiso"]["CI
 
 			</div>
 <?php }?>
+<?php
+// HOOK (UI): plugins can add their own boxes/buttons to the circulation home
+if (function_exists('abcd_run_hook')) echo abcd_run_hook('circulation_menu', '');
+?>
 <script>
 function VerificarInicializacion(){
 	if (confirm("Quiere inicializar las transacciones de préstamo")){

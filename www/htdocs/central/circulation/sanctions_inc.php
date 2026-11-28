@@ -120,6 +120,24 @@ function Sanciones($fecha_d, $atraso, $cod_usuario, $inventario, $ppres, $ncontr
 		$datos_trans["DIAS_SUSPENSION"] = $total_susp;
 		GrabarLog("S", $datos_trans, $Wxis, $xWxis, $wxisUrl, $db_path, "RETORNAR");
 	}
-	if (isset($query))
+	if (isset($query)) {
 		include("../common/wxis_llamar.php");
+
+		// HOOK (event): a fine and/or suspension was recorded in suspml
+		if (function_exists('abcd_do_action')) {
+			abcd_do_action('circulation_sanction_applied', [
+				'user_code'       => $cod_usuario,
+				'user_type'       => $tipo_usuario,
+				'inventory'       => trim($inventario),
+				'control_number'  => $ncontrol,
+				'database'        => $bd,
+				'object_type'     => $tipo_objeto,
+				'due_date'        => $fecha_d,
+				'overdue_days'    => $atraso,
+				'fine'            => $total_fine,
+				'suspension_days' => $total_susp,
+				'operator'        => $_SESSION["login"] ?? '',
+			]);
+		}
+	}
 }

@@ -779,6 +779,16 @@ global $msgstr,$msg_error_0,$arrHttp,$signatura,$msg_1,$cont,$institution_name,$
 		if (file_exists($db_path."trans/pfts/".$_SESSION['lang']."/r_solvency.pft"))
 			echo "<a class='bt bt-blue' href=javascript:ImprimirSolvencia('".$arrHttp["usuario"]."')><i class=\"fas fa-print\"></i> ".$msgstr["solvencia"]."</a>";
 	}
+
+	// HOOK (UI): plugins can append widgets to the borrower's loan panel
+	if (function_exists('abcd_run_hook')) {
+		echo abcd_run_hook('circulation_user_panel', '', [
+			'user_code'   => $arrHttp["usuario"],
+			'loans'       => $xnum_p,
+			'fines'       => $nmulta,
+			'suspensions' => $nsusp,
+		]);
+	}
 ?>
 
 <?php

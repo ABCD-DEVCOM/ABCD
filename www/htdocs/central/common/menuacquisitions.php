@@ -131,3 +131,7 @@ if (isset($_SESSION["permiso"]["ACQ_ACQALL"]) or isset($_SESSION["permiso"]["ACQ
 
 	</div>
 <?php }?>
+<?php
+// HOOK (UI): plugins can add their own boxes/buttons to the acquisitions home
+if (function_exists('abcd_run_hook')) echo abcd_run_hook('acquisitions_menu', '');
+?>
