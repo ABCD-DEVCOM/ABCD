@@ -506,6 +506,10 @@ include("../common/inc_get-dbinfo.php");
             </div> 
             
             <?php include("inc_stat_menu.php"); ?>
+            <?php
+            // HOOK (UI): plugins can add panels (charts, dashboards) to the statistics page
+            if (function_exists('abcd_run_hook')) echo abcd_run_hook('statistics_panel', '', ['base' => $arrHttp["base"]]);
+            ?>
 
         </div>
     </div>

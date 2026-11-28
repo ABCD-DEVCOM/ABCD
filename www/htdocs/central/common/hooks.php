@@ -7,6 +7,8 @@
  * This file handles the registration and execution of hooks, allowing plugins to modify core behavior without changing core files.
  * changelog:
  * 20260701 rogercgui Initial creation of LanguageManager class.
+ * 20261128 rogercgui Extra context arguments for abcd_run_hook(); new abcd_do_action() for event hooks
+ *          (circulation, statistics, acquisitions).
  * 
  * */
 
@@ -29,13 +31,17 @@ function abcd_add_hook(string $hook, callable $cb, int $priority = 10): void
 }
 
 /**
- * Executes all callback functions registered to a specific hook.
+ * Executes all callback functions registered to a specific hook (filter style).
  *
- * @param string $hook The name of the hook.
- * @param mixed  $data Optional data to pass to the callbacks.
+ * Each callback receives the current $data plus any extra context arguments
+ * and must return the (possibly modified) $data.
+ *
+ * @param string $hook    The name of the hook.
+ * @param mixed  $data    Optional data to pass to the callbacks.
+ * @param mixed  ...$args Optional read-only context passed after $data.
  * @return mixed The modified data after all callbacks have processed it.
  */
-function abcd_run_hook(string $hook, mixed $data = null): mixed
+function abcd_run_hook(string $hook, mixed $data = null, mixed ...$args): mixed
 {
     global $_ABCD_HOOKS;
 
@@ -51,12 +57,47 @@ function abcd_run_hook(string $hook, mixed $data = null): mixed
         foreach ($callbacks as $cb) {
             // Ensure the callback is valid before execution to prevent fatal errors
             if (is_callable($cb)) {
-                $data = $cb($data);
+                $data = $cb($data, ...$args);
             }
         }
     }
 
     return $data;
+}
+
+/**
+ * Fires an event hook (action style).
+ *
+ * Used after the core has already written a transaction (loan, return,
+ * renewal, sanction...). Callbacks receive the context array, their return
+ * value is ignored and any exception is caught and logged, so a faulty
+ * plugin can never break the circulation flow.
+ *
+ * @param string $hook    The name of the event.
+ * @param array  $context Event data (see docs for the keys of each event).
+ */
+function abcd_do_action(string $hook, array $context = []): void
+{
+    global $_ABCD_HOOKS;
+
+    if (!isset($_ABCD_HOOKS[$hook])) {
+        return;
+    }
+
+    ksort($_ABCD_HOOKS[$hook]);
+
+    foreach ($_ABCD_HOOKS[$hook] as $callbacks) {
+        foreach ($callbacks as $cb) {
+            if (!is_callable($cb)) {
+                continue;
+            }
+            try {
+                $cb($context);
+            } catch (\Throwable $e) {
+                error_log("ABCD plugin hook '{$hook}' failed: " . $e->getMessage());
+            }
+        }
+    }
 }
 
 

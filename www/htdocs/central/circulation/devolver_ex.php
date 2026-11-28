@@ -354,6 +354,26 @@ foreach ($items as $num_inv) {
 			}
 
 			include("../common/wxis_llamar.php");
+
+			// HOOK (event): a loan was closed (item returned)
+			if (function_exists('abcd_do_action')) {
+				abcd_do_action('circulation_item_returned', [
+					'mfn'            => $Mfn,
+					'user_code'      => $cod_usuario,
+					'user_type'      => $tipo_usuario,
+					'inventory'      => $inventario,
+					'control_number' => $ncontrol,
+					'database'       => $bd,
+					'object_type'    => $tipo_objeto,
+					'loan_date'      => $fecha_p,
+					'due_date'       => $fecha_d,
+					'return_date'    => $devolucion,
+					'overdue_days'   => $dias_atraso,
+					'reserved_for'   => (isset($user_reserved[1]) && $user_reserved[1] != "") ? $user_reserved[0] : '',
+					'reserved_until' => (isset($user_reserved[1]) && $user_reserved[1] != "") ? $user_reserved[3] : '',
+					'operator'       => $_SESSION["login"] ?? '',
+				]);
+			}
 		}
 	}
 }

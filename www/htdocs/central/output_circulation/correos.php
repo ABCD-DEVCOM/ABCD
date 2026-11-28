@@ -92,6 +92,7 @@ if (isset($_REQUEST["ini"])) {
 foreach ($fp as $key=>$value){	$value=trim($value);
 	if ($value!=""){		$x=explode('=',$value);
 		$ini[$x[0]]=$x[1];	}}
+$subject_default=isset($ini["SUBJECT"]) ? $ini["SUBJECT"] : "";
 $ex=explode('|',$_REQUEST["contactos"]);
 $IsisScript=$xWxis."leer_mfnrange.xis";
 $Expresion="";
@@ -123,9 +124,33 @@ foreach ($ex as $Mfn){
 				$name=$c[1];
 				//echo "<hr>";
 				//echo "$to<br>$name<br>$body";
+				// HOOK (filter): plugins can change or take over the delivery of this notice
+				// (HTML template, SMS/WhatsApp, queue...). A plugin that delivers the message
+				// itself sets 'handled' => true (and 'sent' => true on success).
+				$mail_data=array(
+					'to'      => $to,
+					'name'    => $name,
+					'body'    => $body,
+					'subject' => $subject_default,
+					'mfn'     => $Mfn,
+					'base'    => $base,
+					'pft'     => $Formato,
+					'handled' => false,
+					'sent'    => false,
+				);
+				if (function_exists('abcd_run_hook')) $mail_data=abcd_run_hook('circulation_mail_send',$mail_data);
+				if (!empty($mail_data['handled'])){
+					if (!empty($mail_data['sent'])) $enviados=$enviados+1;
+					echo "<p><font face=arial size=1>($icuenta) ".$msgstr["to"].": ".htmlspecialchars((string)$mail_data['to'])." (plugin)";
+				}else{
+				$to=$mail_data['to'];
+				$name=$mail_data['name'];
+				$body=$mail_data['body'];
+				$ini["SUBJECT"]=$mail_data['subject'];
 				if (isset($ini["PHPMAILER"]) and $ini["PHPMAILER"]=="phpmailer"){
 					SendMail($mail,$to,$name,$body,$ini,$icuenta,$_REQUEST["desde"]-1);
 				}else{					SendPhpMail($to,$name,$body,$ini,$icuenta,$_REQUEST["desde"]-1);				}
+				}
 				flush();
     			ob_flush();
 			}
