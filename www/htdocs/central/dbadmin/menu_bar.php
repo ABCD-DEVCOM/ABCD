@@ -31,6 +31,7 @@
 20240627 fho4abcd Add Manage gizmo's, removed create gizmo (covered my Manage gizmo's)
 20250924 fho4abcd Add sort option, translate cleandb
 20260315 fho4abcd Add convert csv to iso option
+20261127 fho4abcd Add Delete copies option
 */
 $lang = $_SESSION["lang"];
 unset($_SESSION["Browse_Expresion"]);
@@ -91,6 +92,11 @@ unset($_SESSION["Server_Path"]);
 				document.admin.base.value = base
 				document.admin.cipar.value = base + ".par"
 				document.admin.action = "../utilities/manage_gizmo.php"
+				break;
+			case "dbdelcp":
+				document.admin.base.value = base
+				document.admin.cipar.value = base + ".par"
+				document.admin.action = "../utilities/dbdelcp.php"
 				break;
 			case "dbrestore":
 				document.admin.base.value = base
@@ -346,6 +352,7 @@ unset($_SESSION["Server_Path"]);
 			<ul>
 				<li><a href='javascript:EnviarFormaMNT("dbcp","<?php echo $msgstr["db_cp"] ?>")'><?php echo $msgstr["db_cp"] ?></a></li>
 				<li><a href='javascript:EnviarFormaMNT("dbrestore","<?php echo $msgstr["db_restore"] ?>")'><?php echo $msgstr["db_restore"] ?></a></li>
+				<li><a href='javascript:EnviarFormaMNT("dbdelcp","<?php echo $msgstr["db_delcp"] ?>")'><?php echo $msgstr["db_delcp"] ?></a></li>
 				<li><a href='Javascript:EnviarFormaMNT("cleandb","<?php echo $msgstr["db_clean"] ?>")'><?php echo $msgstr["db_clean"] ?></a></li>
 			</ul>
 		</li>

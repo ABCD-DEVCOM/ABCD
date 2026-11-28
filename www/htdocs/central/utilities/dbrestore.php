@@ -4,6 +4,7 @@
 20211215 fho4abcd Backbutton & helper by included file
 20261123 fho4abcd Removed preloaded+prevent copy of target to target+improve html and user messages
 20261124 fho4abcd Improved button Inverted file generation
+20261127 fho4abcd Removed unused script, add Bytes in tablecells with filesize, improve button text
 */
 session_start();
 set_time_limit(0);
@@ -85,7 +86,7 @@ global $msgstr,$arrHttp;
 	$Dir=$db_path.$storein;
 	$handle = opendir($Dir);
 	$ix=0;
-	echo "<table bgcolor=#cccccc border=0 cellpadding=8>";
+	echo "<table bgcolor=#cccccc border=0 cellpadding=8>\n";
 	while (false !== ($file = readdir($handle))) {
 		if ($file != "." && $file != "..") {
 			$f=$file;
@@ -108,7 +109,7 @@ global $msgstr,$arrHttp;
 						echo "<tr bgcolor=white><td><input type=radio name=db_sel value='".$fmst."'> $f</td>";
 					}
 					echo "<td>".date($dateFormat, $ctime) . "</td>";
-					echo "<td>".number_format(filesize($file))."</td></tr>";
+					echo "<td>".number_format(filesize($file))." ".$msgstr["cpdb_bytes"]."</td></tr>\n";
 				}
  	   		}
 		}
@@ -121,7 +122,9 @@ global $msgstr,$arrHttp;
 		die;
 	}
 	closedir($handle);
-	echo "<br><input class='bt-green' type=submit value=".$msgstr["procesar"].">\n";
+    ?>
+	<br><input class='bt-green' type=submit value="<?php echo $msgstr["resdb_res"];?>">
+    <?php
 }
 ?>
 <script language="javascript" src="../dataentry/js/lr_trim.js"></script>
@@ -129,15 +132,6 @@ global $msgstr,$arrHttp;
 function Explorar(){
 	msgwin=window.open("../dataentry/dirs_explorer.php?desde=dbcp&Opcion=explorar&base=<?php echo $db_path?>&mx=s&tag=document.forma1.dbfolder","explorar","width=400,height=600,top=0,left=0,resizable,scrollbars,menu")
 	msgwin.focus()
-}
-
-
-function Limpiar(){
-	fld=Trim(document.upload.storein.value)
-	if (fld.substr(0,1)=="/"){
-		fld=fld.substring(1)
-		document.upload.storein.value=fld
-	}
 }
 
 function Confirmar(){
